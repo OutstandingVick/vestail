@@ -3,10 +3,8 @@
 import { useMemo, type ReactNode } from "react";
 import { ConnectionProvider, WalletProvider } from "@solana/wallet-adapter-react";
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
-import {
-  PhantomWalletAdapter,
-  SolflareWalletAdapter,
-} from "@solana/wallet-adapter-wallets";
+import { PhantomWalletAdapter } from "@solana/wallet-adapter-phantom";
+import { SolflareWalletAdapter } from "@solana/wallet-adapter-solflare";
 
 import { RPC_URL } from "@/lib/constants";
 
@@ -27,8 +25,11 @@ import "@solana/wallet-adapter-react-ui/styles.css";
 export function SolanaProvider({ children }: { children: ReactNode }) {
   /*
    * Adapter instances are stateful and must not be rebuilt on every render.
-   * Phantom and Solflare are listed explicitly rather than pulled in as the
-   * full adapter set, so the bundle carries two adapters instead of thirty.
+   *
+   * The two adapters are imported from their own packages rather than from
+   * the @solana/wallet-adapter-wallets barrel. The barrel re-exports every
+   * adapter, which drags in the WalletConnect and Reown AppKit trees whether
+   * or not they are used.
    */
   const wallets = useMemo(
     () => [new PhantomWalletAdapter(), new SolflareWalletAdapter()],

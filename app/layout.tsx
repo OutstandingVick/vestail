@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Source_Serif_4 } from "next/font/google";
+import { SolanaProvider } from "@/components/SolanaProvider";
 import "./globals.css";
 
 /*
@@ -34,7 +35,9 @@ export default function RootLayout({
       lang="en"
       className={`${sourceSerif.variable} ${inter.variable} h-full`}
     >
-      <body className="flex min-h-full flex-col">{children}</body>
+      <body className="flex min-h-full flex-col">
+        <SolanaProvider>{children}</SolanaProvider>
+      </body>
     </html>
   );
 }

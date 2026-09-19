@@ -89,3 +89,73 @@ export const RepresentationSchema = z.object({
 });
 
 export type Representation = z.infer<typeof RepresentationSchema>;
+
+/* -------------------------------------------------------------------------- */
+/* Verdict                                                                     */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Three states, not two. The middle one is the product.
+ *
+ *   eligible     A holder who self-declared this jurisdiction may acquire the
+ *                token and exercise the rights attached to it — redemption,
+ *                dividends, transfer — without a further gate.
+ *
+ *   conditional  Acquirable on the secondary market, but at least one attached
+ *                right is gated behind KYC, an investor-class test, or a
+ *                transfer restriction. The holder can buy it today and
+ *                discover at redemption that they cannot exit the way they
+ *                assumed. This is the invisible gate Vestail makes visible.
+ *
+ *   restricted   The issuer's own policy excludes this jurisdiction.
+ *
+ * Collapsing `conditional` into either neighbour destroys the point: folded
+ * into `eligible` it hides the gate, folded into `restricted` it claims a
+ * prohibition that does not exist.
+ *
+ * A verdict is a disclosure, never an enforcement action. Jurisdiction is
+ * self-declared and Vestail neither can nor does block anyone.
+ */
+export const VerdictStatusSchema = z.enum([
+  "eligible",
+  "conditional",
+  "restricted",
+]);
+
+export type VerdictStatus = z.infer<typeof VerdictStatusSchema>;
+
+/**
+ * The outcome of evaluating one Representation against one self-declared
+ * jurisdiction.
+ */
+export const VerdictSchema = z.object({
+  /** Mint of the Representation this verdict is about. */
+  mint: z.string().min(32).max(44),
+
+  provider: ProviderSchema,
+
+  status: VerdictStatusSchema,
+
+  /**
+   * Why, in the user's language. At least one reason is required — a verdict
+   * with no stated reason is an unexplained assertion, and an unexplained
+   * assertion is not a disclosure. A `conditional` verdict should name the
+   * specific gate, not just report that one exists.
+   */
+  reasons: z.array(z.string().min(1)).min(1),
+
+  /** Version of the policy file that produced this, for reproducibility. */
+  policyVersion: z.string().min(1),
+
+  /**
+   * The issuer document the rule was read from. Every rule in policies/
+   * carries one, so every verdict on screen can be traced to a primary source
+   * rather than to our summary of it.
+   */
+  sourceUrl: z.string().url(),
+
+  /** When the evaluation ran. */
+  evaluatedAt: z.string().datetime(),
+});
+
+export type Verdict = z.infer<typeof VerdictSchema>;

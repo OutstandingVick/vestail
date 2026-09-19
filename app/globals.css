@@ -1,26 +1,59 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/*
+ * Vestail design tokens.
+ *
+ * The palette is deliberately dark-only. Vestail presents a legal claim, not a
+ * dashboard, and the verdict colours only hold their meaning against a dark
+ * ground. A light theme would need a second set of verdict hues and a second
+ * set of contrast proofs for no product gain, so there is no
+ * prefers-color-scheme branch here on purpose.
+ *
+ * Declaring the colours in `@theme` (not `@theme inline`) is what makes
+ * Tailwind emit both the :root custom properties and the matching utilities —
+ * bg-ink, text-paper, border-line, text-conditional, and so on.
+ */
+@theme {
+  /* Surfaces, from furthest back to nearest. */
+  --color-ink: #0d1015;
+  --color-surface: #151922;
+  --color-line: #2a303c;
+
+  /* Type. */
+  --color-paper: #e8e4d9;
+  --color-dim: #9c9787;
+
+  /* Accent. Used for emphasis, never to signal a verdict. */
+  --color-gold: #c9a227;
+
+  /*
+   * Verdict colours. These map 1:1 onto the three Verdict statuses in
+   * lib/types.ts and are not reused for anything else — the whole point of the
+   * product is that `conditional` reads as its own state rather than as a
+   * softer `eligible` or a gentler `restricted`.
+   */
+  --color-eligible: #8fbd7f;
+  --color-conditional: #d9a84d;
+  --color-restricted: #d98d84;
 }
 
+/*
+ * The font tokens are `inline` because they forward the CSS variables that
+ * next/font generates in app/layout.tsx, and those must not be re-declared.
+ */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-display: var(--font-source-serif), ui-serif, Georgia, serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-ink);
+  color: var(--color-paper);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-gold);
+  color: var(--color-ink);
 }

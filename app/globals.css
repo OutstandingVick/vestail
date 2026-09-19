@@ -12,8 +12,16 @@
  * Declaring the colours in `@theme` (not `@theme inline`) is what makes
  * Tailwind emit both the :root custom properties and the matching utilities —
  * bg-ink, text-paper, border-line, text-conditional, and so on.
+ *
+ * `static` forces all of them into the output. By default Tailwind v4 only
+ * emits the custom properties whose utilities it can see in use, which meant
+ * --color-eligible and --color-conditional were absent from the stylesheet
+ * until some component happened to reference them. These tokens are the
+ * public vocabulary of the three Verdict states, so they should be readable
+ * as var(--color-eligible) from anywhere — including raw CSS and any chart or
+ * badge added later — rather than blinking in and out as usage changes.
  */
-@theme {
+@theme static {
   /* Surfaces, from furthest back to nearest. */
   --color-ink: #0d1015;
   --color-surface: #151922;

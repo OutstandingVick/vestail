@@ -1,7 +1,7 @@
 # Policies
 
-Provider eligibility policy, one versioned JSON file per issuer. Empty until
-Phase 2; this file documents the contract those files will honour.
+Issuer eligibility policy: one versioned JSON file per issuer, one set of
+rules per jurisdiction Vestail covers (NG, US, DE).
 
 ## Why files and not a database
 
@@ -18,21 +18,55 @@ diff, an author, a timestamp and a message.
 **Git history is the audit trail.** That is the reason for the format, and it
 is why policy must not migrate into a database later for convenience.
 
+## File shape
+
+```jsonc
+{
+  "provider": "tessera",          // must match the filename
+  "version": "2026-09-21.1",      // YYYY-MM-DD.N, copied onto every verdict
+  "reviewedAt": "2026-09-21",
+  "rules": [
+    {
+      "id": "us-persons-excluded",  // stable, lowercase-kebab, unique in file
+      "kind": "gate",               // "gate" or "note"
+      "status": "restricted",       // gates only
+      "regions": ["US"],
+      "symbols": ["SPCX"],          // optional; omitted means every symbol
+      "reason": "What the user needs to know, in plain language.",
+      "source_url": "https://…",    // https only
+      "source_quality": "primary"   // "primary" or "secondary"
+    }
+  ]
+}
+```
+
+Unknown keys are rejected, so a typo cannot silently drop a field.
+
 ## Rules
 
-1. **Every rule carries a `source_url`** pointing at the issuer's own document —
-   terms of service, prospectus, restricted-jurisdiction list. A rule we cannot
-   source is a rule we do not ship. `VerdictSchema.sourceUrl` is a required URL
-   precisely so this cannot be skipped.
-2. **Every file carries a `version`.** It is copied onto each `Verdict` as
-   `policyVersion`, so any verdict can be reproduced against the exact revision
-   that produced it.
-3. **Edits are commits, not amendments.** Never rewrite history here; a
-   correction is a new commit that says what was wrong.
-4. **Three statuses**: `eligible`, `conditional`, `restricted`. A rule that
-   grants acquisition while gating redemption, dividends or transfer behind KYC
-   or an investor-class test is `conditional` — not a softened `restricted` and
-   not a qualified `eligible`.
+1. **Gates decide; notes inform.** A gate carries a status. A note never does,
+   so a warning ("no voting rights") can never quietly change a verdict. When
+   several gates apply, the most severe decides and all are shown.
+2. **Three statuses**: `eligible`, `conditional`, `restricted`. A rule that lets
+   you acquire on the secondary market while gating redemption, dividends or
+   transfer behind KYC or an investor-class test is `conditional` — not a
+   softened `restricted` and not a qualified `eligible`.
+3. **Every rule carries a `source_url`.** A rule we cannot source is a rule we
+   do not ship.
+4. **Say how good the source is.** `primary` means the issuer's own document
+   states it. `secondary` means third-party reporting, or an inference the
+   issuer's document does not state outright. Secondary sources are labelled
+   on screen, and a verdict decided by one says so.
+5. **No gate, no verdict.** If no gate covers a region, the user sees "not
+   assessed", never a default `eligible`. `npm test` requires every
+   representation to have a gate in every region, so gaps cannot ship
+   silently.
+6. **Edits are commits, not amendments.** Bump `version` on any rule change and
+   never rewrite history; a correction is a new commit that says what was
+   wrong.
+7. **The pinned grid.** `tests/policies.test.mjs` pins the researched SPCX
+   verdicts. A policy change that alters one fails until the test is updated in
+   the same commit, on purpose.
 
 ## Scope
 

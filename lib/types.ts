@@ -179,3 +179,85 @@ export const VerdictSchema = z.object({
 });
 
 export type Verdict = z.infer<typeof VerdictSchema>;
+
+/* -------------------------------------------------------------------------- */
+/* Registry                                                                    */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * A Representation as stored in registry/representations.json: the domain
+ * fields plus the onchain facts the sync script verified.
+ */
+export const RegistryRepresentationSchema = RepresentationSchema.extend({
+  /** The token's own symbol, e.g. "SPCXx", as opposed to the listed ticker. */
+  tokenSymbol: z.string().min(1),
+  /** SPL Token or Token-2022. Needed to derive token accounts correctly. */
+  tokenProgram: z.string().min(32).max(44),
+  mintAuthority: z.string().min(32).max(44).nullable(),
+  /** Set means the issuer can freeze any holder's balance. */
+  freezeAuthority: z.string().min(32).max(44).nullable(),
+  /** Pyth feed for this token itself, where Pyth publishes one. */
+  pythFeedId: z.string().regex(/^0x[0-9a-f]{64}$/).nullable(),
+});
+
+export type RegistryRepresentation = z.infer<
+  typeof RegistryRepresentationSchema
+>;
+
+export const RegistrySchema = z.object({
+  generatedAt: z.string().datetime(),
+  symbols: z.record(
+    z.string(),
+    z.object({
+      /** Pyth feed for the listed share. Null for private companies. */
+      referenceFeedId: z.string().regex(/^0x[0-9a-f]{64}$/).nullable(),
+      representations: z.array(RegistryRepresentationSchema),
+    }),
+  ),
+});
+
+/* -------------------------------------------------------------------------- */
+/* Market view                                                                 */
+/* -------------------------------------------------------------------------- */
+
+/** Where a displayed price came from. Shown to the user, never hidden. */
+export const PriceSourceSchema = z.enum(["pyth", "jupiter"]);
+
+export type PriceSource = z.infer<typeof PriceSourceSchema>;
+
+/** One representation with live market data attached. */
+export const RepresentationQuoteSchema = z.object({
+  representation: RegistryRepresentationSchema,
+  price: z.number().nullable(),
+  priceSource: PriceSourceSchema.nullable(),
+  /**
+   * Premium (+) or discount (−) to the listed share, in percent. Null unless
+   * one token tracks one share; comparing a note priced in its own units to
+   * the share price would produce a precise-looking, meaningless number.
+   */
+  vsReferencePct: z.number().nullable(),
+  /** The issuer's own stated mark price, where it publishes one. */
+  issuerMark: z.number().nullable(),
+  vsIssuerMarkPct: z.number().nullable(),
+  liquidityUsd: z.number().nullable(),
+});
+
+export type RepresentationQuote = z.infer<typeof RepresentationQuoteSchema>;
+
+export const SymbolViewSchema = z.object({
+  symbol: z.string(),
+  isPrivate: z.boolean(),
+  reference: z
+    .object({
+      price: z.number(),
+      publishTime: z.number().int(),
+      source: z.literal("pyth"),
+    })
+    .nullable(),
+  representations: z.array(RepresentationQuoteSchema),
+  /** Degraded data the user should know about, e.g. a missing API key. */
+  warnings: z.array(z.string()),
+  asOf: z.string().datetime(),
+});
+
+export type SymbolView = z.infer<typeof SymbolViewSchema>;

@@ -1,11 +1,12 @@
+import { RepresentationExplorer } from "@/components/RepresentationExplorer";
 import { SiteHeader } from "@/components/SiteHeader";
 import { WalletCard } from "@/components/WalletCard";
 
 /**
  * Phase 0 landing page.
  *
- * States the thesis and proves the wallet plumbing works. Symbol search,
- * representation resolution and the verdict table arrive in later phases.
+ * States the thesis, then shows it: every tokenized version of a ticker side
+ * by side. Eligibility verdicts arrive in Phase 2.
  */
 export default function Home() {
   return (
@@ -31,6 +32,10 @@ export default function Home() {
           which ones you may hold where you are, and routes a purchase only to
           the eligible ones.
         </p>
+
+        <div className="mt-16">
+          <RepresentationExplorer />
+        </div>
 
         {/* Renders only once a wallet is connected. */}
         <div className="mt-14">

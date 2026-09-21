@@ -1,0 +1,42 @@
+{
+  "provider": "prestocks",
+  "version": "2026-09-21.1",
+  "reviewedAt": "2026-09-21",
+  "rules": [
+    {
+      "id": "us-prohibited",
+      "kind": "gate",
+      "status": "restricted",
+      "regions": ["US"],
+      "reason": "The United States is a Prohibited Jurisdiction under PreStocks' terms.",
+      "source_url": "https://prestocks.notion.site/terms-of-service",
+      "source_quality": "primary"
+    },
+    {
+      "id": "discretionary-redemption-kyc",
+      "kind": "gate",
+      "status": "conditional",
+      "regions": ["NG", "DE"],
+      "reason": "Not a prohibited jurisdiction. You may request redemption for USDC, but PreStocks decides whether and how to fulfil it, fulfilment may be partial, delayed or unsuccessful, and an unmet KYC requirement is grounds for freezing, forced transfer or burning.",
+      "source_url": "https://prestocks.notion.site/terms-of-service",
+      "source_quality": "primary"
+    },
+    {
+      "id": "no-shareholder-rights",
+      "kind": "note",
+      "regions": ["NG", "US", "DE"],
+      "reason": "Tokens confer no ownership, voting, dividend or information rights, and are not issued or endorsed by the company they reference.",
+      "source_url": "https://prestocks.notion.site/terms-of-service",
+      "source_quality": "primary"
+    },
+    {
+      "id": "company-says-spv-transfers-void",
+      "kind": "note",
+      "regions": ["NG", "US", "DE"],
+      "symbols": ["OPENAI"],
+      "reason": "OpenAI has warned that transfers of its shares to SPVs are void under its transfer restrictions, and that such exposure may have no value. PreStocks' OpenAI token fell 39% in the week after.",
+      "source_url": "https://www.coindesk.com/markets/2026/05/13/anthropic-openai-tokens-plunge-nearly-40-as-ai-firms-warn-spv-transfers-are-invalid",
+      "source_quality": "secondary"
+    }
+  ]
+}

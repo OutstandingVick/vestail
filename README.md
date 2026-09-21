@@ -85,8 +85,9 @@ reviewable diff:
   proof per issuer (below). `providers.json` holds each issuer's legal
   structure, redeemability and custodian, each with a `sourceUrl`; anything
   confirmed only by secondary sources is listed as `unverified`.
-- **`policies/`: who may hold them** (Phase 2). One file per issuer, every rule
-  sourced. See [`policies/README.md`](policies/README.md).
+- **`policies/`: who may hold them.** One file per issuer, every rule
+  sourced, evaluated by `lib/evaluate.ts`. See
+  [`policies/README.md`](policies/README.md).
 
 ```
 app/                          pages; api/representations/[symbol] route
@@ -96,7 +97,8 @@ lib/                          constants, Zod schemas, registry loader, labels
 lib/server/                   Pyth, Jupiter and issuer-mark clients (server-only)
 registry/                     generated mint registry + sourced provider facts
 scripts/sync-registry.mjs     regenerates the registry
-policies/                     issuer eligibility policy (Phase 2)
+policies/                     sourced issuer eligibility policy
+tests/                        policy and evaluator tests (npm test)
 ```
 
 ### Resolving a ticker safely
@@ -166,6 +168,33 @@ To refresh the mint registry (review the diff before committing it):
 npm run registry:sync
 ```
 
+## What the verdicts say
+
+For SPCX, the one symbol all five issuers cover, the researched grid is:
+
+| | Nigeria | United States | Germany |
+| --- | --- | --- | --- |
+| xStocks | conditional: redemption for professional investors only | restricted | conditional: EU Qualified Investor to redeem |
+| Ondo | conditional: KYC to buy from or redeem with Ondo | restricted, secondary purchases included | conditional: MiFID Professional Client / Qualified Investor |
+| Backpack | conditional: verified account to redeem | restricted | restricted (inferred; marked secondary) |
+| Tessera | conditional: its terms link a FATF list that still had Nigeria | restricted | eligible |
+| PreStocks | conditional: discretionary redemption, KYC | restricted | conditional |
+
+The pattern is the point. **For a retail holder almost every tokenized stock is
+`conditional`**: freely tradable onchain, with the gate at redemption.
+Nothing in a wallet shows that. All 25 tokens also have an onchain freeze
+authority set.
+
+## Tests
+
+```bash
+npm test
+```
+
+Covers policy validity, full region coverage for every representation, the
+pinned grid above, and the evaluator's rules (see
+[`policies/README.md`](policies/README.md)).
+
 ## Status
 
 **Phase 0 — complete.** Scaffold, design tokens, domain schemas, wallet
@@ -174,7 +203,12 @@ connection, USDC balance, landing page.
 **Phase 1 — complete.** 25 representations across 11 symbols, resolved with
 per-issuer proof and verified onchain. SPCX alone has five, each a different
 legal claim. Live prices from Pyth and Jupiter, issuer marks for private
-companies, and a comparison table on the landing page.
+companies, and a comparison table on the landing page. Pyth equity and
+tokenized-stock feeds await plan access; until then prices fall back to
+Jupiter and the page says so.
 
-Next: the policy files and the eligibility evaluator (Phase 2), then Jupiter
-routing to eligible mints only (Phase 3).
+**Phase 2 — complete.** Sourced policy files for all five issuers across NG, US
+and DE, a pure evaluator, tests, and self-declared-region verdicts on every
+token with their evidence and sources.
+
+Next: Jupiter routing (Phase 3).

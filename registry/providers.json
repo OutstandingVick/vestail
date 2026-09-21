@@ -1,0 +1,61 @@
+{
+  "$comment": "Issuer-level facts about each provider's tokens. Hand-maintained: every claim carries a sourceUrl, and anything read only from a secondary source is listed under `unverified` until a primary document confirms it. Per-token data (mints, decimals, authorities) is generated into representations.json by scripts/sync-registry.mjs.",
+  "xstocks": {
+    "issuer": "Backed Finance",
+    "structure": "custody_backed",
+    "redeemable": true,
+    "custodian": "InCore Bank AG",
+    "sourceUrl": "https://docs.xstocks.fi/docs",
+    "notes": "Each token is 1:1 collateralised by the underlying share. Redemption runs through Backed's own onboarding (KYC/AML), not the secondary market. xStocks docs: 'not intended for distribution in the United States, to any US person'.",
+    "unverified": [
+      "custodian (InCore Bank AG): secondary sources only",
+      "redemption minimum of USD 5,000: secondary sources only"
+    ],
+    "mintAuthority": "7pt9tkctJPK7PPNQJ77GKg8ZffSF6QxoMiCFYHxrtaCj"
+  },
+  "ondo": {
+    "issuer": "Ondo Global Markets (BVI) Limited",
+    "structure": "total_return_note",
+    "redeemable": true,
+    "custodian": null,
+    "sourceUrl": "https://docs.ondo.finance/ondo-stocks/legal-and-regulatory",
+    "notes": "Debt notes issued by a bankruptcy-remote BVI SPV, backed 1:1 by underlying securities held at one or more unnamed U.S.-registered broker-dealers, with Ankura Trust Company as verification agent. No shareholder voting rights. Offered under Regulation S; not available to US users.",
+    "unverified": [],
+    "mintAuthority": "9foMHsSDq7nMg4WPusSz9eY7tyxyukqborA8GyU5cUxD"
+  },
+  "backpack": {
+    "issuer": "Backpack Securities",
+    "structure": "security_entitlement",
+    "redeemable": true,
+    "custodian": "Backpack Securities",
+    "sourceUrl": "https://solanacompass.com/news/backpack-securities-lists-tokenized-strategy-mstr-shares-on-solana-redeemable-11-for-real-stock",
+    "notes": "Issued by a US broker-dealer as a UCC Article 8 security entitlement. Onboarded, KYC'd holders can redeem for the real share and move it to another brokerage over ACATS/DTCC.",
+    "unverified": [
+      "all of the above: news coverage only, no Backpack primary document located yet"
+    ],
+    "mintAuthority": null
+  },
+  "prestocks": {
+    "issuer": "PreStocks",
+    "structure": "spv_exposure",
+    "redeemable": true,
+    "custodian": null,
+    "sourceUrl": "https://prestocks.com/api/prestocks",
+    "notes": "PreStocks' own description of each token: 'backed 1:1 by SPV exposure that tracks the price of the underlying private company'. Reported terms grant no equity or shareholder rights. Anthropic and OpenAI have both said SPV transfers of their shares are void.",
+    "unverified": [
+      "redemption and its KYC requirement: secondary sources only (prestocks.com/terms returns 404)",
+      "restricted jurisdictions (US, Singapore, EU): secondary sources only"
+    ],
+    "mintAuthority": null
+  },
+  "tessera": {
+    "issuer": "Tessera (per-token Panamanian issuer, e.g. OPAI Tessera Issuer Inc.)",
+    "structure": "loan_participation",
+    "redeemable": true,
+    "custodian": null,
+    "sourceUrl": "https://terms.tessera.pe/",
+    "notes": "Terms 1.4: a participation in a loan to a dedicated Panamanian issuer that holds the investment. Terms 2.2: redemption opens only after the issuer receives liquidity-event proceeds, runs for 90 days, and the claim lapses afterwards. Terms 3.1(c) excludes US persons. KYC applies at the lending (mint) step (2.1(d)).",
+    "unverified": [],
+    "mintAuthority": null
+  }
+}

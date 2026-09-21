@@ -1,0 +1,485 @@
+{
+  "generatedAt": "2026-09-21T11:48:40.164Z",
+  "symbols": {
+    "SPCX": {
+      "referenceFeedId": "0x8a593d6edde7a3095213c88116d8840d01e93c2ddeb800bc891772eb8b93bb94",
+      "representations": [
+        {
+          "mint": "Xs3oZwbHvqis4NYcf4YKWmEia2eC84wSiVrcYcTqpH8",
+          "provider": "xstocks",
+          "symbol": "SPCX",
+          "name": "SpaceX xStock",
+          "tokenSymbol": "SPCXx",
+          "structure": "custody_backed",
+          "decimals": 8,
+          "redeemable": true,
+          "custodian": "InCore Bank AG",
+          "source": "https://docs.xstocks.fi/docs",
+          "fetchedAt": "2026-09-21T11:48:40.164Z",
+          "tokenProgram": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+          "mintAuthority": "7pt9tkctJPK7PPNQJ77GKg8ZffSF6QxoMiCFYHxrtaCj",
+          "freezeAuthority": "JDq14BWvqCRFNu1krb12bcRpbGtJZ1FLEakMw6FdxJNs",
+          "pythFeedId": "0xe8e2234a06b288fedde43ae9450cb288886ecb3259ad2f41d0067f02244a0101"
+        },
+        {
+          "mint": "SPCXxcqXj6e5dJDVNovHN8744zkbhM2bYudU45BimGb",
+          "provider": "backpack",
+          "symbol": "SPCX",
+          "name": "SpaceX - Backpack Securities",
+          "tokenSymbol": "SPCX",
+          "structure": "security_entitlement",
+          "decimals": 6,
+          "redeemable": true,
+          "custodian": "Backpack Securities",
+          "source": "https://solanacompass.com/news/backpack-securities-lists-tokenized-strategy-mstr-shares-on-solana-redeemable-11-for-real-stock",
+          "fetchedAt": "2026-09-21T11:48:40.164Z",
+          "tokenProgram": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+          "mintAuthority": "HK6jF79duLLLfCMRQFBSgo6CgQ5mF4tFMFU7CmKcXctZ",
+          "freezeAuthority": "2cVYpagTt7ZGc3mmTXBa7fAznUtx5DUu6aCq8uVDaf4a",
+          "pythFeedId": null
+        },
+        {
+          "mint": "wzAyQTorWyoVXuJKj2x8EqKEGJpS13z6EWE9z5Aondo",
+          "provider": "ondo",
+          "symbol": "SPCX",
+          "name": "SpaceX (Ondo Tokenized)",
+          "tokenSymbol": "SPCXon",
+          "structure": "total_return_note",
+          "decimals": 9,
+          "redeemable": true,
+          "custodian": null,
+          "source": "https://docs.ondo.finance/ondo-stocks/legal-and-regulatory",
+          "fetchedAt": "2026-09-21T11:48:40.164Z",
+          "tokenProgram": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+          "mintAuthority": "9foMHsSDq7nMg4WPusSz9eY7tyxyukqborA8GyU5cUxD",
+          "freezeAuthority": "51QVCuHfL1FeNjd8BDeffCKhCcAYoULnVB3yjNhShiuK",
+          "pythFeedId": null
+        },
+        {
+          "mint": "TSPXcLV76s6V2zDiZQ18kBfcbnjaE2ZzNT3ga2Pd99v",
+          "provider": "tessera",
+          "symbol": "SPCX",
+          "name": "T-SpaceX",
+          "tokenSymbol": "tSpaceX",
+          "structure": "loan_participation",
+          "decimals": 9,
+          "redeemable": true,
+          "custodian": null,
+          "source": "https://terms.tessera.pe/",
+          "fetchedAt": "2026-09-21T11:48:40.164Z",
+          "tokenProgram": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+          "mintAuthority": "EXvTtxurWBUNNCtLojaN8ZBJFNJPZFSH3szoih9hh7YW",
+          "freezeAuthority": "7n2PNcDXVDMK2m8dyV9cVPNY7p4jM4ZMHv7TzfibEt8o",
+          "pythFeedId": null
+        },
+        {
+          "mint": "PreANxuXjsy2pvisWWMNB6YaJNzr7681wJJr2rHsfTh",
+          "provider": "prestocks",
+          "symbol": "SPCX",
+          "name": "SpaceX PreStocks",
+          "tokenSymbol": "SPACEX",
+          "structure": "spv_exposure",
+          "decimals": 9,
+          "redeemable": true,
+          "custodian": null,
+          "source": "https://prestocks.com/api/prestocks",
+          "fetchedAt": "2026-09-21T11:48:40.164Z",
+          "tokenProgram": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+          "mintAuthority": "WV9PJN7XTmTLVwbutCLFxp8TyePee6Xq5mRq6Fti5Wc",
+          "freezeAuthority": "WV9PJN7XTmTLVwbutCLFxp8TyePee6Xq5mRq6Fti5Wc",
+          "pythFeedId": null
+        }
+      ]
+    },
+    "NVDA": {
+      "referenceFeedId": "0xb1073854ed24cbc755dc527418f52b7d271f6cc967bbf8d8129112b18860a593",
+      "representations": [
+        {
+          "mint": "Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh",
+          "provider": "xstocks",
+          "symbol": "NVDA",
+          "name": "NVIDIA xStock",
+          "tokenSymbol": "NVDAx",
+          "structure": "custody_backed",
+          "decimals": 8,
+          "redeemable": true,
+          "custodian": "InCore Bank AG",
+          "source": "https://docs.xstocks.fi/docs",
+          "fetchedAt": "2026-09-21T11:48:40.164Z",
+          "tokenProgram": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+          "mintAuthority": "7pt9tkctJPK7PPNQJ77GKg8ZffSF6QxoMiCFYHxrtaCj",
+          "freezeAuthority": "JDq14BWvqCRFNu1krb12bcRpbGtJZ1FLEakMw6FdxJNs",
+          "pythFeedId": "0x4244d07890e4610f46bbde67de8f43a4bf8b569eebe904f136b469f148503b7f"
+        },
+        {
+          "mint": "gEGtLTPNQ7jcg25zTetkbmF7teoDLcrfTnQfmn2ondo",
+          "provider": "ondo",
+          "symbol": "NVDA",
+          "name": "NVIDIA (Ondo Tokenized)",
+          "tokenSymbol": "NVDAon",
+          "structure": "total_return_note",
+          "decimals": 9,
+          "redeemable": true,
+          "custodian": null,
+          "source": "https://docs.ondo.finance/ondo-stocks/legal-and-regulatory",
+          "fetchedAt": "2026-09-21T11:48:40.164Z",
+          "tokenProgram": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+          "mintAuthority": "9foMHsSDq7nMg4WPusSz9eY7tyxyukqborA8GyU5cUxD",
+          "freezeAuthority": "51QVCuHfL1FeNjd8BDeffCKhCcAYoULnVB3yjNhShiuK",
+          "pythFeedId": "0x207ddea2a443d30b7e13a7c88a9e3f106765deb97049afc65a18cede50fffc82"
+        }
+      ]
+    },
+    "TSLA": {
+      "referenceFeedId": "0x16dad506d7db8da01c87581c87ca897a012a153557d4d578c3b9c9e1bc0632f1",
+      "representations": [
+        {
+          "mint": "XsDoVfqeBukxuZHWhdvWHBhgEHjGNst4MLodqsJHzoB",
+          "provider": "xstocks",
+          "symbol": "TSLA",
+          "name": "Tesla xStock",
+          "tokenSymbol": "TSLAx",
+          "structure": "custody_backed",
+          "decimals": 8,
+          "redeemable": true,
+          "custodian": "InCore Bank AG",
+          "source": "https://docs.xstocks.fi/docs",
+          "fetchedAt": "2026-09-21T11:48:40.164Z",
+          "tokenProgram": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+          "mintAuthority": "7pt9tkctJPK7PPNQJ77GKg8ZffSF6QxoMiCFYHxrtaCj",
+          "freezeAuthority": "JDq14BWvqCRFNu1krb12bcRpbGtJZ1FLEakMw6FdxJNs",
+          "pythFeedId": "0x47a156470288850a440df3a6ce85a55917b813a19bb5b31128a33a986566a362"
+        },
+        {
+          "mint": "KeGv7bsfR4MheC1CkmnAVceoApjrkvBhHYjWb67ondo",
+          "provider": "ondo",
+          "symbol": "TSLA",
+          "name": "Tesla (Ondo Tokenized)",
+          "tokenSymbol": "TSLAon",
+          "structure": "total_return_note",
+          "decimals": 9,
+          "redeemable": true,
+          "custodian": null,
+          "source": "https://docs.ondo.finance/ondo-stocks/legal-and-regulatory",
+          "fetchedAt": "2026-09-21T11:48:40.164Z",
+          "tokenProgram": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+          "mintAuthority": "9foMHsSDq7nMg4WPusSz9eY7tyxyukqborA8GyU5cUxD",
+          "freezeAuthority": "51QVCuHfL1FeNjd8BDeffCKhCcAYoULnVB3yjNhShiuK",
+          "pythFeedId": "0xc09ef687ed07091c047da444f1499f2da52cdc1c085104643ec565a9eb1af514"
+        }
+      ]
+    },
+    "AAPL": {
+      "referenceFeedId": "0x49f6b65cb1de6b10eaf75e7c03ca029c306d0357e91b5311b175084a5ad55688",
+      "representations": [
+        {
+          "mint": "XsbEhLAtcf6HdfpFZ5xEMdqW8nfAvcsP5bdudRLJzJp",
+          "provider": "xstocks",
+          "symbol": "AAPL",
+          "name": "Apple xStock",
+          "tokenSymbol": "AAPLx",
+          "structure": "custody_backed",
+          "decimals": 8,
+          "redeemable": true,
+          "custodian": "InCore Bank AG",
+          "source": "https://docs.xstocks.fi/docs",
+          "fetchedAt": "2026-09-21T11:48:40.164Z",
+          "tokenProgram": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+          "mintAuthority": "7pt9tkctJPK7PPNQJ77GKg8ZffSF6QxoMiCFYHxrtaCj",
+          "freezeAuthority": "JDq14BWvqCRFNu1krb12bcRpbGtJZ1FLEakMw6FdxJNs",
+          "pythFeedId": "0x978e6cc68a119ce066aa830017318563a9ed04ec3a0a6439010fc11296a58675"
+        },
+        {
+          "mint": "123mYEnRLM2LLYsJW3K6oyYh8uP1fngj732iG638ondo",
+          "provider": "ondo",
+          "symbol": "AAPL",
+          "name": "Apple (Ondo Tokenized)",
+          "tokenSymbol": "AAPLon",
+          "structure": "total_return_note",
+          "decimals": 9,
+          "redeemable": true,
+          "custodian": null,
+          "source": "https://docs.ondo.finance/ondo-stocks/legal-and-regulatory",
+          "fetchedAt": "2026-09-21T11:48:40.164Z",
+          "tokenProgram": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+          "mintAuthority": "9foMHsSDq7nMg4WPusSz9eY7tyxyukqborA8GyU5cUxD",
+          "freezeAuthority": "51QVCuHfL1FeNjd8BDeffCKhCcAYoULnVB3yjNhShiuK",
+          "pythFeedId": "0xe6734de88a83d9d2fb33072adab319004700aefd069653aba30ba9e3cac056f2"
+        }
+      ]
+    },
+    "SPY": {
+      "referenceFeedId": "0x19e09bb805456ada3979a7d1cbb4b6d63babc3a0f8e8a9509f68afa5c4c11cd5",
+      "representations": [
+        {
+          "mint": "XsoCS1TfEyfFhfvj8EtZ528L3CaKBDBRqRapnBbDF2W",
+          "provider": "xstocks",
+          "symbol": "SPY",
+          "name": "SP500 xStock",
+          "tokenSymbol": "SPYx",
+          "structure": "custody_backed",
+          "decimals": 8,
+          "redeemable": true,
+          "custodian": "InCore Bank AG",
+          "source": "https://docs.xstocks.fi/docs",
+          "fetchedAt": "2026-09-21T11:48:40.164Z",
+          "tokenProgram": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+          "mintAuthority": "7pt9tkctJPK7PPNQJ77GKg8ZffSF6QxoMiCFYHxrtaCj",
+          "freezeAuthority": "JDq14BWvqCRFNu1krb12bcRpbGtJZ1FLEakMw6FdxJNs",
+          "pythFeedId": "0x2817b78438c769357182c04346fddaad1178c82f4048828fe0997c3c64624e14"
+        },
+        {
+          "mint": "k18WJUULWheRkSpSquYGdNNmtuE2Vbw1hpuUi92ondo",
+          "provider": "ondo",
+          "symbol": "SPY",
+          "name": "SPDR S&P 500 ETF (Ondo Tokenized)",
+          "tokenSymbol": "SPYon",
+          "structure": "total_return_note",
+          "decimals": 9,
+          "redeemable": true,
+          "custodian": null,
+          "source": "https://docs.ondo.finance/ondo-stocks/legal-and-regulatory",
+          "fetchedAt": "2026-09-21T11:48:40.164Z",
+          "tokenProgram": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+          "mintAuthority": "9foMHsSDq7nMg4WPusSz9eY7tyxyukqborA8GyU5cUxD",
+          "freezeAuthority": "51QVCuHfL1FeNjd8BDeffCKhCcAYoULnVB3yjNhShiuK",
+          "pythFeedId": null
+        }
+      ]
+    },
+    "QQQ": {
+      "referenceFeedId": "0x9695e2b96ea7b3859da9ed25b7a46a920a776e2fdae19a7bcfdf2b219230452d",
+      "representations": [
+        {
+          "mint": "Xs8S1uUs1zvS2p7iwtsG3b6fkhpvmwz4GYU3gWAmWHZ",
+          "provider": "xstocks",
+          "symbol": "QQQ",
+          "name": "Nasdaq xStock",
+          "tokenSymbol": "QQQx",
+          "structure": "custody_backed",
+          "decimals": 8,
+          "redeemable": true,
+          "custodian": "InCore Bank AG",
+          "source": "https://docs.xstocks.fi/docs",
+          "fetchedAt": "2026-09-21T11:48:40.164Z",
+          "tokenProgram": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+          "mintAuthority": "7pt9tkctJPK7PPNQJ77GKg8ZffSF6QxoMiCFYHxrtaCj",
+          "freezeAuthority": "JDq14BWvqCRFNu1krb12bcRpbGtJZ1FLEakMw6FdxJNs",
+          "pythFeedId": "0x178a6f73a5aede9d0d682e86b0047c9f333ed0efe5c6537ca937565219c4054d"
+        },
+        {
+          "mint": "HrYNm6jTQ71LoFphjVKBTdAE4uja7WsmLG8VxB8ondo",
+          "provider": "ondo",
+          "symbol": "QQQ",
+          "name": "Invesco QQQ (Ondo Tokenized)",
+          "tokenSymbol": "QQQon",
+          "structure": "total_return_note",
+          "decimals": 9,
+          "redeemable": true,
+          "custodian": null,
+          "source": "https://docs.ondo.finance/ondo-stocks/legal-and-regulatory",
+          "fetchedAt": "2026-09-21T11:48:40.164Z",
+          "tokenProgram": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+          "mintAuthority": "9foMHsSDq7nMg4WPusSz9eY7tyxyukqborA8GyU5cUxD",
+          "freezeAuthority": "51QVCuHfL1FeNjd8BDeffCKhCcAYoULnVB3yjNhShiuK",
+          "pythFeedId": null
+        }
+      ]
+    },
+    "MSFT": {
+      "referenceFeedId": "0xd0ca23c1cc005e004ccf1db5bf76aeb6a49218f43dac3d4b275e92de12ded4d1",
+      "representations": [
+        {
+          "mint": "XspzcW1PRtgf6Wj92HCiZdjzKCyFekVD8P5Ueh3dRMX",
+          "provider": "xstocks",
+          "symbol": "MSFT",
+          "name": "Microsoft xStock",
+          "tokenSymbol": "MSFTx",
+          "structure": "custody_backed",
+          "decimals": 8,
+          "redeemable": true,
+          "custodian": "InCore Bank AG",
+          "source": "https://docs.xstocks.fi/docs",
+          "fetchedAt": "2026-09-21T11:48:40.164Z",
+          "tokenProgram": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+          "mintAuthority": "7pt9tkctJPK7PPNQJ77GKg8ZffSF6QxoMiCFYHxrtaCj",
+          "freezeAuthority": "JDq14BWvqCRFNu1krb12bcRpbGtJZ1FLEakMw6FdxJNs",
+          "pythFeedId": "0xbb723a70af731ab56b9a650eb7e8ac22b7bc07ea77f8670bd1fa9a37bf6df3f5"
+        },
+        {
+          "mint": "FRmH6iRkMr33DLG6zVLR7EM4LojBFAuq6NtFzG6ondo",
+          "provider": "ondo",
+          "symbol": "MSFT",
+          "name": "Microsoft (Ondo Tokenized)",
+          "tokenSymbol": "MSFTon",
+          "structure": "total_return_note",
+          "decimals": 9,
+          "redeemable": true,
+          "custodian": null,
+          "source": "https://docs.ondo.finance/ondo-stocks/legal-and-regulatory",
+          "fetchedAt": "2026-09-21T11:48:40.164Z",
+          "tokenProgram": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+          "mintAuthority": "9foMHsSDq7nMg4WPusSz9eY7tyxyukqborA8GyU5cUxD",
+          "freezeAuthority": "51QVCuHfL1FeNjd8BDeffCKhCcAYoULnVB3yjNhShiuK",
+          "pythFeedId": "0x29b228e9fd72bbd306bcca3b10c165d8dba5d535ef8d5aab6c6e4bc18912d150"
+        }
+      ]
+    },
+    "GOOGL": {
+      "referenceFeedId": "0x5a48c03e9b9cb337801073ed9d166817473697efff0d138874e0f6a33d6d5aa6",
+      "representations": [
+        {
+          "mint": "XsCPL9dNWBMvFtTmwcCA5v3xWPSMEBCszbQdiLLq6aN",
+          "provider": "xstocks",
+          "symbol": "GOOGL",
+          "name": "Alphabet xStock",
+          "tokenSymbol": "GOOGLx",
+          "structure": "custody_backed",
+          "decimals": 8,
+          "redeemable": true,
+          "custodian": "InCore Bank AG",
+          "source": "https://docs.xstocks.fi/docs",
+          "fetchedAt": "2026-09-21T11:48:40.164Z",
+          "tokenProgram": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+          "mintAuthority": "7pt9tkctJPK7PPNQJ77GKg8ZffSF6QxoMiCFYHxrtaCj",
+          "freezeAuthority": "JDq14BWvqCRFNu1krb12bcRpbGtJZ1FLEakMw6FdxJNs",
+          "pythFeedId": "0xb911b0329028cd0283e4259c33809d62942bd2716a58084e5f31d64c00b5424e"
+        },
+        {
+          "mint": "bbahNA5vT9WJeYft8tALrH1LXWffjwqVoUbqYa1ondo",
+          "provider": "ondo",
+          "symbol": "GOOGL",
+          "name": "Alphabet Class A (Ondo Tokenized)",
+          "tokenSymbol": "GOOGLon",
+          "structure": "total_return_note",
+          "decimals": 9,
+          "redeemable": true,
+          "custodian": null,
+          "source": "https://docs.ondo.finance/ondo-stocks/legal-and-regulatory",
+          "fetchedAt": "2026-09-21T11:48:40.164Z",
+          "tokenProgram": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+          "mintAuthority": "9foMHsSDq7nMg4WPusSz9eY7tyxyukqborA8GyU5cUxD",
+          "freezeAuthority": "51QVCuHfL1FeNjd8BDeffCKhCcAYoULnVB3yjNhShiuK",
+          "pythFeedId": "0xad79b3487bef87ff8f8ab31c0b779ad08d931fdfa5436f7e92a234bb82bff7e4"
+        }
+      ]
+    },
+    "AMZN": {
+      "referenceFeedId": "0xb5d0e0fa58a1f8b81498ae670ce93c872d14434b72c364885d4fa1b257cbb07a",
+      "representations": [
+        {
+          "mint": "Xs3eBt7uRfJX8QUs4suhyU8p2M6DoUDrJyWBa8LLZsg",
+          "provider": "xstocks",
+          "symbol": "AMZN",
+          "name": "Amazon xStock",
+          "tokenSymbol": "AMZNx",
+          "structure": "custody_backed",
+          "decimals": 8,
+          "redeemable": true,
+          "custodian": "InCore Bank AG",
+          "source": "https://docs.xstocks.fi/docs",
+          "fetchedAt": "2026-09-21T11:48:40.164Z",
+          "tokenProgram": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+          "mintAuthority": "7pt9tkctJPK7PPNQJ77GKg8ZffSF6QxoMiCFYHxrtaCj",
+          "freezeAuthority": "JDq14BWvqCRFNu1krb12bcRpbGtJZ1FLEakMw6FdxJNs",
+          "pythFeedId": "0x7148fbe6e493ff2580305c92a8d7f8628c9943b11b9b253aebc24863fec290e8"
+        },
+        {
+          "mint": "14Tqdo8V1FhzKsE3W2pFsZCzYPQxxupXRcqw9jv6ondo",
+          "provider": "ondo",
+          "symbol": "AMZN",
+          "name": "Amazon (Ondo Tokenized)",
+          "tokenSymbol": "AMZNon",
+          "structure": "total_return_note",
+          "decimals": 9,
+          "redeemable": true,
+          "custodian": null,
+          "source": "https://docs.ondo.finance/ondo-stocks/legal-and-regulatory",
+          "fetchedAt": "2026-09-21T11:48:40.164Z",
+          "tokenProgram": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+          "mintAuthority": "9foMHsSDq7nMg4WPusSz9eY7tyxyukqborA8GyU5cUxD",
+          "freezeAuthority": "51QVCuHfL1FeNjd8BDeffCKhCcAYoULnVB3yjNhShiuK",
+          "pythFeedId": null
+        }
+      ]
+    },
+    "OPENAI": {
+      "referenceFeedId": null,
+      "representations": [
+        {
+          "mint": "oPAiAikWTaFj9RYoRFD35ccfwhnMcB3ThgBZRHSkjTZ",
+          "provider": "tessera",
+          "symbol": "OPENAI",
+          "name": "T-OpenAI",
+          "tokenSymbol": "tOpenAI",
+          "structure": "loan_participation",
+          "decimals": 9,
+          "redeemable": true,
+          "custodian": null,
+          "source": "https://terms.tessera.pe/",
+          "fetchedAt": "2026-09-21T11:48:40.164Z",
+          "tokenProgram": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+          "mintAuthority": "EXvTtxurWBUNNCtLojaN8ZBJFNJPZFSH3szoih9hh7YW",
+          "freezeAuthority": "7n2PNcDXVDMK2m8dyV9cVPNY7p4jM4ZMHv7TzfibEt8o",
+          "pythFeedId": null
+        },
+        {
+          "mint": "PreweJYECqtQwBtpxHL171nL2K6umo692gTm7Q3rpgF",
+          "provider": "prestocks",
+          "symbol": "OPENAI",
+          "name": "OpenAI PreStocks",
+          "tokenSymbol": "OPENAI",
+          "structure": "spv_exposure",
+          "decimals": 9,
+          "redeemable": true,
+          "custodian": null,
+          "source": "https://prestocks.com/api/prestocks",
+          "fetchedAt": "2026-09-21T11:48:40.164Z",
+          "tokenProgram": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+          "mintAuthority": "WV9PJN7XTmTLVwbutCLFxp8TyePee6Xq5mRq6Fti5Wc",
+          "freezeAuthority": "WV9PJN7XTmTLVwbutCLFxp8TyePee6Xq5mRq6Fti5Wc",
+          "pythFeedId": null
+        }
+      ]
+    },
+    "KALSHI": {
+      "referenceFeedId": null,
+      "representations": [
+        {
+          "mint": "TKLSidmLVt3cqGaaodG8tyRzoANfQwoh67AccjmubeZ",
+          "provider": "tessera",
+          "symbol": "KALSHI",
+          "name": "T-Kalshi",
+          "tokenSymbol": "tKalshi",
+          "structure": "loan_participation",
+          "decimals": 9,
+          "redeemable": true,
+          "custodian": null,
+          "source": "https://terms.tessera.pe/",
+          "fetchedAt": "2026-09-21T11:48:40.164Z",
+          "tokenProgram": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+          "mintAuthority": "EXvTtxurWBUNNCtLojaN8ZBJFNJPZFSH3szoih9hh7YW",
+          "freezeAuthority": "7n2PNcDXVDMK2m8dyV9cVPNY7p4jM4ZMHv7TzfibEt8o",
+          "pythFeedId": null
+        },
+        {
+          "mint": "PreLWGkkeqG1s4HEfFZSy9moCrJ7btsHuUtfcCeoRua",
+          "provider": "prestocks",
+          "symbol": "KALSHI",
+          "name": "Kalshi PreStocks",
+          "tokenSymbol": "KALSHI",
+          "structure": "spv_exposure",
+          "decimals": 9,
+          "redeemable": true,
+          "custodian": null,
+          "source": "https://prestocks.com/api/prestocks",
+          "fetchedAt": "2026-09-21T11:48:40.164Z",
+          "tokenProgram": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+          "mintAuthority": "WV9PJN7XTmTLVwbutCLFxp8TyePee6Xq5mRq6Fti5Wc",
+          "freezeAuthority": "WV9PJN7XTmTLVwbutCLFxp8TyePee6Xq5mRq6Fti5Wc",
+          "pythFeedId": null
+        }
+      ]
+    }
+  }
+}

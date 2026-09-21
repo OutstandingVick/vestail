@@ -15,19 +15,25 @@ import { createHmac, randomBytes, timingSafeEqual } from "node:crypto";
 
 const TTL_SECONDS = 120;
 
-let devSecret: Buffer | undefined;
+/*
+ * The development fallback lives on globalThis, not in a module variable:
+ * Next bundles each route separately, so the order and execute routes get
+ * separate copies of this module, and a module-level random secret made
+ * every token signed by one route fail in the other.
+ */
+const globalForSecret = globalThis as { __vestailDevOrderSecret?: Buffer };
 
 function secret(): Buffer {
   const configured = process.env.VESTAIL_ORDER_SECRET?.trim();
   if (configured) return Buffer.from(configured, "utf8");
 
-  // A per-process secret only works when order and execute hit the same
+  // A generated secret only works when order and execute run in the same
   // process, which is true for `next dev` and false on serverless.
   if (process.env.NODE_ENV === "production") {
     throw new Error("VESTAIL_ORDER_SECRET is not set.");
   }
-  devSecret ??= randomBytes(32);
-  return devSecret;
+  globalForSecret.__vestailDevOrderSecret ??= randomBytes(32);
+  return globalForSecret.__vestailDevOrderSecret;
 }
 
 function mac(requestId: string, expiresAt: number): string {

@@ -1,0 +1,96 @@
+import "server-only";
+
+import { JUPITER_EXECUTE_ENDPOINT, JUPITER_ORDER_ENDPOINT } from "@/lib/constants";
+import { jupiterHeaders } from "@/lib/server/jupiter";
+
+/**
+ * Jupiter Swap API V2, Meta-Aggregator path: GET /order -> sign -> POST
+ * /execute. Only the fields Vestail reads are typed; the rest pass through
+ * unused.
+ */
+
+export interface JupiterOrder {
+  requestId: string;
+  /** Base64 v0 transaction; "" when the swap cannot be built (see errorCode). */
+  transaction: string | null;
+  inputMint: string;
+  outputMint: string;
+  inAmount: string;
+  outAmount: string;
+  taker: string | null;
+  router?: string;
+  feeBps?: number;
+  slippageBps?: number;
+  /** Percent, e.g. 2.37 means 2.37%. (priceImpactPct is the same as a fraction.) */
+  priceImpact?: number;
+  gasless?: boolean;
+  signatureFeeLamports?: number;
+  signatureFeePayer?: string | null;
+  prioritizationFeeLamports?: number;
+  prioritizationFeePayer?: string | null;
+  rentFeeLamports?: number;
+  rentFeePayer?: string | null;
+  lastValidBlockHeight?: string;
+  errorCode?: number;
+  errorMessage?: string;
+}
+
+export interface JupiterExecuteResult {
+  status: "Success" | "Failed";
+  signature?: string;
+  code: number;
+  error?: string;
+  totalInputAmount?: string;
+  totalOutputAmount?: string;
+}
+
+export type JupiterCall<T> =
+  | { ok: true; data: T }
+  | { ok: false; status: number; message: string };
+
+async function call<T>(url: string, init: RequestInit): Promise<JupiterCall<T>> {
+  try {
+    const res = await fetch(url, { ...init, cache: "no-store" });
+    if (!res.ok) {
+      const text = await res.text().catch(() => "");
+      return {
+        ok: false,
+        status: res.status,
+        message:
+          res.status === 429
+            ? "Jupiter is rate-limiting requests. Try again in a moment."
+            : `Jupiter returned HTTP ${res.status}${text ? `: ${text.slice(0, 120)}` : ""}`,
+      };
+    }
+    return { ok: true, data: (await res.json()) as T };
+  } catch (cause) {
+    return {
+      ok: false,
+      status: 502,
+      message: cause instanceof Error ? cause.message : "Could not reach Jupiter.",
+    };
+  }
+}
+
+export function getOrder(params: {
+  inputMint: string;
+  outputMint: string;
+  amount: string;
+  taker: string;
+}): Promise<JupiterCall<JupiterOrder>> {
+  return call<JupiterOrder>(
+    `${JUPITER_ORDER_ENDPOINT}?${new URLSearchParams(params)}`,
+    { headers: jupiterHeaders() },
+  );
+}
+
+export function executeOrder(body: {
+  signedTransaction: string;
+  requestId: string;
+}): Promise<JupiterCall<JupiterExecuteResult>> {
+  return call<JupiterExecuteResult>(JUPITER_EXECUTE_ENDPOINT, {
+    method: "POST",
+    headers: { ...jupiterHeaders(), "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+}

@@ -361,3 +361,54 @@ export const SymbolViewSchema = z.object({
 });
 
 export type SymbolView = z.infer<typeof SymbolViewSchema>;
+
+/* -------------------------------------------------------------------------- */
+/* Swaps                                                                       */
+/* -------------------------------------------------------------------------- */
+
+const baseUnits = z.string().regex(/^\d+$/);
+
+/** What /api/swap/order returns for an eligible, buildable order. */
+export const SwapQuoteSchema = z.object({
+  requestId: z.string().min(1),
+  /** Binds the later /api/swap/execute call to this approved order. */
+  orderToken: z.string().min(1),
+  /** Base64 v0 transaction, unsigned. Signed only in the user's wallet. */
+  transaction: z.string().min(1),
+  outputMint: z.string().min(32).max(44),
+  inAmount: baseUnits,
+  outAmount: baseUnits,
+  outputDecimals: z.number().int().min(0),
+  /** Total fee in basis points, as Jupiter reports it. */
+  feeBps: z.number().nullable(),
+  /** Price impact in percent. */
+  priceImpactPct: z.number().nullable(),
+  slippageBps: z.number().nullable(),
+  router: z.string().nullable(),
+  /** SOL the taker pays: signature + priority fees + new-account rent. */
+  takerLamports: z.number().int().min(0),
+  gasless: z.boolean(),
+});
+
+export type SwapQuote = z.infer<typeof SwapQuoteSchema>;
+
+/** What /api/swap/execute returns once Jupiter has tried to land the swap. */
+export const SwapResultSchema = z.object({
+  status: z.enum(["Success", "Failed"]),
+  signature: z.string().nullable(),
+  code: z.number().int(),
+  totalInputAmount: baseUnits.nullable(),
+  totalOutputAmount: baseUnits.nullable(),
+  message: z.string().nullable(),
+});
+
+export type SwapResult = z.infer<typeof SwapResultSchema>;
+
+/** Error body shared by both swap routes. */
+export const SwapErrorSchema = z.object({
+  error: z.string(),
+  /** Set when the order was refused on eligibility grounds. */
+  verdictStatus: z
+    .enum(["eligible", "conditional", "restricted", "not_assessed"])
+    .optional(),
+});

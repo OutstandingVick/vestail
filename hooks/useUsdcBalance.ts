@@ -5,6 +5,17 @@ import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 
 import { USDC_MINT } from "@/lib/constants";
 
+const BALANCES_CHANGED = "vestail:balances-changed";
+
+/**
+ * Tell every mounted balance reader to refetch, e.g. after a swap lands.
+ * Each component owns its own hook instance, so a local refetch would leave
+ * the others showing the old balance.
+ */
+export function notifyBalancesChanged() {
+  window.dispatchEvent(new Event(BALANCES_CHANGED));
+}
+
 export interface UsdcBalance {
   /** Balance in whole USDC, or null when there is no wallet connected. */
   amount: number | null;
@@ -37,6 +48,11 @@ export function useUsdcBalance(): UsdcBalance {
   const [nonce, setNonce] = useState(0);
 
   const refetch = useCallback(() => setNonce((n) => n + 1), []);
+
+  useEffect(() => {
+    window.addEventListener(BALANCES_CHANGED, refetch);
+    return () => window.removeEventListener(BALANCES_CHANGED, refetch);
+  }, [refetch]);
 
   useEffect(() => {
     if (!publicKey) {

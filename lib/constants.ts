@@ -101,11 +101,21 @@ export const RPC_URL = envOr(
 /* -------------------------------------------------------------------------- */
 
 /**
- * The symbols Vestail resolves. Scoped to tickers that actually have more than
+ * The symbols Vestail resolves. Scoped to names that actually have more than
  * one tokenized representation onchain, which is what makes the comparison
  * worth showing at all.
+ *
+ * SPCX leads because it has the widest spread of legal claims on one name:
+ * xStocks, Backpack and Ondo all issue it as a listed stock, while Tessera and
+ * PreStocks still carry tokens minted when SpaceX was private (it listed on
+ * Nasdaq on 12 June 2026).
+ *
+ * OPENAI and KALSHI are private companies. Their tokens have no listed share
+ * behind them at all, so there is no public reference price — only the
+ * issuer's own mark.
  */
 export const SYMBOL_ALLOWLIST = [
+  "SPCX",
   "NVDA",
   "TSLA",
   "AAPL",
@@ -114,9 +124,17 @@ export const SYMBOL_ALLOWLIST = [
   "MSFT",
   "GOOGL",
   "AMZN",
+  "OPENAI",
+  "KALSHI",
 ] as const;
 
 export type AllowedSymbol = (typeof SYMBOL_ALLOWLIST)[number];
+
+/** Symbols with no listed share, and therefore no public reference price. */
+export const PRIVATE_SYMBOLS: ReadonlySet<AllowedSymbol> = new Set([
+  "OPENAI",
+  "KALSHI",
+]);
 
 /**
  * Jurisdictions Vestail has written policy for. Kept short on purpose: a

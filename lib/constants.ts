@@ -138,13 +138,21 @@ export const PRIVATE_SYMBOLS: ReadonlySet<AllowedSymbol> = new Set([
 
 /**
  * Jurisdictions Vestail has written policy for. Kept short on purpose: a
- * region belongs here only once every provider in policies/ has a sourced rule
+ * region belongs here only once every provider in policies/ has a sourced gate
  * for it, because a half-covered region would produce a confident verdict from
- * incomplete inputs.
+ * incomplete inputs. `npm test` enforces that coverage.
  *
- * NG and DE are non-US retail cases where the eligibility split is sharpest;
- * US is where the `conditional` state does the most work.
+ * RegionSchema in lib/types.ts repeats this list for the policy files; a test
+ * asserts the two match. It is not imported from there because this file must
+ * stay loadable by plain Node (scripts/sync-registry.mjs), which cannot
+ * resolve the "@/" alias.
  */
 export const REGION_ALLOWLIST = ["NG", "US", "DE"] as const;
 
 export type AllowedRegion = (typeof REGION_ALLOWLIST)[number];
+
+export const REGION_NAME: Record<AllowedRegion, string> = {
+  NG: "Nigeria",
+  US: "United States",
+  DE: "Germany",
+};

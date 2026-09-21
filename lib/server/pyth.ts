@@ -24,57 +24,99 @@ export interface PythPrice {
 }
 
 export type PythResult =
-  | { status: "ok"; prices: Map<string, PythPrice> }
   | { status: "no_key" }
-  | { status: "error"; message: string };
+  | { status: "unauthorized" }
+  | {
+      status: "ok";
+      prices: Map<string, PythPrice>;
+      /** Feeds the key is valid for but the plan does not include. */
+      notEntitled: string[];
+      /** Feeds that failed for any other reason, with the reason. */
+      errors: string[];
+    };
 
 interface HermesParsed {
   id: string;
   price: { price: string; conf: string; expo: number; publish_time: number };
 }
 
-export async function getPythPrices(feedIds: string[]): Promise<PythResult> {
-  const key = process.env.PYTH_API_KEY?.trim();
-  if (!key) return { status: "no_key" };
-  if (feedIds.length === 0) return { status: "ok", prices: new Map() };
+type FeedOutcome =
+  | { kind: "ok"; id: string; price: PythPrice }
+  | { kind: "unauthorized" }
+  | { kind: "not_entitled"; id: string }
+  | { kind: "error"; message: string };
 
-  const query = feedIds
-    .map((id) => `ids[]=${encodeURIComponent(id)}`)
-    .join("&");
-
+/**
+ * One request per feed, not one batch.
+ *
+ * Pyth plans grant access per asset class: a trial key reads BTC/USD but gets
+ * 403 "Not entitled" on US equity and tokenized-stock feeds. A batch fails as
+ * a whole if any single feed is outside the plan, which would blank out the
+ * feeds the key *can* read. Symbols have at most three feeds, so the cost is
+ * three small parallel requests.
+ */
+async function fetchFeed(id: string, key: string): Promise<FeedOutcome> {
   try {
     const res = await fetch(
-      `${PYTH_HERMES}/v2/updates/price/latest?parsed=true&${query}`,
+      `${PYTH_HERMES}/v2/updates/price/latest?parsed=true&ids[]=${encodeURIComponent(id)}`,
       {
         headers: { Authorization: `Bearer ${key}` },
         next: { revalidate: 10 },
       },
     );
+
+    if (res.status === 401) return { kind: "unauthorized" };
+    if (res.status === 403) {
+      // 403 is Pyth's answer for a valid key outside its plan. Only a body
+      // that says so is treated that way; any other 403 is a plain error.
+      const text = await res.text();
+      return text.startsWith("Not entitled")
+        ? { kind: "not_entitled", id }
+        : { kind: "error", message: `Pyth returned HTTP 403: ${text.slice(0, 80)}` };
+    }
     if (!res.ok) {
-      return {
-        status: "error",
-        message:
-          res.status === 401 || res.status === 403
-            ? "Pyth rejected the API key."
-            : `Pyth returned HTTP ${res.status}.`,
-      };
+      return { kind: "error", message: `Pyth returned HTTP ${res.status}.` };
     }
 
     const body = (await res.json()) as { parsed?: HermesParsed[] };
-    const prices = new Map<string, PythPrice>();
-    for (const p of body.parsed ?? []) {
-      const scale = 10 ** p.price.expo;
-      prices.set(`0x${p.id.replace(/^0x/, "")}`, {
+    const p = body.parsed?.[0];
+    if (!p) return { kind: "error", message: "Pyth returned no price." };
+
+    const scale = 10 ** p.price.expo;
+    return {
+      kind: "ok",
+      id: `0x${p.id.replace(/^0x/, "")}`,
+      price: {
         price: Number(p.price.price) * scale,
         conf: Number(p.price.conf) * scale,
         publishTime: p.price.publish_time,
-      });
-    }
-    return { status: "ok", prices };
+      },
+    };
   } catch (cause) {
     return {
-      status: "error",
+      kind: "error",
       message: cause instanceof Error ? cause.message : "Pyth request failed.",
     };
   }
+}
+
+export async function getPythPrices(feedIds: string[]): Promise<PythResult> {
+  const key = process.env.PYTH_API_KEY?.trim();
+  if (!key) return { status: "no_key" };
+
+  const outcomes = await Promise.all(feedIds.map((id) => fetchFeed(id, key)));
+
+  if (outcomes.some((o) => o.kind === "unauthorized")) {
+    return { status: "unauthorized" };
+  }
+
+  const prices = new Map<string, PythPrice>();
+  const notEntitled: string[] = [];
+  const errors: string[] = [];
+  for (const o of outcomes) {
+    if (o.kind === "ok") prices.set(o.id, o.price);
+    else if (o.kind === "not_entitled") notEntitled.push(o.id);
+    else if (o.kind === "error") errors.push(o.message);
+  }
+  return { status: "ok", prices, notEntitled, errors };
 }

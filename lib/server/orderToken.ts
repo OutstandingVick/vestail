@@ -36,6 +36,20 @@ function secret(): Buffer {
   return globalForSecret.__vestailDevOrderSecret;
 }
 
+/**
+ * Whether orders can be signed here. Checked by both swap routes before they
+ * do any work, so a deploy missing VESTAIL_ORDER_SECRET says so plainly
+ * instead of calling Jupiter and then failing with an empty 500.
+ */
+export function orderSigningReady(): boolean {
+  try {
+    secret();
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 function mac(requestId: string, expiresAt: number): string {
   return createHmac("sha256", secret())
     .update(`${requestId}.${expiresAt}`)

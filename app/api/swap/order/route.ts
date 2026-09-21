@@ -7,7 +7,7 @@ import { evaluate } from "@/lib/evaluate";
 import { POLICIES } from "@/lib/policies";
 import { findRepresentation } from "@/lib/registry";
 import { getOrder } from "@/lib/server/jupiterSwap";
-import { signOrder } from "@/lib/server/orderToken";
+import { orderSigningReady, signOrder } from "@/lib/server/orderToken";
 import { RegionSchema, type SwapQuote } from "@/lib/types";
 
 /**
@@ -51,6 +51,10 @@ function fail(status: number, error: string, extra: object = {}) {
 }
 
 export async function GET(request: Request) {
+  if (!orderSigningReady()) {
+    return fail(503, "Swaps are not configured on this server: VESTAIL_ORDER_SECRET is missing.");
+  }
+
   const parsed = QuerySchema.safeParse(
     Object.fromEntries(new URL(request.url).searchParams),
   );

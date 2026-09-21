@@ -9,6 +9,22 @@
 
 import { PublicKey } from "@solana/web3.js";
 
+/**
+ * Reads an env var, treating blank as absent.
+ *
+ * `process.env.X ?? fallback` is not enough here. A variable that is present
+ * but empty — the `NEXT_PUBLIC_RPC_URL=` line that `cp .env.example .env.local`
+ * leaves behind before anyone fills it in — is an empty string, which is
+ * neither null nor undefined, so `??` hands it straight through. That empty
+ * string then reaches the Connection constructor and throws
+ * "Endpoint URL must start with `http:` or `https:`", which reads like a
+ * config typo rather than a missing value.
+ */
+function envOr(value: string | undefined, fallback: string): string {
+  const trimmed = value?.trim();
+  return trimmed ? trimmed : fallback;
+}
+
 /* -------------------------------------------------------------------------- */
 /* Settlement asset                                                            */
 /* -------------------------------------------------------------------------- */
@@ -42,8 +58,10 @@ export const USDC_DECIMALS = 6;
  * orders will be proxied through a route handler rather than fetched from the
  * browser.
  */
-export const JUPITER_API_BASE =
-  process.env.NEXT_PUBLIC_JUPITER_API ?? "https://api.jup.ag/swap/v2";
+export const JUPITER_API_BASE = envOr(
+  process.env.NEXT_PUBLIC_JUPITER_API,
+  "https://api.jup.ag/swap/v2",
+);
 
 export const JUPITER_ORDER_ENDPOINT = `${JUPITER_API_BASE}/order`;
 export const JUPITER_EXECUTE_ENDPOINT = `${JUPITER_API_BASE}/execute`;
@@ -56,8 +74,10 @@ export const JUPITER_EXECUTE_ENDPOINT = `${JUPITER_API_BASE}/execute`;
  * Mainnet RPC. The public endpoint is rate-limited hard enough that it will
  * fail under demo load, so a real endpoint belongs in NEXT_PUBLIC_RPC_URL.
  */
-export const RPC_URL =
-  process.env.NEXT_PUBLIC_RPC_URL ?? "https://api.mainnet-beta.solana.com";
+export const RPC_URL = envOr(
+  process.env.NEXT_PUBLIC_RPC_URL,
+  "https://api.mainnet-beta.solana.com",
+);
 
 /* -------------------------------------------------------------------------- */
 /* Allowlists                                                                  */

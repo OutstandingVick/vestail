@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import {
   PRIVATE_SYMBOLS,
   REGION_ALLOWLIST,
+  REGION_NAME,
   SYMBOL_ALLOWLIST,
   type AllowedRegion,
   type AllowedSymbol,
@@ -26,6 +27,7 @@ import {
   type Verdict,
 } from "@/lib/types";
 
+import { BuyPanel } from "@/components/BuyPanel";
 import { RegionPicker, VerdictStrip, VerdictSummary } from "@/components/Verdicts";
 
 const REGION_STORAGE_KEY = "vestail.region";
@@ -224,7 +226,12 @@ function SymbolTable({
 
       <div className="mt-3">
         {region && verdicts ? (
-          <VerdictSummary verdicts={verdicts} region={region} />
+          <>
+            <VerdictSummary verdicts={verdicts} region={region} />
+            {!verdicts.some((v) => v?.status === "eligible") && (
+              <NothingToRoute region={region} count={count} />
+            )}
+          </>
         ) : (
           <p className="text-sm text-dim">
             Declare where you are to see which of these you may actually hold.
@@ -362,6 +369,13 @@ function Row({
           />
         </div>
       )}
+
+      {/* The only buy path in the app, and only for eligible verdicts. */}
+      {region && verdict?.status === "eligible" && (
+        <div className="mt-4">
+          <BuyPanel representation={r} region={region} />
+        </div>
+      )}
     </li>
   );
 }
@@ -400,4 +414,34 @@ function Comparison({
     );
   }
   return <p className="text-sm text-dim">—</p>;
+}
+
+/**
+ * Shown when nothing for this symbol is eligible in the declared region.
+ *
+ * This is the common case for a retail holder, not an edge case, so it reads
+ * as the finding it is rather than as an error.
+ */
+function NothingToRoute({
+  region,
+  count,
+}: {
+  region: AllowedRegion;
+  count: number;
+}) {
+  return (
+    <div className="mt-4 rounded-md border border-line bg-surface p-4">
+      <p className="text-sm text-paper">
+        Vestail will not route a purchase of any of these {count} tokens in{" "}
+        {REGION_NAME[region]}.
+      </p>
+      <p className="mt-1 text-xs leading-relaxed text-dim">
+        It only routes to tokens whose issuer&apos;s terms let you hold them
+        and use their rights where you are. Every token below is gated or
+        excluded in {REGION_NAME[region]}; each one says why, with the issuer
+        document it comes from. You can still buy them elsewhere onchain —
+        Vestail blocks nothing — but the gate will still apply to you.
+      </p>
+    </div>
+  );
 }

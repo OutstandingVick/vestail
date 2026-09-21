@@ -19,10 +19,25 @@ import { PublicKey } from "@solana/web3.js";
  * string then reaches the Connection constructor and throws
  * "Endpoint URL must start with `http:` or `https:`", which reads like a
  * config typo rather than a missing value.
+ *
+ * The inverse mistake is caught too: a value that is set but is not an
+ * http(s) URL — usually a bare provider API key pasted without the endpoint
+ * around it — throws naming the variable, instead of surfacing later as that
+ * same unhelpful Connection error.
  */
-function envOr(value: string | undefined, fallback: string): string {
+function envOr(
+  name: string,
+  value: string | undefined,
+  fallback: string,
+): string {
   const trimmed = value?.trim();
-  return trimmed ? trimmed : fallback;
+  if (!trimmed) return fallback;
+  if (!/^https?:\/\//.test(trimmed)) {
+    throw new Error(
+      `${name} must be a full http(s) URL, not a bare API key or hostname.`,
+    );
+  }
+  return trimmed;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -59,6 +74,7 @@ export const USDC_DECIMALS = 6;
  * browser.
  */
 export const JUPITER_API_BASE = envOr(
+  "NEXT_PUBLIC_JUPITER_API",
   process.env.NEXT_PUBLIC_JUPITER_API,
   "https://api.jup.ag/swap/v2",
 );
@@ -75,6 +91,7 @@ export const JUPITER_EXECUTE_ENDPOINT = `${JUPITER_API_BASE}/execute`;
  * fail under demo load, so a real endpoint belongs in NEXT_PUBLIC_RPC_URL.
  */
 export const RPC_URL = envOr(
+  "NEXT_PUBLIC_RPC_URL",
   process.env.NEXT_PUBLIC_RPC_URL,
   "https://api.mainnet-beta.solana.com",
 );

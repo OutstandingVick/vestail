@@ -58,8 +58,19 @@ export async function getSymbolView(symbol: AllowedSymbol): Promise<SymbolView> 
     warnings.push(
       "Pyth is not configured (PYTH_API_KEY), so there is no listed-share reference price and token prices fall back to Jupiter.",
     );
-  } else if (pyth.status === "error") {
-    warnings.push(`Pyth prices unavailable: ${pyth.message}`);
+  } else if (pyth.status === "unauthorized") {
+    warnings.push(
+      "Pyth rejected the API key, so there is no listed-share reference price and token prices fall back to Jupiter.",
+    );
+  } else if (pyth.status === "ok") {
+    if (pyth.notEntitled.length > 0) {
+      warnings.push(
+        `The configured Pyth plan does not include ${pyth.notEntitled.length} of ${feedIds.length} feeds for ${symbol} (US equity and tokenized-stock feeds). Those prices fall back to Jupiter, and premiums to the listed share cannot be shown without them.`,
+      );
+    }
+    for (const message of new Set(pyth.errors)) {
+      warnings.push(`Pyth: ${message}`);
+    }
   }
   if (jupiter.status === "error") {
     warnings.push(`Jupiter market data unavailable: ${jupiter.message}`);

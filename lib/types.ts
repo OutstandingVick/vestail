@@ -28,18 +28,35 @@ import { z } from "zod";
  *                         claim runs against the intermediary. Backpack's
  *                         structure.
  *
+ *   spv_exposure          Economic exposure to a special-purpose vehicle
+ *                         that holds (or claims to hold) private-company
+ *                         shares. No shareholder rights, and the underlying
+ *                         company may not recognise the SPV at all. PreStocks.
+ *
+ *   loan_participation    A participation in a loan to an issuer entity that
+ *                         holds the investment; repaid from the proceeds of a
+ *                         liquidity event such as an IPO. Tessera T-Tokens.
+ *
  * These look identical in a wallet. They are not identical in a bankruptcy.
  */
 export const StructureSchema = z.enum([
   "custody_backed",
   "total_return_note",
   "security_entitlement",
+  "spv_exposure",
+  "loan_participation",
 ]);
 
 export type Structure = z.infer<typeof StructureSchema>;
 
-/** Issuers Vestail has written a policy file for. */
-export const ProviderSchema = z.enum(["xstocks", "ondo", "backpack"]);
+/** Issuers whose representations Vestail resolves. */
+export const ProviderSchema = z.enum([
+  "xstocks",
+  "ondo",
+  "backpack",
+  "prestocks",
+  "tessera",
+]);
 
 export type Provider = z.infer<typeof ProviderSchema>;
 
@@ -78,7 +95,10 @@ export const RepresentationSchema = z.object({
    */
   redeemable: z.boolean(),
 
-  /** Entity holding the underlying, where one exists. Null for a note. */
+  /**
+   * The named entity holding the underlying. Null when the issuer does not
+   * publicly name one — which is itself worth showing, not an empty cell.
+   */
   custodian: z.string().min(1).nullable(),
 
   /** Where this record came from, so any claim on screen can be traced. */

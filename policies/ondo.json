@@ -1,0 +1,42 @@
+{
+  "provider": "ondo",
+  "version": "2026-09-21.1",
+  "reviewedAt": "2026-09-21",
+  "rules": [
+    {
+      "id": "us-prohibited",
+      "kind": "gate",
+      "status": "restricted",
+      "regions": ["US"],
+      "reason": "The United States is a prohibited jurisdiction: US residents and US persons under Regulation S may not subscribe for, acquire or redeem Ondo stocks. That covers buying on the secondary market too.",
+      "source_url": "https://docs.ondo.finance/ondo-stocks/eligibility",
+      "source_quality": "primary"
+    },
+    {
+      "id": "eea-professional-or-qualified",
+      "kind": "gate",
+      "status": "conditional",
+      "regions": ["DE"],
+      "reason": "In the EEA you must be a MiFID II Professional Client or a Qualified Investor to be issued Ondo stocks, typically two of: a EUR 500,000 portfolio, 10 significant trades a quarter, or a year working in finance. A typical retail holder cannot deal with Ondo directly.",
+      "source_url": "https://docs.ondo.finance/ondo-stocks/eligibility",
+      "source_quality": "primary"
+    },
+    {
+      "id": "kyc-to-buy-or-redeem",
+      "kind": "gate",
+      "status": "conditional",
+      "regions": ["NG"],
+      "reason": "Nigeria is on neither Ondo's prohibited nor restricted list, but buying from or redeeming with Ondo requires completing its KYC onboarding first.",
+      "source_url": "https://docs.ondo.finance/ondo-stocks/legal-and-regulatory",
+      "source_quality": "primary"
+    },
+    {
+      "id": "debt-note-no-voting",
+      "kind": "note",
+      "regions": ["NG", "US", "DE"],
+      "reason": "A debt note issued by Ondo Global Markets (BVI) Limited, backed 1:1 by shares held at US broker-dealers. No shareholder voting rights.",
+      "source_url": "https://docs.ondo.finance/ondo-stocks/legal-and-regulatory",
+      "source_quality": "primary"
+    }
+  ]
+}

@@ -111,6 +111,18 @@ export const RepresentationSchema = z.object({
 export type Representation = z.infer<typeof RepresentationSchema>;
 
 /* -------------------------------------------------------------------------- */
+/* Region                                                                      */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Jurisdictions Vestail has written policy for, as ISO 3166-1 alpha-2 codes.
+ * Self-declared by the user; never inferred, never verified.
+ */
+export const RegionSchema = z.enum(["NG", "US", "DE"]);
+
+export type Region = z.infer<typeof RegionSchema>;
+
+/* -------------------------------------------------------------------------- */
 /* Verdict                                                                     */
 /* -------------------------------------------------------------------------- */
 
@@ -145,6 +157,29 @@ export const VerdictStatusSchema = z.enum([
 export type VerdictStatus = z.infer<typeof VerdictStatusSchema>;
 
 /**
+ * How directly a source supports a rule.
+ *
+ *   primary    The issuer's own document states it.
+ *   secondary  Third-party reporting, or an inference from an issuer
+ *              document that does not state it outright. Shown to the user.
+ */
+export const SourceQualitySchema = z.enum(["primary", "secondary"]);
+
+export type SourceQuality = z.infer<typeof SourceQualitySchema>;
+
+/** One policy rule's contribution to a verdict, with its own citation. */
+export const EvidenceSchema = z.object({
+  ruleId: z.string().min(1),
+  /** A gate sets the status; a note adds context and never changes it. */
+  kind: z.enum(["gate", "note"]),
+  reason: z.string().min(1),
+  sourceUrl: z.string().url(),
+  sourceQuality: SourceQualitySchema,
+});
+
+export type Evidence = z.infer<typeof EvidenceSchema>;
+
+/**
  * The outcome of evaluating one Representation against one self-declared
  * jurisdiction.
  */
@@ -168,17 +203,74 @@ export const VerdictSchema = z.object({
   policyVersion: z.string().min(1),
 
   /**
-   * The issuer document the rule was read from. Every rule in policies/
-   * carries one, so every verdict on screen can be traced to a primary source
-   * rather than to our summary of it.
+   * Source of the deciding gate. Every rule in policies/ carries one, so every
+   * verdict on screen traces to a document rather than to our summary of it.
    */
   sourceUrl: z.string().url(),
+
+  /**
+   * Weakest quality among the gates that decided the status. A verdict is no
+   * more certain than its least certain deciding source.
+   */
+  sourceQuality: SourceQualitySchema,
+
+  /** Every matching rule with its own source, gates first. */
+  evidence: z.array(EvidenceSchema).min(1),
 
   /** When the evaluation ran. */
   evaluatedAt: z.string().datetime(),
 });
 
 export type Verdict = z.infer<typeof VerdictSchema>;
+
+/* -------------------------------------------------------------------------- */
+/* Policy files                                                                */
+/* -------------------------------------------------------------------------- */
+
+const PolicyRuleBase = {
+  /** Stable within a file, so evidence can be traced back to its rule. */
+  id: z.string().regex(/^[a-z0-9-]+$/),
+  regions: z.array(RegionSchema).min(1),
+  /** Limit the rule to specific symbols. Omitted means every symbol. */
+  symbols: z.array(z.string().min(1)).min(1).optional(),
+  reason: z.string().min(1),
+  source_url: z.string().url().startsWith("https://"),
+  source_quality: SourceQualitySchema,
+};
+
+/**
+ * A rule in a policies/*.json file. Gates carry a status; notes do not, so a
+ * warning can never silently change a verdict.
+ */
+export const PolicyRuleSchema = z.discriminatedUnion("kind", [
+  z.object({ ...PolicyRuleBase, kind: z.literal("gate"), status: VerdictStatusSchema }),
+  z.object({ ...PolicyRuleBase, kind: z.literal("note") }),
+]);
+
+export type PolicyRule = z.infer<typeof PolicyRuleSchema>;
+
+export const PolicyFileSchema = z
+  .object({
+    provider: ProviderSchema,
+    /** Copied onto every verdict as policyVersion. Bump on any rule change. */
+    version: z.string().regex(/^\d{4}-\d{2}-\d{2}\.\d+$/),
+    reviewedAt: z.string().date(),
+    rules: z.array(PolicyRuleSchema).min(1),
+  })
+  .superRefine((file, ctx) => {
+    const seen = new Set<string>();
+    for (const rule of file.rules) {
+      if (seen.has(rule.id)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: `duplicate rule id "${rule.id}"`,
+        });
+      }
+      seen.add(rule.id);
+    }
+  });
+
+export type PolicyFile = z.infer<typeof PolicyFileSchema>;
 
 /* -------------------------------------------------------------------------- */
 /* Registry                                                                    */

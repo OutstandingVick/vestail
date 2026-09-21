@@ -90,11 +90,11 @@ reviewable diff:
   [`policies/README.md`](policies/README.md).
 
 ```
-app/                          pages; api/representations/[symbol] route
-components/                   wallet, header, RepresentationExplorer
+app/                          pages; api/representations, api/swap/{order,execute}
+components/                   wallet, header, RepresentationExplorer, verdicts, BuyPanel
 hooks/                        useUsdcBalance
 lib/                          constants, Zod schemas, registry loader, labels
-lib/server/                   Pyth, Jupiter and issuer-mark clients (server-only)
+lib/server/                   Pyth, Jupiter, issuer-mark clients; order tokens (server-only)
 registry/                     generated mint registry + sourced provider facts
 scripts/sync-registry.mjs     regenerates the registry
 policies/                     sourced issuer eligibility policy
@@ -134,20 +134,30 @@ Next.js 15 (App Router) · TypeScript · Tailwind v4 · Solana Wallet Adapter
 No Redis, no separate backend, no Anchor program. Keys stay in a Next.js route
 handler, which is the only code that calls Pyth or Jupiter.
 
-### Jupiter
+### Buying: eligible only
 
-Routing uses the **Jupiter Swap API V2** (`api.jup.ag/swap/v2`):
-`GET /order` → sign → `POST /execute`.
+Vestail routes a purchase **only** to a token whose verdict is `eligible` in
+the declared region. Conditional, restricted and not-assessed tokens get no buy
+path at all. When nothing is eligible, which for a retail holder is the common
+case, the page says so and why, instead of offering the next-best token.
 
-This is **not** the Ultra API and **not** the legacy `/swap/v1` quote+swap pair.
-Jupiter's own docs mark Ultra as no longer actively maintained and superseded by
-Swap V2; most third-party tutorials are still on the old endpoints. Check
-[developers.jup.ag](https://developers.jup.ag) before changing this.
+The flow uses the **Jupiter Swap API V2** Meta-Aggregator path
+(`api.jup.ag/swap/v2`): `GET /order` → sign in the user's wallet →
+`POST /execute`. Not the Ultra API, and not the legacy `/swap/v1` pair.
 
-The API key (`x-api-key`) is optional: keyless requests work but hit an
-undocumented rate limit within a few calls. When set, it is read only on the
-server. It must never be a `NEXT_PUBLIC_` variable, which would inline it into
-the browser bundle.
+- `GET /api/swap/order` re-evaluates the verdict on the server and refuses
+  anything not `eligible` (403). The rule is a property of the server, not of
+  which buttons render. It also refuses an order from Jupiter that does not
+  match the request (mints, amount, taker) before anyone signs it.
+- It returns a short-lived HMAC **order token** bound to Jupiter's
+  `requestId`. `POST /api/swap/execute` accepts only orders carrying a valid
+  one, so Vestail's Jupiter key can only land swaps that passed the check.
+- The user sees price impact, Jupiter's fee, the slippage limit, and the SOL
+  they pay (including one-time token-account rent) before signing. The wallet
+  signs; Vestail never holds funds or keys.
+
+`JUPITER_API_KEY` is optional (keyless works, with a lower documented limit on
+`/execute`) and server-only. `VESTAIL_ORDER_SECRET` is required in production.
 
 ## Running locally
 
@@ -211,4 +221,6 @@ Jupiter and the page says so.
 and DE, a pure evaluator, tests, and self-declared-region verdicts on every
 token with their evidence and sources.
 
-Next: Jupiter routing (Phase 3).
+**Phase 3 — complete.** USDC purchases via Jupiter Swap V2, offered and
+enforced for eligible tokens only, with server-bound order tokens and a
+pre-signing quote breakdown.

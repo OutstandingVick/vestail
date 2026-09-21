@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 
 import { executeOrder } from "@/lib/server/jupiterSwap";
-import { verifyOrder } from "@/lib/server/orderToken";
+import { orderSigningReady, verifyOrder } from "@/lib/server/orderToken";
 import type { SwapResult } from "@/lib/types";
 
 /**
@@ -40,6 +40,10 @@ function fail(status: number, error: string) {
 }
 
 export async function POST(request: Request) {
+  if (!orderSigningReady()) {
+    return fail(503, "Swaps are not configured on this server: VESTAIL_ORDER_SECRET is missing.");
+  }
+
   const parsed = BodySchema.safeParse(await request.json().catch(() => null));
   if (!parsed.success) return fail(400, "Invalid execute request.");
   const { signedTransaction, requestId, orderToken } = parsed.data;

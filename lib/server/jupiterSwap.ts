@@ -46,13 +46,25 @@ export interface JupiterExecuteResult {
 
 export type JupiterCall<T> =
   | { ok: true; data: T }
-  | { ok: false; status: number; message: string };
+  | {
+      ok: false;
+      status: number;
+      message: string;
+      /** Jupiter's error body when it sent JSON, e.g. { code: -1003, error }. */
+      body?: unknown;
+    };
 
 async function call<T>(url: string, init: RequestInit): Promise<JupiterCall<T>> {
   try {
     const res = await fetch(url, { ...init, cache: "no-store" });
     if (!res.ok) {
       const text = await res.text().catch(() => "");
+      let body: unknown;
+      try {
+        body = JSON.parse(text);
+      } catch {
+        body = undefined;
+      }
       return {
         ok: false,
         status: res.status,
@@ -60,6 +72,7 @@ async function call<T>(url: string, init: RequestInit): Promise<JupiterCall<T>> 
           res.status === 429
             ? "Jupiter is rate-limiting requests. Try again in a moment."
             : `Jupiter returned HTTP ${res.status}${text ? `: ${text.slice(0, 120)}` : ""}`,
+        body,
       };
     }
     return { ok: true, data: (await res.json()) as T };

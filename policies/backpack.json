@@ -1,0 +1,42 @@
+{
+  "provider": "backpack",
+  "version": "2026-09-21.1",
+  "reviewedAt": "2026-09-21",
+  "rules": [
+    {
+      "id": "us-not-available",
+      "kind": "gate",
+      "status": "restricted",
+      "regions": ["US"],
+      "reason": "Backpack Securities is not available in the United States.",
+      "source_url": "https://support.backpack.exchange/backpack-securities/eligibility-and-access",
+      "source_quality": "primary"
+    },
+    {
+      "id": "not-on-backpack-eu",
+      "kind": "gate",
+      "status": "restricted",
+      "regions": ["DE"],
+      "reason": "Backpack Securities is not offered on Backpack EU. Vestail assumes German residents are served through Backpack EU; Backpack's page does not say so outright.",
+      "source_url": "https://support.backpack.exchange/backpack-securities/eligibility-and-access",
+      "source_quality": "secondary"
+    },
+    {
+      "id": "verified-account-to-redeem",
+      "kind": "gate",
+      "status": "conditional",
+      "regions": ["NG"],
+      "reason": "Nigeria is a supported region, but converting the token back into the underlying security entitlement requires a verified (KYC) Backpack account.",
+      "source_url": "https://support.backpack.exchange/backpack-securities/eligibility-and-access",
+      "source_quality": "primary"
+    },
+    {
+      "id": "security-entitlement-rights",
+      "kind": "note",
+      "regions": ["NG", "US", "DE"],
+      "reason": "A UCC Article 8 security entitlement under New York law held through a US broker-dealer, with cash dividends and corporate actions. The closest thing here to holding the share.",
+      "source_url": "https://support.backpack.exchange/backpack-securities",
+      "source_quality": "primary"
+    }
+  ]
+}

@@ -5,8 +5,8 @@
     "structure": "custody_backed",
     "redeemable": true,
     "custodian": "InCore Bank AG",
-    "sourceUrl": "https://docs.xstocks.fi/docs",
-    "notes": "Each token is 1:1 collateralised by the underlying share. Redemption runs through Backed's own onboarding (KYC/AML), not the secondary market. xStocks docs: 'not intended for distribution in the United States, to any US person'.",
+    "sourceUrl": "https://assets.backed.fi/legal-documentation",
+    "notes": "Legally a tracker certificate under Swiss law, 1:1 collateralised by the underlying share. Issuance and redemption through Backed are limited to professional investors; retail holders buy and sell on the secondary market. Not offered to US persons.",
     "unverified": [
       "custodian (InCore Bank AG): secondary sources only",
       "redemption minimum of USD 5,000: secondary sources only"
@@ -28,10 +28,10 @@
     "structure": "security_entitlement",
     "redeemable": true,
     "custodian": "Backpack Securities",
-    "sourceUrl": "https://solanacompass.com/news/backpack-securities-lists-tokenized-strategy-mstr-shares-on-solana-redeemable-11-for-real-stock",
-    "notes": "Issued by a US broker-dealer as a UCC Article 8 security entitlement. Onboarded, KYC'd holders can redeem for the real share and move it to another brokerage over ACATS/DTCC.",
+    "sourceUrl": "https://support.backpack.exchange/backpack-securities",
+    "notes": "A UCC Article 8 security entitlement under New York law, held through Backpack Securities. Verified Backpack users in supported regions can redeem into the underlying entitlement. Not available in the US, UK, UAE or Japan, or on Backpack EU.",
     "unverified": [
-      "all of the above: news coverage only, no Backpack primary document located yet"
+      "custodian: Backpack's pages describe brokerage, clearing and custody infrastructure without naming the custodian"
     ],
     "mintAuthority": null
   },
@@ -40,12 +40,9 @@
     "structure": "spv_exposure",
     "redeemable": true,
     "custodian": null,
-    "sourceUrl": "https://prestocks.com/api/prestocks",
-    "notes": "PreStocks' own description of each token: 'backed 1:1 by SPV exposure that tracks the price of the underlying private company'. Reported terms grant no equity or shareholder rights. Anthropic and OpenAI have both said SPV transfers of their shares are void.",
-    "unverified": [
-      "redemption and its KYC requirement: secondary sources only (prestocks.com/terms returns 404)",
-      "restricted jurisdictions (US, Singapore, EU): secondary sources only"
-    ],
+    "sourceUrl": "https://prestocks.notion.site/terms-of-service",
+    "notes": "Bearer tokens referencing economic exposure to private companies through SPVs; they confer no ownership, voting, dividend or information rights. Holders may request redemption for USDC, but fulfilment is at PreStocks' discretion and may be partial or fail. Prohibited Jurisdictions include the US and Singapore, not the EU. OpenAI and Anthropic have warned that SPV exposure to their shares may be void or worthless.",
+    "unverified": [],
     "mintAuthority": null
   },
   "tessera": {

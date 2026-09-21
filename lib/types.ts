@@ -241,10 +241,17 @@ const PolicyRuleBase = {
 /**
  * A rule in a policies/*.json file. Gates carry a status; notes do not, so a
  * warning can never silently change a verdict.
+ *
+ * `.strict()` matters here. By default Zod drops unknown keys, so a note
+ * written with a `status`, or a rule with a misspelt `sorce_url`, would parse
+ * cleanly and lose the field without a word. For hand-written policy, an
+ * unknown key is always a mistake.
  */
 export const PolicyRuleSchema = z.discriminatedUnion("kind", [
-  z.object({ ...PolicyRuleBase, kind: z.literal("gate"), status: VerdictStatusSchema }),
-  z.object({ ...PolicyRuleBase, kind: z.literal("note") }),
+  z
+    .object({ ...PolicyRuleBase, kind: z.literal("gate"), status: VerdictStatusSchema })
+    .strict(),
+  z.object({ ...PolicyRuleBase, kind: z.literal("note") }).strict(),
 ]);
 
 export type PolicyRule = z.infer<typeof PolicyRuleSchema>;
@@ -257,6 +264,7 @@ export const PolicyFileSchema = z
     reviewedAt: z.string().date(),
     rules: z.array(PolicyRuleSchema).min(1),
   })
+  .strict()
   .superRefine((file, ctx) => {
     const seen = new Set<string>();
     for (const rule of file.rules) {

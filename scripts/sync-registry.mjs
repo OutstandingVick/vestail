@@ -56,16 +56,17 @@ const TESSERA_SYMBOLS = { tSpaceX: "SPCX", tOpenAI: "OPENAI", tKalshi: "KALSHI" 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 /**
- * Keyless Jupiter allows only a handful of requests before returning 429, so
- * rate limits are retried with backoff (honouring Retry-After) instead of
- * failing the run. Anything else non-2xx still fails immediately.
+ * Retries the two failures that are about the moment, not the request:
+ * 429 (keyless Jupiter allows only a handful of calls) and 5xx (Tessera's API
+ * returns intermittent 500s). Backoff honours Retry-After. Anything else
+ * non-2xx still fails immediately.
  */
 async function getJson(url, init, attempt = 0) {
   const res = await fetch(url, init);
-  if (res.status === 429 && attempt < 6) {
+  if ((res.status === 429 || res.status >= 500) && attempt < 6) {
     const retryAfter = Number(res.headers.get("retry-after"));
     const wait = retryAfter > 0 ? retryAfter * 1000 : 1000 * 2 ** attempt;
-    process.stderr.write(`  429 from ${new URL(url).host}, retrying in ${wait}ms\n`);
+    process.stderr.write(`  ${res.status} from ${new URL(url).host}, retrying in ${wait}ms\n`);
     await sleep(wait);
     return getJson(url, init, attempt + 1);
   }

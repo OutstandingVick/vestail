@@ -25,3 +25,12 @@ export function getSymbolEntry(symbol: AllowedSymbol) {
   }
   return entry;
 }
+
+/** The registry entry for a mint, or undefined if Vestail does not know it. */
+export function findRepresentation(mint: string) {
+  for (const entry of Object.values(registry.symbols)) {
+    const found = entry.representations.find((r) => r.mint === mint);
+    if (found) return found;
+  }
+  return undefined;
+}

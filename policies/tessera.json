@@ -1,0 +1,51 @@
+{
+  "provider": "tessera",
+  "version": "2026-09-21.1",
+  "reviewedAt": "2026-09-21",
+  "rules": [
+    {
+      "id": "us-persons-excluded",
+      "kind": "gate",
+      "status": "restricted",
+      "regions": ["US"],
+      "reason": "Tessera's terms (3.1(c)) exclude US persons from using Tessera, including its smart contracts, so a US holder cannot redeem.",
+      "source_url": "https://terms.tessera.pe/",
+      "source_quality": "primary"
+    },
+    {
+      "id": "de-not-excluded",
+      "kind": "gate",
+      "status": "eligible",
+      "regions": ["DE"],
+      "reason": "Germany is not an excluded jurisdiction, and any holder, including someone who bought on the secondary market, may redeem during the Redemption Period. KYC is required only when lending (minting).",
+      "source_url": "https://terms.tessera.pe/",
+      "source_quality": "primary"
+    },
+    {
+      "id": "ng-fatf-list-ambiguity",
+      "kind": "gate",
+      "status": "conditional",
+      "regions": ["NG"],
+      "reason": "Tessera excludes FATF grey-listed jurisdictions and links to the June 2025 list, which still included Nigeria. FATF removed Nigeria on 24 October 2025. Whether Tessera will serve a Nigerian holder at redemption is unclear; ask Tessera before relying on it.",
+      "source_url": "https://terms.tessera.pe/",
+      "source_quality": "primary"
+    },
+    {
+      "id": "redemption-window-lapses",
+      "kind": "note",
+      "regions": ["NG", "US", "DE"],
+      "reason": "Redemption opens only after the issuer receives the proceeds of a liquidity event such as an IPO, and runs for 90 days. After that the claim lapses and the issuer is released (terms 2.2).",
+      "source_url": "https://terms.tessera.pe/",
+      "source_quality": "primary"
+    },
+    {
+      "id": "spacex-listed-no-redemption-date",
+      "kind": "note",
+      "regions": ["NG", "US", "DE"],
+      "symbols": ["SPCX"],
+      "reason": "SpaceX listed on 12 June 2026, but the window opens only once the issuer has actually received sale proceeds, which can follow a lock-up. Vestail found no announced Redemption Start Date for T-SpaceX.",
+      "source_url": "https://terms.tessera.pe/",
+      "source_quality": "secondary"
+    }
+  ]
+}

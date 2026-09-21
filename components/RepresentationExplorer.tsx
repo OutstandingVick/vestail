@@ -1,12 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import {
   PRIVATE_SYMBOLS,
+  REGION_ALLOWLIST,
   SYMBOL_ALLOWLIST,
+  type AllowedRegion,
   type AllowedSymbol,
 } from "@/lib/constants";
+import { evaluate } from "@/lib/evaluate";
 import {
   formatAge,
   formatCompactUsd,
@@ -15,11 +18,41 @@ import {
   truncateAddress,
 } from "@/lib/format";
 import { PROVIDER_NAME, STRUCTURE_COPY } from "@/lib/labels";
+import { POLICIES } from "@/lib/policies";
 import {
   SymbolViewSchema,
   type RepresentationQuote,
   type SymbolView,
+  type Verdict,
 } from "@/lib/types";
+
+import { RegionPicker, VerdictStrip, VerdictSummary } from "@/components/Verdicts";
+
+const REGION_STORAGE_KEY = "vestail.region";
+
+/**
+ * The declared region is remembered per browser as a convenience only. Reads
+ * and writes are guarded: storage can be blocked, and the page must work the
+ * same without it.
+ */
+function readStoredRegion(): AllowedRegion | null {
+  try {
+    const value = window.localStorage.getItem(REGION_STORAGE_KEY);
+    return (REGION_ALLOWLIST as readonly string[]).includes(value ?? "")
+      ? (value as AllowedRegion)
+      : null;
+  } catch {
+    return null;
+  }
+}
+
+function storeRegion(region: AllowedRegion) {
+  try {
+    window.localStorage.setItem(REGION_STORAGE_KEY, region);
+  } catch {
+    // Not remembered next visit; nothing else depends on it.
+  }
+}
 
 /** Below this, a pool is too thin to buy into at any meaningful size. */
 const THIN_LIQUIDITY_USD = 1_000;
@@ -32,13 +65,25 @@ type LoadState =
 /**
  * Pick a symbol, see every tokenized version of it side by side.
  *
- * Phase 1 shows what each token *is* and what it trades at. Whether you may
- * hold it — the verdict — is Phase 2; nothing here is coloured with the
- * verdict palette, so nothing here can be mistaken for one.
+ * Each token shows what it *is* and what it trades at; once a jurisdiction is
+ * declared, it also shows what the issuer's terms say about holding it there.
+ * Verdicts are computed in the browser from the bundled policy files, so
+ * switching region is instant and needs no request.
  */
 export function RepresentationExplorer() {
   const [symbol, setSymbol] = useState<AllowedSymbol>("SPCX");
+  const [region, setRegion] = useState<AllowedRegion | null>(null);
   const [state, setState] = useState<LoadState>({ status: "loading" });
+
+  // Read after mount, not during render, so server and client HTML match.
+  useEffect(() => {
+    setRegion(readStoredRegion());
+  }, []);
+
+  const declareRegion = (r: AllowedRegion) => {
+    setRegion(r);
+    storeRegion(r);
+  };
 
   useEffect(() => {
     const controller = new AbortController();
@@ -78,10 +123,16 @@ export function RepresentationExplorer() {
         One ticker, every token
       </h2>
 
+      <div className="mt-4">
+        <p className="mb-2 text-sm text-paper">Where are you?</p>
+        <RegionPicker region={region} onChange={declareRegion} />
+      </div>
+
+      <p className="mt-6 mb-2 text-sm text-paper">Which stock?</p>
       <div
         role="group"
         aria-label="Symbol"
-        className="mt-4 flex flex-wrap gap-2"
+        className="flex flex-wrap gap-2"
       >
         {SYMBOL_ALLOWLIST.map((s) => (
           <button
@@ -116,14 +167,36 @@ export function RepresentationExplorer() {
             Could not load {symbol}: {state.message}
           </p>
         )}
-        {state.status === "ready" && <SymbolTable view={state.view} />}
+        {state.status === "ready" && (
+          <SymbolTable view={state.view} region={region} />
+        )}
       </div>
     </section>
   );
 }
 
-function SymbolTable({ view }: { view: SymbolView }) {
+function SymbolTable({
+  view,
+  region,
+}: {
+  view: SymbolView;
+  region: AllowedRegion | null;
+}) {
   const count = view.representations.length;
+
+  const verdicts = useMemo(
+    () =>
+      region === null
+        ? null
+        : view.representations.map((q) =>
+            evaluate(
+              q.representation,
+              region,
+              POLICIES[q.representation.provider],
+            ),
+          ),
+    [view, region],
+  );
 
   return (
     <div>
@@ -149,6 +222,16 @@ function SymbolTable({ view }: { view: SymbolView }) {
         )}
       </p>
 
+      <div className="mt-3">
+        {region && verdicts ? (
+          <VerdictSummary verdicts={verdicts} region={region} />
+        ) : (
+          <p className="text-sm text-dim">
+            Declare where you are to see which of these you may actually hold.
+          </p>
+        )}
+      </div>
+
       {view.warnings.length > 0 && (
         <ul className="mt-4 space-y-1 border-l-2 border-gold pl-4 text-xs leading-relaxed text-dim">
           {view.warnings.map((w) => (
@@ -168,8 +251,14 @@ function SymbolTable({ view }: { view: SymbolView }) {
         </div>
 
         <ul>
-          {view.representations.map((q) => (
-            <Row key={q.representation.mint} quote={q} symbol={view.symbol} />
+          {view.representations.map((q, i) => (
+            <Row
+              key={q.representation.mint}
+              quote={q}
+              symbol={view.symbol}
+              region={region}
+              verdict={verdicts ? verdicts[i] : undefined}
+            />
           ))}
         </ul>
       </div>
@@ -177,14 +266,26 @@ function SymbolTable({ view }: { view: SymbolView }) {
   );
 }
 
-function Row({ quote, symbol }: { quote: RepresentationQuote; symbol: string }) {
+function Row({
+  quote,
+  symbol,
+  region,
+  verdict,
+}: {
+  quote: RepresentationQuote;
+  symbol: string;
+  region: AllowedRegion | null;
+  /** undefined: no region declared. null: declared, but not assessed. */
+  verdict: Verdict | null | undefined;
+}) {
   const r = quote.representation;
   const copy = STRUCTURE_COPY[r.structure];
   const thin =
     quote.liquidityUsd !== null && quote.liquidityUsd < THIN_LIQUIDITY_USD;
 
   return (
-    <li className="grid gap-3 border-b border-line px-5 py-4 last:border-b-0 md:grid-cols-[1.1fr_2fr_1fr_1fr_0.8fr] md:gap-4">
+    <li className="border-b border-line px-5 py-4 last:border-b-0">
+      <div className="grid gap-3 md:grid-cols-[1.1fr_2fr_1fr_1fr_0.8fr] md:gap-4">
       <div>
         <p className="text-sm text-paper">
           {PROVIDER_NAME[r.provider]}{" "}
@@ -250,6 +351,17 @@ function Row({ quote, symbol }: { quote: RepresentationQuote; symbol: string }) 
           {thin && <p className="text-[11px] text-gold">Too thin to trade</p>}
         </div>
       </div>
+      </div>
+
+      {region && verdict !== undefined && (
+        <div className="mt-4">
+          <VerdictStrip
+            verdict={verdict}
+            region={region}
+            canFreeze={r.freezeAuthority !== null}
+          />
+        </div>
+      )}
     </li>
   );
 }

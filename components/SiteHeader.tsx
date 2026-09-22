@@ -1,27 +1,28 @@
+import Image from "next/image";
+import Link from "next/link";
+
 import { WalletButton } from "@/components/WalletButton";
 
 /**
- * Site header: wordmark on the left, wallet connect on the right.
- *
- * Deliberately thin. Phase 0 has one page, and a nav bar with a single
- * destination is furniture.
- *
- * Sits on a navy bar: the site gradient's violet end is too light behind
- * this header's dim label (about 1.9:1).
+ * App header: the logo (home) on the left, the wallet on the right. Sits on
+ * the site gradient; the orange logo and the wallet button's own surface
+ * both read on it.
  */
 export function SiteHeader() {
   return (
-    <header className="border-b border-line bg-ink/85 backdrop-blur-sm">
-      <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-6 py-5">
-        <div className="flex items-baseline gap-3">
-          <span className="font-display text-xl tracking-tight text-paper">
-            Vestail
-          </span>
-          <span className="hidden text-xs uppercase tracking-[0.18em] text-dim sm:inline">
-            Tokenized equity eligibility
-          </span>
-        </div>
-
+    <header className="relative z-40">
+      <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
+        <Link href="/" aria-label="Vestail home" className="shrink-0">
+          <Image
+            src="/brand/vestail-logo-nav.svg"
+            alt="Vestail"
+            width={141}
+            height={32}
+            priority
+            unoptimized
+            className="h-7 w-auto sm:h-8"
+          />
+        </Link>
         <WalletButton />
       </div>
     </header>

@@ -85,7 +85,8 @@ describe("buy button", () => {
     assert.equal(state({ balance: null }).kind, "ready");
   });
 
-  it("shows progress while signing and executing", () => {
+  it("shows progress while preparing, signing and executing", () => {
+    assert.equal(state({ busy: "ordering" }).label, "Preparing your order…");
     assert.equal(state({ busy: "signing" }).label, "Confirm in your wallet…");
     assert.equal(state({ busy: "executing" }).label, "Buying…");
   });

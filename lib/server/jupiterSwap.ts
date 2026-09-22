@@ -85,16 +85,33 @@ async function call<T>(url: string, init: RequestInit): Promise<JupiterCall<T>> 
   }
 }
 
+/** Without `taker`, Jupiter returns a price but no transaction. */
 export function getOrder(params: {
   inputMint: string;
   outputMint: string;
   amount: string;
-  taker: string;
+  taker?: string;
 }): Promise<JupiterCall<JupiterOrder>> {
-  return call<JupiterOrder>(
-    `${JUPITER_ORDER_ENDPOINT}?${new URLSearchParams(params)}`,
-    { headers: jupiterHeaders() },
-  );
+  const query = new URLSearchParams({
+    inputMint: params.inputMint,
+    outputMint: params.outputMint,
+    amount: params.amount,
+    ...(params.taker ? { taker: params.taker } : {}),
+  });
+  return call<JupiterOrder>(`${JUPITER_ORDER_ENDPOINT}?${query}`, {
+    headers: jupiterHeaders(),
+  });
+}
+
+/**
+ * Whether a failed /order call means "no route". Jupiter answers HTTP 400
+ * { "error": "Failed to get quotes" } when nothing can fill the swap
+ * (checked against dust-sized orders); a 500 is something else going wrong.
+ */
+export function isNoRoute(result: JupiterCall<JupiterOrder>): boolean {
+  if (result.ok) return result.data.outAmount === "0";
+  const body = result.body as { error?: unknown } | undefined;
+  return result.status === 400 && body?.error === "Failed to get quotes";
 }
 
 export function executeOrder(body: {

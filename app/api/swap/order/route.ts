@@ -6,7 +6,7 @@ import { PAY_TOKENS } from "@/lib/constants";
 import { evaluate } from "@/lib/evaluate";
 import { POLICIES } from "@/lib/policies";
 import { findRepresentation } from "@/lib/registry";
-import { getOrder } from "@/lib/server/jupiterSwap";
+import { getOrder, isNoRoute } from "@/lib/server/jupiterSwap";
 import { orderSigningReady, signOrder } from "@/lib/server/orderToken";
 import { RegionSchema, type SwapQuote } from "@/lib/types";
 
@@ -20,6 +20,10 @@ import { RegionSchema, type SwapQuote } from "@/lib/types";
  *
  * `inputMint` is USDC (the default) or wrapped SOL, which Jupiter spends as
  * native SOL. `amount` is in the input token's base units.
+ *
+ * Without `taker` it returns a price estimate only (quoteOnly: true, no
+ * transaction and no order token), so the UI can show "you get" before a
+ * wallet is connected.
  */
 
 /** Per pay token: the smallest and largest order, in base units. */
@@ -45,13 +49,16 @@ const QuerySchema = z.object({
     .refine((m) => m in LIMITS, "pay with USDC or SOL"),
   outputMint: z.string().min(32).max(44),
   amount: z.string().regex(/^\d{1,15}$/),
-  taker: z.string().refine((s) => {
-    try {
-      return PublicKey.isOnCurve(new PublicKey(s).toBytes());
-    } catch {
-      return false;
-    }
-  }, "not a wallet address"),
+  taker: z
+    .string()
+    .refine((s) => {
+      try {
+        return PublicKey.isOnCurve(new PublicKey(s).toBytes());
+      } catch {
+        return false;
+      }
+    }, "not a wallet address")
+    .optional(),
   region: RegionSchema,
 });
 
@@ -76,10 +83,6 @@ function fail(status: number, error: string, extra: object = {}) {
 }
 
 export async function GET(request: Request) {
-  if (!orderSigningReady()) {
-    return fail(503, "Swaps are not configured on this server: VESTAIL_ORDER_SECRET is missing.");
-  }
-
   const parsed = QuerySchema.safeParse(
     Object.fromEntries(new URL(request.url).searchParams),
   );
@@ -92,6 +95,11 @@ export async function GET(request: Request) {
   const units = BigInt(amount);
   if (units < limits.min || units > limits.max) {
     return fail(400, `Amount must be ${limits.range}.`);
+  }
+
+  // Only a buildable order is signed; a price estimate needs no secret.
+  if (taker && !orderSigningReady()) {
+    return fail(503, "Swaps are not configured on this server: VESTAIL_ORDER_SECRET is missing.");
   }
 
   const representation = findRepresentation(outputMint);
@@ -115,8 +123,14 @@ export async function GET(request: Request) {
     amount,
     taker,
   });
+  if (isNoRoute(result)) {
+    return fail(422, "No route found for this swap right now.", { code: "no_route" });
+  }
   if (!result.ok) {
-    return fail(result.status === 429 ? 429 : 502, result.message);
+    return fail(
+      result.status === 429 ? 429 : 502,
+      result.status === 429 ? result.message : "Jupiter couldn't price this swap right now.",
+    );
   }
   const order = result.data;
 
@@ -125,27 +139,15 @@ export async function GET(request: Request) {
     order.inputMint !== inputMint ||
     order.outputMint !== outputMint ||
     order.inAmount !== amount ||
-    order.taker !== taker
+    (order.taker ?? undefined) !== taker
   ) {
     return fail(502, "Jupiter returned an order that does not match the request.");
   }
 
-  if (!order.transaction) {
-    return fail(
-      422,
-      orderError(order.errorCode, limits.token.symbol) ||
-        order.errorMessage ||
-        "Jupiter could not build this swap.",
-    );
-  }
-
   const paidByTaker = (lamports: number | undefined, payer: string | null | undefined) =>
-    payer === taker ? (lamports ?? 0) : 0;
+    taker && payer === taker ? (lamports ?? 0) : 0;
 
-  const quote: SwapQuote = {
-    requestId: order.requestId,
-    orderToken: signOrder(order.requestId),
-    transaction: order.transaction,
+  const priced = {
     outputMint,
     inAmount: order.inAmount,
     outAmount: order.outAmount,
@@ -159,6 +161,34 @@ export async function GET(request: Request) {
       paidByTaker(order.prioritizationFeeLamports, order.prioritizationFeePayer) +
       paidByTaker(order.rentFeeLamports, order.rentFeePayer),
     gasless: order.gasless ?? false,
+  };
+
+  if (!taker) {
+    const estimate: SwapQuote = {
+      quoteOnly: true,
+      requestId: null,
+      orderToken: null,
+      transaction: null,
+      ...priced,
+    };
+    return NextResponse.json(estimate, { headers: { "Cache-Control": "no-store" } });
+  }
+
+  if (!order.transaction) {
+    return fail(
+      422,
+      orderError(order.errorCode, limits.token.symbol) ||
+        order.errorMessage ||
+        "Jupiter could not build this swap.",
+    );
+  }
+
+  const quote: SwapQuote = {
+    quoteOnly: false,
+    requestId: order.requestId,
+    orderToken: signOrder(order.requestId),
+    transaction: order.transaction,
+    ...priced,
   };
 
   return NextResponse.json(quote, { headers: { "Cache-Control": "no-store" } });

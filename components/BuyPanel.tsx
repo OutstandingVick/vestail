@@ -128,6 +128,9 @@ export function BuyPanel({
 
     let signedB64: string;
     try {
+      if (!quote.transaction || !quote.orderToken) {
+        throw new Error("This quote cannot be signed. Get a new quote.");
+      }
       const tx = VersionedTransaction.deserialize(base64ToBytes(quote.transaction));
 
       // Refuse to put a transaction in front of the wallet that this wallet

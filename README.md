@@ -90,13 +90,17 @@ reviewable diff:
   [`policies/README.md`](policies/README.md).
 
 ```
-app/                          pages; api/representations, api/swap/{order,execute}
+app/                          / landing page, /app the app; api/representations, api/swap/{order,execute}
 components/                   wallet, header, RepresentationExplorer, verdicts, BuyPanel
+components/landing/           landing nav and hero; globe/ is the three.js hero globe
 hooks/                        useUsdcBalance
 lib/                          constants, Zod schemas, registry loader, labels
 lib/server/                   Pyth, Jupiter, issuer-mark clients; order tokens (server-only)
 registry/                     generated mint registry + sourced provider facts
 scripts/sync-registry.mjs     regenerates the registry
+scripts/generate-land-mask.mjs  bakes the globe's continents (npm run globe:mask)
+lib/globe/                    Fibonacci sphere points and the baked land mask
+public/brand/                 logo and icon as supplied, plus a cropped nav logo
 policies/                     sourced issuer eligibility policy
 tests/                        policy and evaluator tests (npm test)
 ```
@@ -158,6 +162,38 @@ The flow uses the **Jupiter Swap API V2** Meta-Aggregator path
 
 `JUPITER_API_KEY` is optional (keyless works, with a lower documented limit on
 `/execute`) and server-only. `VESTAIL_ORDER_SECRET` is required in production.
+
+## Landing page
+
+`/` is the marketing landing page; the app is at `/app`, and every "Launch
+app" and "Check eligibility" button links there.
+
+The hero globe is plain three.js, built for first paint and frame rate:
+
+- **Continents are baked, not downloaded.** `npm run globe:mask` tests 100,000
+  evenly spread sphere points against Natural Earth land (via `world-atlas`,
+  public domain) and stores one bit per point: 12.5 KB, the only map data the
+  browser gets. Tests check known places, including a mirror check that
+  catches a flipped longitude.
+- **No jump on load.** A CSS sphere is in the server HTML at exactly the
+  globe's position (container units from the same numbers the scene uses in
+  pixels), and the canvas fades in over it. Measured cumulative layout shift
+  in production: 0.
+- **three.js is lazy.** It is imported when the browser is idle after first
+  paint, in its own chunks (about 130 KB gzipped); the landing page's first
+  load is 112 KB of JS without it. Only the visible stage (desktop or mobile)
+  ever creates a WebGL context.
+- **It only runs when seen.** The loop stops when the hero is off screen or the
+  tab is hidden. With `prefers-reduced-motion` it draws one still frame, with
+  coins placed clear of the text rather than a frozen orbit.
+- **Coins:** eight ticker coins (five on mobile) on a tilted elliptical orbit,
+  occluded by the globe's depth buffer and scaled and dimmed by depth. The
+  orbit's parameters come from a sweep over common screen sizes that keeps
+  coins visible, off the headline, and visibly passing behind the globe.
+
+Brand assets in `public/brand/` are committed as supplied. The supplied logo
+has a full-bleed dark background, so the nav uses `vestail-logo-nav.svg`,
+generated from it with the background removed and cropped to the artwork.
 
 ## Running locally
 

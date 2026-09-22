@@ -1,4 +1,6 @@
 import {
+  AdditiveBlending,
+  BackSide,
   BufferAttribute,
   BufferGeometry,
   Group,
@@ -43,6 +45,8 @@ const MAX_PIXEL_RATIO = 1.75;
 
 /** Shared light: soft, from the upper left, slightly towards the viewer. */
 const LIGHT = "vec3(-0.55, 0.55, 0.65)";
+/** Atmosphere shell radius, relative to the globe. */
+const ATMOSPHERE = 1.12;
 
 export interface GlobeHandle {
   dispose(): void;
@@ -149,6 +153,41 @@ export function mountGlobe(
   });
   spin.add(new Points(dotGeometry, dotMaterial));
 
+  /* Atmosphere: a slightly larger shell drawn from the inside (back faces),
+     added on top of whatever is behind it. Seen face-on, the shell's back
+     faces only show outside the globe, between the limb (where the normal's
+     z is -sqrt(1 - 1/ATMOSPHERE^2)) and the shell's edge (z = 0). The glow
+     peaks at the limb and fades to nothing at the edge, a little brighter
+     on the lit side. Lives on the globe group: a sphere needs no spin. */
+  const limbZ = Math.sqrt(1 - 1 / (ATMOSPHERE * ATMOSPHERE));
+  const atmosphereMaterial = new ShaderMaterial({
+    side: BackSide,
+    transparent: true,
+    depthWrite: false,
+    blending: AdditiveBlending,
+    vertexShader: /* glsl */ `
+      varying vec3 vNormal;
+      void main() {
+        vNormal = normalize(normalMatrix * normal);
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      }
+    `,
+    fragmentShader: /* glsl */ `
+      varying vec3 vNormal;
+      void main() {
+        vec3 n = normalize(vNormal);
+        float t = clamp(-n.z / ${limbZ.toFixed(4)}, 0.0, 1.0);
+        float intensity = pow(t, 2.2);
+        vec2 toLight = normalize(${LIGHT}.xy);
+        float side = 0.65 + 0.35 * max(dot(normalize(n.xy), toLight), 0.0);
+        vec3 color = vec3(0.58, 0.46, 1.0) * intensity * side;
+        gl_FragColor = vec4(color, intensity * side);
+      }
+    `,
+  });
+  const atmosphere = new Mesh(new SphereGeometry(ATMOSPHERE, 96, 64), atmosphereMaterial);
+  globe.add(atmosphere);
+
   /* Layout: follow the stage's size, in CSS pixels. */
   let width = 0;
   let height = 0;
@@ -209,6 +248,8 @@ export function mountGlobe(
       dotMaterial.dispose();
       body.geometry.dispose();
       bodyMaterial.dispose();
+      atmosphere.geometry.dispose();
+      atmosphereMaterial.dispose();
       renderer.dispose();
     },
   };

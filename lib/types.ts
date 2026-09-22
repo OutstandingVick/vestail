@@ -239,6 +239,39 @@ const PolicyRuleBase = {
 };
 
 /**
+ * What a buyer must accept before Vestail routes to a `conditional` token,
+ * written to complete the sentence:
+ *
+ *   "I understand I can buy and hold this, but {limit} requires {requires}."
+ */
+export const AcknowledgementSchema = z
+  .object({
+    /** The right that is gated, e.g. "redeeming it for the real share". */
+    limit: z.string().min(1).max(120),
+    /** What unlocks it, e.g. "a verified (KYC) Backpack account". */
+    requires: z.string().min(1).max(160),
+  })
+  .strict();
+
+export type Acknowledgement = z.infer<typeof AcknowledgementSchema>;
+
+const PolicyGate = z
+  .object({
+    ...PolicyRuleBase,
+    kind: z.literal("gate"),
+    status: VerdictStatusSchema,
+    /** One plain-English line for the version card. `reason` is the full text. */
+    short: z.string().min(1).max(90),
+    /** Required on conditional gates, forbidden on the others. */
+    acknowledgement: AcknowledgementSchema.optional(),
+  })
+  .strict()
+  .refine((g) => (g.status === "conditional") === (g.acknowledgement !== undefined), {
+    message:
+      "a conditional gate needs an acknowledgement, and only conditional gates may have one",
+  });
+
+/**
  * A rule in a policies/*.json file. Gates carry a status; notes do not, so a
  * warning can never silently change a verdict.
  *
@@ -247,10 +280,8 @@ const PolicyRuleBase = {
  * cleanly and lose the field without a word. For hand-written policy, an
  * unknown key is always a mistake.
  */
-export const PolicyRuleSchema = z.discriminatedUnion("kind", [
-  z
-    .object({ ...PolicyRuleBase, kind: z.literal("gate"), status: VerdictStatusSchema })
-    .strict(),
+export const PolicyRuleSchema = z.union([
+  PolicyGate,
   z.object({ ...PolicyRuleBase, kind: z.literal("note") }).strict(),
 ]);
 

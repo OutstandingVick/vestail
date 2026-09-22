@@ -1,14 +1,20 @@
+import type { Metadata } from "next";
+
 import { RepresentationExplorer } from "@/components/RepresentationExplorer";
 import { SiteHeader } from "@/components/SiteHeader";
 import { WalletCard } from "@/components/WalletCard";
 
+export const metadata: Metadata = {
+  title: "Check eligibility — Vestail",
+};
+
 /**
- * Phase 0 landing page.
+ * The app: every tokenized version of a ticker side by side, with a verdict
+ * for the declared jurisdiction and a buy path for eligible ones only.
  *
- * States the thesis, then shows it: every tokenized version of a ticker side
- * by side. Eligibility verdicts arrive in Phase 2.
+ * Lives at /app; the marketing landing page is at /.
  */
-export default function Home() {
+export default function AppPage() {
   return (
     <>
       <SiteHeader />

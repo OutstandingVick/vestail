@@ -31,14 +31,6 @@ export function Hero() {
           className="pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[75%] w-[120%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgb(10_18_42/0.7),rgb(10_18_42/0.35)_55%,transparent)] blur-2xl"
         />
 
-        <p data-globe-avoid className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-xs font-semibold tracking-wide text-white/85 sm:text-sm">
-          <span
-            aria-hidden
-            className="size-1.5 rounded-full bg-brand-orange shadow-[0_0_10px_2px_rgb(255_88_10/0.8)]"
-          />
-          Where the right stock finds the right owner
-        </p>
-
         <h1
           data-globe-avoid
           id="hero-heading"

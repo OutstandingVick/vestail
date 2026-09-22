@@ -1,6 +1,6 @@
 "use client";
 
-import { REGION_NAME, type AllowedRegion, type AllowedSymbol } from "@/lib/constants";
+import { REGION_IN_SENTENCE, type AllowedRegion, type AllowedSymbol } from "@/lib/constants";
 import { PROVIDER_NAME, STRUCTURE_PLAIN } from "@/lib/labels";
 import { isSelectable, sortVersions } from "@/lib/app/versions";
 import type { VersionVerdict } from "@/lib/types";
@@ -72,10 +72,18 @@ export function VersionCards({
   }
 
   const versions = sortVersions(state.data.versions);
+  const noneBuyable = !versions.some(isSelectable);
 
   return (
     <fieldset>
       <legend className="mb-3 text-base font-semibold text-white">Versions of {symbol} you can get</legend>
+      {noneBuyable && (
+        <p className="mb-3 rounded-2xl bg-white/[0.05] px-4 py-3 text-sm leading-relaxed text-white/85 ring-1 ring-white/10">
+          None of the {versions.length === 1 ? "version" : `${versions.length} versions`} of {symbol} can
+          be held in {REGION_IN_SENTENCE[region]} under their issuers&apos; own terms, so Vestail won&apos;t route
+          a purchase. Each one below says why.
+        </p>
+      )}
       <ul className="space-y-3">
         {versions.map((v) => (
           <li key={v.representation.mint}>
@@ -121,7 +129,7 @@ function Card({
   const status = v.verdict?.status ?? "not_assessed";
   const selectable = isSelectable(v);
   const badge = BADGE[status];
-  const reason = v.verdict?.summary ?? `No sourced rule covers ${REGION_NAME[region]} yet, so we make no claim.`;
+  const reason = v.verdict?.summary ?? `No sourced rule covers ${REGION_IN_SENTENCE[region]} yet, so we make no claim.`;
 
   return (
     <label

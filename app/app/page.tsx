@@ -28,7 +28,8 @@ export default function AppPage() {
         */}
         <div className="rounded-2xl bg-ink/85 px-5 py-10 ring-1 ring-white/10 backdrop-blur-sm sm:px-10 sm:py-14">
           <h1 className="max-w-3xl font-display text-4xl leading-[1.15] tracking-tight text-paper sm:text-5xl">
-            Which version of this stock are you actually allowed to hold?
+            Find the version of this stock you’re actually allowed to hold
+
           </h1>
 
           <p className="mt-8 max-w-2xl text-base leading-relaxed text-dim">

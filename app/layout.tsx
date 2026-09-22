@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
-import { Inter, Source_Serif_4 } from "next/font/google";
+import { Outfit, Source_Serif_4 } from "next/font/google";
 import { SolanaProvider } from "@/components/SolanaProvider";
 import "./globals.css";
 
 /*
- * Two families, two jobs. Source Serif 4 carries display copy — the headline
- * and the verdict language — because the product is making a claim about a
- * legal instrument and wants to read like a document. Inter carries everything
- * operational: balances, mints, addresses, labels.
+ * Outfit is the brand face and sets everything by default. Source Serif 4 is
+ * kept only for the app's display headings (font-display), which read like a
+ * document because they make a claim about a legal instrument.
  */
 const sourceSerif = Source_Serif_4({
   variable: "--font-source-serif",
@@ -15,9 +14,10 @@ const sourceSerif = Source_Serif_4({
   display: "swap",
 });
 
-const inter = Inter({
-  variable: "--font-inter",
+const outfit = Outfit({
+  variable: "--font-outfit",
   subsets: ["latin"],
+  weight: ["400", "600", "700"],
   display: "swap",
 });
 
@@ -33,7 +33,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${sourceSerif.variable} ${inter.variable} h-full`}
+      className={`${sourceSerif.variable} ${outfit.variable} h-full`}
     >
       <body className="flex min-h-full flex-col">
         <SolanaProvider>{children}</SolanaProvider>

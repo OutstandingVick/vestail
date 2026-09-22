@@ -449,3 +449,25 @@ export const SwapErrorSchema = z.object({
     .enum(["eligible", "conditional", "restricted", "not_assessed"])
     .optional(),
 });
+
+/* -------------------------------------------------------------------------- */
+/* Eligibility API                                                             */
+/* -------------------------------------------------------------------------- */
+
+/** One version of a stock and what the declared region's rules say about it. */
+export const VersionVerdictSchema = z.object({
+  representation: RegistryRepresentationSchema,
+  /** Null only if no sourced gate covers it: shown as not assessed, never routed. */
+  verdict: VerdictSchema.nullable(),
+});
+
+export type VersionVerdict = z.infer<typeof VersionVerdictSchema>;
+
+/** GET /api/eligibility?symbol=X&region=Y */
+export const EligibilityResponseSchema = z.object({
+  symbol: z.string(),
+  region: RegionSchema,
+  versions: z.array(VersionVerdictSchema),
+});
+
+export type EligibilityResponse = z.infer<typeof EligibilityResponseSchema>;

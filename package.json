@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "registry:sync": "node --env-file-if-exists=.env.local --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/sync-registry.mjs",
-    "test": "node --test --disable-warning=MODULE_TYPELESS_PACKAGE_JSON \"tests/**/*.test.mjs\""
+    "test": "node --test --disable-warning=MODULE_TYPELESS_PACKAGE_JSON \"tests/**/*.test.mjs\"",
+    "globe:mask": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/generate-land-mask.mjs"
   },
   "dependencies": {
     "@solana/spl-token": "^0.4.15",

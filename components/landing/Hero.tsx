@@ -16,6 +16,16 @@ export function Hero() {
       className="relative isolate overflow-hidden"
     >
       <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-4xl flex-col items-center justify-center px-4 pb-16 pt-28 text-center sm:px-8">
+        {/*
+          Soft navy scrim behind the copy, so it stays readable wherever the
+          globe's bright dots and coins pass underneath. Radial and blurred at
+          the edge so it reads as depth, not as a box.
+        */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[75%] w-[120%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgb(10_18_42/0.7),rgb(10_18_42/0.35)_55%,transparent)] blur-2xl"
+        />
+
         <p className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-xs font-semibold tracking-wide text-white/85 sm:text-sm">
           <span
             aria-hidden

@@ -157,6 +157,23 @@ export const VerdictStatusSchema = z.enum([
 export type VerdictStatus = z.infer<typeof VerdictStatusSchema>;
 
 /**
+ * What a buyer must accept before Vestail routes to a `conditional` token,
+ * written to complete the sentence:
+ *
+ *   "I understand I can buy and hold this, but {limit} requires {requires}."
+ */
+export const AcknowledgementSchema = z
+  .object({
+    /** The right that is gated, e.g. "redeeming it for the real share". */
+    limit: z.string().min(1).max(120),
+    /** What unlocks it, e.g. "a verified (KYC) Backpack account". */
+    requires: z.string().min(1).max(160),
+  })
+  .strict();
+
+export type Acknowledgement = z.infer<typeof AcknowledgementSchema>;
+
+/**
  * How directly a source supports a rule.
  *
  *   primary    The issuer's own document states it.
@@ -217,6 +234,12 @@ export const VerdictSchema = z.object({
   /** Every matching rule with its own source, gates first. */
   evidence: z.array(EvidenceSchema).min(1),
 
+  /** The deciding gate's one-line reason, for a card. */
+  summary: z.string().min(1),
+
+  /** Present exactly when the status is conditional: what the buyer accepts. */
+  acknowledgement: AcknowledgementSchema.optional(),
+
   /** When the evaluation ran. */
   evaluatedAt: z.string().datetime(),
 });
@@ -237,23 +260,6 @@ const PolicyRuleBase = {
   source_url: z.string().url().startsWith("https://"),
   source_quality: SourceQualitySchema,
 };
-
-/**
- * What a buyer must accept before Vestail routes to a `conditional` token,
- * written to complete the sentence:
- *
- *   "I understand I can buy and hold this, but {limit} requires {requires}."
- */
-export const AcknowledgementSchema = z
-  .object({
-    /** The right that is gated, e.g. "redeeming it for the real share". */
-    limit: z.string().min(1).max(120),
-    /** What unlocks it, e.g. "a verified (KYC) Backpack account". */
-    requires: z.string().min(1).max(160),
-  })
-  .strict();
-
-export type Acknowledgement = z.infer<typeof AcknowledgementSchema>;
 
 const PolicyGate = z
   .object({

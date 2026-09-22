@@ -19,11 +19,15 @@ export function LandingNav() {
         className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-5 sm:px-8"
       >
         <Link href="/" aria-label="Vestail home" className="shrink-0">
-          {/* SVG, so no optimisation pass: it would only rasterise it. */}
+          {/*
+            The nav variant: the supplied logo draws a full-bleed dark box,
+            which would sit on the gradient as a black rectangle. SVG, so no
+            optimisation pass: it would only rasterise it.
+          */}
           <Image
-            src="/brand/vestail-logo.svg"
+            src="/brand/vestail-logo-nav.svg"
             alt="Vestail"
-            width={132}
+            width={141}
             height={32}
             priority
             unoptimized

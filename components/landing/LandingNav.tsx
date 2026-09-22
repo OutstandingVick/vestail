@@ -52,7 +52,7 @@ export function LandingNav() {
           </a>
           <Link
             href={APP_HREF}
-            className="rounded-full bg-brand-orange px-5 py-2.5 text-sm font-semibold text-white shadow-[0_8px_24px_-8px_rgb(255_88_10/0.7)] transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+            className="rounded-full bg-brand-orange px-5 py-2.5 text-sm font-semibold text-brand-navy shadow-[0_8px_24px_-8px_rgb(255_88_10/0.7)] transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
           >
             Launch app
           </Link>

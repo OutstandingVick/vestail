@@ -55,6 +55,12 @@ export interface GlobeHandle {
 
 export interface GlobeOptions {
   placement: GlobePlacement;
+  /**
+   * Boxes, in stage pixels, that a still frame keeps coins away from: the
+   * copy over the globe. Measured when the still frame is arranged, so it
+   * follows the real layout. Omitted where no copy overlaps (mobile).
+   */
+  avoidRects?: () => Array<{ left: number; top: number; right: number; bottom: number }>;
   /** Called once, after the first frame is on screen. */
   onFirstFrame?: () => void;
 }
@@ -62,7 +68,7 @@ export interface GlobeOptions {
 export function mountGlobe(
   stage: HTMLElement,
   canvas: HTMLCanvasElement,
-  { placement, onFirstFrame }: GlobeOptions,
+  { placement, avoidRects, onFirstFrame }: GlobeOptions,
 ): GlobeHandle {
   const renderer = new WebGLRenderer({
     canvas,
@@ -71,6 +77,9 @@ export function mountGlobe(
     powerPreference: "high-performance",
   });
   renderer.setClearColor(0x000000, 0);
+
+  // Declared first: the resize and font-load callbacks below read it.
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, MAX_PIXEL_RATIO));
 
   const scene = new Scene();
@@ -204,7 +213,8 @@ export function mountGlobe(
       coins = createCoins(placement.coins, fontFamily);
       scene.add(coins.group);
       layout();
-      coins.update(orbitPhase);
+      if (reducedMotion.matches) still();
+      else coins.update(orbitPhase);
       render();
     });
 
@@ -232,15 +242,22 @@ export function mountGlobe(
   }
   const resizeObserver = new ResizeObserver(() => {
     layout();
+    // A still frame is arranged for the stage size, so re-arrange it.
+    if (reducedMotion.matches) still();
     render();
   });
   resizeObserver.observe(stage);
   layout();
 
-  /* Loop. Time-based, so speed does not depend on the display's refresh
-     rate, and the step is capped so a background tab does not jump. */
+  /* Motion. The loop runs only while it can be seen and is wanted: not
+     for visitors who ask for reduced motion (they get one still frame), not
+     while the hero is scrolled out of view, not in a background tab. It is
+     time-based, so speed does not depend on the display's refresh rate,
+     with a capped step so resuming never jumps. */
+  let onScreen = true;
+  let running = false;
   let frame = 0;
-  let last = performance.now();
+  let last = 0;
   let firstFrameSent = false;
 
   function render() {
@@ -252,7 +269,25 @@ export function mountGlobe(
     }
   }
 
+  /** A fixed, deliberate arrangement for reduced motion. */
+  function still() {
+    spin.rotation.y = -0.6;
+    if (coins) {
+      const rects = avoidRects?.() ?? [];
+      // Keep a whole coin clear of the copy, not just its centre.
+      const m = coins.maxRadius();
+      coins.place(
+        coins.stillAngles(width, height, (x, y) =>
+          rects.some(
+            (b) => x > b.left - m && x < b.right + m && y > b.top - m && y < b.bottom + m,
+          ),
+        ),
+      );
+    }
+  }
+
   function tick(now: number) {
+    if (!running) return;
     const dt = Math.min((now - last) / 1000, 0.1);
     last = now;
     spin.rotation.y += SPIN_RADIANS_PER_SECOND * dt;
@@ -261,12 +296,47 @@ export function mountGlobe(
     render();
     frame = requestAnimationFrame(tick);
   }
-  frame = requestAnimationFrame(tick);
+
+  function sync() {
+    const shouldRun = !reducedMotion.matches && onScreen && !document.hidden;
+    if (shouldRun && !running) {
+      running = true;
+      last = performance.now();
+      frame = requestAnimationFrame(tick);
+    } else if (!shouldRun && running) {
+      running = false;
+      cancelAnimationFrame(frame);
+    }
+    if (!shouldRun && reducedMotion.matches) {
+      still();
+      render();
+    } else if (shouldRun) {
+      // Leaving a still frame: put the coins back on the even orbit.
+      coins?.update(orbitPhase);
+    }
+  }
+
+  const visibility = new IntersectionObserver(([entry]) => {
+    onScreen = entry.isIntersecting;
+    sync();
+  });
+  visibility.observe(stage);
+  reducedMotion.addEventListener("change", sync);
+  document.addEventListener("visibilitychange", sync);
+
+  // Draw the first frame now, whatever the motion state, then start.
+  if (reducedMotion.matches) still();
+  render();
+  sync();
 
   return {
     dispose() {
       disposed = true;
+      running = false;
       cancelAnimationFrame(frame);
+      visibility.disconnect();
+      reducedMotion.removeEventListener("change", sync);
+      document.removeEventListener("visibilitychange", sync);
       coins?.dispose();
       resizeObserver.disconnect();
       dotGeometry.dispose();

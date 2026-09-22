@@ -9,6 +9,24 @@ import { GLOBE_PLACEMENT, type GlobeVariant } from "./layout";
 const DESKTOP_QUERY = "(min-width: 768px)";
 
 /**
+ * The copy over the desktop globe, measured from the page: every element
+ * marked data-globe-avoid, in the stage's own coordinates. Used only to
+ * arrange the reduced-motion still frame so no coin rests on the text.
+ */
+function copyRects(stage: HTMLElement) {
+  const origin = stage.getBoundingClientRect();
+  return [...document.querySelectorAll<HTMLElement>("[data-globe-avoid]")].map((el) => {
+    const b = el.getBoundingClientRect();
+    return {
+      left: b.left - origin.left,
+      top: b.top - origin.top,
+      right: b.right - origin.left,
+      bottom: b.bottom - origin.top,
+    };
+  });
+}
+
+/**
  * The box the globe lives in: the CSS stand-in always, and the three.js
  * canvas on top once it has loaded and drawn its first frame.
  *
@@ -47,6 +65,7 @@ export function GlobeStage({ variant }: { variant: GlobeVariant }) {
           if (disposed) return;
           handle = mountGlobe(stage, canvas, {
             placement: GLOBE_PLACEMENT[variant],
+            avoidRects: variant === "desktop" ? () => copyRects(stage) : undefined,
             onFirstFrame: () => setDrawn(true),
           });
         })

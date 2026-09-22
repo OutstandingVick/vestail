@@ -63,10 +63,32 @@
 }
 
 body {
-  background: var(--color-ink);
+  /* Fallback under the gradient layer, and the colour of overscroll. */
+  background: var(--color-brand-navy);
   color: var(--color-paper);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+}
+
+/*
+ * The site-wide gradient, left to right from violet to navy.
+ *
+ * A fixed layer rather than `background-attachment: fixed` on body: iOS
+ * Safari ignores fixed attachment, so the gradient would restart per scroll
+ * height there. A position:fixed pseudo-element stays put everywhere, so the
+ * gradient never restarts per section.
+ */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    90deg,
+    var(--color-brand-violet),
+    var(--color-brand-navy)
+  );
+  pointer-events: none;
 }
 
 ::selection {

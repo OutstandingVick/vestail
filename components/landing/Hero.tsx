@@ -1,13 +1,14 @@
 import Link from "next/link";
 
+import { GlobeStage } from "@/components/landing/globe/GlobeStage";
 import { APP_HREF } from "@/components/landing/LandingNav";
 
 /**
  * Landing hero: kicker, headline, subhead and one CTA, centred.
  *
- * The globe sits behind this text on desktop and below it on mobile; see
- * the globe layer, added separately so this copy renders on first paint
- * with or without it.
+ * The globe sits behind this text from md up, and below it on phones,
+ * where there is no room to put text over it. Both stages are in the HTML
+ * and CSS shows one, so the right placeholder paints before any script.
  */
 export function Hero() {
   return (
@@ -15,7 +16,11 @@ export function Hero() {
       aria-labelledby="hero-heading"
       className="relative isolate overflow-hidden"
     >
-      <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-4xl flex-col items-center justify-center px-4 pb-16 pt-28 text-center sm:px-8">
+      <div aria-hidden className="absolute inset-0 -z-10 hidden md:block">
+        <GlobeStage variant="desktop" />
+      </div>
+
+      <div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center justify-center px-4 pb-4 pt-28 text-center sm:px-8 md:min-h-[100svh] md:pb-16">
         {/*
           Soft navy scrim behind the copy, so it stays readable wherever the
           globe's bright dots and coins pass underneath. Radial and blurred at
@@ -54,6 +59,10 @@ export function Hero() {
         >
           Check eligibility
         </Link>
+      </div>
+
+      <div aria-hidden className="relative aspect-[1/0.92] w-full md:hidden">
+        <GlobeStage variant="mobile" />
       </div>
     </section>
   );

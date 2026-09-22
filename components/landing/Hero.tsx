@@ -36,8 +36,7 @@ export function Hero() {
           id="hero-heading"
           className="mt-6 text-4xl font-bold leading-[1.08] tracking-tight text-white sm:text-5xl lg:text-6xl"
         >
-          Your gateway to eligible stocks, verified issuers, safe delivery, and
-          more
+          Acquire onchain stocks you're actually allowed to own.
         </h1>
 
         <p data-globe-avoid className="mt-6 max-w-2xl text-base leading-relaxed text-white/75 sm:text-lg">
@@ -51,7 +50,7 @@ export function Hero() {
           href={APP_HREF}
           className="mt-10 rounded-full bg-brand-orange px-8 py-4 text-base font-semibold text-brand-navy shadow-[0_12px_32px_-10px_rgb(255_88_10/0.8)] transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
         >
-          Check eligibility
+          Find Your Stock
         </Link>
       </div>
 

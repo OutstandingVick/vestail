@@ -197,6 +197,13 @@ export const REGION_FLAG: Record<AllowedRegion, string> = {
   DE: "\u{1F1E9}\u{1F1EA}",
 };
 
+/** The country as it reads mid-sentence: "held in the United States". */
+export const REGION_IN_SENTENCE: Record<AllowedRegion, string> = {
+  NG: "Nigeria",
+  US: "the United States",
+  DE: "Germany",
+};
+
 export const REGION_NAME: Record<AllowedRegion, string> = {
   NG: "Nigeria",
   US: "United States",

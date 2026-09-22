@@ -1,14 +1,17 @@
 {
   "provider": "xstocks",
-  "version": "2026-09-21.1",
-  "reviewedAt": "2026-09-21",
+  "version": "2026-09-22.1",
+  "reviewedAt": "2026-09-22",
   "rules": [
     {
       "id": "us-persons-excluded",
       "kind": "gate",
       "status": "restricted",
-      "regions": ["US"],
+      "regions": [
+        "US"
+      ],
       "reason": "Backed may not offer, sell or deliver xStocks to US persons, and they may only be transferred to non-US persons.",
+      "short": "xStocks aren't offered to US persons.",
       "source_url": "https://assets.backed.fi/legal-documentation",
       "source_quality": "primary"
     },
@@ -16,15 +19,27 @@
       "id": "direct-access-professional-only",
       "kind": "gate",
       "status": "conditional",
-      "regions": ["NG", "DE"],
+      "regions": [
+        "NG",
+        "DE"
+      ],
       "reason": "You can buy xStocks on the secondary market, but issuance and redemption through Backed are limited to professional investors: a Swiss FinSA Professional Client who is also an EU Qualified Investor if in the EU, or the local equivalent elsewhere. A typical retail holder cannot redeem.",
+      "short": "You can buy it, but only professional investors can redeem.",
+      "acknowledgement": {
+        "limit": "redeeming it with the issuer (Backed)",
+        "requires": "professional-investor status"
+      },
       "source_url": "https://assets.backed.fi/legal-documentation",
       "source_quality": "primary"
     },
     {
       "id": "tracker-certificate",
       "kind": "note",
-      "regions": ["NG", "US", "DE"],
+      "regions": [
+        "NG",
+        "US",
+        "DE"
+      ],
       "reason": "Legally a tracker certificate under Swiss law, collateralised by the share. It is not the share itself.",
       "source_url": "https://assets.backed.fi/legal-documentation",
       "source_quality": "primary"

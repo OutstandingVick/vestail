@@ -130,6 +130,10 @@ describe("evaluate()", () => {
     status,
     regions: ["NG"],
     reason: `${id} reason`,
+    short: `${id} short`,
+    ...(status === "conditional"
+      ? { acknowledgement: { limit: `${id} limit`, requires: `${id} requires` } }
+      : {}),
     source_url: url,
     source_quality: "primary",
     ...extra,
@@ -205,6 +209,22 @@ describe("evaluate()", () => {
 
   it("rejects a note that carries a status", () => {
     assert.throws(() => policy([{ ...note("n"), status: "restricted" }]));
+  });
+
+  it("requires an acknowledgement on conditional gates, and only there", () => {
+    const { acknowledgement, ...bare } = gate("c", "conditional");
+    assert.ok(acknowledgement);
+    assert.throws(() => policy([bare]));
+    assert.throws(() =>
+      policy([gate("e", "eligible", { acknowledgement: { limit: "x", requires: "y" } })]),
+    );
+  });
+
+  it("requires a short reason of at most 90 characters on gates", () => {
+    const { short, ...noShort } = gate("g", "eligible");
+    assert.ok(short);
+    assert.throws(() => policy([noShort]));
+    assert.throws(() => policy([gate("g", "eligible", { short: "x".repeat(91) })]));
   });
 
   it("rejects duplicate rule ids", () => {

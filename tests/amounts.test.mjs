@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 
-const { toBaseUnits, fromBaseUnits } = await import(
+const { toBaseUnits, fromBaseUnits, sanitizeAmount } = await import(
   new URL("../lib/amounts.ts", import.meta.url)
 );
 
@@ -43,6 +43,31 @@ describe("fromBaseUnits", () => {
   it("round-trips", () => {
     for (const s of ["0.1", "12.345678", "999999.999999", "1"]) {
       assert.equal(fromBaseUnits(toBaseUnits(s, 6), 6), s);
+    }
+  });
+});
+
+describe("sanitizeAmount", () => {
+  it("keeps digits and one decimal point", () => {
+    assert.equal(sanitizeAmount("12.50", 6), "12.50");
+    assert.equal(sanitizeAmount("5.", 6), "5.");
+    assert.equal(sanitizeAmount("$1,000", 6), "1.000");
+    assert.equal(sanitizeAmount("abc", 6), "");
+  });
+
+  it("merges extra points into the fraction instead of losing digits", () => {
+    assert.equal(sanitizeAmount("1.2.3", 6), "1.23");
+  });
+
+  it("caps fractional digits at the token's decimals", () => {
+    assert.equal(sanitizeAmount("0.1234567", 6), "0.123456");
+    assert.equal(sanitizeAmount("0.1234567891", 9), "0.123456789");
+  });
+
+  it("always yields something toBaseUnits accepts, or an empty field", () => {
+    for (const raw of ["12.5", "0.000001", "7", ".5", "1,5", "9.9999999"]) {
+      const clean = sanitizeAmount(raw, 6);
+      assert.notEqual(toBaseUnits(clean, 6), null, raw);
     }
   });
 });

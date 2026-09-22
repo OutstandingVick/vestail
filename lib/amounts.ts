@@ -31,3 +31,16 @@ export function fromBaseUnits(amount: bigint | string, decimals: number): string
   const frac = digits.slice(digits.length - decimals).replace(/0+$/, "");
   return `${negative ? "-" : ""}${whole}${frac ? `.${frac}` : ""}`;
 }
+
+/**
+ * Clean what the user typed into an amount field as they type: digits and
+ * one decimal point (a comma counts as one), at most `decimals` fractional
+ * digits. Returns a string, not a number, so "0.10" and "5." survive while
+ * the user is still typing.
+ */
+export function sanitizeAmount(raw: string, decimals: number): string {
+  const cleaned = raw.replace(/,/g, ".").replace(/[^\d.]/g, "");
+  const [whole, ...rest] = cleaned.split(".");
+  if (rest.length === 0) return whole;
+  return `${whole}.${rest.join("").slice(0, decimals)}`;
+}

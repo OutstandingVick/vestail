@@ -36,7 +36,7 @@ export function Hero() {
           id="hero-heading"
           className="mt-6 text-4xl font-bold leading-[1.08] tracking-tight text-white sm:text-5xl lg:text-6xl"
         >
-          Acquire onchain stocks you're actually allowed to own.
+          Acquire onchain stocks you&apos;re actually allowed to own.
         </h1>
 
         <p data-globe-avoid className="mt-6 max-w-2xl text-base leading-relaxed text-white/75 sm:text-lg">

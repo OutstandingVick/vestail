@@ -18,8 +18,9 @@ export type EligibilityState =
 export function useEligibility(
   symbol: AllowedSymbol | null,
   region: AllowedRegion | null,
-): EligibilityState {
+): { state: EligibilityState; retry: () => void } {
   const [state, setState] = useState<EligibilityState>({ status: "idle" });
+  const [attempt, setAttempt] = useState(0);
 
   useEffect(() => {
     if (!symbol || !region) {
@@ -48,7 +49,7 @@ export function useEligibility(
 
     // Switching stock or country cancels the older request.
     return () => controller.abort();
-  }, [symbol, region]);
+  }, [symbol, region, attempt]);
 
-  return state;
+  return { state, retry: () => setAttempt((n) => n + 1) };
 }

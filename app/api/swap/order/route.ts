@@ -11,11 +11,18 @@ import { orderSigningReady, signOrder } from "@/lib/server/orderToken";
 import { RegionSchema, type SwapQuote } from "@/lib/types";
 
 /**
- * GET /api/swap/order?inputMint&outputMint&amount&taker&region
+ * GET /api/swap/order?inputMint&outputMint&amount&taker&region&acknowledged
  *
- * Builds a USDC or SOL -> token order via Jupiter, but only for a token whose
- * verdict is `eligible` in the caller's self-declared region. The UI never
- * offers a buy for anything else; this route makes that a property of the
+ * Builds a USDC or SOL -> token order via Jupiter, for a token the caller's
+ * self-declared region allows:
+ *
+ *   eligible     always
+ *   conditional  only with acknowledged=true, meaning the buyer ticked the
+ *                verdict's acknowledgement ("I understand I can buy and hold
+ *                this, but ... requires ..."). A price estimate needs none.
+ *   restricted   never, and neither is a token with no sourced verdict
+ *
+ * The UI enforces the same rules; doing it here makes them a property of the
  * server rather than of which buttons happen to render.
  *
  * `inputMint` is USDC (the default) or wrapped SOL, which Jupiter spends as
@@ -60,6 +67,7 @@ const QuerySchema = z.object({
     }, "not a wallet address")
     .optional(),
   region: RegionSchema,
+  acknowledged: z.enum(["true", "false"]).optional(),
 });
 
 function orderError(code: number | undefined, paySymbol: string): string | undefined {
@@ -89,7 +97,7 @@ export async function GET(request: Request) {
   if (!parsed.success) {
     return fail(400, "Invalid order request.");
   }
-  const { inputMint, outputMint, amount, taker, region } = parsed.data;
+  const { inputMint, outputMint, amount, taker, region, acknowledged } = parsed.data;
 
   const limits = LIMITS[inputMint];
   const units = BigInt(amount);
@@ -107,14 +115,20 @@ export async function GET(request: Request) {
     return fail(404, "Vestail does not know this token.");
   }
 
-  // The rule the product exists for: route only to eligible representations.
   const verdict = evaluate(representation, region, POLICIES[representation.provider]);
-  if (verdict?.status !== "eligible") {
+  const status = verdict?.status ?? "not_assessed";
+  if (status === "restricted" || status === "not_assessed") {
     return fail(
       403,
-      "Vestail only routes purchases to tokens that are eligible in your declared jurisdiction.",
-      { verdictStatus: verdict?.status ?? "not_assessed" },
+      "Vestail doesn't route purchases to versions that are restricted in your declared jurisdiction.",
+      { verdictStatus: status },
     );
+  }
+  // Conditional: a price is fine; a transaction needs the acknowledgement.
+  if (status === "conditional" && taker && acknowledged !== "true") {
+    return fail(403, "Confirm the conditions for this version before buying it.", {
+      verdictStatus: status,
+    });
   }
 
   const result = await getOrder({

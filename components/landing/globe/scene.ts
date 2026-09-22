@@ -15,6 +15,7 @@ import {
 
 import { landPositions } from "@/lib/globe/landPoints";
 
+import { createCoins, ORBIT_RADIANS_PER_SECOND, type Coins } from "./coins";
 import { globeGeometry, type GlobePlacement } from "./layout";
 
 /**
@@ -188,6 +189,25 @@ export function mountGlobe(
   const atmosphere = new Mesh(new SphereGeometry(ATMOSPHERE, 96, 64), atmosphereMaterial);
   globe.add(atmosphere);
 
+  /* Coins. Their faces are drawn with canvas text, which does not wait for
+     web fonts, so they are created once the brand font has loaded. Until
+     then the globe turns on its own. */
+  let coins: Coins | undefined;
+  let orbitPhase = 0.9;
+  let disposed = false;
+  const fontFamily = getComputedStyle(document.body).fontFamily;
+  document.fonts
+    .load(`700 64px ${fontFamily}`)
+    .catch(() => undefined)
+    .then(() => {
+      if (disposed) return;
+      coins = createCoins(placement.coins, fontFamily);
+      scene.add(coins.group);
+      layout();
+      coins.update(orbitPhase);
+      render();
+    });
+
   /* Layout: follow the stage's size, in CSS pixels. */
   let width = 0;
   let height = 0;
@@ -206,6 +226,7 @@ export function mountGlobe(
     const { r, cx, cy } = globeGeometry(placement, width, height);
     globe.position.set(cx, -cy, 0);
     globe.scale.setScalar(r);
+    coins?.setFrame(cx, cy, r);
     // Dot spacing grows with the radius; keep dots about half the gap.
     dotMaterial.uniforms.uSize.value = Math.min(Math.max(r * 0.0054, 1.6), 4.6);
   }
@@ -235,6 +256,8 @@ export function mountGlobe(
     const dt = Math.min((now - last) / 1000, 0.1);
     last = now;
     spin.rotation.y += SPIN_RADIANS_PER_SECOND * dt;
+    orbitPhase += ORBIT_RADIANS_PER_SECOND * dt;
+    coins?.update(orbitPhase);
     render();
     frame = requestAnimationFrame(tick);
   }
@@ -242,7 +265,9 @@ export function mountGlobe(
 
   return {
     dispose() {
+      disposed = true;
       cancelAnimationFrame(frame);
+      coins?.dispose();
       resizeObserver.disconnect();
       dotGeometry.dispose();
       dotMaterial.dispose();

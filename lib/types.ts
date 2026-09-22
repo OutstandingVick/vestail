@@ -405,13 +405,17 @@ export type SymbolView = z.infer<typeof SymbolViewSchema>;
 
 const baseUnits = z.string().regex(/^\d+$/);
 
-/** What /api/swap/order returns for an eligible, buildable order. */
+/**
+ * What /api/swap/order returns. With a taker it is a buildable order; without
+ * one (quoteOnly) it is a price estimate and the three order fields are null.
+ */
 export const SwapQuoteSchema = z.object({
-  requestId: z.string().min(1),
+  quoteOnly: z.boolean(),
+  requestId: z.string().min(1).nullable(),
   /** Binds the later /api/swap/execute call to this approved order. */
-  orderToken: z.string().min(1),
+  orderToken: z.string().min(1).nullable(),
   /** Base64 v0 transaction, unsigned. Signed only in the user's wallet. */
-  transaction: z.string().min(1),
+  transaction: z.string().min(1).nullable(),
   outputMint: z.string().min(32).max(44),
   inAmount: baseUnits,
   outAmount: baseUnits,
@@ -444,6 +448,8 @@ export type SwapResult = z.infer<typeof SwapResultSchema>;
 /** Error body shared by both swap routes. */
 export const SwapErrorSchema = z.object({
   error: z.string(),
+  /** "no_route": nothing can fill this swap right now. */
+  code: z.enum(["no_route"]).optional(),
   /** Set when the order was refused on eligibility grounds. */
   verdictStatus: z
     .enum(["eligible", "conditional", "restricted", "not_assessed"])

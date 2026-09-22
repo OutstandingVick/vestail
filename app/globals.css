@@ -58,7 +58,6 @@
  * next/font generates in app/layout.tsx, and those must not be re-declared.
  */
 @theme inline {
-  --font-display: var(--font-source-serif), ui-serif, Georgia, serif;
   --font-sans: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
 }
 
@@ -130,7 +129,8 @@ body::before {
 
 .wallet-adapter-modal-title {
   color: var(--color-paper);
-  font-family: var(--font-display);
+  font-family: var(--font-sans);
+  font-weight: 600;
 }
 
 .wallet-adapter-modal-list .wallet-adapter-button {
@@ -145,4 +145,16 @@ body::before {
 
 .wallet-adapter-modal-list-more {
   color: var(--color-dim) !important;
+}
+
+/* Toast entrance; used only under motion-safe (see components/app/Toast). */
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

@@ -1,19 +1,9 @@
 import type { Metadata } from "next";
-import { Outfit, Source_Serif_4 } from "next/font/google";
+import { Outfit } from "next/font/google";
 import { SolanaProvider } from "@/components/SolanaProvider";
 import "./globals.css";
 
-/*
- * Outfit is the brand face and sets everything by default. Source Serif 4 is
- * kept only for the app's display headings (font-display), which read like a
- * document because they make a claim about a legal instrument.
- */
-const sourceSerif = Source_Serif_4({
-  variable: "--font-source-serif",
-  subsets: ["latin"],
-  display: "swap",
-});
-
+/* Outfit is the brand face and sets everything. */
 const outfit = Outfit({
   variable: "--font-outfit",
   subsets: ["latin"],
@@ -34,7 +24,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${sourceSerif.variable} ${outfit.variable} h-full`}
+      className={`${outfit.variable} h-full`}
     >
       <body className="flex min-h-full flex-col">
         <SolanaProvider>{children}</SolanaProvider>

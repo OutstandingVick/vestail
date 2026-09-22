@@ -143,7 +143,7 @@ function EstimateAmount({
     // Six significant decimals is plenty for a share-sized token.
     const [whole, frac = ""] = out.split(".");
     return (
-      <span className="block truncate text-4xl font-semibold text-white">
+      <span className="block truncate text-3xl font-semibold text-white sm:text-4xl">
         {frac ? `${whole}.${frac.slice(0, 6)}` : whole}
       </span>
     );
@@ -158,7 +158,7 @@ function EstimateAmount({
   if (estimate.status === "error") {
     return <span className="block text-sm leading-snug text-white/75">{estimate.message}</span>;
   }
-  return <span className="block text-4xl font-semibold text-white/30">0.0</span>;
+  return <span className="block text-3xl font-semibold text-white/30 sm:text-4xl">0.0</span>;
 }
 
 /** Which version you get. Set only by the version cards, never a free dropdown. */
@@ -174,7 +174,10 @@ function VersionPill({ selected }: { selected: SelectedVersion | null }) {
     <span className="flex max-w-[60%] shrink-0 items-center gap-2 rounded-full bg-white/[0.08] py-2 pl-2 pr-3 text-base font-semibold text-white ring-1 ring-white/10">
       <Monogram symbol={selected.symbol} size="sm" />
       <span className="truncate">
-        {selected.tokenSymbol} <span className="font-normal text-white/60">· {selected.providerName}</span>
+        {selected.tokenSymbol}
+        {/* On phones the provider is dropped here; the selected card below names it. */}
+        <span className="hidden font-normal text-white/60 sm:inline"> · {selected.providerName}</span>
+        <span className="sr-only sm:hidden"> from {selected.providerName}</span>
       </span>
     </span>
   );

@@ -24,8 +24,8 @@ export interface BuyButtonInput {
   payTokenSymbol: string;
   estimate: "idle" | "loading" | "ready" | "no_route" | "error";
   acknowledged: boolean;
-  /** Signing or executing right now. */
-  busy: "signing" | "executing" | null;
+  /** Preparing the order, signing or executing right now. */
+  busy: "ordering" | "signing" | "executing" | null;
 }
 
 export type BuyButtonKind =
@@ -48,6 +48,7 @@ export interface BuyButtonState {
 }
 
 export function buyButtonState(s: BuyButtonInput): BuyButtonState {
+  if (s.busy === "ordering") return { kind: "busy", label: "Preparing your order…", enabled: false };
   if (s.busy === "signing") return { kind: "busy", label: "Confirm in your wallet…", enabled: false };
   if (s.busy === "executing") return { kind: "busy", label: "Buying…", enabled: false };
 

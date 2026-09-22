@@ -3,8 +3,9 @@
 **Which version of this stock are you actually allowed to hold?**
 
 Vestail resolves every tokenized representation of a security, evaluates which
-ones a user in a given jurisdiction may actually hold, and routes a purchase
-only to the eligible ones via Jupiter.
+ones a user in a given jurisdiction may actually hold, and routes a purchase via
+Jupiter only to versions they may hold: eligible ones, or conditional ones once
+the buyer has acknowledged the specific condition. Never restricted ones.
 
 Built for the STOCKLANA Solana hackathon.
 
@@ -138,30 +139,50 @@ Next.js 15 (App Router) · TypeScript · Tailwind v4 · Solana Wallet Adapter
 No Redis, no separate backend, no Anchor program. Keys stay in a Next.js route
 handler, which is the only code that calls Pyth or Jupiter.
 
-### Buying: eligible only
+### Buying
 
-Vestail routes a purchase **only** to a token whose verdict is `eligible` in
-the declared region. Conditional, restricted and not-assessed tokens get no buy
-path at all. When nothing is eligible, which for a retail holder is the common
-case, the page says so and why, instead of offering the next-best token.
+What Vestail will route, by verdict for the declared region:
+
+| Verdict | Routed? |
+| --- | --- |
+| `eligible` | Yes. The strongest eligible version is pre-selected. |
+| `conditional` | Yes, once the buyer ticks the version's acknowledgement: *"I understand I can buy and hold this, but {limit} requires {requires}."* Never pre-selected. |
+| `restricted` | Never, and never quoted. Shown dimmed with its reason. |
+| not assessed | Never. |
+
+The acknowledgement text comes from the sourced policy file (each conditional
+gate must carry one; the schema enforces it), not from UI copy. This rule
+changed on 2026-09-22: Phase 3 routed to eligible versions only.
 
 The flow uses the **Jupiter Swap API V2** Meta-Aggregator path
 (`api.jup.ag/swap/v2`): `GET /order` → sign in the user's wallet →
-`POST /execute`. Not the Ultra API, and not the legacy `/swap/v1` pair.
+`POST /execute`. Not the Ultra API, and not the legacy `/swap/v1` pair. Buyers
+pay with USDC or SOL.
 
-- `GET /api/swap/order` re-evaluates the verdict on the server and refuses
-  anything not `eligible` (403). The rule is a property of the server, not of
-  which buttons render. It also refuses an order from Jupiter that does not
-  match the request (mints, amount, taker) before anyone signs it.
+- `GET /api/eligibility?symbol&region` returns every version of a stock with
+  its verdict, from the same evaluator the tests pin.
+- `GET /api/swap/order` re-evaluates the verdict on the server and applies the
+  table above: conditional needs `acknowledged=true`, restricted is refused
+  (403). Without a `taker` it returns a price estimate only, so the page can
+  show "You get" before a wallet is connected. It also refuses an order from
+  Jupiter that does not match the request (mints, amount, taker), and reports
+  Jupiter's "no route" as its own case.
 - It returns a short-lived HMAC **order token** bound to Jupiter's
   `requestId`. `POST /api/swap/execute` accepts only orders carrying a valid
   one, so Vestail's Jupiter key can only land swaps that passed the check.
-- The user sees price impact, Jupiter's fee, the slippage limit, and the SOL
-  they pay (including one-time token-account rent) before signing. The wallet
-  signs; Vestail never holds funds or keys.
+- The wallet signs; Vestail never holds funds or keys.
 
 `JUPITER_API_KEY` is optional (keyless works, with a lower documented limit on
 `/execute`) and server-only. `VESTAIL_ORDER_SECRET` is required in production.
+
+### The app
+
+`/app` is one card: where you are, which stock, You pay / You get, the main
+button, and every version of the stock with its verdict, structure in plain
+English, one-line reason and a link to the issuer's terms. The button's label
+always names the next step ("Connect wallet", "Choose a country and stock",
+"Enter an amount", "Review the conditions below", "Buy NVDAx"); its rules are a
+tested pure function in `lib/app/buyButton.ts`.
 
 ## Landing page
 
@@ -237,9 +258,11 @@ authority set.
 npm test
 ```
 
-Covers policy validity, full region coverage for every representation, the
-pinned grid above, and the evaluator's rules (see
-[`policies/README.md`](policies/README.md)).
+60 tests: policy validity (including that every conditional gate carries an
+acknowledgement), full region coverage for every representation, the pinned
+grid above, the evaluator's rules (see [`policies/README.md`](policies/README.md)),
+exact amount handling, the globe's land mask, the version ordering, and every
+state of the main button.
 
 ## Status
 
@@ -257,6 +280,13 @@ Jupiter and the page says so.
 and DE, a pure evaluator, tests, and self-declared-region verdicts on every
 token with their evidence and sources.
 
-**Phase 3 — complete.** USDC purchases via Jupiter Swap V2, offered and
-enforced for eligible tokens only, with server-bound order tokens and a
-pre-signing quote breakdown.
+**Phase 3 — complete.** Purchases via Jupiter Swap V2 with server-bound order
+tokens.
+
+**App redesign — complete.** `/app` rebuilt as a single swap card; USDC or SOL;
+live estimates before connecting; conditional versions routed after an explicit
+acknowledgement.
+
+Not shown in the new app: the Pyth price comparison against the listed share.
+`/api/representations` still serves it (and Pyth equity feeds still await
+plan access), but the card layout has no place for it yet.

@@ -35,6 +35,14 @@
   --color-gold: #c9a227;
 
   /*
+   * Brand. Orange carries the primary call to action and highlights; the
+   * violet and navy are the two ends of the site background gradient.
+   */
+  --color-brand-orange: #ff580a;
+  --color-brand-violet: #7c41f1;
+  --color-brand-navy: #0a122a;
+
+  /*
    * Verdict colours. These map 1:1 onto the three Verdict statuses in
    * lib/types.ts and are not reused for anything else — the whole point of the
    * product is that `conditional` reads as its own state rather than as a

@@ -40,7 +40,7 @@ export function Hero() {
 
         <Link
           href={APP_HREF}
-          className="mt-10 rounded-full bg-brand-orange px-8 py-4 text-base font-semibold text-white shadow-[0_12px_32px_-10px_rgb(255_88_10/0.8)] transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+          className="mt-10 rounded-full bg-brand-orange px-8 py-4 text-base font-semibold text-brand-navy shadow-[0_12px_32px_-10px_rgb(255_88_10/0.8)] transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
         >
           Check eligibility
         </Link>

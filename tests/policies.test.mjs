@@ -98,6 +98,20 @@ describe("researched verdicts (change deliberately, with the policy)", () => {
     assert.equal(evaluate(rep, "NG", policies.backpack).sourceQuality, "primary");
   });
 
+  it("carries a summary on every verdict, and an acknowledgement exactly on conditional ones", () => {
+    for (const rep of allReps) {
+      for (const region of REGION_ALLOWLIST) {
+        const v = evaluate(rep, region, policies[rep.provider]);
+        assert.ok(v.summary.length > 0);
+        assert.equal(
+          v.acknowledgement !== undefined,
+          v.status === "conditional",
+          `${rep.provider} ${rep.symbol} ${region}`,
+        );
+      }
+    }
+  });
+
   it("attaches symbol-scoped notes only to their symbol", () => {
     const tSpaceX = registry.symbols.SPCX.representations.find(
       (r) => r.provider === "tessera",

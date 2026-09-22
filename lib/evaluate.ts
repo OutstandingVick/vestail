@@ -102,6 +102,12 @@ export function evaluate(
     sourceUrl: deciding[0].source_url,
     sourceQuality,
     evidence,
+    summary: deciding[0].short,
+    // Only conditional gates carry one (the schema enforces it), so this is
+    // set exactly when the verdict is conditional.
+    ...(deciding[0].acknowledgement
+      ? { acknowledgement: deciding[0].acknowledgement }
+      : {}),
     evaluatedAt: now.toISOString(),
   };
 }

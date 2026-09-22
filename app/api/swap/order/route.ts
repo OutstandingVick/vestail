@@ -2,7 +2,7 @@ import { PublicKey } from "@solana/web3.js";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
-import { USDC_MINT } from "@/lib/constants";
+import { PAY_TOKENS } from "@/lib/constants";
 import { evaluate } from "@/lib/evaluate";
 import { POLICIES } from "@/lib/policies";
 import { findRepresentation } from "@/lib/registry";
@@ -11,20 +11,38 @@ import { orderSigningReady, signOrder } from "@/lib/server/orderToken";
 import { RegionSchema, type SwapQuote } from "@/lib/types";
 
 /**
- * GET /api/swap/order?outputMint&amount&taker&region
+ * GET /api/swap/order?inputMint&outputMint&amount&taker&region
  *
- * Builds a USDC -> token order via Jupiter, but only for a token whose
+ * Builds a USDC or SOL -> token order via Jupiter, but only for a token whose
  * verdict is `eligible` in the caller's self-declared region. The UI never
  * offers a buy for anything else; this route makes that a property of the
  * server rather than of which buttons happen to render.
  *
- * `amount` is USDC in base units (6 decimals).
+ * `inputMint` is USDC (the default) or wrapped SOL, which Jupiter spends as
+ * native SOL. `amount` is in the input token's base units.
  */
 
-const MIN_USDC = BigInt(1_000_000); // 1 USDC
-const MAX_USDC = BigInt(100_000_000_000); // 100,000 USDC
+/** Per pay token: the smallest and largest order, in base units. */
+const LIMITS = {
+  [PAY_TOKENS.USDC.mint]: {
+    token: PAY_TOKENS.USDC,
+    min: BigInt(1_000_000), // 1 USDC
+    max: BigInt(100_000_000_000), // 100,000 USDC
+    range: "between 1 and 100,000 USDC",
+  },
+  [PAY_TOKENS.SOL.mint]: {
+    token: PAY_TOKENS.SOL,
+    min: BigInt(10_000_000), // 0.01 SOL
+    max: BigInt(1_000_000_000_000), // 1,000 SOL
+    range: "between 0.01 and 1,000 SOL",
+  },
+};
 
 const QuerySchema = z.object({
+  inputMint: z
+    .string()
+    .default(PAY_TOKENS.USDC.mint)
+    .refine((m) => m in LIMITS, "pay with USDC or SOL"),
   outputMint: z.string().min(32).max(44),
   amount: z.string().regex(/^\d{1,15}$/),
   taker: z.string().refine((s) => {
@@ -37,11 +55,18 @@ const QuerySchema = z.object({
   region: RegionSchema,
 });
 
-const ORDER_ERRORS: Record<number, string> = {
-  1: "Not enough USDC in the wallet for this amount.",
-  2: "Not enough SOL in the wallet to pay network fees.",
-  3: "This amount is below Jupiter's minimum for a gasless swap. Add a little SOL or increase the amount.",
-};
+function orderError(code: number | undefined, paySymbol: string): string | undefined {
+  switch (code) {
+    case 1:
+      return `Not enough ${paySymbol} in the wallet for this amount.`;
+    case 2:
+      return "Not enough SOL in the wallet to pay network fees.";
+    case 3:
+      return "This amount is below Jupiter's minimum for a gasless swap. Add a little SOL or increase the amount.";
+    default:
+      return undefined;
+  }
+}
 
 function fail(status: number, error: string, extra: object = {}) {
   return NextResponse.json(
@@ -61,11 +86,12 @@ export async function GET(request: Request) {
   if (!parsed.success) {
     return fail(400, "Invalid order request.");
   }
-  const { outputMint, amount, taker, region } = parsed.data;
+  const { inputMint, outputMint, amount, taker, region } = parsed.data;
 
-  const usdc = BigInt(amount);
-  if (usdc < MIN_USDC || usdc > MAX_USDC) {
-    return fail(400, "Amount must be between 1 and 100,000 USDC.");
+  const limits = LIMITS[inputMint];
+  const units = BigInt(amount);
+  if (units < limits.min || units > limits.max) {
+    return fail(400, `Amount must be ${limits.range}.`);
   }
 
   const representation = findRepresentation(outputMint);
@@ -84,7 +110,7 @@ export async function GET(request: Request) {
   }
 
   const result = await getOrder({
-    inputMint: USDC_MINT.toBase58(),
+    inputMint,
     outputMint,
     amount,
     taker,
@@ -96,7 +122,7 @@ export async function GET(request: Request) {
 
   // Refuse an order that is not the one we asked for, before anyone signs it.
   if (
-    order.inputMint !== USDC_MINT.toBase58() ||
+    order.inputMint !== inputMint ||
     order.outputMint !== outputMint ||
     order.inAmount !== amount ||
     order.taker !== taker
@@ -107,7 +133,7 @@ export async function GET(request: Request) {
   if (!order.transaction) {
     return fail(
       422,
-      (order.errorCode !== undefined && ORDER_ERRORS[order.errorCode]) ||
+      orderError(order.errorCode, limits.token.symbol) ||
         order.errorMessage ||
         "Jupiter could not build this swap.",
     );

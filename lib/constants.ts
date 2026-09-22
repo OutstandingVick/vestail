@@ -55,6 +55,30 @@ export const USDC_MINT = new PublicKey(
 /** USDC is a 6-decimal mint, so 1 USDC is 1_000_000 base units. */
 export const USDC_DECIMALS = 6;
 
+/**
+ * Wrapped SOL. Passing it as Jupiter's input mint spends native SOL: Jupiter
+ * wraps and unwraps it inside the swap transaction.
+ */
+export const WSOL_MINT = new PublicKey("So11111111111111111111111111111111111111112");
+
+/** SOL has 9 decimals: 1 SOL is 1_000_000_000 lamports. */
+export const SOL_DECIMALS = 9;
+
+/**
+ * SOL held back when the user presses MAX with SOL as the pay token: network
+ * fees, plus rent for the new token account and the temporary wrapped-SOL
+ * account the swap opens. Spending every lamport would make the swap fail.
+ */
+export const SOL_FEE_RESERVE = 0.01;
+
+/** The tokens a buyer can pay with. */
+export const PAY_TOKENS = {
+  USDC: { symbol: "USDC", mint: USDC_MINT.toBase58(), decimals: USDC_DECIMALS },
+  SOL: { symbol: "SOL", mint: WSOL_MINT.toBase58(), decimals: SOL_DECIMALS },
+} as const;
+
+export type PayTokenSymbol = keyof typeof PAY_TOKENS;
+
 /* -------------------------------------------------------------------------- */
 /* Jupiter                                                                     */
 /* -------------------------------------------------------------------------- */
@@ -130,6 +154,21 @@ export const SYMBOL_ALLOWLIST = [
 
 export type AllowedSymbol = (typeof SYMBOL_ALLOWLIST)[number];
 
+/** Company or fund name for each symbol, as shown in the stock picker. */
+export const SYMBOL_NAME: Record<AllowedSymbol, string> = {
+  SPCX: "SpaceX",
+  NVDA: "Nvidia",
+  TSLA: "Tesla",
+  AAPL: "Apple",
+  SPY: "SPDR S&P 500 ETF",
+  QQQ: "Invesco QQQ",
+  MSFT: "Microsoft",
+  GOOGL: "Alphabet",
+  AMZN: "Amazon",
+  OPENAI: "OpenAI",
+  KALSHI: "Kalshi",
+};
+
 /** Symbols with no listed share, and therefore no public reference price. */
 export const PRIVATE_SYMBOLS: ReadonlySet<AllowedSymbol> = new Set([
   "OPENAI",
@@ -150,6 +189,13 @@ export const PRIVATE_SYMBOLS: ReadonlySet<AllowedSymbol> = new Set([
 export const REGION_ALLOWLIST = ["NG", "US", "DE"] as const;
 
 export type AllowedRegion = (typeof REGION_ALLOWLIST)[number];
+
+/** Flag emoji per region (regional-indicator pairs). */
+export const REGION_FLAG: Record<AllowedRegion, string> = {
+  NG: "\u{1F1F3}\u{1F1EC}",
+  US: "\u{1F1FA}\u{1F1F8}",
+  DE: "\u{1F1E9}\u{1F1EA}",
+};
 
 export const REGION_NAME: Record<AllowedRegion, string> = {
   NG: "Nigeria",

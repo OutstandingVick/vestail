@@ -3,6 +3,18 @@
   padding: clamp(64px, 8vw, 120px) 24px clamp(80px, 9vw, 144px);
 }
 
+.heading {
+  max-inline-size: 760px;
+  margin: 0 auto 72px;
+  color: #b8b7c2;
+  font-size: clamp(30px, 4vw, 52px);
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -0.035em;
+  text-align: center;
+  text-wrap: balance;
+}
+
 .cards {
   display: grid;
   gap: 24px;

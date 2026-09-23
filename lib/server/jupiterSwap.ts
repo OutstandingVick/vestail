@@ -85,17 +85,24 @@ async function call<T>(url: string, init: RequestInit): Promise<JupiterCall<T>> 
   }
 }
 
-/** Without `taker`, Jupiter returns a price but no transaction. */
+/**
+ * Without `taker`, Jupiter returns a price but no transaction.
+ *
+ * `slippageBps` is always sent. Left off, Jupiter picks the slippage itself,
+ * and whatever it picks is what the user ends up signing for.
+ */
 export function getOrder(params: {
   inputMint: string;
   outputMint: string;
   amount: string;
   taker?: string;
+  slippageBps: number;
 }): Promise<JupiterCall<JupiterOrder>> {
   const query = new URLSearchParams({
     inputMint: params.inputMint,
     outputMint: params.outputMint,
     amount: params.amount,
+    slippageBps: String(params.slippageBps),
     ...(params.taker ? { taker: params.taker } : {}),
   });
   return call<JupiterOrder>(`${JUPITER_ORDER_ENDPOINT}?${query}`, {

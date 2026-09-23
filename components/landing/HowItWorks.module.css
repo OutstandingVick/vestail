@@ -4,6 +4,32 @@
   scroll-margin-block-start: 32px;
 }
 
+.artwork {
+  position: relative;
+  isolation: isolate;
+  order: -1;
+  inline-size: min(72%, 320px);
+  margin: 0 auto 40px;
+}
+
+.artwork::before {
+  content: "";
+  position: absolute;
+  inset: 8%;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgb(255 88 10 / 24%), transparent 70%);
+  filter: blur(28px);
+}
+
+.character {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+  transform: rotate(-8deg);
+  filter: drop-shadow(0 24px 28px rgb(10 18 42 / 25%));
+}
+
 .heading {
   margin: 0;
   color: #fff;

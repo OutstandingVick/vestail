@@ -3,6 +3,24 @@
   padding: clamp(64px, 8vw, 120px) 24px clamp(80px, 9vw, 144px);
 }
 
+.body {
+  margin: 0;
+  color: #c2bfce;
+  font-size: 17px;
+  line-height: 1.65;
+  overflow-wrap: break-word;
+}
+
+.takeaway {
+  max-inline-size: 720px;
+  margin: 48px auto 0;
+  color: #b8b7c2;
+  font-size: 17px;
+  line-height: 1.6;
+  text-align: center;
+  text-wrap: balance;
+}
+
 .title {
   margin: 0 0 20px;
   color: #fff;

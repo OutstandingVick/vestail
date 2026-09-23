@@ -20,7 +20,7 @@ export function Hero() {
         <GlobeStage variant="desktop" />
       </div>
 
-      <div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center justify-center px-4 pb-4 pt-28 text-center sm:px-8 md:min-h-[100svh] md:pb-16">
+      <div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center justify-center px-4 pb-4 pt-28 text-center sm:px-8 md:min-h-svh md:pb-16">
         {/*
           Soft navy scrim behind the copy, so it stays readable wherever the
           globe's bright dots and coins pass underneath. Radial and blurred at

@@ -122,3 +122,29 @@
   color: var(--color-brand-orange);
   margin-block-end: 20px;
 }
+
+@media (min-width: 900px) {
+  .header {
+    margin-block-end: 112px;
+  }
+
+  .cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+    gap: 96px clamp(72px, 8vw, 112px);
+    max-inline-size: none;
+    padding: 24px 24px 200px;
+  }
+
+  .item:nth-child(even) {
+    top: 140px;
+  }
+
+  .card {
+    transform: rotate(-3deg);
+  }
+
+  .item:nth-child(even) .card {
+    transform: rotate(3deg);
+  }
+}

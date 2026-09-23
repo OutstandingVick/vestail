@@ -125,6 +125,37 @@
   padding-block-start: 7px;
 }
 
+.step[data-active="true"] .badge {
+  border-color: var(--color-brand-orange);
+  color: var(--color-brand-orange);
+}
+
+@media (hover: hover) {
+  .step:hover .badge {
+    border-color: var(--color-brand-orange);
+    color: var(--color-brand-orange);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .badge {
+    transition: color 180ms ease, border-color 180ms ease;
+  }
+
+  .copy {
+    transition: opacity 180ms ease;
+  }
+
+  .steps[data-tracking="true"] .copy {
+    opacity: 0.78;
+  }
+
+  .steps[data-tracking="true"] .step[data-active="true"] .copy,
+  .steps[data-tracking="true"] .step:hover .copy {
+    opacity: 1;
+  }
+}
+
 @media (min-width: 900px) {
   .section {
     padding-block: 48px 112px;

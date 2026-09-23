@@ -1,13 +1,15 @@
-import { PublicKey } from "@solana/web3.js";
+import { PublicKey, VersionedTransaction } from "@solana/web3.js";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
-import { PAY_TOKENS } from "@/lib/constants";
+import { base64ToBytes } from "@/lib/base64";
+import { PAY_TOKENS, WSOL_MINT } from "@/lib/constants";
 import { evaluate } from "@/lib/evaluate";
 import { POLICIES } from "@/lib/policies";
 import { findRepresentation } from "@/lib/registry";
 import { getOrder, isNoRoute } from "@/lib/server/jupiterSwap";
 import { orderSigningReady, signOrder } from "@/lib/server/orderToken";
+import { inspectSwapTransaction, maxLamportsFor } from "@/lib/swap/inspect";
 import { RegionSchema, type SwapQuote } from "@/lib/types";
 
 /**
@@ -195,6 +197,23 @@ export async function GET(request: Request) {
         order.errorMessage ||
         "Jupiter could not build this swap.",
     );
+  }
+
+  /*
+   * Jupiter's transaction is untrusted input, so it is read before it is
+   * passed on. The browser checks it again before the wallet opens — this
+   * check stops a bad transaction being served at all, that one stops a
+   * compromised server from getting one signed.
+   */
+  const inspection = inspectSwapTransaction(
+    VersionedTransaction.deserialize(base64ToBytes(order.transaction)),
+    {
+      taker,
+      maxLamportsFromTaker: maxLamportsFor(inputMint, units, WSOL_MINT.toBase58()),
+    },
+  );
+  if (!inspection.ok) {
+    return fail(502, inspection.reason);
   }
 
   const quote: SwapQuote = {

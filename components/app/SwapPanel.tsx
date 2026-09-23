@@ -1,5 +1,8 @@
 "use client";
 
+import Image from "next/image";
+
+import { Icon } from "@/components/icons";
 import { fromBaseUnits, sanitizeAmount } from "@/lib/amounts";
 import { PAY_TOKENS, type AllowedSymbol, type PayTokenSymbol } from "@/lib/constants";
 import { formatUsdc } from "@/lib/format";
@@ -64,9 +67,7 @@ export function SwapPanel({
           >
             <PayTokenGlyph token={payToken} />
             {payToken}
-            <svg aria-hidden viewBox="0 0 20 20" className="size-4 text-white/60">
-              <path d="M6 8 10 4 14 8M6 12 10 16 14 12" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
+            <Icon name="chevron-updown" className="size-4 text-white/60" />
           </button>
         </div>
         {balance !== null && (
@@ -95,9 +96,7 @@ export function SwapPanel({
             onClick={(e) => e.preventDefault()}
             className="flex size-11 cursor-not-allowed items-center justify-center rounded-full bg-[#101631] text-white/40 ring-4 ring-[#0b1026] focus-visible:outline-2 focus-visible:outline-brand-orange"
           >
-            <svg aria-hidden viewBox="0 0 20 20" className="size-5">
-              <path d="M7 4v12M7 16l-3-3M7 16l3-3M13 16V4M13 4l-3 3M13 4l3 3" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
+            <Icon name="swap-vertical" className="size-5" />
             <span className="sr-only">Swap direction</span>
           </button>
           <span
@@ -183,17 +182,24 @@ function VersionPill({ selected }: { selected: SelectedVersion | null }) {
   );
 }
 
-/** Plain glyphs for the pay tokens: a dollar for USDC, a stacked S for SOL. */
+/**
+ * The pay token's own mark.
+ *
+ * Previously a dollar sign and a stacked "S" drawn in type, which is what a
+ * swap panel looks like before anyone has put the real marks in. Round mask
+ * because the Solana mark is published on a black square and is normally set
+ * in a circle; the USDC one is already round and unaffected.
+ */
 function PayTokenGlyph({ token }: { token: PayTokenSymbol }) {
   return (
-    <span
+    <Image
+      src={`/brand/tokens/${token.toLowerCase()}.png`}
+      alt=""
       aria-hidden
-      className={`inline-flex size-7 items-center justify-center rounded-full text-sm font-bold ${
-        token === "USDC" ? "bg-[#2775ca] text-white" : "bg-black text-[#14f195]"
-      }`}
-    >
-      {token === "USDC" ? "$" : "≡"}
-    </span>
+      width={64}
+      height={64}
+      className="size-7 shrink-0 rounded-full"
+    />
   );
 }
 

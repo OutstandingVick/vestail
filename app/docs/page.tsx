@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Overview } from "@/components/docs/sections/Overview";
 import { Problem } from "@/components/docs/sections/Problem";
 import { Stakes } from "@/components/docs/sections/Stakes";
+import { Verdicts } from "@/components/docs/sections/Verdicts";
 import { APP_HREF } from "@/components/landing/LandingNav";
 
 export const metadata: Metadata = {
@@ -55,6 +56,7 @@ export default function DocsPage() {
         <Overview />
         <Problem />
         <Stakes />
+        <Verdicts />
       </div>
     </main>
   );

@@ -15,6 +15,13 @@ export function ProblemSection() {
             exposure to the real thing, but not a shareholder&apos;s rights.
           </p>
         </article>
+        <article className={styles.card}>
+          <h3 className={styles.title}>Just tracks the price</h3>
+          <p className={styles.body}>
+            Ondo often issues a note that follows what the stock does. You get the
+            performance without ever holding the share itself.
+          </p>
+        </article>
       </div>
     </section>
   );

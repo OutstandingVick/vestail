@@ -46,6 +46,32 @@ import { RegionSchema, type SwapQuote } from "@/lib/types";
 const REQUESTED_SLIPPAGE_BPS = 100;
 const MAX_SLIPPAGE_BPS = 300;
 
+/**
+ * The most a quote may deviate from the market before Vestail refuses to
+ * route it, as a percentage.
+ *
+ * Slippage bounds what happens between quoting and landing; this bounds the
+ * quote itself. A route through a pool that is thin, stale or being
+ * manipulated prices far from the real share, and Jupiter will quote it
+ * quite happily — `priceImpact` is the number that says so, and nothing was
+ * reading it.
+ *
+ * The check is on the magnitude, not the direction. Jupiter returns this
+ * signed and has been observed both ways for the same pair minutes apart, so
+ * a one-sided test risks being a check that never fires; and on a tokenized
+ * stock a sudden ten per cent in the buyer's favour is not a bargain, it is a
+ * mispriced pool.
+ *
+ * Ten per cent is deliberately loose, and the number was measured rather than
+ * picked. At two per cent this refuses Tessera's OPENAI and KALSHI outright —
+ * their pools price a five-dollar order more than two per cent from the
+ * market — and those are real tokens a buyer may legitimately want. Vestail
+ * discloses rather than forbids, so the line sits where a purchase is
+ * obviously value-destroying instead of where it is merely expensive. Telling
+ * the buyer the number belongs on screen, which it is not yet.
+ */
+const MAX_PRICE_IMPACT_PCT = 10;
+
 /** Per pay token: the smallest and largest order, in base units. */
 const LIMITS = {
   [PAY_TOKENS.USDC.mint]: {
@@ -170,6 +196,14 @@ export async function GET(request: Request) {
     (order.taker ?? undefined) !== taker
   ) {
     return fail(502, "Jupiter returned an order that does not match the request.");
+  }
+
+  if (Math.abs(order.priceImpact ?? 0) > MAX_PRICE_IMPACT_PCT) {
+    return fail(
+      422,
+      `This route prices more than ${MAX_PRICE_IMPACT_PCT}% away from the market, which usually means the pool is too thin for this amount. Try a smaller one.`,
+      { code: "price_impact" },
+    );
   }
 
   if ((order.slippageBps ?? REQUESTED_SLIPPAGE_BPS) > MAX_SLIPPAGE_BPS) {

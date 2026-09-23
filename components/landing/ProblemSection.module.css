@@ -3,6 +3,15 @@
   padding: clamp(64px, 8vw, 120px) 24px clamp(80px, 9vw, 144px);
 }
 
+.title {
+  margin: 0 0 20px;
+  color: #fff;
+  font-size: clamp(30px, 3vw, 38px);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+}
+
 .icon {
   inline-size: 48px;
   margin-block-end: 28px;

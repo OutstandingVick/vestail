@@ -17,7 +17,7 @@ export function ProblemSection() {
               <path d="M13 13v-2a3 3 0 0 1 6 0v2m-3 3v2" />
             </ProblemIcon>
           </div>
-          <h3 className={styles.title}>Backed by real shares</h3>
+          <h3 className={styles.title}>Backed by<br />real shares</h3>
           <p className={styles.body}>
             xStocks holds the actual shares in custody, one for one. You own
             exposure to the real thing, but not a shareholder&apos;s rights.
@@ -29,7 +29,7 @@ export function ProblemSection() {
               <path d="M5 4v23h23M9 21l6-7 5 3 7-10m-6 0h6v6" />
             </ProblemIcon>
           </div>
-          <h3 className={styles.title}>Just tracks the price</h3>
+          <h3 className={styles.title}>Just tracks<br />the price</h3>
           <p className={styles.body}>
             Ondo often issues a note that follows what the stock does. You get the
             performance without ever holding the share itself.
@@ -43,7 +43,7 @@ export function ProblemSection() {
               <path d="m20 25-1 5 4-2 4 2-1-5" />
             </ProblemIcon>
           </div>
-          <h3 className={styles.title}>A real legal claim</h3>
+          <h3 className={styles.title}>A real<br />legal claim</h3>
           <p className={styles.body}>
             Backpack issues a recognised entitlement through a licensed broker —
             the strongest claim, and the narrowest on who&apos;s allowed to hold it.

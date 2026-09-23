@@ -36,6 +36,13 @@ export function ProblemSection() {
           </p>
         </article>
         <article className={styles.card}>
+          <div className={styles.icon}>
+            <ProblemIcon>
+              <path d="M15 27H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h13l7 7v7M20 3v7h7M10 11h5m-5 5h8" />
+              <circle cx="23" cy="22" r="4" />
+              <path d="m20 25-1 5 4-2 4 2-1-5" />
+            </ProblemIcon>
+          </div>
           <h3 className={styles.title}>A real legal claim</h3>
           <p className={styles.body}>
             Backpack issues a recognised entitlement through a licensed broker —

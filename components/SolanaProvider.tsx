@@ -8,8 +8,12 @@ import { SolflareWalletAdapter } from "@solana/wallet-adapter-solflare";
 
 import { RPC_URL } from "@/lib/constants";
 
-// Base styles for the wallet modal and button. Imported once, here.
-import "@solana/wallet-adapter-react-ui/styles.css";
+/*
+ * Base styles for the wallet modal and button, vendored rather than imported
+ * from the package: the published stylesheet pulls a font from Google, on
+ * the page where people sign transactions. See the file's own note.
+ */
+import "./wallet-adapter.css";
 
 /**
  * Wallet and RPC context for the whole app.

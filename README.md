@@ -92,7 +92,7 @@ reviewable diff:
 
 ```
 app/                          / landing page, /app the app, /docs the explanation; api/eligibility, api/representations, api/swap/{order,execute}
-components/                   wallet, header, RepresentationExplorer, verdicts, BuyPanel
+components/                   wallet, header, the swap card; icons.tsx is the icon set
 components/docs/              the documentation page's sections and blocks
 components/landing/           landing nav and hero; globe/ is the three.js hero globe
 hooks/                        useUsdcBalance

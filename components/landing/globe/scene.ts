@@ -94,16 +94,22 @@ export function mountGlobe(
      turn a disc into an object you can see the thickness of. The key comes
      from the same direction the globe's shader lights from, so a coin
      passing in front of the planet is lit by the same sun.
-     Intensities are chosen so a coin facing the camera lands just under
-     full brightness rather than clipping to white: ambient plus the key's
-     lambert term against a face albedo of roughly three quarters. */
-  scene.add(new AmbientLight(0xcfd4ff, 0.75));
-  const key = new DirectionalLight(0xfff6ec, 0.95);
+     The intensities look high for a reason: three.js divides diffuse
+     lighting by pi (the Lambert BRDF), so an intensity of 1 arrives as
+     roughly a third of that. Lit at face value the coins came out at
+     about a third of their own colour and read as grey.
+
+     These were measured rather than guessed — rendered offscreen and read
+     back a pixel at a time. They put a coin near the camera at 94 to 95
+     per cent of its own colour with nothing clipping to white, so the
+     lights sculpt the coin without draining or blowing out its palette. */
+  scene.add(new AmbientLight(0xcfd4ff, 2.65));
+  const key = new DirectionalLight(0xfff6ec, 1.8);
   key.position.set(-0.55, 0.55, 0.65);
   scene.add(key);
   /* A violet bounce from the lower right, the colour of the page behind
      it, so the shadowed edge of a coin is never a dead grey. */
-  const bounce = new DirectionalLight(0x8b5cf6, 0.35);
+  const bounce = new DirectionalLight(0x8b5cf6, 0.66);
   bounce.position.set(0.7, -0.4, 0.35);
   scene.add(bounce);
 

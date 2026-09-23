@@ -1,3 +1,4 @@
+import Image from "next/image";
 import styles from "./HowItWorks.module.css";
 
 export function HowItWorks() {
@@ -8,6 +9,10 @@ export function HowItWorks() {
           <h2 id="how-heading" className={styles.heading}>
             From a ticker to your<br />wallet, in four steps.
           </h2>
+          <div className={styles.artwork} aria-hidden="true">
+            <Image src="/brand/vestail-character.svg" alt="" width={420} height={420}
+              unoptimized className={styles.character} />
+          </div>
         </div>
       </div>
     </section>

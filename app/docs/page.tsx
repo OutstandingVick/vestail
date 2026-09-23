@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import { Overview } from "@/components/docs/sections/Overview";
 import { APP_HREF } from "@/components/landing/LandingNav";
 
 export const metadata: Metadata = {
@@ -46,6 +47,10 @@ export default function DocsPage() {
         >
           Start reading
         </a>
+      </div>
+
+      <div className="mt-20 space-y-14">
+        <Overview />
       </div>
     </main>
   );

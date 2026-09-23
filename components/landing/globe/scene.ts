@@ -1,8 +1,10 @@
 import {
   AdditiveBlending,
+  AmbientLight,
   BackSide,
   BufferAttribute,
   BufferGeometry,
+  DirectionalLight,
   Group,
   Mesh,
   OrthographicCamera,
@@ -85,6 +87,25 @@ export function mountGlobe(
   const scene = new Scene();
   const camera = new OrthographicCamera(0, 1, 0, -1, 0.1, 40_000);
   camera.position.z = 20_000;
+
+  /* Lighting.
+     The globe and its atmosphere are hand-written shaders and ignore these
+     entirely; the lights exist for the coins, whose lit materials are what
+     turn a disc into an object you can see the thickness of. The key comes
+     from the same direction the globe's shader lights from, so a coin
+     passing in front of the planet is lit by the same sun.
+     Intensities are chosen so a coin facing the camera lands just under
+     full brightness rather than clipping to white: ambient plus the key's
+     lambert term against a face albedo of roughly three quarters. */
+  scene.add(new AmbientLight(0xcfd4ff, 0.75));
+  const key = new DirectionalLight(0xfff6ec, 0.95);
+  key.position.set(-0.55, 0.55, 0.65);
+  scene.add(key);
+  /* A violet bounce from the lower right, the colour of the page behind
+     it, so the shadowed edge of a coin is never a dead grey. */
+  const bounce = new DirectionalLight(0x8b5cf6, 0.35);
+  bounce.position.set(0.7, -0.4, 0.35);
+  scene.add(bounce);
 
   // globe (position + scale) > tilt (axial tilt) > spin (rotation about y)
   const globe = new Group();

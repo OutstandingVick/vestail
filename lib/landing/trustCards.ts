@@ -15,4 +15,9 @@ export const TRUST_CARDS = [
     title: "We show the gate, we don't pretend to be it",
     body: "Anyone can buy anything on a public market. What most apps won't tell you is what you're actually entitled to once you hold it. We do.",
   },
+  {
+    id: "stack",
+    title: "Built on what already works",
+    body: "Solana for settlement, Jupiter for routing, Pyth for prices, and the issuers themselves for the assets. We add the layer that was missing.",
+  },
 ] as const;

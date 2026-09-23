@@ -3,6 +3,7 @@ import { IssuerStrip } from "@/components/landing/IssuerStrip";
 import { LandingNav } from "@/components/landing/LandingNav";
 import { ProblemSection } from "@/components/landing/ProblemSection";
 import { HowItWorks } from "@/components/landing/HowItWorks";
+import { TrustSection } from "@/components/landing/TrustSection";
 
 /**
  * Marketing landing page. The app itself lives at /app.
@@ -22,6 +23,7 @@ export default function Landing() {
       <IssuerStrip />
       <ProblemSection />
       <HowItWorks />
+      <TrustSection />
     </main>
   );
 }

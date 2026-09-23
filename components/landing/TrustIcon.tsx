@@ -18,6 +18,9 @@ export function TrustIcon({ name }: { name: (typeof TRUST_CARDS)[number]["id"] }
         <circle cx="16" cy="16" r="4" />
         <path d="M16 2v2M5 5l2 2m20-2-2 2" />
       </>}
+      {name === "stack" && <>
+        <path d="m16 3 13 7-13 7L3 10 16 3Zm-13 14 13 7 13-7M3 23l13 7 13-7" />
+      </>}
     </svg>
   );
 }

@@ -257,6 +257,28 @@ generated from it with the background removed and cropped to the artwork.
 
 ## Running locally
 
+### Landing problem section
+
+The section after the issuer strip compares three claims behind the same
+ticker: xStocks' custody-backed exposure, Ondo's price-tracking note, and
+Backpack's legal entitlement. `components/landing/ProblemSection.tsx` renders
+the supplied copy as a server component; `ProblemIcon.tsx` supplies decorative,
+hand-drawn SVG outlines. No extra client JavaScript or icon package is needed.
+
+The scoped CSS leaves the site-wide gradient visible through navy surfaces.
+At 900px and wider, the side cards rotate by five degrees and sit 32px lower;
+the upright centre card stays on top. Normal document flow and extra bottom
+space keep the entire fan visible. Below 900px, the cards stack with 24px gaps.
+Hover lifts and straightens desktop cards only for a fine pointer with motion
+enabled; reduced-motion users receive the still composition.
+
+Verification: typecheck, ESLint and an isolated production build passed.
+Browser geometry checks at 320, 390, 768, 899, 900, 1023 and 1440 CSS pixels
+found no horizontal overflow or card edges outside the page. The headline
+occupied at most three lines. Desktop layering and mobile stacking were
+inspected in the browser. Reduced-motion gating was checked in the CSS;
+OS-level motion emulation and 200% browser zoom were not exercised.
+
 ```bash
 npm install
 cp .env.example .env.local   # fill in NEXT_PUBLIC_RPC_URL and PYTH_API_KEY

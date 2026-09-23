@@ -2,6 +2,7 @@ import { Hero } from "@/components/landing/Hero";
 import { IssuerStrip } from "@/components/landing/IssuerStrip";
 import { LandingNav } from "@/components/landing/LandingNav";
 import { ProblemSection } from "@/components/landing/ProblemSection";
+import { HowItWorks } from "@/components/landing/HowItWorks";
 
 /**
  * Marketing landing page. The app itself lives at /app.
@@ -20,6 +21,7 @@ export default function Landing() {
       <Hero />
       <IssuerStrip />
       <ProblemSection />
+      <HowItWorks />
     </main>
   );
 }

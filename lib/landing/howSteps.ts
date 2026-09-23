@@ -10,4 +10,9 @@ export const HOW_STEPS = [
     title: "Check",
     body: "We compare each version against your country's rules, using the provider's own published terms.",
   },
+  {
+    number: "03",
+    title: "Route",
+    body: "Of the versions you're allowed to hold, we pick the one with the best price and the cleanest terms.",
+  },
 ] as const;

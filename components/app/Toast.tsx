@@ -2,6 +2,8 @@
 
 import { useEffect, type ReactNode } from "react";
 
+import { Icon } from "@/components/icons";
+
 /**
  * A single toast at the bottom of the screen for the outcome of a purchase.
  * Success is announced politely and closes itself after a while; failures
@@ -42,9 +44,7 @@ export function Toast({
           aria-label="Dismiss"
           className="-m-1 rounded-md p-1 text-white/60 hover:text-white focus-visible:outline-2 focus-visible:outline-brand-orange"
         >
-          <svg aria-hidden viewBox="0 0 20 20" className="size-4">
-            <path d="M5 5l10 10M15 5 5 15" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-          </svg>
+          <Icon name="close" className="size-4" />
         </button>
       </div>
     </div>

@@ -6,6 +6,7 @@ import { Disclosure } from "@/components/docs/sections/Disclosure";
 import { Faq } from "@/components/docs/sections/Faq";
 import { Findings } from "@/components/docs/sections/Findings";
 import { HowItWorks } from "@/components/docs/sections/HowItWorks";
+import { Limits } from "@/components/docs/sections/Limits";
 import { Overview } from "@/components/docs/sections/Overview";
 import { Policies } from "@/components/docs/sections/Policies";
 import { Problem } from "@/components/docs/sections/Problem";
@@ -73,6 +74,7 @@ export default function DocsPage() {
         <Custody />
         <Findings />
         <Faq />
+        <Limits />
       </div>
     </main>
   );

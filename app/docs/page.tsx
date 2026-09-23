@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { Disclosure } from "@/components/docs/sections/Disclosure";
+import { HowItWorks } from "@/components/docs/sections/HowItWorks";
 import { Overview } from "@/components/docs/sections/Overview";
 import { Problem } from "@/components/docs/sections/Problem";
 import { Routing } from "@/components/docs/sections/Routing";
@@ -61,6 +62,7 @@ export default function DocsPage() {
         <Verdicts />
         <Disclosure />
         <Routing />
+        <HowItWorks />
       </div>
     </main>
   );

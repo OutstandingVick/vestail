@@ -12,9 +12,9 @@ export default function DocsLayout({ children }: { children: ReactNode }) {
   return (
     <div className="flex min-h-svh flex-col">
       <DocsHeader />
-      <div className="mx-auto flex w-full max-w-7xl flex-1 gap-10 px-4 sm:px-8">
+      <div className="mx-auto flex w-full max-w-6xl flex-1 gap-10 px-4 sm:px-8">
         <DocsSidebar />
-        <div className="min-w-0 flex-1 py-12 sm:py-16">{children}</div>
+        <div className="mx-auto min-w-0 max-w-2xl flex-1 py-12 sm:py-16">{children}</div>
       </div>
     </div>
   );

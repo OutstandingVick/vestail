@@ -34,7 +34,7 @@ export const metadata: Metadata = {
  */
 export default function DocsPage() {
   return (
-    <main className="max-w-2xl">
+    <main>
       <p className="text-sm font-bold uppercase tracking-widest text-brand-orange">
         Documentation
       </p>

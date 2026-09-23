@@ -116,14 +116,19 @@ export function SiteFooter() {
         */}
         <div className="@container mt-20">
           <div className="flex items-center gap-[0.08em] text-[clamp(2.5rem,27.5cqw,22rem)] leading-[0.78]">
+            {/*
+              The nav variant of the icon: the supplied one draws a
+              full-bleed dark box, which sits on the gradient as a black
+              square beside the wordmark.
+            */}
             <Image
-              src="/brand/vestail-icon.svg"
+              src="/brand/vestail-icon-nav.svg"
               alt=""
               aria-hidden
-              width={116}
-              height={116}
+              width={102}
+              height={93}
               unoptimized
-              className="h-[0.86em] w-[0.86em] shrink-0 opacity-90"
+              className="h-[0.82em] w-auto shrink-0"
             />
             <span className="select-none font-bold tracking-[-0.04em] text-white/85">
               vestail

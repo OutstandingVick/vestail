@@ -9,6 +9,9 @@ export function TrustSection() {
         <p className={styles.subhead}>Three things we made sure of before we shipped anything.</p>
       </header>
       <TrustCards />
+      <p className={styles.foundations}>
+        Solana · Jupiter · Pyth · xStocks · Ondo · Backpack
+      </p>
     </section>
   );
 }

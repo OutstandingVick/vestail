@@ -1,6 +1,6 @@
 .section {
-  /* The final badge can reach the viewport centre even before a footer exists. */
-  --end-space: max(112px, calc(50svh - 110px));
+  /* The trust section now supplies the scroll room after the final badge. */
+  --end-space: 48px;
   position: relative;
   padding: 64px clamp(16px, 4vw, 64px) var(--end-space);
   scroll-margin-block-start: 32px;

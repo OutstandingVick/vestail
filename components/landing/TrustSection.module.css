@@ -28,6 +28,15 @@
   text-wrap: balance;
 }
 
+.foundations {
+  margin: 56px auto 0;
+  color: rgb(255 255 255 / 65%);
+  font-size: 16px;
+  line-height: 1.7;
+  text-align: center;
+  text-wrap: balance;
+}
+
 .stage {
   position: relative;
   isolation: isolate;

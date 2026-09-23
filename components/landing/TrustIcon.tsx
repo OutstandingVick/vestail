@@ -13,6 +13,11 @@ export function TrustIcon({ name }: { name: (typeof TRUST_CARDS)[number]["id"] }
         <path d="M16 28H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h12l7 7v6M19 3v7h7M10 11h4m-4 5h8m-8 5h3" />
         <path d="m21 22 2-2a3 3 0 0 1 4 4l-2 2m-4-4-2 2a3 3 0 0 0 4 4l2-2m-4 0 4-4" />
       </>}
+      {name === "gate" && <>
+        <path d="M2 16S7 7 16 7s14 9 14 9-5 9-14 9S2 16 2 16Z" />
+        <circle cx="16" cy="16" r="4" />
+        <path d="M16 2v2M5 5l2 2m20-2-2 2" />
+      </>}
     </svg>
   );
 }

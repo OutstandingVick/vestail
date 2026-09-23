@@ -68,6 +68,16 @@
   box-shadow: 0 20px 48px -20px rgb(4 8 24 / 55%);
 }
 
+@media (min-width: 900px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .card {
+    transition: transform 240ms ease;
+  }
+
+  .card:hover {
+    transform: translateY(calc(var(--drop) - 8px)) rotate(0deg);
+  }
+}
+
 @media (min-width: 900px) {
   .heading {
     margin-block-end: 88px;

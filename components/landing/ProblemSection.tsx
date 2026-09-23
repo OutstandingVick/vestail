@@ -24,6 +24,11 @@ export function ProblemSection() {
           </p>
         </article>
         <article className={styles.card}>
+          <div className={styles.icon}>
+            <ProblemIcon>
+              <path d="M5 4v23h23M9 21l6-7 5 3 7-10m-6 0h6v6" />
+            </ProblemIcon>
+          </div>
           <h3 className={styles.title}>Just tracks the price</h3>
           <p className={styles.body}>
             Ondo often issues a note that follows what the stock does. You get the

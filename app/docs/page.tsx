@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { Custody } from "@/components/docs/sections/Custody";
 import { Disclosure } from "@/components/docs/sections/Disclosure";
+import { Findings } from "@/components/docs/sections/Findings";
 import { HowItWorks } from "@/components/docs/sections/HowItWorks";
 import { Overview } from "@/components/docs/sections/Overview";
 import { Policies } from "@/components/docs/sections/Policies";
@@ -69,6 +70,7 @@ export default function DocsPage() {
         <Policies />
         <Registry />
         <Custody />
+        <Findings />
       </div>
     </main>
   );

@@ -20,10 +20,10 @@ codebase had inspected. Everything else found is smaller than that.
 | H2 | **High** | Slippage is neither requested nor capped | Fixed |
 | H3 | **High** | No security headers: the signing page can be framed | Fixed |
 | H4 | **High** | Unused dependency carrying a high-severity advisory | Fixed |
-| M1 | Medium | No reference-price sanity check on the quote | Open |
-| M2 | Medium | A third-party font loads on the signing page | Open |
+| M1 | Medium | No reference-price sanity check on the quote | Part fixed |
+| M2 | Medium | A third-party font loads on the signing page | Fixed |
 | M3 | Medium | The amount on screen is not the amount signed | Open |
-| M4 | Medium | `source` URLs are validated as URLs, not as https | Open |
+| M4 | Medium | `source` URLs are validated as URLs, not as https | Fixed |
 | L1 | Low | `rel="noreferrer"` without `noopener` | Open |
 | L2 | Low | The wallet reconnects on every page, including marketing pages | Open |
 | L3 | Low | Dependencies are ranges, not pins | Open |
@@ -166,12 +166,19 @@ manipulated pool, or simply a very thin one, can quote a rate far from the real
 share price and Vestail will present it as the price. `priceImpactPct` comes
 back from Jupiter and is not checked either.
 
-**Recommended fix.** Reject or warn when `priceImpactPct` exceeds a threshold
-(2% is a reasonable line), and cross-check the implied price against the Pyth
-reference feed for the underlying share, refusing to route when they diverge
-by more than a few per cent. The Pyth client already exists in
-`lib/server/pyth.ts`; the equity feeds it needs are not available on the
-current plan, which is why this is documented rather than fixed.
+**Partly fixed.** `priceImpact` is now read: an order that prices more than
+10% from the market is refused. The number was measured on live routes before
+being chosen — at 2% this refuses Tessera's OPENAI and KALSHI outright, at
+five dollars, because their pools really are that thin, and those are real
+tokens a buyer may want. Vestail discloses rather than forbids, so the line
+sits where a purchase is obviously value-destroying rather than merely
+expensive.
+
+**Still open.** Nothing cross-checks the price against an independent source,
+and nothing tells the buyer that a route is pricing 3% from the market — it is
+simply allowed. Both want the Pyth reference feed for the underlying share
+(`lib/server/pyth.ts` already exists; the equity feeds are not available on
+the current plan) and a number on screen, which is M3's territory.
 
 ### M2 — A third-party font loads on the signing page
 
@@ -183,9 +190,10 @@ The wallet adapter's stylesheet begins with
 transaction therefore makes a request to a third-party origin, which leaks
 referrer data and adds an origin that would have to be allowed in the CSP.
 
-**Recommended fix.** Copy the two rules Vestail actually uses out of that
-stylesheet and drop the import, or self-host the font. The site's own type is
-already self-hosted through `next/font`.
+**Fixed.** The stylesheet is vendored at `components/wallet-adapter.css`,
+copied verbatim apart from dropping the import and pointing its three font
+stacks at `--font-sans`. Verified in the browser: no request to googleapis or
+gstatic on `/app`.
 
 ### M3 — The amount on screen is not the amount signed
 
@@ -216,7 +224,8 @@ Exploitability is low — the values come from JSON committed to this repository
 so an attacker needs repository write access, at which point they have better
 options. It is a one-line hardening.
 
-**Recommended fix.** Add `.startsWith("https://")` to those three schemas.
+**Fixed.** `.startsWith("https://")` added to all three. Every value in the
+repository today is already https, so nothing changed but the guarantee.
 
 ---
 

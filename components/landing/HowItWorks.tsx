@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { HowItWorksSteps } from "./HowItWorksSteps";
 import styles from "./HowItWorks.module.css";
 
 export function HowItWorks() {
@@ -14,6 +15,7 @@ export function HowItWorks() {
               unoptimized className={styles.character} />
           </div>
         </div>
+        <HowItWorksSteps />
       </div>
     </section>
   );

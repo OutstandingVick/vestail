@@ -26,4 +26,10 @@
   min-inline-size: 0;
   padding: 36px;
   text-align: start;
+  border: 1px solid rgb(255 255 255 / 8%);
+  border-radius: 24px;
+  background: rgb(10 18 42 / 55%);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 20px 48px -20px rgb(4 8 24 / 55%);
 }

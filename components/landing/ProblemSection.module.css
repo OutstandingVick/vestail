@@ -56,6 +56,7 @@
 }
 
 .card {
+  position: relative;
   min-inline-size: 0;
   padding: 36px;
   text-align: start;
@@ -65,4 +66,45 @@
   -webkit-backdrop-filter: blur(16px);
   backdrop-filter: blur(16px);
   box-shadow: 0 20px 48px -20px rgb(4 8 24 / 55%);
+}
+
+@media (min-width: 900px) {
+  .heading {
+    margin-block-end: 88px;
+  }
+
+  .cards {
+    isolation: isolate;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0;
+    max-inline-size: 1000px;
+    padding: 24px 24px 80px;
+  }
+
+  .card {
+    --tilt: 0deg;
+    --drop: 0px;
+    z-index: 1;
+    margin-inline: -12px;
+    padding: 40px 36px;
+    transform: translateY(var(--drop)) rotate(var(--tilt));
+  }
+
+  .card:first-child {
+    --tilt: -5deg;
+    --drop: 32px;
+  }
+
+  .card:nth-child(2) {
+    z-index: 2;
+  }
+
+  .card:last-child {
+    --tilt: 5deg;
+    --drop: 32px;
+  }
+
+  .takeaway {
+    margin-block-start: 24px;
+  }
 }

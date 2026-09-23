@@ -124,3 +124,42 @@
   max-inline-size: 400px;
   padding-block-start: 7px;
 }
+
+@media (min-width: 900px) {
+  .section {
+    padding-block: 48px 112px;
+  }
+
+  .intro {
+    position: absolute;
+    inset-block-start: 80px;
+    inset-inline-start: 0;
+    inline-size: 39%;
+    margin: 0;
+  }
+
+  .artwork {
+    order: 0;
+    inline-size: 100%;
+    max-inline-size: 420px;
+    margin: 100px 0 0;
+  }
+
+  .curve {
+    display: block;
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  .steps {
+    grid-template-rows: repeat(4, minmax(200px, 1fr));
+    gap: 0;
+    min-block-size: 880px;
+  }
+
+  .steps::before {
+    display: none;
+  }
+}

@@ -8,13 +8,26 @@ import { notifyBalancesChanged } from "@/hooks/useWalletBalances";
 import { base64ToBytes, bytesToBase64 } from "@/lib/base64";
 import { WSOL_MINT, type AllowedRegion } from "@/lib/constants";
 import { inspectSwapTransaction, maxLamportsFor } from "@/lib/swap/inspect";
-import { SwapErrorSchema, SwapQuoteSchema, SwapResultSchema, type SwapResult } from "@/lib/types";
+import {
+  SwapErrorSchema,
+  SwapQuoteSchema,
+  SwapResultSchema,
+  type SwapQuote,
+  type SwapResult,
+} from "@/lib/types";
 
 export type BuyPhase =
   | { kind: "idle" }
   | { kind: "ordering" }
-  | { kind: "signing" }
-  | { kind: "executing" }
+  /*
+   * From here on the phase carries the order itself. The amount on screen
+   * until now came from an estimate fetched without a wallet; this is the
+   * quote actually being signed, and it is not always the same number. The
+   * page should show what is in the wallet, not what was on screen a moment
+   * before it opened.
+   */
+  | { kind: "signing"; quote: SwapQuote }
+  | { kind: "executing"; quote: SwapQuote }
   | { kind: "done"; result: SwapResult }
   | { kind: "error"; message: string };
 
@@ -52,7 +65,7 @@ export function useBuy() {
 
       // 1. A buildable order, for this wallet.
       setPhase({ kind: "ordering" });
-      let quote;
+      let quote: SwapQuote;
       try {
         const query = new URLSearchParams({
           inputMint: req.inputMint,
@@ -122,7 +135,7 @@ export function useBuy() {
           );
         }
 
-        setPhase({ kind: "signing" });
+        setPhase({ kind: "signing", quote });
         signed = bytesToBase64((await signTransaction(tx)).serialize());
       } catch (cause) {
         const message = cause instanceof Error ? cause.message : String(cause);
@@ -136,7 +149,7 @@ export function useBuy() {
       }
 
       // 3. Land it.
-      setPhase({ kind: "executing" });
+      setPhase({ kind: "executing", quote });
       try {
         const res = await fetch("/api/swap/execute", {
           method: "POST",

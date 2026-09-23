@@ -4,8 +4,10 @@ import Image from "next/image";
 
 import { Icon } from "@/components/icons";
 import { fromBaseUnits, sanitizeAmount } from "@/lib/amounts";
+import { impactWarning } from "@/lib/app/priceImpact";
 import { PAY_TOKENS, type AllowedSymbol, type PayTokenSymbol } from "@/lib/constants";
 import { formatUsdc } from "@/lib/format";
+import type { SwapQuote } from "@/lib/types";
 import type { EstimateState } from "@/hooks/useEstimate";
 
 import { Monogram } from "./Selectors";
@@ -27,6 +29,8 @@ export function SwapPanel({
   onMax,
   selected,
   estimate,
+  confirmed = false,
+  payAmount,
 }: {
   payToken: PayTokenSymbol;
   onPayTokenChange: (token: PayTokenSymbol) => void;
@@ -37,6 +41,13 @@ export function SwapPanel({
   onMax: () => void;
   selected: SelectedVersion | null;
   estimate: EstimateState;
+  /**
+   * True once `estimate` is the order in the user's wallet rather than a
+   * price fetched without one.
+   */
+  confirmed?: boolean;
+  /** The amount being paid, in base units, for the impact warning. */
+  payAmount: bigint | null;
 }) {
   const other: PayTokenSymbol = payToken === "USDC" ? "SOL" : "USDC";
 
@@ -111,13 +122,21 @@ export function SwapPanel({
 
       {/* You get */}
       <div className="rounded-2xl p-5 ring-1 ring-white/12">
-        <p className="text-sm font-semibold text-white/80">You get</p>
+        <p className="text-sm font-semibold text-white/80">
+          You get{confirmed ? " — the order in your wallet" : ""}
+        </p>
         <div className="mt-3 flex items-center gap-3">
           <div className="min-w-0 flex-1" aria-live="polite">
             <EstimateAmount estimate={estimate} selected={selected} />
           </div>
           <VersionPill selected={selected} />
         </div>
+        {estimate.status === "ready" && selected && (
+          <Guarantee quote={estimate.quote} selected={selected} confirmed={confirmed} />
+        )}
+        {estimate.status === "ready" && (
+          <ImpactNote quote={estimate.quote} payToken={payToken} payAmount={payAmount} />
+        )}
       </div>
     </div>
   );
@@ -158,6 +177,68 @@ function EstimateAmount({
     return <span className="block text-sm leading-snug text-white/75">{estimate.message}</span>;
   }
   return <span className="block text-3xl font-semibold text-white/30 sm:text-4xl">0.0</span>;
+}
+
+/**
+ * The floor under the number above it: what the swap will not go below.
+ *
+ * Only shown once there is an order, and only when there is slippage to
+ * speak of — a firm market-maker quote comes back at zero, and "at least"
+ * the exact amount is noise.
+ */
+function Guarantee({
+  quote,
+  selected,
+  confirmed,
+}: {
+  quote: SwapQuote;
+  selected: SelectedVersion;
+  confirmed: boolean;
+}) {
+  const slippage = quote.slippageBps ?? 0;
+  if (!confirmed || slippage <= 0) return null;
+
+  const out = BigInt(quote.outAmount);
+  const floor = (out * BigInt(10_000 - slippage)) / BigInt(10_000);
+  return (
+    <p className="mt-2 text-sm text-white/60">
+      At least {fromBaseUnits(floor, selected.decimals)} {selected.tokenSymbol} after
+      slippage, or the swap fails and nothing is spent.
+    </p>
+  );
+}
+
+/**
+ * What this route costs to enter, when that is worth saying.
+ *
+ * Orange, not a verdict colour: a thin market is not a jurisdiction, and
+ * the three verdict hues mean one thing each.
+ */
+function ImpactNote({
+  quote,
+  payToken,
+  payAmount,
+}: {
+  quote: SwapQuote;
+  payToken: PayTokenSymbol;
+  payAmount: bigint | null;
+}) {
+  const warning = impactWarning(quote.priceImpactPct, payAmount);
+  if (!warning) return null;
+
+  // "Roughly" and six decimal places do not belong in the same sentence:
+  // USDC reads as money, SOL to four places, which is how the balance above
+  // is written too.
+  const decimals = PAY_TOKENS[payToken].decimals;
+  const whole = Number(warning.costUnits) / 10 ** decimals;
+  const cost = payToken === "USDC" ? formatUsdc(whole) : whole.toFixed(4);
+
+  return (
+    <p className="mt-3 rounded-xl bg-brand-orange/10 px-3 py-2 text-sm leading-relaxed text-brand-orange ring-1 ring-brand-orange/40">
+      This version costs about {warning.percent}% to buy into — roughly {cost}{" "}
+      {payToken} of what you pay. Thin market; Jupiter&apos;s estimate.
+    </p>
+  );
 }
 
 /** Which version you get. Set only by the version cards, never a free dropdown. */

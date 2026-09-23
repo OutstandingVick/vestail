@@ -108,6 +108,10 @@ export function SwapCard() {
       ? phase.kind
       : null;
 
+  /** The order being signed, once there is one. */
+  const order =
+    phase.kind === "signing" || phase.kind === "executing" ? phase.quote : null;
+
   const button = buyButtonState({
     walletConnected: Boolean(publicKey),
     countryChosen: region !== null,
@@ -169,7 +173,14 @@ export function SwapCard() {
           balance={publicKey ? payBalance : null}
           onMax={onMax}
           selected={selected}
-          estimate={estimate}
+          /*
+           * Once there is an order, the panel shows that rather than the
+           * estimate: it is the quote in the wallet, and the two are not
+           * always the same number.
+           */
+          estimate={order ? { status: "ready", quote: order } : estimate}
+          confirmed={order !== null}
+          payAmount={units}
         />
 
         <button

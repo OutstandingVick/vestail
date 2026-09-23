@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import { Custody } from "@/components/docs/sections/Custody";
 import { Disclosure } from "@/components/docs/sections/Disclosure";
 import { HowItWorks } from "@/components/docs/sections/HowItWorks";
 import { Overview } from "@/components/docs/sections/Overview";
@@ -67,6 +68,7 @@ export default function DocsPage() {
         <HowItWorks />
         <Policies />
         <Registry />
+        <Custody />
       </div>
     </main>
   );

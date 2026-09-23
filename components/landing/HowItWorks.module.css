@@ -162,4 +162,25 @@
   .steps::before {
     display: none;
   }
+
+  .step {
+    display: flex;
+    align-items: center;
+    padding-block: 32px;
+  }
+
+  .badge {
+    position: absolute;
+    inset-inline-start: var(--anchor-x);
+    inset-block-start: 50%;
+    transform: translate(-50%, -50%);
+    inline-size: 72px;
+    block-size: 72px;
+    font-size: 24px;
+  }
+
+  .copy {
+    margin-inline-start: calc(var(--anchor-x) + 60px);
+    padding: 0;
+  }
 }

@@ -1,5 +1,5 @@
 import { HOW_STEPS } from "@/lib/landing/howSteps";
-import { HOW_CURVE_PATH } from "@/lib/landing/howCurve";
+import { HOW_CURVE_PATH, howStepAnchor } from "@/lib/landing/howCurve";
 import styles from "./HowItWorks.module.css";
 
 export function HowItWorksSteps() {
@@ -11,8 +11,9 @@ export function HowItWorksSteps() {
           strokeWidth="1" vectorEffect="non-scaling-stroke" />
       </svg>
       <ol className={styles.steps}>
-        {HOW_STEPS.map((step) => (
-          <li key={step.number} className={styles.step}>
+        {HOW_STEPS.map((step, index) => (
+          <li key={step.number} className={styles.step}
+            style={{ "--anchor-x": `${howStepAnchor(index, HOW_STEPS.length).x}%` } as CSSProperties}>
             <span className={styles.badge} aria-hidden="true">{step.number}</span>
             <div className={styles.copy}>
               <h3 className={styles.title}>{step.title}</h3>
@@ -24,3 +25,4 @@ export function HowItWorksSteps() {
     </div>
   );
 }
+import type { CSSProperties } from "react";

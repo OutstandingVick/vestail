@@ -30,6 +30,9 @@ export function ProblemSection() {
           </p>
         </article>
       </div>
+      <p className={styles.takeaway}>
+        Three tokens. One ticker. Completely different rules on who can own them.
+      </p>
     </section>
   );
 }

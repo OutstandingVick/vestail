@@ -120,6 +120,8 @@
 }
 
 .copy {
+  /* Full-opacity is the baseline, including SSR and reduced motion. */
+  opacity: 1;
   min-inline-size: 0;
   max-inline-size: 400px;
   padding-block-start: 7px;
@@ -152,6 +154,17 @@
 
   .steps[data-tracking="true"] .step[data-active="true"] .copy,
   .steps[data-tracking="true"] .step:hover .copy {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .badge,
+  .copy {
+    transition: none;
+  }
+
+  .copy {
     opacity: 1;
   }
 }

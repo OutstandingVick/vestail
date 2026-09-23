@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Disclosure } from "@/components/docs/sections/Disclosure";
 import { Overview } from "@/components/docs/sections/Overview";
 import { Problem } from "@/components/docs/sections/Problem";
+import { Routing } from "@/components/docs/sections/Routing";
 import { Stakes } from "@/components/docs/sections/Stakes";
 import { Verdicts } from "@/components/docs/sections/Verdicts";
 import { APP_HREF } from "@/components/landing/LandingNav";
@@ -59,6 +60,7 @@ export default function DocsPage() {
         <Stakes />
         <Verdicts />
         <Disclosure />
+        <Routing />
       </div>
     </main>
   );

@@ -201,6 +201,26 @@ for the dark gradient and otherwise untouched; see
 [`public/brand/issuers/README.md`](public/brand/issuers/README.md) for the
 source of each file and the trademark note.
 
+### The footer
+
+`components/landing/SiteFooter.tsx` closes the landing page: three link
+columns that stack at 900px, a "vestail" lockup sized in container query
+units so it fills the page at any width without overflowing it, a legal bar,
+and a decorative band of heaped tokenized-stock coins.
+
+The pile is generated, not drawn (`lib/landing/coinPile.ts`): a seeded
+generator, because an unseeded one would produce a different pile on the
+server and in the browser and React would report a hydration mismatch. Its
+crest is three sine waves whose periods do not divide into each other, so the
+top edge never repeats, and the vertical spread is skewed towards the floor
+so the coins heap rather than scatter. `npm test` pins determinism, the heap,
+the bleed off both edges and the depth ordering.
+
+`components/landing/CoinPile.tsx` draws it as inline SVG in three depth
+layers — a blur filter per coin would be eighty rasterisations, three groups
+is three. The phone and desktop bands are both in the HTML with CSS choosing
+between them, so the right one paints with nothing measured.
+
 ## Documentation page
 
 `/docs` is the public explanation of all of this: what Vestail is, why a

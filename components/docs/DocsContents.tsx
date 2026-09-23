@@ -22,7 +22,7 @@ export function DocsContents() {
       <nav aria-label="On this page" className="px-4 pb-4">
         {docsGroups().map(({ group, sections }) => (
           <div key={group} className="mt-3 first:mt-0">
-            <p className="text-xs font-bold uppercase tracking-widest text-white/40">
+            <p className="text-xs font-bold uppercase tracking-widest text-white/55">
               {group}
             </p>
             <ul className="mt-1 space-y-1">

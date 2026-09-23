@@ -31,7 +31,7 @@ export function AcknowledgementExample() {
           requires {gate.acknowledgement.requires}.
         </span>
       </div>
-      <figcaption className="mt-2 text-sm text-white/50">
+      <figcaption className="mt-2 text-sm text-white/60">
         The real checkbox for {PROVIDER_NAME[policy.provider]}, as it appears{" "}
         {REGION_IN_SENTENCE[gate.regions[0]]}. Its wording comes from the
         sourced policy file, not from interface copy — no gate, no sentence, no

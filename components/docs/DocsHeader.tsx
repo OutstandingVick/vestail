@@ -26,7 +26,7 @@ export function DocsHeader() {
               className="h-7 w-auto"
             />
           </Link>
-          <span aria-hidden className="text-white/25">/</span>
+          <span aria-hidden className="text-white/40">/</span>
           <span className="text-sm font-semibold text-white/70">Docs</span>
         </div>
 

@@ -51,11 +51,11 @@ export function VerdictLegend() {
             <p className="mt-3 leading-relaxed text-white/80">{row.means}</p>
             <dl className="mt-4 flex flex-wrap gap-x-8 gap-y-2 text-sm">
               <div className="flex gap-2">
-                <dt className="text-white/45">Can you buy it?</dt>
+                <dt className="text-white/60">Can you buy it?</dt>
                 <dd className="font-semibold text-white">{row.buy}</dd>
               </div>
               <div className="flex gap-2">
-                <dt className="text-white/45">Can you get out?</dt>
+                <dt className="text-white/60">Can you get out?</dt>
                 <dd className="font-semibold text-white">{row.exit}</dd>
               </div>
             </dl>

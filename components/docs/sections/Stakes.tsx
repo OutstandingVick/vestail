@@ -22,7 +22,7 @@ export function Stakes() {
       </P>
 
       <Card>
-        <p className="text-sm font-bold uppercase tracking-widest text-white/50">
+        <p className="text-sm font-bold uppercase tracking-widest text-white/60">
           What that looks like in practice
         </p>
         <ul className="mt-3 space-y-3 text-white/80">

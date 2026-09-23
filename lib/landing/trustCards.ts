@@ -10,4 +10,9 @@ export const TRUST_CARDS = [
     title: "Every answer is sourced",
     body: "When we tell you a version is restricted, we link to the provider's own terms so you can read the rule yourself. No black box.",
   },
+  {
+    id: "gate",
+    title: "We show the gate, we don't pretend to be it",
+    body: "Anyone can buy anything on a public market. What most apps won't tell you is what you're actually entitled to once you hold it. We do.",
+  },
 ] as const;

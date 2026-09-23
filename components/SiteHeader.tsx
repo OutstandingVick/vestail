@@ -1,12 +1,17 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { DOCS_HREF } from "@/components/landing/LandingNav";
 import { WalletButton } from "@/components/WalletButton";
 
 /**
- * App header: the logo (home) on the left, the wallet on the right. Sits on
- * the site gradient; the orange logo and the wallet button's own surface
- * both read on it.
+ * App header: the logo (home) on the left, the docs link and the wallet on
+ * the right. Sits on the site gradient; the orange logo and the wallet
+ * button both read on it.
+ *
+ * The docs link is here because /app is where the verdicts appear, and
+ * "conditional" is a word the reader may well want explained at exactly
+ * that moment.
  */
 export function SiteHeader() {
   return (
@@ -23,7 +28,15 @@ export function SiteHeader() {
             className="h-7 w-auto sm:h-8"
           />
         </Link>
-        <WalletButton />
+        <div className="flex items-center gap-4 sm:gap-6">
+          <Link
+            href={DOCS_HREF}
+            className="text-sm font-semibold text-white/80 transition-colors hover:text-white"
+          >
+            Docs
+          </Link>
+          <WalletButton />
+        </div>
       </div>
     </header>
   );

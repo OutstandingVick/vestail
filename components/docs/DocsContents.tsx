@@ -1,3 +1,4 @@
+import { Icon } from "@/components/icons";
 import { docsGroups } from "@/lib/docs/sections";
 
 /**
@@ -12,12 +13,10 @@ export function DocsContents() {
     <details className="group rounded-2xl bg-brand-navy/60 ring-1 ring-white/10 lg:hidden">
       <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-4 font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange">
         On this page
-        <span
-          aria-hidden
-          className="text-brand-orange transition-transform group-open:rotate-45 motion-reduce:transition-none"
-        >
-          +
-        </span>
+        <Icon
+          name="chevron-down"
+          className="size-5 text-brand-orange transition-transform group-open:rotate-180 motion-reduce:transition-none"
+        />
       </summary>
       <nav aria-label="On this page" className="px-4 pb-4">
         {docsGroups().map(({ group, sections }) => (

@@ -1,3 +1,4 @@
+import { Icon } from "@/components/icons";
 import { POLICIES } from "@/lib/policies";
 import { PROVIDER_NAME } from "@/lib/labels";
 import { REGION_IN_SENTENCE } from "@/lib/constants";
@@ -22,9 +23,9 @@ export function AcknowledgementExample() {
       <div className="flex items-start gap-3 rounded-2xl bg-conditional/10 px-4 py-3 text-sm leading-relaxed text-white ring-1 ring-conditional/40">
         <span
           aria-hidden
-          className="mt-0.5 flex size-4 shrink-0 items-center justify-center rounded-sm bg-brand-orange text-[10px] font-bold text-brand-navy"
+          className="mt-0.5 flex size-4 shrink-0 items-center justify-center rounded-sm bg-brand-orange text-brand-navy"
         >
-          ✓
+          <Icon name="check" className="size-3" strokeWidth={3} />
         </span>
         <span>
           I understand I can buy and hold this, but {gate.acknowledgement.limit}{" "}

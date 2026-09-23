@@ -23,7 +23,7 @@ export const WalletButton = dynamic(
     loading: () => (
       <div
         aria-hidden
-        className="h-[38px] w-[150px] animate-pulse rounded-md border border-line bg-surface"
+        className="h-10.5 w-37.5 motion-safe:animate-pulse rounded-xl bg-brand-orange/40"
       />
     ),
   },

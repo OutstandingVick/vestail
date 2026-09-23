@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 
+import { Icon } from "@/components/icons";
 import { useBuy } from "@/hooks/useBuy";
 import { useEligibility } from "@/hooks/useEligibility";
 import { useEstimate } from "@/hooks/useEstimate";
@@ -208,6 +209,7 @@ export function SwapCard() {
               className="underline underline-offset-4"
             >
               View transaction
+              <Icon name="external-link" className="ml-1 inline size-[0.9em] align-[-0.1em]" />
             </a>
           )}
         </Toast>
@@ -223,6 +225,7 @@ export function SwapCard() {
               className="underline underline-offset-4"
             >
               View transaction
+              <Icon name="external-link" className="ml-1 inline size-[0.9em] align-[-0.1em]" />
             </a>
           )}
         </Toast>

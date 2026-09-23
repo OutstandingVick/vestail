@@ -1,5 +1,6 @@
 "use client";
 
+import { Icon } from "@/components/icons";
 import { REGION_IN_SENTENCE, type AllowedRegion, type AllowedSymbol } from "@/lib/constants";
 import { PROVIDER_NAME, STRUCTURE_PLAIN } from "@/lib/labels";
 import { isSelectable, sortVersions } from "@/lib/app/versions";
@@ -164,6 +165,8 @@ function Card({
           className="mt-2 inline-block text-xs text-white/60 underline underline-offset-4 hover:text-white"
         >
           Source{v.verdict.sourceQuality === "secondary" ? " (secondary: verify before relying on it)" : ""}
+          {/* The issuer's own document is on the issuer's own site. */}
+          <Icon name="external-link" className="ml-1 inline size-[0.9em] align-[-0.1em]" />
         </a>
       )}
     </label>

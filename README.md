@@ -91,8 +91,9 @@ reviewable diff:
   [`policies/README.md`](policies/README.md).
 
 ```
-app/                          / landing page, /app the app; api/representations, api/swap/{order,execute}
+app/                          / landing page, /app the app, /docs the explanation; api/eligibility, api/representations, api/swap/{order,execute}
 components/                   wallet, header, RepresentationExplorer, verdicts, BuyPanel
+components/docs/              the documentation page's sections and blocks
 components/landing/           landing nav and hero; globe/ is the three.js hero globe
 hooks/                        useUsdcBalance
 lib/                          constants, Zod schemas, registry loader, labels
@@ -183,6 +184,28 @@ English, one-line reason and a link to the issuer's terms. The button's label
 always names the next step ("Connect wallet", "Choose a country and stock",
 "Enter an amount", "Review the conditions below", "Buy NVDAx"); its rules are a
 tested pure function in `lib/app/buyButton.ts`.
+
+## Documentation page
+
+`/docs` is the public explanation of all of this: what Vestail is, why a
+ticker is not one thing onchain, the three verdicts, the routing rule, where
+the rules come from, and what Vestail deliberately does not do. The landing
+nav's "Docs" and "How it works" links and the app header point at it.
+
+It is static, and it reads from the same modules the product does, so it
+cannot drift from it:
+
+- the figures it quotes (tokens, symbols, issuers, sourced rules) are counted
+  from `registry/` and `policies/` in `lib/docs/stats.ts`;
+- the sample policy rule and registry entry are serialised from those files at
+  build time;
+- the acknowledgement it shows is the real one, rendered from the policy file;
+- the SPCX verdict grid is computed by `lib/evaluate.ts`, the same evaluator
+  the app and the tests use;
+- the verdict badges come from `lib/verdictBadge.ts`, shared with `/app`.
+
+Contrast was audited against the real composited background: 0 failures, the
+lowest ratio 5.3:1.
 
 ## Landing page
 

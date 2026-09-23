@@ -1,4 +1,5 @@
 import { Lede, Section } from "@/components/docs/blocks";
+import { Icon } from "@/components/icons";
 
 const QUESTIONS: Array<{ q: string; a: string }> = [
   {
@@ -47,12 +48,10 @@ export function Faq() {
           >
             <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-4 font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange">
               {q}
-              <span
-                aria-hidden
-                className="shrink-0 text-brand-orange transition-transform group-open:rotate-45 motion-reduce:transition-none"
-              >
-                +
-              </span>
+              <Icon
+                name="chevron-down"
+                className="size-5 shrink-0 text-brand-orange transition-transform group-open:rotate-180 motion-reduce:transition-none"
+              />
             </summary>
             <p className="px-4 pb-4 leading-relaxed text-white/70">{a}</p>
           </details>

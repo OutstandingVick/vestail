@@ -1,4 +1,5 @@
 import { Card, Lede, P, Section } from "@/components/docs/blocks";
+import { Icon } from "@/components/icons";
 import { docsStats } from "@/lib/docs/stats";
 
 export function Stakes() {
@@ -27,7 +28,7 @@ export function Stakes() {
         </p>
         <ul className="mt-3 space-y-3 text-white/80">
           <li className="flex gap-3">
-            <span aria-hidden className="text-brand-orange">→</span>
+            <Icon name="arrow-right" className="mt-1 size-4 shrink-0 text-brand-orange" />
             <span>
               You hold a token whose issuer only redeems for professional
               investors. You can sell it to someone else, but you cannot take
@@ -35,14 +36,14 @@ export function Stakes() {
             </span>
           </li>
           <li className="flex gap-3">
-            <span aria-hidden className="text-brand-orange">→</span>
+            <Icon name="arrow-right" className="mt-1 size-4 shrink-0 text-brand-orange" />
             <span>
               You hold a note rather than a share. The price tracked the stock
               the whole time; your claim was always against the issuer.
             </span>
           </li>
           <li className="flex gap-3">
-            <span aria-hidden className="text-brand-orange">→</span>
+            <Icon name="arrow-right" className="mt-1 size-4 shrink-0 text-brand-orange" />
             <span>
               You are in a country the issuer&apos;s own terms exclude. Nothing
               onchain stopped the purchase, and nothing onchain will help you

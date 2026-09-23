@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 
+import { Icon } from "@/components/icons";
 import { DOCS_SECTIONS } from "@/lib/docs/sections";
 
 /**
@@ -34,7 +35,7 @@ export function Section({ id, children }: { id: string; children: ReactNode }) {
           aria-label={`Link to ${section.title}`}
           className="text-brand-orange opacity-0 transition-opacity focus-visible:opacity-100 group-hover:opacity-100"
         >
-          #
+          <Icon name="hash" className="size-[0.6em]" />
         </a>
       </h2>
       <div className="mt-5 space-y-5">{children}</div>
@@ -91,6 +92,8 @@ export function Out({ href, children }: { href: string; children: ReactNode }) {
       className="font-semibold text-brand-orange underline decoration-brand-orange/40 underline-offset-4 hover:decoration-brand-orange"
     >
       {children}
+      {/* Says the link leaves the page, which the wording alone does not. */}
+      <Icon name="external-link" className="ml-1 inline size-[0.8em] align-[-0.05em] no-underline" />
     </a>
   );
 }

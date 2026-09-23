@@ -295,8 +295,8 @@ The original supplied asset is unchanged. A soft CSS glow supplies depth.
 the closest to the viewport centre. It cleans up scroll, resize and media
 listeners and responds to changes in reduced-motion preferences. Reduced
 motion disables tracking and transitions; every step retains full opacity.
-The final section padding lets Deliver reach the viewport centre even before
-a footer is added. Hover changes badge colour without moving the content.
+The following trust section provides room for Deliver to reach the viewport
+centre. Hover changes badge colour without moving the content.
 
 Verified: typecheck, lint, all 64 tests, and an isolated production build.
 Browser checks at 320, 390, 768, 899, 900, 1024 and 1440 CSS pixels found no
@@ -305,6 +305,34 @@ match the curve within 0.01px, and mobile artwork sits above the headline.
 Scroll activation was checked through Deliver. Reduced-motion behavior was
 reviewed in the hook and stylesheet; OS-level emulation and 200% zoom were
 not exercised.
+
+### Why trust it
+
+`components/landing/TrustSection.tsx` follows the four-step journey. It keeps
+the supplied heading, subhead and four claims in `lib/landing/trustCards.ts`
+and closes with a plain-text list of the underlying platforms and issuers.
+The supplied subhead says "Three things"; the section intentionally retains
+all four requested cards.
+
+The desktop cards stagger left, right, left, right with alternating three-degree
+rotations. Each has a translucent navy outer surface, a restrained tinted
+inner panel, an orange outline icon, and a CSS sphere overlapping the top.
+Orbs alternate orange and purple. No image assets or icon packages are added.
+Below 900px the cards are unrotated, with 72px gaps and no connectors.
+
+`useTrustConnectors` measures the unrotated card wrappers on resize so that
+the dashed SVG paths follow the rendered content without moving on hover.
+The connectors use 1px strokes and a 6/6 dash pattern. A separate normalized
+SVG mask reveals each line once its destination card enters the viewport;
+`useTrustReveal` disconnects its observers when no longer needed. Reduced
+motion shows complete lines immediately and disables hover transforms.
+
+Verification: all 100 tests, typecheck, lint and an isolated production build
+pass. Browser checks at 320, 390, 768, 899, 900, 1024 and 1440 CSS pixels found
+no horizontal overflow, with all card and orb bounds inside the section.
+Desktop scroll reveal and hover straightening were exercised, and the mobile
+stack was visually inspected. Reduced-motion rules were reviewed in code;
+OS-level emulation, 200% zoom and slow-motion animation playback were not run.
 
 ## Running locally
 

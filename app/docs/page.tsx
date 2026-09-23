@@ -13,6 +13,7 @@ import { Problem } from "@/components/docs/sections/Problem";
 import { Registry } from "@/components/docs/sections/Registry";
 import { Routing } from "@/components/docs/sections/Routing";
 import { Stakes } from "@/components/docs/sections/Stakes";
+import { Start } from "@/components/docs/sections/Start";
 import { Verdicts } from "@/components/docs/sections/Verdicts";
 import { APP_HREF } from "@/components/landing/LandingNav";
 
@@ -75,6 +76,7 @@ export default function DocsPage() {
         <Findings />
         <Faq />
         <Limits />
+        <Start />
       </div>
     </main>
   );

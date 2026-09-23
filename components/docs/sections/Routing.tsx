@@ -1,3 +1,4 @@
+import { AcknowledgementExample } from "@/components/docs/AcknowledgementExample";
 import { Lede, Note, P, Section } from "@/components/docs/blocks";
 import { VERDICT_BADGE, type BadgeStatus } from "@/lib/verdictBadge";
 
@@ -43,6 +44,7 @@ export function Routing() {
           );
         })}
       </ul>
+      <AcknowledgementExample />
       <P>
         The rule is enforced on the server, not in the interface. Every order
         is re-evaluated before it is priced or placed: a restricted version is

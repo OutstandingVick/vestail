@@ -22,7 +22,7 @@ codebase had inspected. Everything else found is smaller than that.
 | H4 | **High** | Unused dependency carrying a high-severity advisory | Fixed |
 | M1 | Medium | No reference-price sanity check on the quote | Part fixed |
 | M2 | Medium | A third-party font loads on the signing page | Fixed |
-| M3 | Medium | The amount on screen is not the amount signed | Open |
+| M3 | Medium | The amount on screen is not the amount signed | Fixed |
 | M4 | Medium | `source` URLs are validated as URLs, not as https | Fixed |
 | L1 | Low | `rel="noreferrer"` without `noopener` | Open |
 | L2 | Low | The wallet reconnects on every page, including marketing pages | Open |
@@ -174,11 +174,16 @@ tokens a buyer may want. Vestail discloses rather than forbids, so the line
 sits where a purchase is obviously value-destroying rather than merely
 expensive.
 
-**Still open.** Nothing cross-checks the price against an independent source,
-and nothing tells the buyer that a route is pricing 3% from the market — it is
-simply allowed. Both want the Pyth reference feed for the underlying share
+**Also fixed since.** A route pricing more than 1.5% off market now says so
+on screen, in the token being paid rather than as a percentage, attributed to
+Jupiter. The rule is `lib/app/priceImpact.ts`, tested.
+
+**Still open.** Nothing cross-checks the price against an *independent*
+source. Jupiter's own estimate is all that is shown, and a compromised or
+mistaken aggregator would misreport its own impact as easily as its own
+price. That needs the Pyth reference feed for the underlying share
 (`lib/server/pyth.ts` already exists; the equity feeds are not available on
-the current plan) and a number on screen, which is M3's territory.
+the current plan).
 
 ### M2 — A third-party font loads on the signing page
 
@@ -206,8 +211,14 @@ to the one being signed, and Vestail shows no confirmation step of its own. The
 wallet shows the real amounts, which is the backstop, but Vestail's own screen
 can be out of date at the moment of signing.
 
-**Recommended fix.** After the fresh order returns, show its `outAmount` and
-the minimum received after slippage, and require a second press to sign.
+**Fixed.** The buy phases now carry the order, and the panel switches to it
+the moment it exists — so while the wallet is asking, the page behind it shows
+what the wallet is asking about. The floor is shown under it: at least this
+much after slippage, or the swap fails and nothing is spent.
+
+A second press to confirm was considered and not added. The wallet is already
+a confirmation step that Vestail cannot skip or fake, and a second one inside
+the page trains people to click through both.
 
 ### M4 — `source` URLs are validated as URLs, not as https
 

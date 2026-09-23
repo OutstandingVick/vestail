@@ -3,15 +3,9 @@
 import { REGION_IN_SENTENCE, type AllowedRegion, type AllowedSymbol } from "@/lib/constants";
 import { PROVIDER_NAME, STRUCTURE_PLAIN } from "@/lib/labels";
 import { isSelectable, sortVersions } from "@/lib/app/versions";
+import { VERDICT_BADGE as BADGE } from "@/lib/verdictBadge";
 import type { VersionVerdict } from "@/lib/types";
 import type { EligibilityState } from "@/hooks/useEligibility";
-
-const BADGE: Record<string, { label: string; className: string }> = {
-  eligible: { label: "Eligible", className: "text-eligible ring-eligible/60 bg-eligible/10" },
-  conditional: { label: "Conditional", className: "text-conditional ring-conditional/60 bg-conditional/10" },
-  restricted: { label: "Restricted", className: "text-restricted ring-restricted/60 bg-restricted/10" },
-  not_assessed: { label: "Not assessed", className: "text-white/60 ring-white/20" },
-};
 
 /**
  * Every version of the chosen stock with its verdict for the declared

@@ -42,7 +42,7 @@ function FooterLinkItem({ link }: { link: FooterLink }) {
     return (
       <span className="flex items-baseline gap-2 text-lg font-semibold text-white/55">
         {link.label}
-        <span className="text-xs font-bold uppercase tracking-widest text-white/40">
+        <span className="text-xs font-bold uppercase tracking-widest text-white/55">
           soon
         </span>
       </span>
@@ -81,7 +81,7 @@ export function SiteFooter() {
         <div className="grid gap-10 min-[900px]:grid-cols-3">
           {COLUMNS.map((column) => (
             <div key={column.label}>
-              <p className="text-xs font-bold uppercase tracking-[0.2em] text-white/45">
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-white/55">
                 {column.label}
               </p>
               <ul className="mt-4 space-y-2">
@@ -95,7 +95,7 @@ export function SiteFooter() {
           ))}
 
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-white/45">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-white/55">
               Vestail
             </p>
             <p className="mt-4 text-lg font-semibold text-white">
@@ -115,7 +115,7 @@ export function SiteFooter() {
           without running past it on an ultra-wide screen.
         */}
         <div className="@container mt-20">
-          <div className="flex items-center gap-[0.08em] text-[clamp(2.5rem,20.5cqw,15rem)] leading-[0.78]">
+          <div className="flex items-center gap-[0.08em] text-[clamp(2.5rem,27.5cqw,22rem)] leading-[0.78]">
             <Image
               src="/brand/vestail-icon.svg"
               alt=""

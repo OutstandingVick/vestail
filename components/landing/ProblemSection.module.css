@@ -1,3 +1,17 @@
 .section {
   position: relative;
+  padding: clamp(64px, 8vw, 120px) 24px clamp(80px, 9vw, 144px);
+}
+
+.cards {
+  display: grid;
+  gap: 24px;
+  max-inline-size: 480px;
+  margin-inline: auto;
+}
+
+.card {
+  min-inline-size: 0;
+  padding: 36px;
+  text-align: start;
 }

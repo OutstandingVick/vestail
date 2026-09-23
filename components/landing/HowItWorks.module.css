@@ -68,6 +68,16 @@
   margin-block-end: 64px;
 }
 
+.journey {
+  position: relative;
+}
+
+.curve {
+  display: none;
+  pointer-events: none;
+  color: rgb(255 255 255 / 20%);
+}
+
 .steps {
   position: relative;
   display: grid;

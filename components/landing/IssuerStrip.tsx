@@ -9,7 +9,7 @@ import Image from "next/image";
  */
 const ISSUERS: Array<{ name: string; file: string; width: number; className: string }> = [
   { name: "xStocks", file: "xstocks.svg", width: 170, className: "h-9" },
-  { name: "Ondo Finance", file: "ondo.svg", width: 1512, className: "h-5 sm:h-6" },
+  { name: "Ondo Finance", file: "ondo.svg", width: 1512, className: "h-4 sm:h-5" },
   { name: "Backpack", file: "backpack.svg", width: 143, className: "h-6 sm:h-7" },
   { name: "Tessera", file: "tessera.svg", width: 192, className: "h-6 sm:h-7" },
   { name: "PreStocks", file: "prestocks.svg", width: 5566, className: "h-6 sm:h-7" },
@@ -67,7 +67,7 @@ export function IssuerStrip() {
       </h2>
 
       <div className="mt-8 overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_8%,#000_92%,transparent)]">
-        <ul className="flex w-max items-center hover:[animation-play-state:paused] motion-safe:animate-[issuer-marquee_45s_linear_infinite] motion-reduce:w-full motion-reduce:flex-wrap motion-reduce:justify-center motion-reduce:gap-y-6">
+        <ul className="flex w-max items-center hover:[animation-play-state:paused] motion-safe:animate-[issuer-marquee_30s_linear_infinite] motion-reduce:w-full motion-reduce:flex-wrap motion-reduce:justify-center motion-reduce:gap-y-6">
           <Row hidden={false} />
           <Row hidden />
         </ul>

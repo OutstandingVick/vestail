@@ -4,12 +4,15 @@ import Link from "next/link";
 /** Where "Launch app" goes, everywhere on the landing page. */
 export const APP_HREF = "/app";
 
-const DOCS_HREF = "https://github.com/OutstandingVick/vestail#readme";
+/** The docs page, not the README: the argument lives on the site now. */
+export const DOCS_HREF = "/docs";
 
 /**
  * Landing navigation: logo left; "How it works", "Docs" and the orange
- * "Launch app" pill right. The two text links drop out below `sm` so the bar
- * never wraps or scrolls sideways on a phone; the pill always stays.
+ * "Launch app" pill right. Both text links go to the docs page — "How it
+ * works" to its section there, since the landing page is still hero-only.
+ * The text links drop out below `sm` so the bar never wraps or scrolls
+ * sideways on a phone; the pill always stays.
  */
 export function LandingNav() {
   return (
@@ -36,20 +39,18 @@ export function LandingNav() {
         </Link>
 
         <div className="flex items-center gap-2 sm:gap-6">
-          <a
-            href="#how-it-works"
+          <Link
+            href={`${DOCS_HREF}#how-it-works`}
             className="hidden text-sm font-semibold text-white/80 transition-colors hover:text-white sm:inline"
           >
             How it works
-          </a>
-          <a
+          </Link>
+          <Link
             href={DOCS_HREF}
-            target="_blank"
-            rel="noreferrer"
             className="hidden text-sm font-semibold text-white/80 transition-colors hover:text-white sm:inline"
           >
             Docs
-          </a>
+          </Link>
           <Link
             href={APP_HREF}
             className="rounded-full bg-brand-orange px-5 py-2.5 text-sm font-semibold text-brand-navy shadow-[0_8px_24px_-8px_rgb(255_88_10/0.7)] transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"

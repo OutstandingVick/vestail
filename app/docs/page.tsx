@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Disclosure } from "@/components/docs/sections/Disclosure";
 import { HowItWorks } from "@/components/docs/sections/HowItWorks";
 import { Overview } from "@/components/docs/sections/Overview";
+import { Policies } from "@/components/docs/sections/Policies";
 import { Problem } from "@/components/docs/sections/Problem";
 import { Routing } from "@/components/docs/sections/Routing";
 import { Stakes } from "@/components/docs/sections/Stakes";
@@ -63,6 +64,7 @@ export default function DocsPage() {
         <Disclosure />
         <Routing />
         <HowItWorks />
+        <Policies />
       </div>
     </main>
   );

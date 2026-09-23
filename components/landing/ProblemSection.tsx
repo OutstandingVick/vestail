@@ -22,6 +22,13 @@ export function ProblemSection() {
             performance without ever holding the share itself.
           </p>
         </article>
+        <article className={styles.card}>
+          <h3 className={styles.title}>A real legal claim</h3>
+          <p className={styles.body}>
+            Backpack issues a recognised entitlement through a licensed broker —
+            the strongest claim, and the narrowest on who&apos;s allowed to hold it.
+          </p>
+        </article>
       </div>
     </section>
   );

@@ -94,15 +94,18 @@ export function coinPile({ count, width, height, seed }: PileOptions): PileCoin[
 
   for (let i = 0; i < count; i++) {
     const depth = random();
-    // Near coins are half again as big as far ones.
-    const r = height * (0.055 + depth * 0.055);
+    // Near coins are twice the size of far ones, and big enough that the
+    // heap overlaps into a solid mass rather than a scatter of discs.
+    const r = height * (0.09 + depth * 0.09);
     // Spread past both edges, so the band bleeds off the viewport rather
     // than stopping in a tidy line.
     const x = -r + random() * (width + r * 2);
     const top = crest(x, width, height);
     // Heaped: more coins low in the band than high in it, so the pile has
-    // a dense floor and a ragged crest. Squaring the sample does that.
-    const fall = random() ** 2;
+    // a dense floor and a ragged crest. A square root skews the sample
+    // towards the bottom; squaring it would pack them under the crest and
+    // leave the floor thin, which is a pile upside down.
+    const fall = Math.sqrt(random());
     const y = top + fall * (height - top + r);
 
     coins.push({

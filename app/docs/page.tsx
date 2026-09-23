@@ -7,6 +7,7 @@ import { Faq } from "@/components/docs/sections/Faq";
 import { Findings } from "@/components/docs/sections/Findings";
 import { HowItWorks } from "@/components/docs/sections/HowItWorks";
 import { Limits } from "@/components/docs/sections/Limits";
+import { DocsContents } from "@/components/docs/DocsContents";
 import { Overview } from "@/components/docs/sections/Overview";
 import { Policies } from "@/components/docs/sections/Policies";
 import { Problem } from "@/components/docs/sections/Problem";
@@ -62,7 +63,11 @@ export default function DocsPage() {
         </a>
       </div>
 
-      <div className="mt-20 space-y-14">
+      <div className="mt-10">
+        <DocsContents />
+      </div>
+
+      <div className="mt-14 space-y-14">
         <Overview />
         <Problem />
         <Stakes />

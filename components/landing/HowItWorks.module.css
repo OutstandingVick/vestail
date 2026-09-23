@@ -1,6 +1,8 @@
 .section {
+  /* The final badge can reach the viewport centre even before a footer exists. */
+  --end-space: max(112px, calc(50svh - 110px));
   position: relative;
-  padding: 64px clamp(16px, 4vw, 64px) 112px;
+  padding: 64px clamp(16px, 4vw, 64px) var(--end-space);
   scroll-margin-block-start: 32px;
 }
 
@@ -171,7 +173,7 @@
 
 @media (min-width: 900px) {
   .section {
-    padding-block: 48px 112px;
+    padding-block: 48px var(--end-space);
   }
 
   .intro {

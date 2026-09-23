@@ -188,3 +188,23 @@ body::before {
     scroll-behavior: smooth;
   }
 }
+
+/*
+ * The issuer strip's travel.
+ *
+ * The track holds the row of logos twice, so translating it exactly half its
+ * own width lands the copy where the original started and the loop has no
+ * seam. Percentages are of the element, which is why this works whatever the
+ * logos measure.
+ *
+ * Applied under `motion-safe:` only; with reduced motion the strip is a
+ * static, wrapped row instead (see components/landing/IssuerStrip).
+ */
+@keyframes issuer-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}

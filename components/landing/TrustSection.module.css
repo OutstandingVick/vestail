@@ -35,6 +35,17 @@
   margin-inline: auto;
 }
 
+.connectors {
+  display: none;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  pointer-events: none;
+  color: rgb(255 255 255 / 15%);
+}
+
 .cards {
   display: grid;
   gap: 72px;
@@ -134,6 +145,10 @@
 }
 
 @media (min-width: 900px) {
+  .connectors {
+    display: block;
+  }
+
   .header {
     margin-block-end: 112px;
   }

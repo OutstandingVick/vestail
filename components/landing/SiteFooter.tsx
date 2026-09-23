@@ -130,8 +130,8 @@ export function SiteFooter() {
               unoptimized
               className="h-[0.82em] w-auto shrink-0"
             />
-            <span className="select-none font-bold tracking-[-0.04em] text-white/85">
-              vestail
+            <span className="select-none font-bold tracking-[-0.04em] text-brand-orange">
+              Vestail
             </span>
           </div>
         </div>

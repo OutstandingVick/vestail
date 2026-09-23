@@ -134,6 +134,25 @@
   margin-block-end: 20px;
 }
 
+.drawMask {
+  stroke-dashoffset: 0;
+}
+
+@keyframes reveal-connector {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+
+@media (min-width: 900px) and (prefers-reduced-motion: no-preference) {
+  .drawMask[data-revealed="false"] {
+    stroke-dashoffset: 1;
+  }
+
+  .drawMask[data-revealed="true"] {
+    animation: reveal-connector 900ms cubic-bezier(0.2, 0, 0, 1) both;
+  }
+}
+
 @media (min-width: 900px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
   .card {
     transition: transform 240ms cubic-bezier(0.2, 0, 0, 1);

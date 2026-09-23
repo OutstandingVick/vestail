@@ -1,3 +1,40 @@
 .section {
   position: relative;
+  padding: 64px clamp(16px, 4vw, 64px) 112px;
+  scroll-margin-block-start: 32px;
+}
+
+.layout {
+  position: relative;
+  max-inline-size: 1200px;
+  margin-inline: auto;
+}
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  margin-block-end: 64px;
+}
+
+.steps {
+  position: relative;
+  display: grid;
+  gap: 56px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.step {
+  position: relative;
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.copy {
+  min-inline-size: 0;
+  max-inline-size: 400px;
+  padding-block-start: 7px;
 }

@@ -185,6 +185,22 @@ always names the next step ("Connect wallet", "Choose a country and stock",
 "Enter an amount", "Review the conditions below", "Buy NVDAx"); its rules are a
 tested pure function in `lib/app/buyButton.ts`.
 
+### The issuer strip
+
+Under the hero, the five issuers' own logos drift past in one continuous row
+(`components/landing/IssuerStrip.tsx`). No JavaScript and nothing measured:
+the track carries the row twice and animates to `translateX(-50%)`, so the
+second copy lands exactly where the first began. Hover pauses it; with
+`prefers-reduced-motion` the animation never starts, the duplicate row is
+dropped and the logos wrap into a centred static row. The track's width is
+held inside an `overflow-hidden` parent, so it cannot scroll the page
+sideways.
+
+The logos in `public/brand/issuers/` came from each issuer's own site, white
+for the dark gradient and otherwise untouched; see
+[`public/brand/issuers/README.md`](public/brand/issuers/README.md) for the
+source of each file and the trademark note.
+
 ## Documentation page
 
 `/docs` is the public explanation of all of this: what Vestail is, why a

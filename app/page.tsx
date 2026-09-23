@@ -1,9 +1,9 @@
 import { Hero } from "@/components/landing/Hero";
+import { HowItWorks } from "@/components/landing/HowItWorks";
 import { IssuerStrip } from "@/components/landing/IssuerStrip";
 import { LandingNav } from "@/components/landing/LandingNav";
-import { SiteFooter } from "@/components/landing/SiteFooter";
 import { ProblemSection } from "@/components/landing/ProblemSection";
-import { HowItWorks } from "@/components/landing/HowItWorks";
+import { SiteFooter } from "@/components/landing/SiteFooter";
 import { TrustSection } from "@/components/landing/TrustSection";
 
 /**
@@ -22,10 +22,10 @@ export default function Landing() {
       </div>
       <Hero />
       <IssuerStrip />
-      <SiteFooter />
       <ProblemSection />
       <HowItWorks />
       <TrustSection />
+      <SiteFooter />
     </main>
   );
 }

@@ -77,6 +77,30 @@
   list-style: none;
 }
 
+.steps::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 27.5px;
+  inset-block: 28px;
+  inline-size: 1px;
+  background: rgb(255 255 255 / 20%);
+}
+
+.badge {
+  position: relative;
+  display: grid;
+  place-items: center;
+  inline-size: 56px;
+  block-size: 56px;
+  border: 1px solid rgb(255 255 255 / 20%);
+  border-radius: 50%;
+  background: var(--color-brand-navy);
+  color: #fff;
+  font-size: 20px;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+}
+
 .step {
   position: relative;
   display: grid;

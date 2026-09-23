@@ -10,6 +10,13 @@ export function ProblemSection() {
       </h2>
       <div className={styles.cards}>
         <article className={styles.card}>
+          <div className={styles.icon}>
+            <ProblemIcon>
+              <path d="M16 3 27 7v8c0 6-4.5 10.5-11 14C9.5 25.5 5 21 5 15V7Z" />
+              <rect x="11" y="13" width="10" height="8" rx="2" />
+              <path d="M13 13v-2a3 3 0 0 1 6 0v2m-3 3v2" />
+            </ProblemIcon>
+          </div>
           <h3 className={styles.title}>Backed by real shares</h3>
           <p className={styles.body}>
             xStocks holds the actual shares in custody, one for one. You own

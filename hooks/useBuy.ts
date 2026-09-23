@@ -6,7 +6,8 @@ import { useWallet } from "@solana/wallet-adapter-react";
 
 import { notifyBalancesChanged } from "@/hooks/useWalletBalances";
 import { base64ToBytes, bytesToBase64 } from "@/lib/base64";
-import type { AllowedRegion } from "@/lib/constants";
+import { WSOL_MINT, type AllowedRegion } from "@/lib/constants";
+import { inspectSwapTransaction, maxLamportsFor } from "@/lib/swap/inspect";
 import { SwapErrorSchema, SwapQuoteSchema, SwapResultSchema, type SwapResult } from "@/lib/types";
 
 export type BuyPhase =
@@ -75,15 +76,27 @@ export function useBuy() {
         return;
       }
 
-      // 2. Sign in the wallet, after checking the wallet is a required signer.
+      // 2. Read the transaction before asking anyone to sign it.
       let signed: string;
       try {
         const tx = VersionedTransaction.deserialize(base64ToBytes(quote.transaction));
-        const signers = tx.message.staticAccountKeys
-          .slice(0, tx.message.header.numRequiredSignatures)
-          .map((k) => k.toBase58());
-        if (!signers.includes(publicKey.toBase58())) {
-          throw new Error("This transaction is not for your wallet. Try again.");
+        /*
+         * What Jupiter sent back is untrusted input, and this is the last
+         * point at which anything can be done about it: after this line the
+         * user's wallet is open and a signature is one click away. The
+         * server checked it too, but a check that only runs there protects
+         * nobody if the server is the thing that has been compromised.
+         */
+        const inspection = inspectSwapTransaction(tx, {
+          taker: publicKey.toBase58(),
+          maxLamportsFromTaker: maxLamportsFor(
+            req.inputMint,
+            req.amount,
+            WSOL_MINT.toBase58(),
+          ),
+        });
+        if (!inspection.ok) {
+          throw new Error(`${inspection.reason} Nothing was signed.`);
         }
         setPhase({ kind: "signing" });
         signed = bytesToBase64((await signTransaction(tx)).serialize());

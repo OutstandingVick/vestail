@@ -15,4 +15,9 @@ export const HOW_STEPS = [
     title: "Route",
     body: "Of the versions you're allowed to hold, we pick the one with the best price and the cleanest terms.",
   },
+  {
+    number: "04",
+    title: "Deliver",
+    body: "You sign the transaction yourself and the stock lands in your wallet. We never hold your funds.",
+  },
 ] as const;

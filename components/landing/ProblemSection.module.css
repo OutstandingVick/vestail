@@ -3,6 +3,12 @@
   padding: clamp(64px, 8vw, 120px) 24px clamp(80px, 9vw, 144px);
 }
 
+.icon {
+  inline-size: 48px;
+  margin-block-end: 28px;
+  color: var(--color-brand-orange);
+}
+
 .heading {
   max-inline-size: 760px;
   margin: 0 auto 72px;

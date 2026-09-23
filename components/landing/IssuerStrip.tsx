@@ -31,7 +31,7 @@ function Row({ hidden }: { hidden: boolean }) {
             width={issuer.width}
             height={40}
             unoptimized
-            className={`w-auto opacity-70 transition-opacity hover:opacity-100 motion-reduce:transition-none ${issuer.className}`}
+            className={`w-auto opacity-90 transition-opacity hover:opacity-100 motion-reduce:transition-none ${issuer.className}`}
           />
         </li>
       ))}
@@ -42,6 +42,10 @@ function Row({ hidden }: { hidden: boolean }) {
 /**
  * The issuer strip under the hero: the five companies whose tokenized stocks
  * Vestail reads, drifting past in one continuous row.
+ *
+ * No background, no rules, no blur: the hero and this share one continuous
+ * page gradient, and anything drawn across that seam reads as a band pasted
+ * over it. Space does the separating instead.
  *
  * No JavaScript and no measuring. The track carries the row twice and moves
  * by half its own width, so the second copy arrives exactly where the first
@@ -57,7 +61,7 @@ export function IssuerStrip() {
   return (
     <section
       aria-labelledby="issuers-heading"
-      className="relative z-10 border-y border-white/10 bg-brand-navy/30 py-10 backdrop-blur-sm sm:py-12"
+      className="relative z-10 py-12 sm:py-16"
     >
       <h2
         id="issuers-heading"

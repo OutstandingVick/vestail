@@ -23,7 +23,7 @@ export function VerdictGrid({ symbol }: { symbol: AllowedSymbol }) {
         <div key={representation.mint} className="bg-brand-navy/80 p-4">
           <p className="font-bold text-white">
             {PROVIDER_NAME[representation.provider]}
-            <span className="ml-2 font-normal text-white/45">
+            <span className="ml-2 font-normal text-white/60">
               {representation.tokenSymbol}
             </span>
           </p>
@@ -38,7 +38,7 @@ export function VerdictGrid({ symbol }: { symbol: AllowedSymbol }) {
               const badge = VERDICT_BADGE[status];
               return (
                 <li key={region} className="rounded-xl bg-white/[0.04] p-3">
-                  <p className="text-xs font-bold uppercase tracking-widest text-white/40">
+                  <p className="text-xs font-bold uppercase tracking-widest text-white/55">
                     <span aria-hidden>{REGION_FLAG[region]} </span>
                     {REGION_NAME[region]}
                   </p>

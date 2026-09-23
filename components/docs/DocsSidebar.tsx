@@ -24,7 +24,7 @@ export function DocsSidebar() {
     >
       {docsGroups().map(({ group, sections }) => (
         <div key={group} className="mb-6">
-          <p className="mb-2 text-xs font-bold uppercase tracking-widest text-white/40">
+          <p className="mb-2 text-xs font-bold uppercase tracking-widest text-white/55">
             {group}
           </p>
           <ul className="space-y-0.5 border-l border-white/10">

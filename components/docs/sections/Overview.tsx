@@ -28,7 +28,7 @@ export function Overview() {
         and the difference is the whole product.
       </P>
       <Card>
-        <p className="text-sm font-bold uppercase tracking-widest text-white/50">
+        <p className="text-sm font-bold uppercase tracking-widest text-white/60">
           In one sentence
         </p>
         <p className="mt-2 text-lg leading-relaxed text-white">

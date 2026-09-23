@@ -24,26 +24,26 @@ export function IssuerTable() {
             </span>
             <div className="min-w-0">
               <p className="font-bold text-white">{p.name}</p>
-              <p className="truncate text-sm text-white/50">{p.issuer}</p>
+              <p className="truncate text-sm text-white/60">{p.issuer}</p>
             </div>
           </div>
 
           <dl className="mt-4 grid gap-3 sm:grid-cols-2">
             <div>
-              <dt className="text-xs font-bold uppercase tracking-widest text-white/40">
+              <dt className="text-xs font-bold uppercase tracking-widest text-white/55">
                 What the token is
               </dt>
               <dd className="mt-1 text-sm leading-snug text-white/80">{p.plain}</dd>
             </div>
             <div>
-              <dt className="text-xs font-bold uppercase tracking-widest text-white/40">
+              <dt className="text-xs font-bold uppercase tracking-widest text-white/55">
                 Your claim runs against
               </dt>
               <dd className="mt-1 text-sm leading-snug text-white/80">{p.claimAgainst}</dd>
             </div>
           </dl>
 
-          <p className="mt-3 text-sm text-white/50">
+          <p className="mt-3 text-sm text-white/60">
             {p.custodian ? `Custodian: ${p.custodian}. ` : ""}
             <Out href={p.sourceUrl}>Issuer&apos;s own terms</Out>
           </p>

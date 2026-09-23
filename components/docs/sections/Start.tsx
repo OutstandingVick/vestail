@@ -38,7 +38,7 @@ export function Start() {
         >
           Find your stock
         </Link>
-        <p className="mt-4 text-sm text-white/50">
+        <p className="mt-4 text-sm text-white/60">
           Vestail never holds your funds. You sign every transaction. Not
           investment advice.
         </p>

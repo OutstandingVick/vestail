@@ -2,6 +2,8 @@
 
 import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from "react";
 
+import { Icon } from "@/components/icons";
+
 export interface ComboboxOption<T extends string> {
   value: T;
   /** Matched against the search text, case-insensitively. */
@@ -120,13 +122,10 @@ export function Combobox<T extends string>({
         <span className="min-w-0 truncate">
           {value ? renderValue(value) : <span className="text-white/50">{placeholder}</span>}
         </span>
-        <svg
-          aria-hidden
-          viewBox="0 0 20 20"
+        <Icon
+          name="chevron-down"
           className={`size-5 shrink-0 text-white/60 motion-safe:transition-transform ${open ? "rotate-180" : ""}`}
-        >
-          <path d="M5 7.5 10 12.5 15 7.5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
+        />
       </button>
 
       {open && (
@@ -169,9 +168,7 @@ export function Combobox<T extends string>({
               >
                 <span className="min-w-0 flex-1">{option.row}</span>
                 {option.value === value && (
-                  <svg aria-hidden viewBox="0 0 20 20" className="size-4 shrink-0 text-brand-orange">
-                    <path d="M4.5 10.5 8.5 14.5 15.5 6.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
+                  <Icon name="check" className="size-4 shrink-0 text-brand-orange" />
                 )}
               </li>
             ))}

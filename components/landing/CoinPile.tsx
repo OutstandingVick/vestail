@@ -4,8 +4,10 @@ const ORANGE = "#ff580a";
 const INK = "#0a122a";
 
 /** Desktop and phone bands. Each is generated once, at module load. */
-const WIDE = { width: 1600, height: 280, count: 82, seed: 20260923 };
-const NARROW = { width: 760, height: 170, count: 30, seed: 20260923 };
+const WIDE = { width: 1600, height: 280, count: 88, seed: 20260923 };
+/* The phone band is shorter and narrower, so its coins are smaller too;
+   it needs a few more of them than a third to read as the same heap. */
+const NARROW = { width: 760, height: 170, count: 40, seed: 20260923 };
 
 /**
  * A coin, as a rounded octagon with its ticker across the face.

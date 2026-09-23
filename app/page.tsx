@@ -1,11 +1,14 @@
 import { Hero } from "@/components/landing/Hero";
+import { IssuerStrip } from "@/components/landing/IssuerStrip";
 import { LandingNav } from "@/components/landing/LandingNav";
 
 /**
  * Marketing landing page. The app itself lives at /app.
  *
  * The nav overlays the top of the full-bleed hero rather than pushing it
- * down, so the hero can own the whole first screen.
+ * down, so the hero can own the whole first screen. The issuer strip is the
+ * first thing under it: the hero makes a claim about versions of a stock,
+ * and the strip names whose versions those are.
  */
 export default function Landing() {
   return (
@@ -14,6 +17,7 @@ export default function Landing() {
         <LandingNav />
       </div>
       <Hero />
+      <IssuerStrip />
     </main>
   );
 }

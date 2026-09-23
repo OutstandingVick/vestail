@@ -91,7 +91,7 @@ export function GlobeStage({ variant }: { variant: GlobeVariant }) {
   return (
     <div
       ref={stageRef}
-      className="absolute inset-0 overflow-hidden [container-type:size]"
+      className="absolute inset-0 overflow-hidden @container-size"
     >
       <GlobeFallback placement={GLOBE_PLACEMENT[variant]} />
       <canvas

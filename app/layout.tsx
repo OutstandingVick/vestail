@@ -12,7 +12,7 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "Vestail — which version of this stock may you hold?",
+  title: "Vestail — Acquire the right onchain stocks",
   icons: { icon: { url: "/brand/vestail-icon.svg", type: "image/svg+xml" } },
   description:
     "A stock ticker is not one thing onchain. Vestail resolves every tokenized representation of a security, shows which ones a holder in a given jurisdiction may actually hold, and routes a purchase only to eligible ones.",

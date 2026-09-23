@@ -1,4 +1,7 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+
+import { APP_HREF } from "@/components/landing/LandingNav";
 
 export const metadata: Metadata = {
   title: "Docs — Vestail",
@@ -16,10 +19,34 @@ export const metadata: Metadata = {
  */
 export default function DocsPage() {
   return (
-    <main className="mx-auto w-full max-w-3xl px-4 py-16 sm:px-6">
-      <h1 className="text-4xl font-bold tracking-tight text-white">
-        Vestail, documented
+    <main className="max-w-2xl">
+      <p className="text-sm font-bold uppercase tracking-widest text-brand-orange">
+        Documentation
+      </p>
+      <h1 className="mt-3 text-4xl font-bold leading-tight tracking-tight text-white sm:text-5xl">
+        The same ticker. Different claims. Different rules about who may hold
+        them.
       </h1>
+      <p className="mt-6 text-lg leading-relaxed text-white/80">
+        Vestail reads every tokenized version of a stock, tells you which ones
+        someone in your country may actually hold, and buys only the ones you
+        may. This page explains what that means, how the answers are produced,
+        and where you can check them yourself.
+      </p>
+      <div className="mt-8 flex flex-wrap items-center gap-3">
+        <Link
+          href={APP_HREF}
+          className="rounded-full bg-brand-orange px-6 py-3 font-bold text-brand-navy transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white motion-reduce:transition-none"
+        >
+          Open the app
+        </Link>
+        <a
+          href="#overview"
+          className="rounded-full px-5 py-3 font-semibold text-white/80 ring-1 ring-white/20 transition-colors hover:bg-white/10 hover:text-white"
+        >
+          Start reading
+        </a>
+      </div>
     </main>
   );
 }

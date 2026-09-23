@@ -255,6 +255,37 @@ Brand assets in `public/brand/` are committed as supplied. The supplied logo
 has a full-bleed dark background, so the nav uses `vestail-logo-nav.svg`,
 generated from it with the background removed and cropped to the artwork.
 
+### How it works
+
+`components/landing/HowItWorks.tsx` follows the problem cards with the four
+steps: Resolve, Check, Route and Deliver. The landing navigation links to
+`#how-it-works`. Copy lives in `lib/landing/howSteps.ts`.
+
+Desktop uses an inline quadratic SVG curve. Its control points and badge
+coordinates live in `lib/landing/howCurve.ts`; four equal-height rows put each
+badge exactly on the path. The curve scales with the content, and its stroke
+stays one pixel wide. Below 900px, it is replaced by a straight timeline and
+the existing Vestail character moves above the headline.
+
+`public/brand/vestail-character.svg` preserves the six character shapes from
+`vestail-icon.svg` exactly, omitting only the solid background and metadata.
+The original supplied asset is unchanged. A soft CSS glow supplies depth.
+
+`useClosestStep` measures badge centres once per animation frame and marks
+the closest to the viewport centre. It cleans up scroll, resize and media
+listeners and responds to changes in reduced-motion preferences. Reduced
+motion disables tracking and transitions; every step retains full opacity.
+The final section padding lets Deliver reach the viewport centre even before
+a footer is added. Hover changes badge colour without moving the content.
+
+Verified: typecheck, lint, all 64 tests, and an isolated production build.
+Browser checks at 320, 390, 768, 899, 900, 1024 and 1440 CSS pixels found no
+horizontal overflow. The headline stays on two lines, desktop badge centres
+match the curve within 0.01px, and mobile artwork sits above the headline.
+Scroll activation was checked through Deliver. Reduced-motion behavior was
+reviewed in the hook and stylesheet; OS-level emulation and 200% zoom were
+not exercised.
+
 ## Running locally
 
 ### Landing problem section

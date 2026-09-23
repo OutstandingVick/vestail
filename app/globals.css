@@ -173,3 +173,18 @@ body::before {
     transform: translateY(0);
   }
 }
+
+/*
+ * Anchor jumps glide instead of teleporting.
+ *
+ * The docs page is one long page navigated entirely by anchors, and a jump
+ * that cuts straight to a new position loses the reader's sense of where
+ * they went. Wrapped in the media query rather than written as
+ * `scroll-behavior: smooth` with a reduced-motion override, so no-preference
+ * is the only case that opts in.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}

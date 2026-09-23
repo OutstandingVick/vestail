@@ -6,6 +6,7 @@ import { HowItWorks } from "@/components/docs/sections/HowItWorks";
 import { Overview } from "@/components/docs/sections/Overview";
 import { Policies } from "@/components/docs/sections/Policies";
 import { Problem } from "@/components/docs/sections/Problem";
+import { Registry } from "@/components/docs/sections/Registry";
 import { Routing } from "@/components/docs/sections/Routing";
 import { Stakes } from "@/components/docs/sections/Stakes";
 import { Verdicts } from "@/components/docs/sections/Verdicts";
@@ -65,6 +66,7 @@ export default function DocsPage() {
         <Routing />
         <HowItWorks />
         <Policies />
+        <Registry />
       </div>
     </main>
   );

@@ -35,6 +35,17 @@ import { RegionSchema, type SwapQuote } from "@/lib/types";
  * wallet is connected.
  */
 
+/**
+ * Slippage, in basis points.
+ *
+ * REQUESTED is what every order asks for. MAX is the line past which an
+ * order is refused rather than offered for signature: Jupiter can come back
+ * with more than was asked — a different route, a thinner pool — and the
+ * difference between a trade and a donation is how much more.
+ */
+const REQUESTED_SLIPPAGE_BPS = 100;
+const MAX_SLIPPAGE_BPS = 300;
+
 /** Per pay token: the smallest and largest order, in base units. */
 const LIMITS = {
   [PAY_TOKENS.USDC.mint]: {
@@ -138,6 +149,7 @@ export async function GET(request: Request) {
     outputMint,
     amount,
     taker,
+    slippageBps: REQUESTED_SLIPPAGE_BPS,
   });
   if (isNoRoute(result)) {
     return fail(422, "No route found for this swap right now.", { code: "no_route" });
@@ -158,6 +170,13 @@ export async function GET(request: Request) {
     (order.taker ?? undefined) !== taker
   ) {
     return fail(502, "Jupiter returned an order that does not match the request.");
+  }
+
+  if ((order.slippageBps ?? REQUESTED_SLIPPAGE_BPS) > MAX_SLIPPAGE_BPS) {
+    return fail(
+      422,
+      `This route only prices with more than ${MAX_SLIPPAGE_BPS / 100}% slippage, which is too much to route through. Try a smaller amount.`,
+    );
   }
 
   const paidByTaker = (lamports: number | undefined, payer: string | null | undefined) =>

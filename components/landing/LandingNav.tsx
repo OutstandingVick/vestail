@@ -9,8 +9,8 @@ export const DOCS_HREF = "/docs";
 
 /**
  * Landing navigation: logo left; "How it works", "Docs" and the orange
- * "Launch app" pill right. Both text links go to the docs page — "How it
- * works" to its section there, since the landing page is still hero-only.
+ * "Launch app" pill right. "How it works" jumps to the landing journey;
+ * "Docs" opens the full product explanation.
  * The text links drop out below `sm` so the bar never wraps or scrolls
  * sideways on a phone; the pill always stays.
  */
@@ -40,7 +40,7 @@ export function LandingNav() {
 
         <div className="flex items-center gap-2 sm:gap-6">
           <Link
-            href={`${DOCS_HREF}#how-it-works`}
+            href="#how-it-works"
             className="hidden text-sm font-semibold text-white/80 transition-colors hover:text-white sm:inline"
           >
             How it works

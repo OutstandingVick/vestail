@@ -50,6 +50,28 @@
   min-inline-size: 0;
 }
 
+.card {
+  position: relative;
+  padding: 44px 10px 10px;
+  border: 1px solid rgb(255 255 255 / 10%);
+  border-radius: 24px;
+  background: rgb(10 18 42 / 60%);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 24px 48px -24px rgb(3 7 23 / 55%);
+}
+
+.panel {
+  padding: clamp(22px, 3vw, 32px);
+  border-radius: 14px;
+  background: var(--panel-tint);
+}
+
+.item:nth-child(1) { --panel-tint: rgb(190 128 84 / 10%); }
+.item:nth-child(2) { --panel-tint: rgb(156 125 207 / 12%); }
+.item:nth-child(3) { --panel-tint: rgb(184 151 103 / 10%); }
+.item:nth-child(4) { --panel-tint: rgb(109 151 194 / 12%); }
+
 .title {
   margin: 0 0 16px;
   color: #fff;

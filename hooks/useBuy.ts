@@ -2,7 +2,7 @@
 
 import { useCallback, useState } from "react";
 import { VersionedTransaction } from "@solana/web3.js";
-import { useWallet } from "@solana/wallet-adapter-react";
+import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 
 import { notifyBalancesChanged } from "@/hooks/useWalletBalances";
 import { base64ToBytes, bytesToBase64 } from "@/lib/base64";
@@ -37,6 +37,7 @@ export interface BuyRequest {
  * transaction, and a quote goes stale within seconds anyway.
  */
 export function useBuy() {
+  const { connection } = useConnection();
   const { publicKey, signTransaction } = useWallet();
   const [phase, setPhase] = useState<BuyPhase>({ kind: "idle" });
 
@@ -98,6 +99,29 @@ export function useBuy() {
         if (!inspection.ok) {
           throw new Error(`${inspection.reason} Nothing was signed.`);
         }
+
+        /*
+         * Simulate before the wallet opens. A transaction that will fail on
+         * chain still costs the fee, and the failure is the signal that
+         * something about this order is wrong — a stale blockhash, a route
+         * that no longer exists. Better to learn that from the RPC than to
+         * spend the user's money finding out.
+         *
+         * sigVerify is off because nothing is signed yet, and the blockhash
+         * is replaced because the one in the order may already be a few
+         * slots old.
+         */
+        const simulation = await connection.simulateTransaction(tx, {
+          sigVerify: false,
+          replaceRecentBlockhash: true,
+          commitment: "processed",
+        });
+        if (simulation.value.err) {
+          throw new Error(
+            "This swap would fail on chain, so it was not sent to your wallet. Try again, or try a smaller amount.",
+          );
+        }
+
         setPhase({ kind: "signing" });
         signed = bytesToBase64((await signTransaction(tx)).serialize());
       } catch (cause) {
@@ -138,7 +162,7 @@ export function useBuy() {
         });
       }
     },
-    [publicKey, signTransaction],
+    [connection, publicKey, signTransaction],
   );
 
   return { phase, buy, reset };

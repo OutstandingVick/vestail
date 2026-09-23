@@ -101,8 +101,13 @@ export const RepresentationSchema = z.object({
    */
   custodian: z.string().min(1).nullable(),
 
-  /** Where this record came from, so any claim on screen can be traced. */
-  source: z.string().url(),
+  /**
+   * Where this record came from, so any claim on screen can be traced.
+   *
+   * https, not merely a URL: `z.string().url()` accepts `javascript:` — it is
+   * a syntactically valid URL — and this value is rendered into an href.
+   */
+  source: z.string().url().startsWith("https://"),
 
   /** When the record was fetched. Staleness is user-visible information. */
   fetchedAt: z.string().datetime(),
@@ -190,7 +195,8 @@ export const EvidenceSchema = z.object({
   /** A gate sets the status; a note adds context and never changes it. */
   kind: z.enum(["gate", "note"]),
   reason: z.string().min(1),
-  sourceUrl: z.string().url(),
+  /** https, for the same reason as RegistryRepresentation.source. */
+  sourceUrl: z.string().url().startsWith("https://"),
   sourceQuality: SourceQualitySchema,
 });
 
@@ -222,8 +228,9 @@ export const VerdictSchema = z.object({
   /**
    * Source of the deciding gate. Every rule in policies/ carries one, so every
    * verdict on screen traces to a document rather than to our summary of it.
+   * https, for the same reason as RegistryRepresentation.source.
    */
-  sourceUrl: z.string().url(),
+  sourceUrl: z.string().url().startsWith("https://"),
 
   /**
    * Weakest quality among the gates that decided the status. A verdict is no

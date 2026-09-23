@@ -1,6 +1,6 @@
 .section {
   position: relative;
-  padding: clamp(64px, 8vw, 120px) 24px clamp(80px, 9vw, 144px);
+  padding: clamp(64px, 8vw, 120px) clamp(16px, 3vw, 48px) clamp(80px, 9vw, 144px);
 }
 
 .body {
@@ -40,7 +40,7 @@
   max-inline-size: 760px;
   margin: 0 auto 72px;
   color: #b8b7c2;
-  font-size: clamp(30px, 4vw, 52px);
+  font-size: clamp(26px, 4vw, 52px);
   font-weight: 700;
   line-height: 1.12;
   letter-spacing: -0.035em;
@@ -58,7 +58,7 @@
 .card {
   position: relative;
   min-inline-size: 0;
-  padding: 36px;
+  padding: clamp(24px, 6vw, 36px);
   text-align: start;
   border: 1px solid rgb(255 255 255 / 8%);
   border-radius: 24px;
@@ -68,6 +68,8 @@
   box-shadow: 0 20px 48px -20px rgb(4 8 24 / 55%);
 }
 
+/* Mobile is the untransformed base layout. Only desktop opts into the fan.
+   Motion is opt-in too: reduced-motion users retain the still composition. */
 @media (min-width: 900px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
   .card {
     transition: transform 240ms ease;

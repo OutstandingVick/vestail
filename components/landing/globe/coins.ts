@@ -192,9 +192,10 @@ export function createCoins(count: number, fontFamily: string): Coins {
       coin.holder.rotation.set(0.28 + 0.12 * Math.sin(theta), 0.45 * Math.cos(theta), 0);
 
       // Depth dimming on top of the scene's lighting, so the far side of
-      // the orbit still recedes. Gentler than it was when the materials
-      // were unlit and this was the only shading they had.
-      const light = 0.62 + 0.38 * depth;
+      // the orbit still recedes. Slight, because the lights now do the
+      // shading: any more and the far coins go grey, which is what this
+      // had to do on its own back when the materials were unlit.
+      const light = 0.82 + 0.18 * depth;
       coin.face.color.setScalar(light);
       coin.edge.color.copy(coin.edgeBase).multiplyScalar(light);
     });

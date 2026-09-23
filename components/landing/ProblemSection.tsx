@@ -1,4 +1,5 @@
 import styles from "./ProblemSection.module.css";
+import { ProblemIcon } from "./ProblemIcon";
 
 /** The three different claims a single ticker can represent. */
 export function ProblemSection() {

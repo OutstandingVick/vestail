@@ -124,13 +124,17 @@ match), and any ambiguity aborts the sync.
 
 ### Sponsor integrations
 
-- **Pyth:** the listed-share reference price (`Equity.US.*`) and xStock/Ondo
-  token feeds, so each representation shows its premium or discount to the
-  real share. Needs `PYTH_API_KEY` (Hermes has required a key since 26 August
-  2026); without it the page says so and falls back to Jupiter prices.
 - **Tessera:** T-OpenAI, T-Kalshi and T-SpaceX are resolved alongside PreStocks'
   tokens for the same companies, so a buyer can see that one is a loan
   participation to a Panamanian issuer and the other is SPV exposure.
+
+**Pyth is not one.** `lib/server/pyth.ts` exists and works, but the equity and
+tokenized-stock feeds it needs are not included in the plan available here —
+Pyth answers 403 "not entitled" for every one of them. No Pyth data reaches
+any screen, so Vestail does not claim the integration. Every price shown comes
+from Jupiter. The client is kept because it is the shortest path to the
+reference price the security audit wants for checking a quote against an
+independent source (see M1 in [SECURITY-AUDIT.md](SECURITY-AUDIT.md)).
 
 ### Stack
 
@@ -138,7 +142,7 @@ Next.js 15 (App Router) · TypeScript · Tailwind v4 · Solana Wallet Adapter
 (Phantom + Solflare) · @solana/web3.js v1 · Zod. Deploys to Vercel.
 
 No Redis, no separate backend, no Anchor program. Keys stay in a Next.js route
-handler, which is the only code that calls Pyth or Jupiter.
+handler, which is the only code that calls Jupiter.
 
 ### Buying
 
@@ -360,7 +364,7 @@ OS-level motion emulation and 200% browser zoom were not exercised.
 
 ```bash
 npm install
-cp .env.example .env.local   # fill in NEXT_PUBLIC_RPC_URL and PYTH_API_KEY
+cp .env.example .env.local   # fill in NEXT_PUBLIC_RPC_URL
 npm run dev
 ```
 
@@ -411,10 +415,7 @@ connection, USDC balance, landing page.
 
 **Phase 1 — complete.** 25 representations across 11 symbols, resolved with
 per-issuer proof and verified onchain. SPCX alone has five, each a different
-legal claim. Live prices from Pyth and Jupiter, issuer marks for private
-companies, and a comparison table on the landing page. Pyth equity and
-tokenized-stock feeds await plan access; until then prices fall back to
-Jupiter and the page says so.
+legal claim. Prices from Jupiter, and issuer marks for private companies.
 
 **Phase 2 — complete.** Sourced policy files for all five issuers across NG, US
 and DE, a pure evaluator, tests, and self-declared-region verdicts on every
@@ -427,6 +428,7 @@ tokens.
 live estimates before connecting; conditional versions routed after an explicit
 acknowledgement.
 
-Not shown in the new app: the Pyth price comparison against the listed share.
-`/api/representations` still serves it (and Pyth equity feeds still await
-plan access), but the card layout has no place for it yet.
+One thing the app does not show: a price for each version against the listed
+share. That needs a reference feed Vestail does not have (see the note under
+Sponsor integrations). `/api/representations` still serves what it can from
+Jupiter.

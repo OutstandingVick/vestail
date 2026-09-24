@@ -10,7 +10,7 @@ export function TrustSection() {
       </header>
       <TrustCards />
       <p className={styles.foundations}>
-        Solana · Jupiter · Pyth · xStocks · Ondo · Backpack
+        Solana · Jupiter · xStocks · Ondo · Backpack · Tessera · PreStocks
       </p>
     </section>
   );

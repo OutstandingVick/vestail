@@ -76,7 +76,7 @@ function FooterLinkItem({ link }: { link: FooterLink }) {
  */
 export function SiteFooter() {
   return (
-    <footer className="relative mt-24 overflow-hidden">
+    <footer className="relative mt-12 overflow-hidden">
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-8">
         <div className="grid gap-10 min-[900px]:grid-cols-3">
           {COLUMNS.map((column) => (

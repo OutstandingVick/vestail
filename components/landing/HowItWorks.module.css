@@ -1,8 +1,8 @@
 .section {
   /* The trust section now supplies the scroll room after the final badge. */
-  --end-space: 48px;
+  --end-space: 24px;
   position: relative;
-  padding: 64px clamp(16px, 4vw, 64px) var(--end-space);
+  padding: 32px clamp(16px, 4vw, 64px) var(--end-space);
   scroll-margin-block-start: 32px;
 }
 
@@ -173,7 +173,7 @@
 
 @media (min-width: 900px) {
   .section {
-    padding-block: 48px var(--end-space);
+    padding-block: 24px var(--end-space);
   }
 
   .intro {

@@ -1,6 +1,6 @@
 .section {
   position: relative;
-  padding: clamp(64px, 8vw, 120px) clamp(16px, 3vw, 48px) clamp(80px, 9vw, 144px);
+  padding: clamp(32px, 4vw, 60px) clamp(16px, 3vw, 48px) clamp(40px, 4.5vw, 72px);
 }
 
 .body {

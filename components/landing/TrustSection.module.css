@@ -1,6 +1,6 @@
 .section {
   position: relative;
-  padding: 80px clamp(16px, 4vw, 64px) 128px;
+  padding: 40px clamp(16px, 4vw, 64px) 64px;
   scroll-margin-block-start: 32px;
 }
 

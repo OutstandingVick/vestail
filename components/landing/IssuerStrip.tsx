@@ -61,7 +61,7 @@ export function IssuerStrip() {
   return (
     <section
       aria-labelledby="issuers-heading"
-      className="relative z-10 py-12 sm:py-16"
+      className="relative z-10 py-6 sm:py-8"
     >
       <h2
         id="issuers-heading"

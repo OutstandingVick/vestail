@@ -18,6 +18,6 @@ export const TRUST_CARDS = [
   {
     id: "stack",
     title: "Built on what already works",
-    body: "Solana for settlement, Jupiter for routing, Pyth for prices, and the issuers themselves for the assets. We add the layer that was missing.",
+    body: "Solana for settlement, Jupiter for routing, and the issuers themselves for the assets. We add the layer that was missing.",
   },
 ] as const;

@@ -72,10 +72,15 @@ const nextConfig: NextConfig = {
             key: "Permissions-Policy",
             value: "camera=(), microphone=(), geolocation=(), payment=(), usb=()",
           },
-          {
-            key: "Strict-Transport-Security",
-            value: "max-age=63072000; includeSubDomains; preload",
-          },
+          /*
+           * Six months, this domain only, and not submitted for preloading.
+           * A browser caches this header and honours it for its whole life,
+           * so `preload` plus `includeSubDomains` on a domain registered
+           * yesterday is a two-year promise that every future subdomain will
+           * serve HTTPS — made before anyone knows what the subdomains are.
+           * Lengthen it once the setup has settled.
+           */
+          { key: "Strict-Transport-Security", value: "max-age=15552000" },
         ],
       },
     ];

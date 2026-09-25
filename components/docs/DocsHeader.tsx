@@ -7,12 +7,26 @@ import { APP_HREF } from "@/components/landing/LandingNav";
  * Docs header: logo home, and the one action that matters from a docs page.
  *
  * Sticky, because the page is long and the way out should never be more than
- * a glance away. The blur keeps the gradient visible behind it instead of
- * cutting a solid bar across it.
+ * a glance away.
+ *
+ * It paints no background of its own. The page gradient is on a fixed
+ * pseudo-element, so it does not scroll — which means a transparent header
+ * shows exactly the same colours as the page under it, with nothing to draw
+ * a line between the two. A tinted bar and a border did draw one, and on the
+ * docs page, where the gradient is brightest right under the header, that
+ * line read as a stripe across the top of the screen.
+ *
+ * What the header still needs is for text to stop being legible as it
+ * scrolls underneath. A blur does that, masked so it fades out downwards
+ * rather than ending on an edge of its own.
  */
 export function DocsHeader() {
   return (
-    <header className="sticky top-0 z-40 border-b border-white/10 bg-brand-navy/70 backdrop-blur-xl">
+    <header className="sticky top-0 z-40">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 -z-10 backdrop-blur-xl [mask-image:linear-gradient(to_bottom,#000_55%,transparent)]"
+      />
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-8">
         <div className="flex items-center gap-3">
           <Link href="/" aria-label="Vestail home" className="shrink-0">

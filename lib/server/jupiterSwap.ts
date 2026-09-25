@@ -97,6 +97,8 @@ export function getOrder(params: {
   amount: string;
   taker?: string;
   slippageBps: number;
+  /** Routers to keep out of the answer, e.g. "jupiterz". */
+  excludeRouters?: string;
 }): Promise<JupiterCall<JupiterOrder>> {
   const query = new URLSearchParams({
     inputMint: params.inputMint,
@@ -104,6 +106,7 @@ export function getOrder(params: {
     amount: params.amount,
     slippageBps: String(params.slippageBps),
     ...(params.taker ? { taker: params.taker } : {}),
+    ...(params.excludeRouters ? { excludeRouters: params.excludeRouters } : {}),
   });
   return call<JupiterOrder>(`${JUPITER_ORDER_ENDPOINT}?${query}`, {
     headers: jupiterHeaders(),

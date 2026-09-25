@@ -170,13 +170,35 @@ export async function GET(request: Request) {
     });
   }
 
-  const result = await getOrder({
-    inputMint,
-    outputMint,
-    amount,
-    taker,
-    slippageBps: REQUESTED_SLIPPAGE_BPS,
-  });
+  const ask = (excludeRouters?: string) =>
+    getOrder({
+      inputMint,
+      outputMint,
+      amount,
+      taker,
+      slippageBps: REQUESTED_SLIPPAGE_BPS,
+      excludeRouters,
+    });
+
+  let result = await ask();
+
+  /*
+   * Jupiter fills most of these pairs through JupiterZ, which quotes against
+   * market makers rather than pools. When none of them answer — and for a
+   * tokenized stock that happens — the order comes back with no route at
+   * all, and the buyer is told the swap is impossible when it is merely
+   * unattended.
+   *
+   * So ask again without that router. What comes back is an ordinary
+   * aggregator route through pools: it costs the buyer the network fee
+   * instead of being gasless, and it does not depend on anyone being online.
+   * Checked against a funded taker: it uses only programs the transaction
+   * verifier already allows.
+   */
+  if (isNoRoute(result)) {
+    result = await ask("jupiterz");
+  }
+
   if (isNoRoute(result)) {
     return fail(422, "No route found for this swap right now.", { code: "no_route" });
   }

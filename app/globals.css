@@ -90,6 +90,26 @@ body::before {
   pointer-events: none;
 }
 
+/*
+ * The docs page turns that gradient inside out: dark at both edges, light
+ * through the middle, so the reading column sits in the lit part of the page
+ * and the margins fall away on either side.
+ *
+ * Done by overriding the same pseudo-element rather than painting a second
+ * layer over it: body::before is fixed at z-index -1, so anything laid on
+ * top of it would have to sit above the content too. `:has()` lets the
+ * marker live on the docs layout, which is the thing that knows it is the
+ * docs.
+ */
+body:has([data-surface="docs"])::before {
+  background: linear-gradient(
+    90deg,
+    var(--color-brand-navy),
+    var(--color-brand-violet) 50%,
+    var(--color-brand-navy)
+  );
+}
+
 ::selection {
   background: var(--color-gold);
   color: var(--color-ink);

@@ -16,6 +16,7 @@ const { inspectSwapTransaction } = await import(
 const TOKEN = new PublicKey("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA");
 const TOKEN_2022 = new PublicKey("TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb");
 const JUPITER = new PublicKey("JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4");
+const JUPITER_Z = new PublicKey("61DFfeTKM7trxYcPQCM78bJ794ddZprZpAwAnLiwTpYH");
 const COMPUTE_BUDGET = new PublicKey("ComputeBudget111111111111111111111111111111");
 
 const taker = Keypair.generate().publicKey;
@@ -65,6 +66,17 @@ const check = (transaction, max = RENT_ALLOWANCE) =>
 describe("swap transaction inspection", () => {
   it("accepts an ordinary swap", () => {
     assert.deepEqual(check(tx([budget, route])), { ok: true });
+  });
+
+  it("accepts the order engine a real gasless swap is filled through", () => {
+    // What Jupiter actually returns for these pairs: compute budget, an
+    // associated-token-account create, and the JupiterZ order engine.
+    const fill = new TransactionInstruction({
+      programId: JUPITER_Z,
+      keys: [{ pubkey: taker, isSigner: true, isWritable: true }],
+      data: Buffer.from([168, 1, 2, 3]),
+    });
+    assert.deepEqual(check(tx([budget, fill])), { ok: true });
   });
 
   it("accepts a token transfer, which is what a swap is made of", () => {

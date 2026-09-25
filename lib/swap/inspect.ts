@@ -22,8 +22,19 @@ const TOKEN_2022_PROGRAM = "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb";
 const ASSOCIATED_TOKEN = "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL";
 const MEMO_PROGRAM = "MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr";
 const MEMO_PROGRAM_V1 = "Memo1UhkJRfHyvLMcVucJwxXeuD728EqVDDwQDxFMNo";
-/** Jupiter's aggregator program: the one that actually routes the swap. */
+/** Jupiter's aggregator program: the one that routes a swap through pools. */
 const JUPITER_V6 = "JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4";
+/**
+ * JupiterZ's order engine, which fills a swap against a market maker rather
+ * than a pool.
+ *
+ * Every order Vestail actually receives goes through this one: Jupiter picks
+ * the `jupiterz` router and a gasless transaction for these pairs, so the
+ * aggregator above never appears. The address is the mainnet deployment
+ * published in Jupiter's own documentation, at jupiterz.jup.ag/docs/faq,
+ * which also links the program's source and its Offside Labs audit.
+ */
+const JUPITER_Z_ORDER_ENGINE = "61DFfeTKM7trxYcPQCM78bJ794ddZprZpAwAnLiwTpYH";
 
 /** Top-level programs a Jupiter swap legitimately touches. */
 export const ALLOWED_PROGRAMS: readonly string[] = [
@@ -35,6 +46,7 @@ export const ALLOWED_PROGRAMS: readonly string[] = [
   MEMO_PROGRAM,
   MEMO_PROGRAM_V1,
   JUPITER_V6,
+  JUPITER_Z_ORDER_ENGINE,
 ];
 
 /**

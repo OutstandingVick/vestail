@@ -110,6 +110,25 @@ body:has([data-surface="docs"])::before {
   );
 }
 
+/*
+ * Buttons point.
+ *
+ * Tailwind v4 dropped the `cursor: pointer` its v3 preflight gave buttons,
+ * on the grounds that the native control does not have one. The effect here
+ * is that every button on the site — buy, MAX, the pickers, the token
+ * toggle, the toast's close — showed an arrow, so nothing looked clickable
+ * until you clicked it.
+ *
+ * Disabled controls are excluded by both routes they can be disabled: the
+ * attribute, and aria-disabled, which the main button uses so that it stays
+ * focusable and keeps announcing itself while it is unavailable.
+ */
+button:not(:disabled):not([aria-disabled="true"]),
+[role="button"]:not([aria-disabled="true"]),
+summary {
+  cursor: pointer;
+}
+
 ::selection {
   background: var(--color-gold);
   color: var(--color-ink);

@@ -17,6 +17,7 @@ The spec is served at `/v1/openapi.json`. Parameters and bodies are validated ag
 | `OWN_API_KEYS` | none | Comma-separated keys for `POST /orders/click`. With none set, every click is refused. |
 | `OWN_RATE_LIMIT` | `120` | GETs per IP per minute |
 | `OWN_TRUST_PROXY` | off | Set to `1` behind a proxy to rate-limit by `X-Forwarded-For` |
+| `OWN_CORS_ORIGINS` | `*` | Comma-separated origins allowed to call the API from a browser |
 | `NODE_ENV` | | `production` stops `/activity` serving the sample figures |
 
 ## Behaviour the spec leaves open

@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+import { cors } from "hono/cors";
 import { loadData } from "./data.js";
 import { onError, notFound } from "./errors.js";
 import { loadSpec } from "./spec.js";
@@ -23,11 +24,20 @@ export function createApp({
   useSample = process.env.NODE_ENV !== "production",
   apiKeys = keysFromEnv(),
   limiter = rateLimit({ limit: Number(process.env.OWN_RATE_LIMIT) || 120 }),
+  corsOrigins = (process.env.OWN_CORS_ORIGINS || "*").split(",").map(s => s.trim()),
 } = {}) {
   const app = new Hono();
   const v1 = new Hono();
   const ctx = { v: createValidator(spec), data, clicks, useSample, auth: createAuth(apiKeys) };
 
+  // Browsers call the API from the Own page, which may be another origin or a
+  // file:// page (Origin: null). Auth is a bearer header, not cookies, so "*" is safe.
+  app.use(cors({
+    origin: corsOrigins.includes("*") ? "*" : corsOrigins,
+    allowMethods: ["GET", "POST", "OPTIONS"],
+    allowHeaders: ["Authorization", "Content-Type"],
+    maxAge: 86400,
+  }));
   app.use(limiter);
   app.use(cacheControl);
   v1.get("/health", c => c.json({ ok: true }));

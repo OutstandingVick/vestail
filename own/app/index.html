@@ -546,10 +546,37 @@ const VENUES = {
   "Precious gems":        { default: [V("Blue Nile", "https://www.bluenile.com"), V("Brilliant Earth", "https://www.brilliantearth.com")] }
 };
 function venuesFor(assetIdx, code) {
+  if (apiLive && apiVenues.has(`${assetIdx}|${code}`)) return apiVenues.get(`${assetIdx}|${code}`);
   const v = VENUES[ASSETS[assetIdx]] || { default: [] };
   return v[code] || v.default;
 }
 const withRef = url => url ? url + (url.includes("?") ? "&" : "?") + REF : null;
+
+/* ============================================================
+   3b. API MODE (optional)
+   Set window.OWN_API to the API base in a script tag placed before
+   this one, e.g.  window.OWN_API = "https://api.own.example/v1";
+   and the page loads assets, the board and the HUD from the API.
+   Set window.OWN_API_KEY too and Buy presses go through
+   POST /orders/click, which records them and returns the tagged
+   redirect. Without OWN_API, or if the API can't be reached, the
+   page runs entirely on the inline data above, as before.
+   ============================================================ */
+const API = typeof window.OWN_API === "string" && window.OWN_API ? window.OWN_API.replace(/\/+$/, "") : null;
+const API_KEY = typeof window.OWN_API_KEY === "string" && window.OWN_API_KEY ? window.OWN_API_KEY : null;
+const STATUS_NUM = { can_own: 2, conditional: 1, cannot_own: 0 };
+const SESSION = (crypto.randomUUID && crypto.randomUUID()) || String(Math.random()).slice(2);
+let apiLive = false;       // true while the board comes from the API
+let ASSET_IDS = [];        // asset index -> API id
+const apiVenues = new Map(); // "index|CODE" -> venues, already tagged by the API
+async function api(path, init) {
+  const r = await fetch(API + path, init);
+  if (!r.ok) throw new Error(`${init && init.method || "GET"} ${path}: ${r.status}`);
+  return r.json();
+}
+const esc = s => String(s).replace(/[&<>"']/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
+// Inline venues get the ref tag here; API venues arrive tagged.
+const hrefOf = v => v.tagged ? v.url : withRef(v.url);
 
 /* ============================================================
    4. STATE + RENDER
@@ -560,24 +587,78 @@ let view = "status", who = "citizen", selected = null; // selected = asset index
 let firstPaint = true;
 
 function ctaHTML(c, assetIdx, status) {
+  if (status === 0) return `<div class="cta off"><span class="cta-btn disabled">Not permitted</span><span class="cta-sub">${ASSETS[assetIdx]}</span></div>`;
   const vs = venuesFor(assetIdx, c.code);
   const primary = vs[0], secondary = vs[1];
-  if (status === 0) return `<div class="cta off"><span class="cta-btn disabled">Not permitted</span><span class="cta-sub">${ASSETS[assetIdx]}</span></div>`;
+  if (!primary) return `<div class="cta"><span class="cta-sub">${ASSETS[assetIdx]}</span></div>`;
   const label = status === 1 ? "Check eligibility" : "Buy";
+  // data-* lets API mode record the press before following the link.
+  const data = v => `data-country="${esc(c.code)}" data-asset="${assetIdx}" data-venue="${esc(v.name)}"`;
   const btn = primary.url
-    ? `<a class="cta-btn ${status === 1 ? "cond" : ""}" href="${withRef(primary.url)}" target="_blank" rel="noopener">${label} on ${primary.name}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></a>`
-    : `<span class="cta-btn muted">${primary.name}</span>`;
-  const alt = secondary && secondary.url ? `<a class="cta-alt" href="${withRef(secondary.url)}" target="_blank" rel="noopener">or ${secondary.name}</a>` : `<span class="cta-sub">${ASSETS[assetIdx]}</span>`;
+    ? `<a class="cta-btn ${status === 1 ? "cond" : ""}" href="${esc(hrefOf(primary))}" ${data(primary)} target="_blank" rel="noopener">${label} on ${esc(primary.name)}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></a>`
+    : `<span class="cta-btn muted">${esc(primary.name)}</span>`;
+  const alt = secondary && secondary.url ? `<a class="cta-alt" href="${esc(hrefOf(secondary))}" ${data(secondary)} target="_blank" rel="noopener">or ${esc(secondary.name)}</a>` : `<span class="cta-sub">${ASSETS[assetIdx]}</span>`;
   return `<div class="cta">${btn}${alt}</div>`;
 }
 
-function render() {
+// Board from the inline data: the resolution plus one entry per country row.
+function boardLocal() {
   const res = resolve(q.value);
-  clearBtn.classList.toggle("on", q.value.trim().length > 0);
-
   // If the search narrowed to a single asset per row, that becomes the selection automatically.
-  const single = res.assets.length === 1 || !!res.perCountry;
-  const autoSel = single;
+  const autoSel = res.assets.length === 1 || !!res.perCountry;
+  const data = COUNTRIES.map(c => {
+    const vals = c[who];
+    const idx = res.perCountry ? res.perCountry(c) : res.assets;
+    let tiles = idx.map(i => ({ i, s: vals[i] }));
+    if (view === "status") tiles = tiles.slice().sort((a, b) => b.s - a.s || a.i - b.i);
+    const sel = autoSel ? idx[0] : (selected !== null && idx.includes(selected) ? selected : null);
+    return { code: c.code, name: c.name, flag: c.flag, tiles, sel,
+      yes: tiles.filter(t => t.s === 2).length, cond: tiles.filter(t => t.s === 1).length, no: tiles.filter(t => t.s === 0).length };
+  });
+  if (view === "status") data.sort((a, b) => b.yes - a.yes || a.no - b.no || a.name.localeCompare(b.name));
+  return { res, data };
+}
+
+// The same board from GET /matrix. The API already sorts, counts and picks each row's asset.
+async function boardFromApi() {
+  const m = await api(`/matrix?${new URLSearchParams({ q: q.value, who, sort: view })}`);
+  const r = m.resolution;
+  const res = { assets: r.assets, perCountry: !!r.perCountry, trail: r.trail.map(label => ({ label })), note: r.note };
+  const autoSel = r.assets.length === 1 || !!r.perCountry;
+  const tag = vs => vs.map(v => ({ ...v, tagged: true }));
+  const data = m.rows.map(row => {
+    const tiles = row.cells.map(x => ({ i: x.index, s: STATUS_NUM[x.status] }));
+    const idx = tiles.map(t => t.i);
+    const sel = autoSel ? idx[0] : (selected !== null && idx.includes(selected) ? selected : null);
+    if (row.cta && sel !== null) apiVenues.set(`${sel}|${row.code}`, tag(row.cta.venues));
+    return { code: row.code, name: row.name, flag: row.flag, tiles, sel,
+      yes: row.summary.can_own, cond: row.summary.conditional, no: row.summary.cannot_own };
+  });
+  // A tile picked by hand on a multi-asset board has no cta; fetch its venues where it can be bought.
+  await Promise.all(data.map(async c => {
+    if (c.sel === null || apiVenues.has(`${c.sel}|${c.code}`)) return;
+    if (!c.tiles.find(t => t.i === c.sel).s) return;
+    const vs = await api(`/venues/${encodeURIComponent(ASSET_IDS[c.sel])}?country=${encodeURIComponent(c.code)}`);
+    apiVenues.set(`${c.sel}|${c.code}`, tag(vs));
+  }));
+  return { res, data };
+}
+
+// Fetches can finish out of order while the user types; only the latest render paints.
+let renderSeq = 0;
+async function render() {
+  const seq = ++renderSeq;
+  let board = null;
+  if (apiLive) {
+    try { board = await boardFromApi(); }
+    catch (err) { console.warn("Own API unavailable, using inline data.", err); apiLive = false; }
+    if (seq !== renderSeq) return;
+  }
+  paint(board || boardLocal());
+}
+
+function paint({ res, data }) {
+  clearBtn.classList.toggle("on", q.value.trim().length > 0);
 
   // trail
   trailEl.innerHTML = "";
@@ -596,17 +677,6 @@ function render() {
   rows.innerHTML = "";
   if (!res.assets.length) { boardHead.classList.add("hide"); return; }
 
-  const data = COUNTRIES.map(c => {
-    const vals = c[who];
-    const idx = res.perCountry ? res.perCountry(c) : res.assets;
-    let tiles = idx.map(i => ({ i, s: vals[i] }));
-    if (view === "status") tiles = tiles.slice().sort((a, b) => b.s - a.s || a.i - b.i);
-    const sel = autoSel ? idx[0] : (selected !== null && idx.includes(selected) ? selected : null);
-    return { ...c, tiles, sel,
-      yes: tiles.filter(t => t.s === 2).length, cond: tiles.filter(t => t.s === 1).length, no: tiles.filter(t => t.s === 0).length };
-  });
-  if (view === "status") data.sort((a, b) => b.yes - a.yes || a.no - b.no || a.name.localeCompare(b.name));
-
   boardHead.classList.remove("hide");
   $("hAssets").textContent = view === "status" ? "Assets, most open first" : "Assets 1–20";
   $("hWho").textContent = who === "citizen" ? "Citizens" : "Foreigners";
@@ -620,10 +690,10 @@ function render() {
       ? `${LABEL[c.tiles[0].s]}`
       : `${c.yes} of ${n} open${c.cond ? ` · ${c.cond} conditional` : ""}${c.no ? ` · ${c.no} closed` : ""}`;
     row.innerHTML = `
-      <div class="who"><span class="flag" aria-hidden="true">${c.flag}</span>
-        <div><div class="name">${c.name}</div><div class="score">${score}</div></div></div>
-      <div class="grid" role="group" aria-label="${c.name}"></div>
-      <div class="buy">${c.sel !== null ? ctaHTML(c, c.sel, c[who][c.sel]) : `<span class="cta-hint">Pick an asset</span>`}</div>`;
+      <div class="who"><span class="flag" aria-hidden="true">${esc(c.flag)}</span>
+        <div><div class="name">${esc(c.name)}</div><div class="score">${score}</div></div></div>
+      <div class="grid" role="group" aria-label="${esc(c.name)}"></div>
+      <div class="buy">${c.sel !== null ? ctaHTML(c, c.sel, c.tiles.find(t => t.i === c.sel).s) : `<span class="cta-hint">Pick an asset</span>`}</div>`;
     const grid = row.querySelector(".grid");
     c.tiles.forEach((t, k) => {
       const b = document.createElement("button");
@@ -640,8 +710,37 @@ function render() {
   firstPaint = false;
 }
 
+/* --- buy: record the press with the API, then follow its redirect --- */
+async function buyViaApi(link) {
+  // Open the tab now, inside the click, or popup blockers stop it after the await.
+  const win = window.open("", "_blank");
+  if (win) win.opener = null;
+  const go = url => { if (win) win.location.href = url; else location.href = url; };
+  try {
+    const out = await api("/orders/click", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${API_KEY}` },
+      body: JSON.stringify({ country: link.dataset.country, asset: ASSET_IDS[+link.dataset.asset], who,
+        venue: link.dataset.venue, query: q.value.trim() || undefined, session: SESSION }),
+    });
+    if (!/^https?:\/\//i.test(out.redirect)) throw new Error("Unexpected redirect " + out.redirect);
+    go(out.redirect);
+    loadActivity().catch(() => {});
+  } catch (err) {
+    // The venue link is already tagged, so a failed record never blocks the buyer.
+    console.warn("Click not recorded; opening the venue directly.", err);
+    go(link.href);
+  }
+}
+
 /* --- interactions --- */
 rows.addEventListener("click", e => {
+  const link = e.target.closest("a[data-venue]");
+  if (link) {
+    // Modified clicks (new tab, etc.) keep the browser's behaviour and skip recording.
+    if (apiLive && API_KEY && !(e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button)) { e.preventDefault(); buyViaApi(link); }
+    return;
+  }
   const t = e.target.closest(".tile"); if (!t) return;
   const i = +t.dataset.i;
   selected = selected === i ? null : i;
@@ -657,8 +756,6 @@ q.addEventListener("input", () => { selected = null; render(); });
 clearBtn.addEventListener("click", () => { q.value = ""; selected = null; render(); q.focus(); });
 document.querySelectorAll(".chip").forEach(ch => ch.addEventListener("click", () => { q.value = ch.dataset.q; selected = null; render(); q.focus(); }));
 document.addEventListener("keydown", e => { if (e.key === "Escape" && selected !== null) { selected = null; render(); } });
-ASSETS.forEach(a => { const li = document.createElement("li"); li.textContent = a; $("key").appendChild(li); });
-render();
 
 function showTip(el) {
   const r = el.getBoundingClientRect();
@@ -680,18 +777,64 @@ const RECENT = [
   ["🇳🇬", "Foreign currency accounts", "Wise", "11m ago"], ["🇸🇦", "Gold bullion", "Kitco", "12m ago"]
 ];
 const tickerEl = document.getElementById("ticker");
-RECENT.forEach(([f, a, v, t]) => { const li = document.createElement("li"); li.innerHTML = `<span>${f}</span><span><span class="long">Someone bought </span><b>${a}</b> via <b>${v}</b></span><span class="t">${t}</span>`; tickerEl.appendChild(li); });
+function renderTicker(items) {
+  tickerEl.textContent = "";
+  items.forEach(([f, a, v, t]) => {
+    const li = document.createElement("li");
+    li.innerHTML = `<span>${esc(f)}</span><span><span class="long">Someone bought </span><b>${esc(a)}</b> via <b>${esc(v)}</b></span><span class="t">${esc(t)}</span>`;
+    tickerEl.appendChild(li);
+  });
+}
 let tickI = 0;
 const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-if (!reduce) setInterval(() => { tickI = (tickI + 1) % RECENT.length; tickerEl.style.transform = `translateY(${-tickI * 40}px)`; }, 3200);
+if (!reduce) setInterval(() => { const n = tickerEl.children.length; if (!n) return; tickI = (tickI + 1) % n; tickerEl.style.transform = `translateY(${-tickI * 40}px)`; }, 3200);
 
 const fmt = (n, f, pre) => pre + (f === "compact" ? (n >= 1e6 ? (n / 1e6).toFixed(1) + "M" : n >= 1e3 ? Math.round(n / 1e3) + "k" : n) : Math.round(n).toLocaleString());
-document.querySelectorAll(".stat .v").forEach(el => {
-  const target = +el.dataset.count, f = el.dataset.fmt, pre = el.dataset.prefix || "";
-  if (reduce) { el.textContent = fmt(target, f, pre); return; }
-  const t0 = performance.now() + 500, dur = 1400;
-  (function step(now) { const p = Math.min(1, Math.max(0, (now - t0) / dur)); const e = 1 - Math.pow(1 - p, 3); el.textContent = fmt(target * e, f, pre); if (p < 1) requestAnimationFrame(step); })(t0);
-});
+// Counts up once on first paint; later updates set the number without replaying the motion.
+let statsShown = false;
+function showStats() {
+  const animate = !statsShown && !reduce;
+  statsShown = true;
+  document.querySelectorAll(".stat .v").forEach(el => {
+    const target = +el.dataset.count, f = el.dataset.fmt, pre = el.dataset.prefix || "";
+    if (!animate) { el.textContent = fmt(target, f, pre); return; }
+    const t0 = performance.now() + 500, dur = 1400;
+    (function step(now) { const p = Math.min(1, Math.max(0, (now - t0) / dur)); const e = 1 - Math.pow(1 - p, 3); el.textContent = fmt(target * e, f, pre); if (p < 1) requestAnimationFrame(step); })(t0);
+  });
+}
+
+// HUD from GET /activity: stats into the counters, recent buys into the ticker.
+async function loadActivity() {
+  const { stats, recent } = await api("/activity");
+  const [vol, orders, buyers] = document.querySelectorAll(".stat");
+  const delta = (el, pct) => { const d = el.querySelector(".d"); if (d) { d.textContent = pct ? `${pct > 0 ? "+" : ""}${pct}%` : ""; } };
+  vol.querySelector(".v").dataset.count = stats.volume_30d_usd; delta(vol, stats.volume_30d_delta_pct);
+  orders.querySelector(".v").dataset.count = stats.orders_routed; delta(orders, stats.orders_delta_pct);
+  buyers.querySelector(".v").dataset.count = stats.active_buyers_7d;
+  renderTicker(recent.map(r => [r.flag, r.asset, r.venue, r.ago]));
+  showStats();
+}
+
+/* --- start --- */
+async function start() {
+  if (API) {
+    try {
+      const assets = (await api("/assets")).slice().sort((a, b) => a.index - b.index);
+      ASSET_IDS = assets.map(a => a.id);
+      ASSETS.splice(0, ASSETS.length, ...assets.map(a => a.name));
+      apiLive = true;
+    } catch (err) { console.warn("Own API unavailable, using inline data.", err); }
+  }
+  ASSETS.forEach(a => { const li = document.createElement("li"); li.textContent = a; $("key").appendChild(li); });
+  render();
+  if (apiLive) {
+    try { await loadActivity(); return; }
+    catch (err) { console.warn("Activity unavailable, showing the inline HUD.", err); }
+  }
+  renderTicker(RECENT);
+  showStats();
+}
+start();
 
 // segmented control thumb position
 document.querySelectorAll(".seg").forEach(seg => seg.addEventListener("click", e => {

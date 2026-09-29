@@ -1,13 +1,15 @@
 import { Hono } from "hono";
 import { loadData } from "./data.js";
 import { onError, notFound } from "./errors.js";
+import { loadSpec } from "./spec.js";
 
 /** Build the API. Everything it needs is injected so tests can run it in-process. */
-export function createApp({ data = loadData() } = {}) {
+export function createApp({ data = loadData(), spec = loadSpec() } = {}) {
   const app = new Hono();
   const v1 = new Hono();
 
   v1.get("/health", c => c.json({ ok: true }));
+  v1.get("/openapi.json", c => c.json(spec));
 
   app.route("/v1", v1);
   app.onError(onError);

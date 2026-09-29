@@ -55,5 +55,46 @@ export function createValidator(spec) {
     };
   }
 
-  return { params, ajv, rebase };
+  /** Validator for an operation's JSON request body, or null if it has none. */
+  function body(specPath, method) {
+    const rb = spec.paths[specPath]?.[method]?.requestBody;
+    const schema = rb?.content?.["application/json"]?.schema;
+    if (!schema) return null;
+    const check = ajv.compile(rebase(schema));
+    return value => {
+      if (value === undefined) {
+        if (rb.required) throw new ApiError(400, "validation", "A JSON body is required.");
+        return value;
+      }
+      if (!check(value)) {
+        const e = check.errors[0];
+        if (e.instancePath === "/who") throw new ApiError(400, "bad_buyer_type", "who must be citizen or foreigner.");
+        throw new ApiError(400, "validation", `body${e.instancePath.replaceAll("/", ".")} ${e.message}.`);
+      }
+      return value;
+    };
+  }
+
+  /**
+   * Register a handler for a spec operation on a Hono app. The handler gets
+   * (c, { params, body }) already validated.
+   */
+  function route(app, method, specPath, handler) {
+    const readParams = params(specPath, method);
+    const readBody = body(specPath, method);
+    const honoPath = specPath.replace(/\{(\w+)\}/g, ":$1");
+    app.on(method.toUpperCase(), honoPath, async c => {
+      const p = readParams({ path: c.req.param(), query: c.req.query() });
+      let b;
+      if (readBody) {
+        const text = await c.req.text();
+        try { b = text ? JSON.parse(text) : undefined; }
+        catch { throw new ApiError(400, "validation", "Body is not valid JSON."); }
+        b = readBody(b);
+      }
+      return handler(c, { params: p, body: b });
+    });
+  }
+
+  return { params, body, route };
 }

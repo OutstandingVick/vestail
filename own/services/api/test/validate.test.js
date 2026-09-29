@@ -18,6 +18,15 @@ test("rejects values outside an enum or pattern with validation", () => {
   assert.throws(() => v.params("/rules/{country}", "get")({ path: { country: "ng" } }), { code: "validation" });
 });
 
+test("validates request bodies against the spec", () => {
+  const click = v.body("/orders/click", "post");
+  const ok = { country: "NG", asset: "cryptocurrency", who: "citizen", venue: "Luno" };
+  assert.deepEqual(click(ok), ok);
+  assert.throws(() => click(undefined), { code: "validation" });
+  assert.throws(() => click({ ...ok, venue: undefined }), { code: "validation" });
+  assert.throws(() => click({ ...ok, who: "tourist" }), { code: "bad_buyer_type" });
+});
+
 test("requires required parameters", () => {
   assert.throws(() => v.params("/resolve", "get")({ query: {} }), { code: "validation" });
 });

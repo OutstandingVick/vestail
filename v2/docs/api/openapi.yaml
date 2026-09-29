@@ -84,11 +84,11 @@ paths:
         - { name: who, in: query, schema: { $ref: "#/components/schemas/BuyerType" } }
       responses:
         "200":
-          description: Rule with venues
+          description: Rule with venues and provenance
           content:
             application/json:
               schema: { $ref: "#/components/schemas/Rule" }
-              example: { country: NG, asset: cryptocurrency, who: citizen, status: conditional, venues: [{ name: Luno, url: "https://www.luno.com?ref=vestail" }] }
+              example: { country: NG, asset: cryptocurrency, who: citizen, status: conditional, venues: [{ name: Luno, url: "https://www.luno.com?ref=vestail" }], sources: [], verified_at: null }
 
   /venues/{asset}:
     get:
@@ -174,7 +174,17 @@ components:
         resolution: { $ref: "#/components/schemas/Resolution" }
         rows: { type: array, items: { $ref: "#/components/schemas/MatrixRow" } }
     CountryRules: { type: object, properties: { country: { type: string }, who: { $ref: "#/components/schemas/BuyerType" }, rules: { type: object, additionalProperties: { $ref: "#/components/schemas/Status" } } } }
-    Rule: { type: object, properties: { country: { type: string }, asset: { type: string }, who: { $ref: "#/components/schemas/BuyerType" }, status: { $ref: "#/components/schemas/Status" }, venues: { type: array, items: { $ref: "#/components/schemas/Venue" } } } }
+    Source: { type: object, required: [title, url], properties: { title: { type: string }, url: { type: string, format: uri } }, description: A document the rule is based on (statute, regulator guidance, issuer terms). }
+    Rule:
+      type: object
+      properties:
+        country: { type: string }
+        asset: { type: string }
+        who: { $ref: "#/components/schemas/BuyerType" }
+        status: { $ref: "#/components/schemas/Status" }
+        venues: { type: array, items: { $ref: "#/components/schemas/Venue" } }
+        sources: { type: array, items: { $ref: "#/components/schemas/Source" }, description: Empty until the rule has been sourced. }
+        verified_at: { type: [string, "null"], format: date, description: When the rule was last checked against its sources; null if never. }
     Activity:
       type: object
       properties:

@@ -20,6 +20,12 @@ test("GET /rules/{country}/{asset} returns the status and tagged venues", async 
   assert.ok(body.venues.filter(x => x.url).every(x => x.url.includes("ref=vestail")));
 });
 
+test("a rule carries its provenance", async () => {
+  const { body } = await json("/rules/NG/cryptocurrency");
+  assert.deepEqual(body.sources, []);
+  assert.equal(body.verified_at, null);
+});
+
 test("a cannot_own rule lists no venues", async () => {
   const { body: all } = await json("/rules/NG?who=foreigner");
   const blocked = Object.keys(all.rules).find(id => all.rules[id] === "cannot_own");

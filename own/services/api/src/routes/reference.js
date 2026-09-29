@@ -1,7 +1,5 @@
 import { fuzzyHit, norm } from "@own/core";
-
-/** Entity asset is an asset name or a sentinel like "equity-by-home"; ids for names, sentinels as-is. */
-const entityOut = (e, idByName) => ({ name: e.name, kind: e.kind, ...(e.home && { home: e.home }), asset: idByName[e.asset] || e.asset });
+import { entityOut } from "../shape.js";
 
 /** Static lists: /assets, /categories, /countries, /entities. */
 export function registerReference(v1, { v, data }) {

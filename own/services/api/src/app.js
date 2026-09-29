@@ -7,6 +7,7 @@ import { cacheControl } from "./cache.js";
 import { registerReference } from "./routes/reference.js";
 import { registerResolve } from "./routes/resolve.js";
 import { registerMatrix } from "./routes/matrix.js";
+import { registerRules } from "./routes/rules.js";
 
 /** Build the API. Everything it needs is injected so tests can run it in-process. */
 export function createApp({ data = loadData(), spec = loadSpec() } = {}) {
@@ -20,6 +21,7 @@ export function createApp({ data = loadData(), spec = loadSpec() } = {}) {
   registerReference(v1, ctx);
   registerResolve(v1, ctx);
   registerMatrix(v1, ctx);
+  registerRules(v1, ctx);
 
   app.route("/v1", v1);
   app.onError(onError);

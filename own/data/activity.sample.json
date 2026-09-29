@@ -1,0 +1,72 @@
+{
+  "version": "1.0",
+  "stats": {
+    "volume_30d_usd": 48300000,
+    "volume_30d_delta_pct": 18,
+    "orders_routed": 12640,
+    "orders_delta_pct": 9,
+    "active_buyers_7d": 2310
+  },
+  "recent": [
+    {
+      "flag": "🇳🇬",
+      "asset": "Foreign equities",
+      "venue": "Bamboo",
+      "ago": "just now"
+    },
+    {
+      "flag": "🇬🇧",
+      "asset": "Gold bullion",
+      "venue": "BullionVault",
+      "ago": "1m ago"
+    },
+    {
+      "flag": "🇮🇳",
+      "asset": "Cryptocurrency",
+      "venue": "CoinDCX",
+      "ago": "2m ago"
+    },
+    {
+      "flag": "🇺🇸",
+      "asset": "Government bonds",
+      "venue": "TreasuryDirect",
+      "ago": "3m ago"
+    },
+    {
+      "flag": "🇦🇪",
+      "asset": "Residential property",
+      "venue": "Bayut",
+      "ago": "4m ago"
+    },
+    {
+      "flag": "🇩🇪",
+      "asset": "Domestic equities",
+      "venue": "Trade Republic",
+      "ago": "6m ago"
+    },
+    {
+      "flag": "🇧🇷",
+      "asset": "Foreign equities",
+      "venue": "Interactive Brokers",
+      "ago": "7m ago"
+    },
+    {
+      "flag": "🇰🇷",
+      "asset": "Cryptocurrency",
+      "venue": "Upbit",
+      "ago": "9m ago"
+    },
+    {
+      "flag": "🇳🇬",
+      "asset": "Foreign currency accounts",
+      "venue": "Wise",
+      "ago": "11m ago"
+    },
+    {
+      "flag": "🇸🇦",
+      "asset": "Gold bullion",
+      "venue": "Kitco",
+      "ago": "12m ago"
+    }
+  ]
+}

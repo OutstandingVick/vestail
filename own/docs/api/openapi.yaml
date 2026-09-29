@@ -1,0 +1,192 @@
+openapi: 3.1.0
+info:
+  title: Own API
+  version: 0.1.0
+  summary: Ownership rules, query resolution and buy routing for any asset, in any country, for any buyer type.
+  description: |
+    The same pipeline that powers the Own frontend, exposed for other builders.
+    Three ideas run through every endpoint:
+
+    * **Resolve** – free text ("Google", "a house", "gilts") becomes one or more asset classes, with a trail explaining how.
+    * **Rules** – each country holds a status (`can_own` / `conditional` / `cannot_own`) per asset class, per buyer type.
+    * **Route** – for a permitted (asset, country) pair, the venues where it can be bought, tagged for attribution.
+
+    All responses are JSON. Reference data endpoints are cacheable for 24h; `/activity` is live.
+servers:
+  - url: https://api.own.example/v1
+tags:
+  - { name: resolve, description: Turn text into asset classes }
+  - { name: matrix,  description: Status grid across countries }
+  - { name: rules,   description: Individual rule lookups }
+  - { name: venues,  description: Where to buy }
+  - { name: reference, description: Static lists }
+  - { name: activity, description: Traction feed for the HUD }
+  - { name: orders,  description: Outbound click / order-flow attribution }
+
+paths:
+  /resolve:
+    get:
+      tags: [resolve]
+      summary: Resolve a query to asset classes
+      parameters:
+        - { name: q, in: query, required: true, schema: { type: string }, example: "tesla shares" }
+      responses:
+        "200":
+          description: Resolution with trail
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Resolution" }
+              example:
+                stage: entity
+                assets: [domestic_equities, foreign_equities]
+                entity: { name: Tesla, kind: Listed company, home: US }
+                perCountry: { rule: equity-by-home, home: US }
+                trail: [Tesla, "Listed company (US)", Equities, "Domestic in US, foreign elsewhere"]
+                note: Tesla is a listed company from US, so it counts as domestic equity there and foreign equity everywhere else.
+
+  /matrix:
+    get:
+      tags: [matrix]
+      summary: Status grid for a query across all countries
+      description: The endpoint the board is built from. One row per country; `cells` holds one entry per resolved asset; `cta` is populated when exactly one asset applies to the row.
+      parameters:
+        - { name: q, in: query, schema: { type: string }, description: Free text. Empty returns all 20 assets. }
+        - { name: who, in: query, schema: { $ref: "#/components/schemas/BuyerType" }, description: Defaults to citizen }
+        - { name: sort, in: query, schema: { type: string, enum: [status, asset] }, description: "`status` ranks countries most-open first and orders tiles green→amber→red; `asset` keeps index order." }
+        - { name: countries, in: query, schema: { type: string }, description: Comma-separated ISO codes to restrict rows, e.g. NG,GB }
+      responses:
+        "200":
+          description: Matrix
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Matrix" }
+
+  /rules/{country}:
+    get:
+      tags: [rules]
+      summary: All rules for one country
+      parameters:
+        - { name: country, in: path, required: true, schema: { type: string, pattern: "^[A-Z]{2}$" } }
+        - { name: who, in: query, schema: { $ref: "#/components/schemas/BuyerType" } }
+      responses:
+        "200":
+          description: Rules
+          content: { application/json: { schema: { $ref: "#/components/schemas/CountryRules" } } }
+        "404": { description: Unknown country }
+
+  /rules/{country}/{asset}:
+    get:
+      tags: [rules]
+      summary: One rule
+      parameters:
+        - { name: country, in: path, required: true, schema: { type: string } }
+        - { name: asset, in: path, required: true, schema: { type: string }, description: Asset id, e.g. `gold_bullion` }
+        - { name: who, in: query, schema: { $ref: "#/components/schemas/BuyerType" } }
+      responses:
+        "200":
+          description: Rule with venues
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Rule" }
+              example: { country: NG, asset: cryptocurrency, who: citizen, status: conditional, venues: [{ name: Luno, url: "https://www.luno.com?ref=ownmatrix" }] }
+
+  /venues/{asset}:
+    get:
+      tags: [venues]
+      summary: Venues for an asset, optionally for one country
+      parameters:
+        - { name: asset, in: path, required: true, schema: { type: string } }
+        - { name: country, in: query, schema: { type: string } }
+        - { name: ref, in: query, schema: { type: string }, description: Override the attribution tag appended to urls }
+      responses:
+        "200":
+          description: Venue list
+          content: { application/json: { schema: { type: array, items: { $ref: "#/components/schemas/Venue" } } } }
+
+  /assets:
+    get: { tags: [reference], summary: The asset classes, responses: { "200": { description: List, content: { application/json: { schema: { type: array, items: { $ref: "#/components/schemas/Asset" } } } } } } }
+  /categories:
+    get: { tags: [reference], summary: Category fan-outs, responses: { "200": { description: List, content: { application/json: { schema: { type: array, items: { $ref: "#/components/schemas/Category" } } } } } } }
+  /countries:
+    get: { tags: [reference], summary: Countries covered, responses: { "200": { description: List, content: { application/json: { schema: { type: array, items: { $ref: "#/components/schemas/Country" } } } } } } }
+  /entities:
+    get:
+      tags: [reference]
+      summary: Search the named-entity dictionary
+      parameters: [{ name: q, in: query, schema: { type: string } }, { name: kind, in: query, schema: { type: string } }]
+      responses: { "200": { description: Matches, content: { application/json: { schema: { type: array, items: { $ref: "#/components/schemas/Entity" } } } } } }
+
+  /activity:
+    get:
+      tags: [activity]
+      summary: Traction stats and recent buys for the HUD
+      responses: { "200": { description: Feed, content: { application/json: { schema: { $ref: "#/components/schemas/Activity" } } } } }
+
+  /orders/click:
+    post:
+      tags: [orders]
+      summary: Record an outbound click to a venue
+      description: Called when a Buy button is pressed. Returns a redirect url carrying the partner tag. Feeds `/activity` and the attribution ledger.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ClickEvent" }
+      responses:
+        "201":
+          description: Recorded
+          content: { application/json: { schema: { type: object, properties: { id: { type: string }, redirect: { type: string, format: uri } } } } }
+
+components:
+  schemas:
+    BuyerType: { type: string, enum: [citizen, foreigner], default: citizen }
+    Status: { type: string, enum: [can_own, conditional, cannot_own] }
+    Asset: { type: object, properties: { id: { type: string }, index: { type: integer }, name: { type: string } } }
+    Category: { type: object, properties: { id: { type: string }, name: { type: string }, assets: { type: array, items: { type: string } } } }
+    Country: { type: object, properties: { code: { type: string }, name: { type: string }, flag: { type: string } } }
+    Entity: { type: object, properties: { name: { type: string }, kind: { type: string }, home: { type: string }, asset: { type: string } } }
+    Venue: { type: object, properties: { name: { type: string }, url: { type: [string, "null"], format: uri } } }
+    Resolution:
+      type: object
+      properties:
+        stage: { type: string, enum: [entity, alias, category, asset, all, none], description: Which pipeline stage produced the result }
+        assets: { type: array, items: { type: string }, description: Asset ids }
+        entity: { $ref: "#/components/schemas/Entity" }
+        perCountry: { type: object, description: Present when the applicable asset differs by country, properties: { rule: { type: string }, home: { type: string } } }
+        trail: { type: array, items: { type: string } }
+        note: { type: string }
+    Cell: { type: object, properties: { asset: { type: string }, index: { type: integer }, status: { $ref: "#/components/schemas/Status" } } }
+    MatrixRow:
+      type: object
+      properties:
+        code: { type: string }
+        name: { type: string }
+        flag: { type: string }
+        who: { $ref: "#/components/schemas/BuyerType" }
+        cells: { type: array, items: { $ref: "#/components/schemas/Cell" } }
+        summary: { type: object, properties: { can_own: { type: integer }, conditional: { type: integer }, cannot_own: { type: integer } } }
+        cta: { type: [object, "null"], properties: { asset: { type: string }, status: { $ref: "#/components/schemas/Status" }, venues: { type: array, items: { $ref: "#/components/schemas/Venue" } } } }
+    Matrix:
+      type: object
+      properties:
+        query: { type: string }
+        who: { $ref: "#/components/schemas/BuyerType" }
+        resolution: { $ref: "#/components/schemas/Resolution" }
+        rows: { type: array, items: { $ref: "#/components/schemas/MatrixRow" } }
+    CountryRules: { type: object, properties: { country: { type: string }, who: { $ref: "#/components/schemas/BuyerType" }, rules: { type: object, additionalProperties: { $ref: "#/components/schemas/Status" } } } }
+    Rule: { type: object, properties: { country: { type: string }, asset: { type: string }, who: { $ref: "#/components/schemas/BuyerType" }, status: { $ref: "#/components/schemas/Status" }, venues: { type: array, items: { $ref: "#/components/schemas/Venue" } } } }
+    Activity:
+      type: object
+      properties:
+        stats: { type: object, properties: { volume_30d_usd: { type: number }, volume_30d_delta_pct: { type: number }, orders_routed: { type: integer }, orders_delta_pct: { type: number }, active_buyers_7d: { type: integer } } }
+        recent: { type: array, items: { type: object, properties: { flag: { type: string }, asset: { type: string }, venue: { type: string }, ago: { type: string } } } }
+    ClickEvent:
+      type: object
+      required: [country, asset, who, venue]
+      properties:
+        country: { type: string }
+        asset: { type: string }
+        who: { $ref: "#/components/schemas/BuyerType" }
+        venue: { type: string }
+        query: { type: string, description: The text the user typed, for resolver analytics }
+        session: { type: string }

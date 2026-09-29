@@ -1,0 +1,64 @@
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { createApp } from "../src/app.js";
+
+const KEY = "test-key";
+const app = createApp({ apiKeys: [KEY], useSample: false });
+const click = async (body, key = KEY) => {
+  const res = await app.request("/v1/orders/click", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...(key && { Authorization: `Bearer ${key}` }) },
+    body: JSON.stringify(body),
+  });
+  return { res, body: await res.json() };
+};
+const luno = { country: "NG", asset: "cryptocurrency", who: "citizen", venue: "Luno", session: "s1", query: "bitcoin" };
+
+test("a valid click is recorded and returns the tagged redirect", async () => {
+  const { res, body } = await click(luno);
+  assert.equal(res.status, 201);
+  assert.match(body.id, /^clk_/);
+  assert.equal(body.redirect, "https://www.luno.com?ref=vestail");
+  const feed = await (await app.request("/v1/activity")).json();
+  assert.equal(feed.recent[0].venue, "Luno");
+});
+
+test("a missing or wrong key is 401 unauthorized", async () => {
+  for (const key of [null, "nope"]) {
+    const { res, body } = await click(luno, key);
+    assert.equal(res.status, 401);
+    assert.equal(body.error.code, "unauthorized");
+  }
+});
+
+test("auth is checked before the body", async () => {
+  const { res } = await click({}, null);
+  assert.equal(res.status, 401);
+});
+
+test("no keys configured means nothing is accepted", async () => {
+  const res = await createApp({ apiKeys: [] }).request("/v1/orders/click", {
+    method: "POST", headers: { Authorization: "Bearer anything" }, body: JSON.stringify(luno),
+  });
+  assert.equal(res.status, 401);
+});
+
+test("a cannot_own cell cannot be routed", async () => {
+  const rules = await (await app.request("/v1/rules/NG?who=foreigner")).json();
+  const blocked = Object.keys(rules.rules).find(id => rules.rules[id] === "cannot_own");
+  const { res, body } = await click({ ...luno, who: "foreigner", asset: blocked });
+  assert.equal(res.status, 400);
+  assert.equal(body.error.code, "validation");
+});
+
+test("a venue not listed for the rule is refused", async () => {
+  const { res } = await click({ ...luno, venue: "Evil Exchange" });
+  assert.equal(res.status, 400);
+});
+
+test("body is validated against the spec", async () => {
+  assert.equal((await click({ ...luno, venue: undefined })).body.error.code, "validation");
+  assert.equal((await click({ ...luno, who: "tourist" })).body.error.code, "bad_buyer_type");
+  assert.equal((await click({ ...luno, country: "XX" })).body.error.code, "unknown_country");
+  assert.equal((await click({ ...luno, asset: "moon_rocks" })).body.error.code, "unknown_asset");
+});

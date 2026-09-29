@@ -1,0 +1,9 @@
+{
+  "name": "vestail-v2",
+  "private": true,
+  "type": "module",
+  "workspaces": ["packages/*", "services/*"],
+  "scripts": {
+    "test": "npm test --workspaces --if-present"
+  }
+}

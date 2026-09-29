@@ -1,0 +1,2 @@
+{ "name": "@own/api", "version": "0.1.0", "private": true, "type": "module", "license": "UNLICENSED",
+  "description": "HTTP API implementing docs/api/openapi.yaml. Built in step 2." }

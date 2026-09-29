@@ -1,0 +1,87 @@
+{
+  "version": "1.0",
+  "categories": [
+    {
+      "id": "equities",
+      "name": "Equities",
+      "assets": [
+        "Domestic equities",
+        "Foreign equities",
+        "Private company shares"
+      ]
+    },
+    {
+      "id": "fixed_income",
+      "name": "Fixed income",
+      "assets": [
+        "Government bonds",
+        "Corporate bonds"
+      ]
+    },
+    {
+      "id": "real_estate",
+      "name": "Real estate",
+      "assets": [
+        "Residential property",
+        "Agricultural land",
+        "Commercial property"
+      ]
+    },
+    {
+      "id": "currency_cash",
+      "name": "Currency & cash",
+      "assets": [
+        "Foreign currency accounts",
+        "Foreign bank accounts"
+      ]
+    },
+    {
+      "id": "digital_assets",
+      "name": "Digital assets",
+      "assets": [
+        "Cryptocurrency"
+      ]
+    },
+    {
+      "id": "commodities",
+      "name": "Commodities",
+      "assets": [
+        "Gold bullion",
+        "Precious gems",
+        "Mining rights"
+      ]
+    },
+    {
+      "id": "transport",
+      "name": "Transport",
+      "assets": [
+        "Private aircraft",
+        "Yachts / vessels"
+      ]
+    },
+    {
+      "id": "regulated_sectors",
+      "name": "Regulated sectors",
+      "assets": [
+        "Media companies",
+        "Telecom licences",
+        "Mining rights"
+      ]
+    },
+    {
+      "id": "structures",
+      "name": "Structures",
+      "assets": [
+        "Offshore trusts",
+        "Private company shares"
+      ]
+    },
+    {
+      "id": "weapons",
+      "name": "Weapons",
+      "assets": [
+        "Firearms"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,700 @@
+{
+  "version": "1.0",
+  "entities": [
+    {
+      "name": "Google",
+      "kind": "Listed company",
+      "home": "US",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "Alphabet",
+      "kind": "Listed company",
+      "home": "US",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "Apple",
+      "kind": "Listed company",
+      "home": "US",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "Microsoft",
+      "kind": "Listed company",
+      "home": "US",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "Amazon",
+      "kind": "Listed company",
+      "home": "US",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "Nvidia",
+      "kind": "Listed company",
+      "home": "US",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "Meta",
+      "kind": "Listed company",
+      "home": "US",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "Tesla",
+      "kind": "Listed company",
+      "home": "US",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "Coca-Cola",
+      "kind": "Listed company",
+      "home": "US",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "Dangote Cement",
+      "kind": "Listed company",
+      "home": "NG",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "Dangote",
+      "kind": "Listed company",
+      "home": "NG",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "Zenith Bank",
+      "kind": "Listed company",
+      "home": "NG",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "GTBank",
+      "kind": "Listed company",
+      "home": "NG",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "Airtel Africa",
+      "kind": "Listed company",
+      "home": "NG",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "Seplat",
+      "kind": "Listed company",
+      "home": "NG",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "MTN Nigeria",
+      "kind": "Listed company",
+      "home": "NG",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "BP",
+      "kind": "Listed company",
+      "home": "GB",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "Shell",
+      "kind": "Listed company",
+      "home": "GB",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "HSBC",
+      "kind": "Listed company",
+      "home": "GB",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "Unilever",
+      "kind": "Listed company",
+      "home": "GB",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "Rolls-Royce",
+      "kind": "Listed company",
+      "home": "GB",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "Barclays",
+      "kind": "Listed company",
+      "home": "GB",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "Emirates NBD",
+      "kind": "Listed company",
+      "home": "AE",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "Emaar",
+      "kind": "Listed company",
+      "home": "AE",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "Etisalat",
+      "kind": "Listed company",
+      "home": "AE",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "e&",
+      "kind": "Listed company",
+      "home": "AE",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "Alibaba",
+      "kind": "Listed company",
+      "home": "CN",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "Tencent",
+      "kind": "Listed company",
+      "home": "CN",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "BYD",
+      "kind": "Listed company",
+      "home": "CN",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "Xiaomi",
+      "kind": "Listed company",
+      "home": "CN",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "ICBC",
+      "kind": "Listed company",
+      "home": "CN",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "Reliance",
+      "kind": "Listed company",
+      "home": "IN",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "Tata",
+      "kind": "Listed company",
+      "home": "IN",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "Infosys",
+      "kind": "Listed company",
+      "home": "IN",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "HDFC",
+      "kind": "Listed company",
+      "home": "IN",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "Adani",
+      "kind": "Listed company",
+      "home": "IN",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "Petrobras",
+      "kind": "Listed company",
+      "home": "BR",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "Vale",
+      "kind": "Listed company",
+      "home": "BR",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "Itaú",
+      "kind": "Listed company",
+      "home": "BR",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "Ambev",
+      "kind": "Listed company",
+      "home": "BR",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "Aramco",
+      "kind": "Listed company",
+      "home": "SA",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "Saudi Aramco",
+      "kind": "Listed company",
+      "home": "SA",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "SABIC",
+      "kind": "Listed company",
+      "home": "SA",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "Al Rajhi",
+      "kind": "Listed company",
+      "home": "SA",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "SAP",
+      "kind": "Listed company",
+      "home": "DE",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "Siemens",
+      "kind": "Listed company",
+      "home": "DE",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "Volkswagen",
+      "kind": "Listed company",
+      "home": "DE",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "BMW",
+      "kind": "Listed company",
+      "home": "DE",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "Mercedes",
+      "kind": "Listed company",
+      "home": "DE",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "Adidas",
+      "kind": "Listed company",
+      "home": "DE",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "Samsung",
+      "kind": "Listed company",
+      "home": "KR",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "Hyundai",
+      "kind": "Listed company",
+      "home": "KR",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "LG",
+      "kind": "Listed company",
+      "home": "KR",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "SK Hynix",
+      "kind": "Listed company",
+      "home": "KR",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "Kia",
+      "kind": "Listed company",
+      "home": "KR",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "Toyota",
+      "kind": "Listed company",
+      "home": "JP",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "Sony",
+      "kind": "Listed company",
+      "home": "JP",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "Nintendo",
+      "kind": "Listed company",
+      "home": "JP",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "MTN",
+      "kind": "Listed company",
+      "home": "ZA",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "Naspers",
+      "kind": "Listed company",
+      "home": "ZA",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "Nestlé",
+      "kind": "Listed company",
+      "home": "CH",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "ASML",
+      "kind": "Listed company",
+      "home": "NL",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "Bitcoin",
+      "kind": "Cryptocurrency",
+      "asset": "Cryptocurrency"
+    },
+    {
+      "name": "BTC",
+      "kind": "Cryptocurrency",
+      "asset": "Cryptocurrency"
+    },
+    {
+      "name": "Ethereum",
+      "kind": "Cryptocurrency",
+      "asset": "Cryptocurrency"
+    },
+    {
+      "name": "ETH",
+      "kind": "Cryptocurrency",
+      "asset": "Cryptocurrency"
+    },
+    {
+      "name": "Solana",
+      "kind": "Cryptocurrency",
+      "asset": "Cryptocurrency"
+    },
+    {
+      "name": "SOL",
+      "kind": "Cryptocurrency",
+      "asset": "Cryptocurrency"
+    },
+    {
+      "name": "Tether",
+      "kind": "Cryptocurrency",
+      "asset": "Cryptocurrency"
+    },
+    {
+      "name": "USDT",
+      "kind": "Cryptocurrency",
+      "asset": "Cryptocurrency"
+    },
+    {
+      "name": "USDC",
+      "kind": "Cryptocurrency",
+      "asset": "Cryptocurrency"
+    },
+    {
+      "name": "XRP",
+      "kind": "Cryptocurrency",
+      "asset": "Cryptocurrency"
+    },
+    {
+      "name": "Dogecoin",
+      "kind": "Cryptocurrency",
+      "asset": "Cryptocurrency"
+    },
+    {
+      "name": "BNB",
+      "kind": "Cryptocurrency",
+      "asset": "Cryptocurrency"
+    },
+    {
+      "name": "Cardano",
+      "kind": "Cryptocurrency",
+      "asset": "Cryptocurrency"
+    },
+    {
+      "name": "Gulfstream",
+      "kind": "Aircraft model",
+      "asset": "Private aircraft"
+    },
+    {
+      "name": "G650",
+      "kind": "Aircraft model",
+      "asset": "Private aircraft"
+    },
+    {
+      "name": "Cessna",
+      "kind": "Aircraft model",
+      "asset": "Private aircraft"
+    },
+    {
+      "name": "Citation",
+      "kind": "Aircraft model",
+      "asset": "Private aircraft"
+    },
+    {
+      "name": "Bombardier",
+      "kind": "Aircraft model",
+      "asset": "Private aircraft"
+    },
+    {
+      "name": "Global 7500",
+      "kind": "Aircraft model",
+      "asset": "Private aircraft"
+    },
+    {
+      "name": "Learjet",
+      "kind": "Aircraft model",
+      "asset": "Private aircraft"
+    },
+    {
+      "name": "Pilatus",
+      "kind": "Aircraft model",
+      "asset": "Private aircraft"
+    },
+    {
+      "name": "Embraer Phenom",
+      "kind": "Aircraft model",
+      "asset": "Private aircraft"
+    },
+    {
+      "name": "Falcon 8X",
+      "kind": "Aircraft model",
+      "asset": "Private aircraft"
+    },
+    {
+      "name": "Airbus ACJ",
+      "kind": "Aircraft model",
+      "asset": "Private aircraft"
+    },
+    {
+      "name": "Boeing BBJ",
+      "kind": "Aircraft model",
+      "asset": "Private aircraft"
+    },
+    {
+      "name": "Azimut",
+      "kind": "Yacht builder",
+      "asset": "Yachts / vessels"
+    },
+    {
+      "name": "Sunseeker",
+      "kind": "Yacht builder",
+      "asset": "Yachts / vessels"
+    },
+    {
+      "name": "Benetti",
+      "kind": "Yacht builder",
+      "asset": "Yachts / vessels"
+    },
+    {
+      "name": "Feadship",
+      "kind": "Yacht builder",
+      "asset": "Yachts / vessels"
+    },
+    {
+      "name": "Lürssen",
+      "kind": "Yacht builder",
+      "asset": "Yachts / vessels"
+    },
+    {
+      "name": "Riva",
+      "kind": "Yacht builder",
+      "asset": "Yachts / vessels"
+    },
+    {
+      "name": "Ferretti",
+      "kind": "Yacht builder",
+      "asset": "Yachts / vessels"
+    },
+    {
+      "name": "Princess yacht",
+      "kind": "Yacht builder",
+      "asset": "Yachts / vessels"
+    },
+    {
+      "name": "Glock",
+      "kind": "Firearm",
+      "asset": "Firearms"
+    },
+    {
+      "name": "AK-47",
+      "kind": "Firearm",
+      "asset": "Firearms"
+    },
+    {
+      "name": "AR-15",
+      "kind": "Firearm",
+      "asset": "Firearms"
+    },
+    {
+      "name": "Beretta",
+      "kind": "Firearm",
+      "asset": "Firearms"
+    },
+    {
+      "name": "Sig Sauer",
+      "kind": "Firearm",
+      "asset": "Firearms"
+    },
+    {
+      "name": "Remington",
+      "kind": "Firearm",
+      "asset": "Firearms"
+    },
+    {
+      "name": "Smith & Wesson",
+      "kind": "Firearm",
+      "asset": "Firearms"
+    },
+    {
+      "name": "Kalashnikov",
+      "kind": "Firearm",
+      "asset": "Firearms"
+    },
+    {
+      "name": "US Treasuries",
+      "kind": "Sovereign bond",
+      "home": "US",
+      "asset": "Government bonds"
+    },
+    {
+      "name": "T-bills",
+      "kind": "Sovereign bond",
+      "home": "US",
+      "asset": "Government bonds"
+    },
+    {
+      "name": "UK gilts",
+      "kind": "Sovereign bond",
+      "home": "GB",
+      "asset": "Government bonds"
+    },
+    {
+      "name": "German bunds",
+      "kind": "Sovereign bond",
+      "home": "DE",
+      "asset": "Government bonds"
+    },
+    {
+      "name": "FGN bonds",
+      "kind": "Sovereign bond",
+      "home": "NG",
+      "asset": "Government bonds"
+    },
+    {
+      "name": "Nigerian eurobond",
+      "kind": "Sovereign bond",
+      "home": "NG",
+      "asset": "Government bonds"
+    },
+    {
+      "name": "Saudi sukuk",
+      "kind": "Sovereign bond",
+      "home": "SA",
+      "asset": "Government bonds"
+    },
+    {
+      "name": "Indian G-secs",
+      "kind": "Sovereign bond",
+      "home": "IN",
+      "asset": "Government bonds"
+    },
+    {
+      "name": "CNN",
+      "kind": "Media company",
+      "asset": "Media companies"
+    },
+    {
+      "name": "BBC",
+      "kind": "Media company",
+      "asset": "Media companies"
+    },
+    {
+      "name": "Channels TV",
+      "kind": "Media company",
+      "asset": "Media companies"
+    },
+    {
+      "name": "Al Jazeera",
+      "kind": "Media company",
+      "asset": "Media companies"
+    },
+    {
+      "name": "Fox",
+      "kind": "Media company",
+      "asset": "Media companies"
+    },
+    {
+      "name": "Netflix",
+      "kind": "Media company",
+      "asset": "Media companies"
+    },
+    {
+      "name": "Vodafone",
+      "kind": "Telecom operator",
+      "asset": "Telecom licences"
+    },
+    {
+      "name": "Verizon",
+      "kind": "Telecom operator",
+      "asset": "Telecom licences"
+    },
+    {
+      "name": "AT&T",
+      "kind": "Telecom operator",
+      "asset": "Telecom licences"
+    },
+    {
+      "name": "Airtel",
+      "kind": "Telecom operator",
+      "asset": "Telecom licences"
+    },
+    {
+      "name": "Glo",
+      "kind": "Telecom operator",
+      "asset": "Telecom licences"
+    },
+    {
+      "name": "9mobile",
+      "kind": "Telecom operator",
+      "asset": "Telecom licences"
+    },
+    {
+      "name": "Jio",
+      "kind": "Telecom operator",
+      "asset": "Telecom licences"
+    },
+    {
+      "name": "T-Mobile",
+      "kind": "Telecom operator",
+      "asset": "Telecom licences"
+    }
+  ]
+}

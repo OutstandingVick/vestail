@@ -1,0 +1,105 @@
+{
+  "version": "1.0",
+  "assets": [
+    {
+      "id": "residential_property",
+      "index": 0,
+      "name": "Residential property"
+    },
+    {
+      "id": "agricultural_land",
+      "index": 1,
+      "name": "Agricultural land"
+    },
+    {
+      "id": "commercial_property",
+      "index": 2,
+      "name": "Commercial property"
+    },
+    {
+      "id": "domestic_equities",
+      "index": 3,
+      "name": "Domestic equities"
+    },
+    {
+      "id": "foreign_equities",
+      "index": 4,
+      "name": "Foreign equities"
+    },
+    {
+      "id": "government_bonds",
+      "index": 5,
+      "name": "Government bonds"
+    },
+    {
+      "id": "corporate_bonds",
+      "index": 6,
+      "name": "Corporate bonds"
+    },
+    {
+      "id": "cryptocurrency",
+      "index": 7,
+      "name": "Cryptocurrency"
+    },
+    {
+      "id": "foreign_currency_accounts",
+      "index": 8,
+      "name": "Foreign currency accounts"
+    },
+    {
+      "id": "gold_bullion",
+      "index": 9,
+      "name": "Gold bullion"
+    },
+    {
+      "id": "private_company_shares",
+      "index": 10,
+      "name": "Private company shares"
+    },
+    {
+      "id": "foreign_bank_accounts",
+      "index": 11,
+      "name": "Foreign bank accounts"
+    },
+    {
+      "id": "firearms",
+      "index": 12,
+      "name": "Firearms"
+    },
+    {
+      "id": "private_aircraft",
+      "index": 13,
+      "name": "Private aircraft"
+    },
+    {
+      "id": "yachts_vessels",
+      "index": 14,
+      "name": "Yachts / vessels"
+    },
+    {
+      "id": "offshore_trusts",
+      "index": 15,
+      "name": "Offshore trusts"
+    },
+    {
+      "id": "media_companies",
+      "index": 16,
+      "name": "Media companies"
+    },
+    {
+      "id": "telecom_licences",
+      "index": 17,
+      "name": "Telecom licences"
+    },
+    {
+      "id": "mining_rights",
+      "index": 18,
+      "name": "Mining rights"
+    },
+    {
+      "id": "precious_gems",
+      "index": 19,
+      "name": "Precious gems"
+    }
+  ]
+}

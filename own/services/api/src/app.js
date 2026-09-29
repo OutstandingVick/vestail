@@ -11,6 +11,8 @@ import { registerMatrix } from "./routes/matrix.js";
 import { registerRules } from "./routes/rules.js";
 import { registerVenues } from "./routes/venues.js";
 import { registerActivity } from "./routes/activity.js";
+import { registerOrders } from "./routes/orders.js";
+import { createAuth, keysFromEnv } from "./auth.js";
 
 /** Build the API. Everything it needs is injected so tests can run it in-process. */
 export function createApp({
@@ -18,10 +20,11 @@ export function createApp({
   spec = loadSpec(),
   clicks = createClickLog(),
   useSample = process.env.NODE_ENV !== "production",
+  apiKeys = keysFromEnv(),
 } = {}) {
   const app = new Hono();
   const v1 = new Hono();
-  const ctx = { v: createValidator(spec), data, clicks, useSample };
+  const ctx = { v: createValidator(spec), data, clicks, useSample, auth: createAuth(apiKeys) };
 
   app.use(cacheControl);
   v1.get("/health", c => c.json({ ok: true }));
@@ -32,6 +35,7 @@ export function createApp({
   registerRules(v1, ctx);
   registerVenues(v1, ctx);
   registerActivity(v1, ctx);
+  registerOrders(v1, ctx);
 
   app.route("/v1", v1);
   app.onError(onError);

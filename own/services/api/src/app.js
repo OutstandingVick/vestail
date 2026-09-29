@@ -1,7 +1,8 @@
 import { Hono } from "hono";
+import { loadData } from "./data.js";
 
 /** Build the API. Everything it needs is injected so tests can run it in-process. */
-export function createApp() {
+export function createApp({ data = loadData() } = {}) {
   const app = new Hono();
   const v1 = new Hono();
 

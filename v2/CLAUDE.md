@@ -14,7 +14,7 @@ Vestail is a country × asset-class ownership matrix with venue routing. This re
 - Never invent `sources` or `verified_at`. They stay `[]` and `null` until a rule is checked against a real document.
 - The resolver returns a `trail` for every hit. Any new stage must add to the trail. Never resolve silently.
 - Entities beat aliases. "tesla shares" must resolve to Tesla, not the generic "shares" bucket. `packages/core/test.js` guards this; run it after any resolver change.
-- Every outbound venue url carries the ref tag. Tag logic should move server-side (`POST /orders/click`) when the API exists.
+- Every outbound venue url carries the ref tag (`ref=vestail`). With the API connected, Buy presses go through `POST /orders/click`, which returns the tagged redirect. Ask before changing venues or tag logic; they tie to commercial agreements.
 - HUD numbers must come from real order data before any public launch. Never ship the sample figures to production.
 
 ## Conventions
@@ -24,5 +24,7 @@ Vestail is a country × asset-class ownership matrix with venue routing. This re
 - Keep `docs/GLOSSARY.html` build log current when a phase lands.
 
 ## Commands
-- `node packages/core/test.js` — resolver tests
-- open `app/index.html` — the app (no server needed)
+- `npm test` — every test (core and API)
+- `node packages/core/test.js` — resolver tests only
+- `npm start -w @vestail/api` — the API on http://localhost:8787/v1
+- open `app/index.html` — the app (no server needed); see `DEPLOY.md` to point it at the API

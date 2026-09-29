@@ -75,13 +75,13 @@
   <div class="card">
     <table>
       <tr><th>File</th><th>Shape</th><th>Who edits it</th><th>Changes how often</th></tr>
-      <tr><td><code>assets.json</code></td><td>id, index, name</td><td>Product</td><td>Rarely; index order is load-bearing</td></tr>
+      <tr><td><code>assets.json</code></td><td>id, index, name</td><td>Product</td><td>Rarely; adding one means adding its rule in every country</td></tr>
       <tr><td><code>categories.json</code></td><td>name → asset names</td><td>Product</td><td>Rarely</td></tr>
       <tr><td><code>aliases.json</code></td><td>word → asset or category</td><td>Anyone; grows from search logs</td><td>Weekly</td></tr>
       <tr><td><code>entities.json</code></td><td>name, kind, home?, asset</td><td>Seeded by hand; to be replaced by a securities master</td><td>Daily once automated</td></tr>
-      <tr><td><code>countries.json</code></td><td>code, name, flag, rules.citizen[20], rules.foreigner[20]</td><td>Compliance / legal</td><td>When law changes; needs provenance</td></tr>
+      <tr><td><code>countries.json</code></td><td>code, name, flag, rules.{citizen,foreigner}.{asset_id: {status, sources, verified_at}}</td><td>Compliance / legal</td><td>When law changes; needs provenance</td></tr>
       <tr><td><code>venues.json</code></td><td>asset → { default[], NG[], US[] … }</td><td>Partnerships</td><td>As deals land</td></tr>
-      <tr><td><code>activity.sample.json</code></td><td>stats{}, recent[]</td><td>Nobody; generated from the order log</td><td>Live</td></tr>
+      <tr><td><code>activity.sample.json</code></td><td>stats{}, recent[]</td><td>Nobody; sample for development only</td><td>Replaced by recorded clicks in production</td></tr>
     </table>
     <p style="margin-top:12px">Full field definitions and a JSON Schema are in <code>data/schema/</code>. The modules are deliberately independent so any one can move to a database table without touching the others.</p>
   </div>
@@ -125,12 +125,12 @@
   <h2 id="cta">Buy column</h2>
   <div class="card">
     <p>For the selected asset in each row the column shows one of four things: <b>Buy on [venue]</b> (blue, green tile), <b>Check eligibility on [venue]</b> (amber tile), <b>Not permitted</b> (red tile), or the name of the licensed route when there is no online venue (firearms, trusts, media, telecom, mining). A secondary venue appears as a text link. Venue choice is local override first, default second. Every link opens in a new tab with the ref tag.</p>
-    <p>The intended production flow is: click → <code>POST /orders/click</code> → server returns the tagged redirect → browser follows it. That moves tag logic server-side and feeds the HUD.</p>
+    <p>With the API connected (<code>window.VESTAIL_API</code> and <code>window.VESTAIL_API_KEY</code>), a click goes to <code>POST /orders/click</code>, which records it and returns the tagged redirect; the page opens the tab during the click and then follows it, so popup blockers allow it. If recording fails the buyer still goes to the venue link, which is already tagged. The API only redirects to a venue listed for that rule, so a cannot-own cell can't be routed. Without the API every link opens directly, as before.</p>
   </div>
 
   <h2 id="hud">Traction HUD</h2>
   <div class="card">
-    <p>Three numbers that count up once on load (cubic ease-out, 1.4s, skipped under reduced-motion) and a ticker that advances every 3.2s through recent buys. Numbers live in <code>data-count</code> attributes; the ticker reads a <code>RECENT</code> array. Both are placeholders and must be wired to <code>GET /activity</code> before launch — fabricated traction is the fastest way to lose trust in a finance product.</p>
+    <p>Three numbers that count up once on load (cubic ease-out, 1.4s, skipped under reduced-motion) and a ticker that advances every 3.2s through recent buys. Numbers live in <code>data-count</code> attributes; the ticker reads a <code>RECENT</code> array. With the API connected both come from <code>GET /activity</code>. Outside production the API still mixes in the sample figures; with <code>NODE_ENV=production</code> it reports recorded clicks only, and volume stays 0 until real order data exists. Fabricated traction is the fastest way to lose trust in a finance product.</p>
     <p>Placement rationale: under the search so the eye path is headline → search → proof. Not in the nav (too small to feel real) and not a two-column hero (the board needs full width and the search is the product).</p>
   </div>
 
@@ -147,7 +147,7 @@
 
   <h2 id="api">API</h2>
   <div class="card">
-    <p>Contract in <code>docs/api/openapi.yaml</code>, guide in <code>docs/api/API.md</code>. Core endpoints: <code>/resolve</code>, <code>/matrix</code>, <code>/rules/{country}/{asset}</code>, <code>/venues/{asset}</code>, <code>/activity</code>, <code>POST /orders/click</code>. The reusable logic behind them is <code>packages/core</code>.</p>
+    <p>Contract in <code>docs/api/openapi.yaml</code>, guide in <code>docs/api/API.md</code>. Core endpoints: <code>/resolve</code>, <code>/matrix</code>, <code>/rules/{country}/{asset}</code>, <code>/venues/{asset}</code>, <code>/activity</code>, <code>POST /orders/click</code>. The reusable logic behind them is <code>packages/core</code>; the server is <code>services/api</code> (Hono on Node), with its configuration and behaviour notes in <code>services/api/README.md</code> and running instructions in <code>DEPLOY.md</code>.</p>
     <object data="diagrams/system-flow.svg" type="image/svg+xml" aria-label="System flow diagram"></object>
   </div>
 
@@ -159,18 +159,25 @@
     <div class="step"><b>4 · Buy column and redesign</b><span>Venue map with per-country overrides, four CTA states, ref tag on every link. Page rebuilt from tokens up: hero search, cards instead of a table, segmented controls, entrance and selection motion, mobile layout.</span></div>
     <div class="step"><b>5 · Traction HUD</b><span>Volume, orders and buyers with count-up, plus the live ticker. Placed under the search after weighing the nav and a two-column hero.</span></div>
     <div class="step"><b>6 · Handoff</b><span>Data split into modular JSON with schema, resolver extracted into a dependency-free package with tests, OpenAPI spec and builder guide, pipeline and system diagrams, this glossary, and a Claude Code kickoff prompt.</span></div>
+    <div class="step"><b>7 · Repo</b><span>Brought into the Vestail repo under <code>v2/</code> on its own branch, as an npm workspace for <code>packages/*</code> and <code>services/*</code>; <code>npm test</code> runs every test. The judged Vestail app is untouched.</span></div>
+    <div class="step"><b>8 · API</b><span><code>services/api</code> implements the OpenAPI contract over the core and the JSON data. Parameters and bodies are validated against the spec, errors use one shape, cache headers follow the guide, public reads are rate-limited by IP, clicks need an API key. A contract test calls every operation and checks the response against its schema.</span></div>
+    <div class="step"><b>9 · Page on the API</b><span>With <code>window.VESTAIL_API</code> set the page loads assets, boards and the HUD from the API and sends Buy presses through <code>POST /orders/click</code>; without it, or when the API is down, it runs on its inline data as before. The API gained CORS so the page can call it from another origin.</span></div>
+    <div class="step"><b>10 · Vestail</b><span>Renamed from the example's working name, Own: <code>v2/</code>, <code>@vestail/core</code>, <code>@vestail/api</code>, <code>VESTAIL_*</code> settings, and the <code>ref=vestail</code> tag.</span></div>
+    <div class="step"><b>11 · Keyed rules and provenance</b><span>Rules moved from arrays indexed by asset position to objects keyed by asset id, each with <code>sources</code> and <code>verified_at</code> (empty until filled). Every board is identical before and after. The core refuses to load a missing, unknown or invalid rule; <code>/rules/{country}/{asset}</code> returns the provenance; the data schema validates it.</span></div>
   </div>
 
   <h2 id="next">Open questions</h2>
   <div class="card"><dl>
-    <dt>Rule provenance</dt><dd>Every status needs a source and a verified date before real users rely on it. All current values are illustrative.</dd>
-    <dt>Positional rules</dt><dd>Rules are arrays indexed by asset position. Move to keyed objects when the asset list changes.</dd>
+    <dt>Rule provenance</dt><dd>Every rule now has <code>sources</code> and <code>verified_at</code>, but all are empty: every status is still illustrative until it is checked against a real document. The grid does not show provenance yet.</dd>
+    <dt>Conditional cells</dt><dd>A conditional cell routes like a permitted one, behind a "Check eligibility" label. Decide whether the buyer must acknowledge the condition first, as Vestail v1 requires.</dd>
+    <dt>Partner keys</dt><dd>The page has to carry an API key to record clicks, and anything in a public page can be read. Decide how partner keys and per-partner ref tags work before relying on click attribution.</dd>
+    <dt>Click and rate-limit storage</dt><dd>Both live in the API process's memory, so they reset on restart and are not shared between instances. Move them to a store before running more than one.</dd>
     <dt>Securities master</dt><dd>Replace the hand-seeded entity list with ticker/ISIN lookup so any listed company resolves.</dd>
     <dt>Resident buyer type</dt><dd>Many rules differ for residents without citizenship; a third rule set is the obvious next axis.</dd>
     <dt>Affiliate deep links</dt><dd>Venue urls are homepages. Partner agreements will bring specific landing urls and per-partner ref tags.</dd>
   </dl></div>
 
-  <footer>Vestail · handoff build · docs/GLOSSARY.html</footer>
+  <footer>Vestail v2 · docs/GLOSSARY.html</footer>
 </div>
 </body>
 </html>

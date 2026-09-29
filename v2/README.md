@@ -8,14 +8,16 @@ Open `app/index.html` in a browser to see it. Open `docs/GLOSSARY.html` to under
 v2/
 ├── README.md                    ← you are here
 ├── CLAUDE.md                    ← project context for Claude Code (auto-read)
-├── CLAUDE_CODE_FIRST_PROMPT.md  ← paste this into Claude Code to start
+├── CLAUDE_CODE_FIRST_PROMPT.md  ← the mentor's original brief
+├── DEPLOY.md                    ← running the API and serving the page
 ├── app/
 │   └── index.html               ← the working page, single file, data inlined
 ├── data/                        ← the same data, split into modules
 │   ├── assets.json  categories.json  aliases.json  entities.json
 │   ├── countries.json  venues.json  activity.sample.json
 │   └── schema/  README.md (data model) · schemas.json (JSON Schema)
-├── packages/core/           ← resolver + matrix as a dependency-free ES module
+├── services/api/                ← the HTTP API (see services/api/README.md)
+├── packages/core/               ← resolver + matrix as a dependency-free ES module
 │   ├── index.js  package.json  test.js   (node test.js)
 └── docs/
     ├── GLOSSARY.html            ← vocabulary, architecture, build log, open questions

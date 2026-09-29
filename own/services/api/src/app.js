@@ -13,6 +13,7 @@ import { registerVenues } from "./routes/venues.js";
 import { registerActivity } from "./routes/activity.js";
 import { registerOrders } from "./routes/orders.js";
 import { createAuth, keysFromEnv } from "./auth.js";
+import { rateLimit } from "./ratelimit.js";
 
 /** Build the API. Everything it needs is injected so tests can run it in-process. */
 export function createApp({
@@ -21,11 +22,13 @@ export function createApp({
   clicks = createClickLog(),
   useSample = process.env.NODE_ENV !== "production",
   apiKeys = keysFromEnv(),
+  limiter = rateLimit({ limit: Number(process.env.OWN_RATE_LIMIT) || 120 }),
 } = {}) {
   const app = new Hono();
   const v1 = new Hono();
   const ctx = { v: createValidator(spec), data, clicks, useSample, auth: createAuth(apiKeys) };
 
+  app.use(limiter);
   app.use(cacheControl);
   v1.get("/health", c => c.json({ ok: true }));
   v1.get("/openapi.json", c => c.json(spec));

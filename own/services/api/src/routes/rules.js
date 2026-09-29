@@ -16,4 +16,14 @@ export function registerRules(v1, { v, data }) {
     const rules = Object.fromEntries(own.ASSETS.map((name, i) => [data.idByName[name], STATUS[row[i]]]));
     return c.json({ country, who, rules });
   });
+
+  v.route(v1, "get", "/rules/{country}/{asset}", (c, { params: { country, asset, who } }) => {
+    const row = countryOf(country)[who];
+    const name = data.nameById[asset];
+    if (!name) throw new ApiError(404, "unknown_asset", `No asset class with id ${asset}.`);
+    const status = row[own.ASSETS.indexOf(name)];
+    // Nothing is routed for a prohibited cell, matching the core's matrix cta.
+    const venues = status ? own.venues(name, country) : [];
+    return c.json({ country, asset, who, status: STATUS[status], venues });
+  });
 }

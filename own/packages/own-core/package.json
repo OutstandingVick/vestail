@@ -1,3 +1,0 @@
-{ "name": "@own/core", "version": "0.1.0", "type": "module", "main": "index.js", "exports": "./index.js", "license": "UNLICENSED",
-  "description": "Query resolution pipeline + ownership rule matrix for Own. No dependencies; data is injected.",
-  "scripts": { "test": "node test.js" } }

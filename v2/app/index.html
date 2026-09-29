@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Vestail — what you can buy, where</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ---------- Design tokens ---------- */
+  :root {
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+
+    --bg: #F3F4F6;          /* page */
+    --surface: #FFFFFF;     /* cards */
+    --surface-2: #F7F8FA;   /* insets */
+    --ink: #111827;
+    --ink-2: #4B5563;
+    --ink-3: #9CA3AF;
+    --line: #E5E7EB;
+    --accent: #2F4BFF;      /* buy / focus */
+    --accent-ink: #FFFFFF;
+    --yes: #23A55A; --cond: #E0A421; --no: #DC4B3B;
+    --no-hatch: rgba(255,255,255,.55);
+    --tile-dim: .28;
+    --shadow-1: 0 1px 2px rgba(17,24,39,.05), 0 1px 1px rgba(17,24,39,.03);
+    --shadow-2: 0 10px 30px -10px rgba(17,24,39,.18), 0 2px 6px rgba(17,24,39,.05);
+    --r-xl: 28px; --r-lg: 20px; --r-md: 14px; --r-sm: 8px; --r-pill: 999px;
+    --font-display: "Bricolage Grotesque", "Plus Jakarta Sans", system-ui, sans-serif;
+    --font-body: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --ease: cubic-bezier(.2,.8,.2,1);
+    --tip-bg: #111827; --tip-fg: #fff;
+  }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+    --bg: #0F1217; --surface: #171B22; --surface-2: #1E232B; --ink: #F3F4F6; --ink-2: #A5ADBA; --ink-3: #6B7280; --line: #262C36;
+    --accent: #6C83FF; --accent-ink: #0F1217; --yes: #34C070; --cond: #EAB54A; --no: #EF6355; --no-hatch: rgba(0,0,0,.35);
+    --shadow-1: 0 1px 2px rgba(0,0,0,.4); --shadow-2: 0 12px 30px -10px rgba(0,0,0,.6); --tip-bg: #F3F4F6; --tip-fg: #111827; } }
+  :root[data-theme="dark"] {
+    --bg: #0F1217; --surface: #171B22; --surface-2: #1E232B; --ink: #F3F4F6; --ink-2: #A5ADBA; --ink-3: #6B7280; --line: #262C36;
+    --accent: #6C83FF; --accent-ink: #0F1217; --yes: #34C070; --cond: #EAB54A; --no: #EF6355; --no-hatch: rgba(0,0,0,.35);
+    --shadow-1: 0 1px 2px rgba(0,0,0,.4); --shadow-2: 0 12px 30px -10px rgba(0,0,0,.6); --tip-bg: #F3F4F6; --tip-fg: #111827; }
+
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  *, *::before, *::after { box-sizing: inherit; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 15px; line-height: 1.5; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+  a { color: inherit; }
+  button { font: inherit; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 20px; }
+
+  /* ---------- Top bar ---------- */
+  .top { display: flex; align-items: center; justify-content: space-between; padding: 22px 0 6px; }
+  .brand { display: inline-flex; align-items: center; gap: 10px; font-family: var(--font-display); font-weight: 800; font-size: 20px; letter-spacing: -.02em; text-decoration: none; }
+  .brand i { width: 28px; height: 28px; border-radius: 9px; background: conic-gradient(from 210deg, var(--yes), var(--cond), var(--no), var(--yes)); display: inline-block; }
+  .top .meta { font-size: 13px; color: var(--ink-2); }
+
+  /* ---------- Hero ---------- */
+  .hero { padding: 56px 0 28px; text-align: center; }
+  .hero h1 { font-family: var(--font-display); font-weight: 800; font-size: clamp(38px, 6.5vw, 72px); line-height: .98; letter-spacing: -.035em; margin: 0 auto 18px; max-width: 14ch; }
+  .hero h1 .w { display: inline-block; animation: rise .7s var(--ease) both; }
+  .hero h1 .w:nth-child(2) { animation-delay: .06s } .hero h1 .w:nth-child(3) { animation-delay: .12s } .hero h1 .w:nth-child(4) { animation-delay: .18s } .hero h1 .w:nth-child(5) { animation-delay: .24s } .hero h1 .w:nth-child(6) { animation-delay: .30s }
+  .hero p { margin: 0 auto; max-width: 48ch; color: var(--ink-2); font-size: 17px; animation: rise .7s .3s var(--ease) both; }
+
+  .searchbar { position: relative; max-width: 680px; margin: 30px auto 0; animation: rise .7s .38s var(--ease) both; }
+  .searchbar input {
+    width: 100%; font: inherit; font-size: 17px; color: var(--ink); background: var(--surface);
+    border: 1.5px solid var(--line); border-radius: var(--r-pill); padding: 18px 96px 18px 54px;
+    box-shadow: var(--shadow-1); transition: box-shadow .25s var(--ease), border-color .25s, transform .25s var(--ease);
+  }
+  .searchbar input::-webkit-search-cancel-button, .searchbar input::-webkit-search-decoration { -webkit-appearance: none; display: none; }
+  .searchbar input::placeholder { color: var(--ink-3); }
+  .searchbar input:hover { box-shadow: var(--shadow-2); }
+  .searchbar input:focus { outline: 0; border-color: var(--accent); box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 18%, transparent), var(--shadow-2); }
+  .searchbar > svg { position: absolute; left: 22px; top: 50%; transform: translateY(-50%); width: 20px; height: 20px; stroke: var(--ink-3); fill: none; stroke-width: 2.2; stroke-linecap: round; pointer-events: none; }
+  .searchbar button { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); border: 0; background: var(--surface-2); color: var(--ink-2); font-size: 13px; font-weight: 600; cursor: pointer; padding: 8px 14px; border-radius: var(--r-pill); display: none; }
+  .searchbar button.on { display: inline-block; }
+  .searchbar button:hover { background: var(--line); }
+
+  /* ---------- Traction HUD ---------- */
+  .hud { max-width: 680px; margin: 22px auto 0; animation: rise .7s .42s var(--ease) both; }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .stat { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-md); padding: 14px 16px; text-align: left; box-shadow: var(--shadow-1); }
+  .stat .v { font-family: var(--font-display); font-weight: 800; font-size: clamp(22px, 3vw, 30px); letter-spacing: -.03em; line-height: 1.05; font-variant-numeric: tabular-nums; }
+  .stat .l { font-size: 12.5px; color: var(--ink-2); margin-top: 3px; }
+  .stat .d { display: inline-block; font-size: 12px; font-weight: 600; color: var(--yes); margin-left: 6px; }
+  .ticker { margin-top: 10px; height: 40px; overflow: hidden; position: relative; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-pill); box-shadow: var(--shadow-1); }
+  .ticker .live { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 700; color: var(--ink-2); z-index: 1; background: var(--surface); padding-right: 10px; }
+  .ticker .live i { width: 7px; height: 7px; border-radius: 50%; background: var(--yes); box-shadow: 0 0 0 0 color-mix(in srgb, var(--yes) 45%, transparent); animation: pulse 1.8s ease-out infinite; }
+  .ticker ul { list-style: none; margin: 0; padding: 0 16px 0 68px; }
+  .ticker li { height: 40px; display: flex; align-items: center; gap: 8px; font-size: 13.5px; color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ticker li b { color: var(--ink); font-weight: 600; }
+  .ticker li .t { margin-left: auto; color: var(--ink-3); font-size: 12px; flex: none; }
+  .ticker ul { transition: transform .5s var(--ease); }
+  @keyframes pulse { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--yes) 45%, transparent); } 100% { box-shadow: 0 0 0 8px transparent; } }
+  @media (max-width: 480px) { .stats { gap: 8px; } .stat { padding: 11px 12px; } .stat .l { font-size: 11.5px; } .stat .d { display: none; } .ticker li .t { display: none; } .long { display: none; } .ticker li { font-size: 13px; } }
+
+  .chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 14px auto 0; animation: rise .7s .5s var(--ease) both; }
+  .chip { border: 1px solid var(--line); background: var(--surface); color: var(--ink-2); border-radius: var(--r-pill); padding: 7px 14px; font-size: 13.5px; font-weight: 500; cursor: pointer; transition: transform .2s var(--ease), background .2s, color .2s, border-color .2s; }
+  .chip:hover { transform: translateY(-2px); color: var(--ink); border-color: var(--ink-3); }
+  .chip:active { transform: translateY(0) scale(.98); }
+
+  /* ---------- Controls ---------- */
+  .controls { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin: 34px 0 12px; }
+  .controls .left { display: flex; flex-wrap: wrap; gap: 10px; }
+  .seg { position: relative; display: inline-grid; grid-auto-flow: column; grid-auto-columns: 1fr; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-pill); padding: 4px; box-shadow: var(--shadow-1); }
+  .seg button { position: relative; z-index: 1; border: 0; background: transparent; color: var(--ink-2); font-weight: 600; font-size: 14px; padding: 9px 18px; border-radius: var(--r-pill); cursor: pointer; white-space: nowrap; transition: color .25s; }
+  .seg button[aria-selected="true"] { color: var(--ink); }
+  .seg::before { content: ""; position: absolute; z-index: 0; top: 4px; bottom: 4px; left: 4px; width: calc(50% - 4px); border-radius: var(--r-pill); background: var(--surface-2); border: 1px solid var(--line); transition: transform .3s var(--ease); }
+  .seg[data-pos="1"]::before { transform: translateX(100%); }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 13px; color: var(--ink-2); }
+  .legend span { display: inline-flex; align-items: center; gap: 7px; }
+  .sw { width: 12px; height: 12px; border-radius: 4px; display: inline-block; }
+  .sw.yes { background: var(--yes); } .sw.cond { background: var(--cond); }
+  .sw.no { background: var(--no); background-image: repeating-linear-gradient(135deg, var(--no-hatch) 0 2px, transparent 2px 5px); }
+
+  .trail { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: 13.5px; color: var(--ink-2); margin: 0 0 14px; min-height: 30px; }
+  .trail .step { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-pill); padding: 4px 11px; color: var(--ink); font-weight: 500; animation: pop .35s var(--ease) both; }
+  .trail .arrow { color: var(--ink-3); }
+  .trail .why { width: 100%; padding-top: 2px; }
+  .trail .why b { color: var(--ink); font-weight: 600; }
+
+  /* ---------- Board ---------- */
+  .board-head { display: grid; grid-template-columns: 240px 1fr 220px; gap: 20px; padding: 0 22px 8px; font-size: 12.5px; font-weight: 600; color: var(--ink-3); }
+  .board-head.hide { display: none; }
+  .board { display: flex; flex-direction: column; gap: 10px; }
+  .row {
+    display: grid; grid-template-columns: 240px 1fr 220px; gap: 20px; align-items: center;
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 16px 22px;
+    box-shadow: var(--shadow-1);
+    transition: transform .25s var(--ease), box-shadow .25s var(--ease), border-color .25s;
+  }
+  .row:hover { transform: translateY(-2px); box-shadow: var(--shadow-2); }
+  .row.has-sel { border-color: color-mix(in srgb, var(--accent) 35%, var(--line)); }
+  .who { display: flex; align-items: center; gap: 14px; min-width: 0; }
+  .flag { font-size: 30px; line-height: 1; width: 44px; height: 44px; display: grid; place-items: center; background: var(--surface-2); border-radius: var(--r-md); flex: none; }
+  .name { font-family: var(--font-display); font-weight: 700; font-size: 17px; letter-spacing: -.01em; }
+  .score { font-size: 12.5px; color: var(--ink-2); margin-top: 1px; }
+
+  .grid { display: grid; grid-template-columns: repeat(10, 24px); grid-auto-rows: 24px; gap: 5px; }
+  .tile { border: 0; padding: 0; border-radius: 6px; background: var(--surface-2); cursor: pointer; transition: transform .18s var(--ease), opacity .25s, box-shadow .18s; }
+  .tile.yes { background: var(--yes); } .tile.cond { background: var(--cond); }
+  .tile.no { background: var(--no); background-image: repeating-linear-gradient(135deg, var(--no-hatch) 0 2px, transparent 2px 5px); }
+  .tile:hover, .tile:focus-visible { transform: scale(1.22); z-index: 1; position: relative; box-shadow: 0 4px 10px rgba(17,24,39,.2); outline: 0; }
+  .row.has-sel .tile:not(.sel) { opacity: var(--tile-dim); }
+  .row.has-sel .tile:not(.sel):hover { opacity: 1; }
+  .tile.sel { transform: scale(1.22); box-shadow: 0 0 0 2.5px var(--surface), 0 0 0 4.5px var(--ink); position: relative; z-index: 1; }
+
+  .row.in { animation: rise .55s var(--ease) both; }
+  .tile.in { animation: pop .4s var(--ease) both; }
+  .buy { display: flex; justify-content: flex-end; }
+  .cta { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; animation: pop .3s var(--ease) both; }
+  .cta-btn { display: inline-flex; align-items: center; gap: 6px; background: var(--accent); color: var(--accent-ink); font-weight: 700; font-size: 14px; text-decoration: none; padding: 10px 16px; border-radius: var(--r-pill); white-space: nowrap; transition: transform .2s var(--ease), box-shadow .2s var(--ease), filter .2s; }
+  .cta-btn svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; transition: transform .2s var(--ease); }
+  .cta-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 20px -6px color-mix(in srgb, var(--accent) 60%, transparent); }
+  .cta-btn:hover svg { transform: translate(2px, -2px); }
+  .cta-btn:active { transform: translateY(0) scale(.98); }
+  .cta-btn.cond { background: var(--cond); color: #1a1400; }
+  .cta-btn.disabled { background: var(--surface-2); color: var(--ink-3); cursor: not-allowed; }
+  .cta-btn.muted { background: var(--surface-2); color: var(--ink-2); font-weight: 600; }
+  .cta-alt { font-size: 12.5px; color: var(--ink-2); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .2s, color .2s; }
+  .cta-alt:hover { color: var(--ink); border-color: var(--ink); }
+  .cta-sub { font-size: 12px; color: var(--ink-3); }
+  .cta-hint { font-size: 13px; color: var(--ink-3); }
+
+  /* ---------- Key + footer ---------- */
+  .key { margin-top: 28px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 20px 24px; }
+  .key h2 { font-family: var(--font-display); font-size: 16px; font-weight: 700; margin: 0 0 10px; letter-spacing: -.01em; }
+  .key ol { columns: 4; column-gap: 28px; margin: 0; padding-left: 20px; font-size: 13.5px; color: var(--ink-2); }
+  .key li { break-inside: avoid; padding: 2px 0; }
+  footer { padding: 28px 0 44px; font-size: 13px; color: var(--ink-3); max-width: 70ch; }
+
+  #tip { position: fixed; pointer-events: none; opacity: 0; transform: translate(-50%, calc(-100% - 12px)) scale(.96); background: var(--tip-bg); color: var(--tip-fg); padding: 7px 11px; border-radius: 10px; font-size: 13px; white-space: nowrap; z-index: 10; transition: opacity .12s, transform .12s var(--ease); }
+  #tip.show { opacity: 1; transform: translate(-50%, calc(-100% - 12px)) scale(1); }
+  #tip b { font-weight: 700; }
+
+  @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+  @keyframes pop { from { opacity: 0; transform: scale(.6); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 900px) {
+    .board-head { display: none; }
+    .row { grid-template-columns: 1fr; gap: 14px; padding: 16px; }
+    .buy { justify-content: flex-start; }
+    .cta { align-items: flex-start; }
+    .key ol { columns: 2; }
+  }
+  @media (max-width: 480px) {
+    .hero { padding: 36px 0 20px; }
+    .hero p { font-size: 15.5px; }
+    .searchbar input { font-size: 16px; padding: 15px 84px 15px 46px; }
+    .searchbar > svg { left: 17px; }
+    .grid { grid-template-columns: repeat(10, minmax(0, 1fr)); grid-auto-rows: auto; width: 100%; }
+    .tile { aspect-ratio: 1; }
+    .tile:hover, .tile.sel { transform: scale(1.12); }
+    .cta-btn { width: 100%; justify-content: center; }
+    .cta { width: 100%; align-items: center; }
+    .top .meta { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="top">
+    <a class="brand" href="#"><i></i>Vestail</a>
+    <span class="meta">10 countries · 20 asset classes · citizens and foreigners</span>
+  </nav>
+
+  <section class="hero">
+    <h1><span class="w">What</span> <span class="w">can</span> <span class="w">you</span> <span class="w">actually</span> <span class="w">own</span> <span class="w">here?</span></h1>
+    <p>Type a thing you'd like to buy. See where it's allowed, where it needs a licence, where it's off the table, and where to go to buy it.</p>
+    <div class="searchbar">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="q" type="search" placeholder="Google, bitcoin, a house, farmland, a Gulfstream…" aria-label="Search assets" autocomplete="off">
+      <button id="clear" type="button">Clear</button>
+    </div>
+    <div class="hud" aria-label="Activity on Vestail">
+      <div class="stats">
+        <div class="stat"><div class="v" data-count="48300000" data-prefix="$" data-fmt="compact">$0</div><div class="l"><span class="long">Bought through Vestail, </span>last 30 days<span class="d">+18%</span></div></div>
+        <div class="stat"><div class="v" data-count="12640" data-fmt="int">0</div><div class="l">Orders routed<span class="long"> to venues</span><span class="d">+9%</span></div></div>
+        <div class="stat"><div class="v" data-count="2310" data-fmt="int">0</div><div class="l">Active buyers<span class="long"> this week</span></div></div>
+      </div>
+      <div class="ticker" role="status" aria-live="off">
+        <span class="live"><i></i>LIVE</span>
+        <ul id="ticker"></ul>
+      </div>
+    </div>
+    <div class="chips" aria-label="Try one">
+      <button class="chip" data-q="Google">Google</button>
+      <button class="chip" data-q="Bitcoin">Bitcoin</button>
+      <button class="chip" data-q="a house">A house</button>
+      <button class="chip" data-q="farmland">Farmland</button>
+      <button class="chip" data-q="gold">Gold</button>
+      <button class="chip" data-q="Dangote">Dangote</button>
+      <button class="chip" data-q="private jet">Private jet</button>
+    </div>
+  </section>
+
+  <div class="controls">
+    <div class="left">
+      <div class="seg" role="radiogroup" aria-label="Who is buying" data-pos="0">
+        <button role="radio" aria-selected="true" data-who="citizen">Citizens</button>
+        <button role="radio" aria-selected="false" data-who="foreigner">Foreigners</button>
+      </div>
+      <div class="seg" role="tablist" aria-label="Tile order" data-pos="0">
+        <button role="tab" aria-selected="true" data-view="status">By status</button>
+        <button role="tab" aria-selected="false" data-view="asset">By asset 1–20</button>
+      </div>
+    </div>
+    <div class="legend" aria-label="Legend">
+      <span><i class="sw yes"></i>Can own</span>
+      <span><i class="sw cond"></i>Licence or cap</span>
+      <span><i class="sw no"></i>Cannot own</span>
+    </div>
+  </div>
+  <div class="trail" id="trail" aria-live="polite"></div>
+
+  <div class="board-head" id="boardHead"><span>Country</span><span id="hAssets">Assets, most open first</span><span style="text-align:right" id="hWho">Citizens</span></div>
+  <div class="board" id="rows"></div>
+
+  <section class="key">
+    <h2>The 20 asset classes</h2>
+    <ol id="key"></ol>
+  </section>
+  <footer>Sample rules for layout review only; replace the data before relying on any cell. Buy links open partner venues in a new tab with a tracking tag so referrals and order flow can be attributed.</footer>
+</div>
+<div id="tip" role="tooltip"></div>
+<script>
+
+/* ============================================================
+   1. DATA
+   ============================================================ */
+const ASSETS = [
+  "Residential property", "Agricultural land", "Commercial property", "Domestic equities",
+  "Foreign equities", "Government bonds", "Corporate bonds", "Cryptocurrency",
+  "Foreign currency accounts", "Gold bullion", "Private company shares", "Foreign bank accounts",
+  "Firearms", "Private aircraft", "Yachts / vessels", "Offshore trusts",
+  "Media companies", "Telecom licences", "Mining rights", "Precious gems"
+];
+const A = Object.fromEntries(ASSETS.map((a, i) => [a, i])); // name -> index
+
+// Broad categories: one query word can fan out to several asset classes.
+const CATEGORIES = {
+  "Equities":        ["Domestic equities", "Foreign equities", "Private company shares"],
+  "Fixed income":    ["Government bonds", "Corporate bonds"],
+  "Real estate":     ["Residential property", "Agricultural land", "Commercial property"],
+  "Currency & cash": ["Foreign currency accounts", "Foreign bank accounts"],
+  "Digital assets":  ["Cryptocurrency"],
+  "Commodities":     ["Gold bullion", "Precious gems", "Mining rights"],
+  "Transport":       ["Private aircraft", "Yachts / vessels"],
+  "Regulated sectors": ["Media companies", "Telecom licences", "Mining rights"],
+  "Structures":      ["Offshore trusts", "Private company shares"],
+  "Weapons":         ["Firearms"]
+};
+
+// Aliases: everyday words → a category or a specific asset.
+const ALIASES = {
+  // categories
+  "equity": "Equities", "equities": "Equities", "stock": "Equities", "stocks": "Equities", "shares": "Equities", "share": "Equities", "listed company": "Equities",
+  "bond": "Fixed income", "bonds": "Fixed income", "debt": "Fixed income", "fixed income": "Fixed income",
+  "property": "Real estate", "real estate": "Real estate", "land": "Real estate", "realty": "Real estate",
+  "cash": "Currency & cash", "currency": "Currency & cash", "forex": "Currency & cash", "fx": "Currency & cash", "bank account": "Currency & cash", "account": "Currency & cash",
+  "crypto": "Digital assets", "coin": "Digital assets", "token": "Digital assets", "digital asset": "Digital assets",
+  "commodity": "Commodities", "commodities": "Commodities", "metal": "Commodities", "metals": "Commodities",
+  "vehicle": "Transport", "transport": "Transport",
+  "weapon": "Weapons", "weapons": "Weapons", "gun": "Weapons", "guns": "Weapons", "arms": "Weapons",
+  // specific assets
+  "house": "Residential property", "home": "Residential property", "apartment": "Residential property", "flat": "Residential property", "condo": "Residential property", "villa": "Residential property", "duplex": "Residential property",
+  "farm": "Agricultural land", "farmland": "Agricultural land", "ranch": "Agricultural land", "plantation": "Agricultural land", "acres": "Agricultural land", "arable": "Agricultural land",
+  "office": "Commercial property", "warehouse": "Commercial property", "mall": "Commercial property", "shop": "Commercial property", "retail space": "Commercial property", "hotel": "Commercial property",
+  "treasury": "Government bonds", "treasuries": "Government bonds", "t-bill": "Government bonds", "gilt": "Government bonds", "gilts": "Government bonds", "bund": "Government bonds", "bunds": "Government bonds", "sukuk": "Government bonds", "sovereign": "Government bonds", "fgn bond": "Government bonds",
+  "corporate": "Corporate bonds", "commercial paper": "Corporate bonds", "debenture": "Corporate bonds",
+  "dollar": "Foreign currency accounts", "usd": "Foreign currency accounts", "euro": "Foreign currency accounts", "pound": "Foreign currency accounts", "sterling": "Foreign currency accounts", "yen": "Foreign currency accounts", "domiciliary": "Foreign currency accounts",
+  "gold": "Gold bullion", "bullion": "Gold bullion", "krugerrand": "Gold bullion", "gold bar": "Gold bullion", "gold coin": "Gold bullion", "silver": "Gold bullion",
+  "startup": "Private company shares", "llc": "Private company shares", "private equity": "Private company shares", "venture": "Private company shares", "unlisted": "Private company shares", "stake": "Private company shares",
+  "offshore account": "Foreign bank accounts", "swiss account": "Foreign bank accounts", "overseas account": "Foreign bank accounts",
+  "rifle": "Firearms", "pistol": "Firearms", "handgun": "Firearms", "shotgun": "Firearms", "firearm": "Firearms", "ammunition": "Firearms",
+  "jet": "Private aircraft", "plane": "Private aircraft", "aircraft": "Private aircraft", "helicopter": "Private aircraft", "private jet": "Private aircraft",
+  "yacht": "Yachts / vessels", "boat": "Yachts / vessels", "vessel": "Yachts / vessels", "ship": "Yachts / vessels", "superyacht": "Yachts / vessels",
+  "trust": "Offshore trusts", "foundation": "Offshore trusts", "offshore": "Offshore trusts", "cayman": "Offshore trusts", "bvi": "Offshore trusts", "jersey trust": "Offshore trusts",
+  "newspaper": "Media companies", "tv station": "Media companies", "radio station": "Media companies", "broadcaster": "Media companies", "media": "Media companies", "press": "Media companies",
+  "telecom": "Telecom licences", "telco": "Telecom licences", "spectrum": "Telecom licences", "mobile network": "Telecom licences", "isp": "Telecom licences",
+  "mine": "Mining rights", "mining": "Mining rights", "mineral": "Mining rights", "lithium": "Mining rights", "oil block": "Mining rights", "quarry": "Mining rights",
+  "diamond": "Precious gems", "diamonds": "Precious gems", "ruby": "Precious gems", "sapphire": "Precious gems", "emerald": "Precious gems", "gem": "Precious gems", "gemstone": "Precious gems"
+};
+
+// Named entities: a real-world thing → what asset class it is, plus its home country
+// (used to decide domestic vs foreign equity for each row).
+const ENTITIES = [
+  // listed companies (home = ISO country code)
+  ...[["Google","US"],["Alphabet","US"],["Apple","US"],["Microsoft","US"],["Amazon","US"],["Nvidia","US"],["Meta","US"],["Tesla","US"],["Coca-Cola","US"],
+      ["Dangote Cement","NG"],["Dangote","NG"],["Zenith Bank","NG"],["GTBank","NG"],["Airtel Africa","NG"],["Seplat","NG"],["MTN Nigeria","NG"],
+      ["BP","GB"],["Shell","GB"],["HSBC","GB"],["Unilever","GB"],["Rolls-Royce","GB"],["Barclays","GB"],
+      ["Emirates NBD","AE"],["Emaar","AE"],["Etisalat","AE"],["e&","AE"],
+      ["Alibaba","CN"],["Tencent","CN"],["BYD","CN"],["Xiaomi","CN"],["ICBC","CN"],
+      ["Reliance","IN"],["Tata","IN"],["Infosys","IN"],["HDFC","IN"],["Adani","IN"],
+      ["Petrobras","BR"],["Vale","BR"],["Itaú","BR"],["Ambev","BR"],
+      ["Aramco","SA"],["Saudi Aramco","SA"],["SABIC","SA"],["Al Rajhi","SA"],
+      ["SAP","DE"],["Siemens","DE"],["Volkswagen","DE"],["BMW","DE"],["Mercedes","DE"],["Adidas","DE"],
+      ["Samsung","KR"],["Hyundai","KR"],["LG","KR"],["SK Hynix","KR"],["Kia","KR"],
+      ["Toyota","JP"],["Sony","JP"],["Nintendo","JP"],["MTN","ZA"],["Naspers","ZA"],["Nestlé","CH"],["ASML","NL"]]
+    .map(([n, h]) => ({ name: n, kind: "Listed company", home: h, asset: "equity-by-home" })),
+  // crypto
+  ...["Bitcoin","BTC","Ethereum","ETH","Solana","SOL","Tether","USDT","USDC","XRP","Dogecoin","BNB","Cardano"]
+    .map(n => ({ name: n, kind: "Cryptocurrency", asset: "Cryptocurrency" })),
+  // aircraft / vessels
+  ...["Gulfstream","G650","Cessna","Citation","Bombardier","Global 7500","Learjet","Pilatus","Embraer Phenom","Falcon 8X","Airbus ACJ","Boeing BBJ"]
+    .map(n => ({ name: n, kind: "Aircraft model", asset: "Private aircraft" })),
+  ...["Azimut","Sunseeker","Benetti","Feadship","Lürssen","Riva","Ferretti","Princess yacht"]
+    .map(n => ({ name: n, kind: "Yacht builder", asset: "Yachts / vessels" })),
+  // firearms
+  ...["Glock","AK-47","AR-15","Beretta","Sig Sauer","Remington","Smith & Wesson","Kalashnikov"]
+    .map(n => ({ name: n, kind: "Firearm", asset: "Firearms" })),
+  // bonds
+  ...[["US Treasuries","US"],["T-bills","US"],["UK gilts","GB"],["German bunds","DE"],["FGN bonds","NG"],["Nigerian eurobond","NG"],["Saudi sukuk","SA"],["Indian G-secs","IN"]]
+    .map(([n, h]) => ({ name: n, kind: "Sovereign bond", home: h, asset: "Government bonds" })),
+  // media / telecom
+  ...["CNN","BBC","Channels TV","Al Jazeera","Fox","Netflix"].map(n => ({ name: n, kind: "Media company", asset: "Media companies" })),
+  ...["Vodafone","Verizon","AT&T","Airtel","Glo","9mobile","Jio","T-Mobile"].map(n => ({ name: n, kind: "Telecom operator", asset: "Telecom licences" }))
+];
+
+// Ownership rules. 2 = can own, 1 = conditional, 0 = cannot own. Illustrative values only.
+// "citizen" = passport holder; "foreigner" = non-resident or resident without citizenship.
+const COUNTRIES = [
+  { code: "NG", flag: "🇳🇬", name: "Nigeria",
+    citizen:   [2,2,2,2,1,2,2,1,2,2,2,1,1,1,2,1,1,1,1,2],
+    foreigner: [1,0,1,2,2,2,2,1,2,2,1,2,0,1,1,2,0,0,0,2] },
+  { code: "GB", flag: "🇬🇧", name: "United Kingdom",
+    citizen:   [2,2,2,2,2,2,2,2,2,2,2,2,1,2,2,2,2,1,2,2],
+    foreigner: [2,2,2,2,2,2,2,2,2,2,2,2,0,2,2,2,1,1,1,2] },
+  { code: "US", flag: "🇺🇸", name: "United States",
+    citizen:   [2,2,2,2,2,2,2,2,2,2,2,1,2,2,2,2,2,1,2,2],
+    foreigner: [2,1,2,2,2,2,2,2,2,2,2,2,0,1,1,2,0,0,1,2] },
+  { code: "AE", flag: "🇦🇪", name: "UAE",
+    citizen:   [2,2,2,2,2,2,2,1,2,2,2,2,0,1,2,1,1,0,0,2],
+    foreigner: [1,0,1,2,2,2,2,1,2,2,1,2,0,1,1,1,0,0,0,2] },
+  { code: "CN", flag: "🇨🇳", name: "China",
+    citizen:   [2,0,1,2,1,2,2,0,1,2,2,1,0,1,1,0,0,0,0,2],
+    foreigner: [1,0,1,1,2,1,1,0,2,2,1,2,0,0,0,0,0,0,0,2] },
+  { code: "IN", flag: "🇮🇳", name: "India",
+    citizen:   [2,1,2,2,1,2,2,1,1,2,2,1,1,1,2,0,1,1,1,2],
+    foreigner: [1,0,1,1,2,1,1,1,2,2,1,2,0,1,1,1,0,0,0,2] },
+  { code: "BR", flag: "🇧🇷", name: "Brazil",
+    citizen:   [2,1,2,2,2,2,2,2,1,2,2,1,1,2,2,1,1,1,1,2],
+    foreigner: [2,1,2,2,2,2,2,2,2,2,2,2,0,1,2,2,0,1,1,2] },
+  { code: "SA", flag: "🇸🇦", name: "Saudi Arabia",
+    citizen:   [2,2,2,2,1,2,2,0,2,2,2,1,1,1,2,0,0,0,1,2],
+    foreigner: [1,0,1,1,2,1,1,0,2,2,1,2,0,1,1,1,0,0,0,2] },
+  { code: "DE", flag: "🇩🇪", name: "Germany",
+    citizen:   [2,2,2,2,2,2,2,2,2,2,2,2,1,2,2,2,2,1,1,2],
+    foreigner: [2,2,2,2,2,2,2,2,2,2,2,2,0,2,2,2,1,1,1,2] },
+  { code: "KR", flag: "🇰🇷", name: "South Korea",
+    citizen:   [2,1,2,2,1,2,2,1,2,2,2,1,0,1,2,1,1,1,1,2],
+    foreigner: [1,1,1,1,2,1,1,0,2,2,1,2,0,1,1,1,0,0,0,2] }
+];
+const LABEL = { 2: "Can own", 1: "Conditional", 0: "Cannot own" };
+const CLASS = { 2: "yes", 1: "cond", 0: "no" };
+
+/* ============================================================
+   2. SEARCH PIPELINE
+   A query is resolved through ordered stages. The first stage
+   that produces a confident result wins; each stage records
+   a "trail" so the UI can show how the query was understood.
+
+   Result shape:
+   { assets: [index, ...],                  // which tiles to show
+     perCountry: (country) => [index,...],  // optional override per row
+     trail: [ {label, note} ... ],
+     note: "one-line explanation" }
+   ============================================================ */
+const norm = s => s.toLowerCase().replace(/[’']/g, "").replace(/[^a-z0-9&+\- ]/g, " ").replace(/\s+/g, " ").trim();
+
+function editDistance(a, b) {
+  const m = a.length, n = b.length, d = [];
+  for (let i = 0; i <= m; i++) { d[i] = [i]; }
+  for (let j = 1; j <= n; j++) d[0][j] = j;
+  for (let i = 1; i <= m; i++) for (let j = 1; j <= n; j++)
+    d[i][j] = Math.min(d[i-1][j] + 1, d[i][j-1] + 1, d[i-1][j-1] + (a[i-1] === b[j-1] ? 0 : 1));
+  return d[m][n];
+}
+// prefix / substring / small-typo matching for one candidate name
+function fuzzyHit(query, name) {
+  const q = norm(query), n = norm(name);
+  if (!q) return 0;
+  if (n === q) return 3;
+  if (n.startsWith(q) || n.split(" ").some(w => w.startsWith(q))) return 2;
+  if (n.includes(q)) return 1;
+  if (q.length >= 4 && editDistance(q, n) <= Math.floor(q.length / 4)) return 1;
+  return 0;
+}
+const assetsOf = names => names.map(n => A[n]);
+
+// Stage 1 — named entity: "Google" → listed company (US) → equity → domestic/foreign per country
+function stageEntity(q) {
+  let best = null, bestScore = 0;
+  for (const e of ENTITIES) {
+    const s = fuzzyHit(q, e.name);
+    if (s > bestScore) { best = e; bestScore = s; }
+  }
+  if (!best || bestScore < 1) return null;
+  const trail = [{ label: best.name }, { label: best.kind + (best.home ? ` (${best.home})` : "") }];
+  if (best.asset === "equity-by-home") {
+    trail.push({ label: "Equities" }, { label: `Domestic in ${best.home}, foreign elsewhere` });
+    return {
+      assets: assetsOf(["Domestic equities", "Foreign equities"]),
+      perCountry: c => [c.code === best.home ? A["Domestic equities"] : A["Foreign equities"]],
+      trail,
+      note: `${best.name} is a listed company from ${best.home}, so it counts as domestic equity there and foreign equity everywhere else.`
+    };
+  }
+  trail.push({ label: best.asset });
+  return { assets: [A[best.asset]], trail, note: `${best.name} is a ${best.kind.toLowerCase()}, governed by the ${best.asset.toLowerCase()} rule.` };
+}
+
+// Stage 2 — alias: "house" → Residential property; "stocks" → Equities category
+function stageAlias(q) {
+  const nq = norm(q);
+  let bestKey = null, bestScore = 0;
+  for (const key of Object.keys(ALIASES)) {
+    const s = fuzzyHit(nq, key);
+    if (s > bestScore) { bestKey = key; bestScore = s; }
+  }
+  if (!bestKey || bestScore < 1) return null;
+  const target = ALIASES[bestKey];
+  if (CATEGORIES[target]) {
+    return { assets: assetsOf(CATEGORIES[target]), trail: [{ label: bestKey }, { label: target }, { label: `${CATEGORIES[target].length} asset classes` }],
+      note: `“${bestKey}” is a category, so all ${target.toLowerCase()} classes are shown.` };
+  }
+  return { assets: [A[target]], trail: [{ label: bestKey }, { label: target }], note: `“${bestKey}” maps to the ${target.toLowerCase()} rule.` };
+}
+
+// Stage 3 — category name typed directly: "commodities"
+function stageCategory(q) {
+  for (const cat of Object.keys(CATEGORIES)) {
+    if (fuzzyHit(q, cat) >= 1) return { assets: assetsOf(CATEGORIES[cat]), trail: [{ label: cat }, { label: `${CATEGORIES[cat].length} asset classes` }], note: "" };
+  }
+  return null;
+}
+
+// Stage 4 — asset name typed directly (with prefix / typo tolerance): "foreign eq"
+function stageAsset(q) {
+  const hits = ASSETS.map((a, i) => ({ i, s: fuzzyHit(q, a) })).filter(h => h.s > 0);
+  if (!hits.length) return null;
+  const top = Math.max(...hits.map(h => h.s));
+  const idx = hits.filter(h => h.s === top).map(h => h.i);
+  return { assets: idx, trail: [{ label: idx.length === 1 ? ASSETS[idx[0]] : `${idx.length} asset names match` }], note: "" };
+}
+
+// Stage 0 — clean the query: drop filler words ("can I own a house in", "buy some gold")
+const STOP = new Set(["a","an","the","some","any","my","i","can","could","want","to","own","owning","buy","buying","purchase","hold","holding","in","of","for","as","is","it","do","does","allowed","get","have"]);
+function cleanQuery(query) {
+  const words = norm(query).split(" ").filter(Boolean);
+  const kept = words.filter(w => !STOP.has(w));
+  return { full: kept.join(" "), tokens: kept.slice().sort((a, b) => b.length - a.length) };
+}
+function runStages(q) { return stageEntity(q) || stageAlias(q) || stageCategory(q) || stageAsset(q); }
+function dedupeTrail(r) {
+  r.trail = r.trail.filter((t, i, arr) => !i || t.label !== arr[i - 1].label);
+  return r;
+}
+function resolve(query) {
+  if (!query.trim()) return { assets: ASSETS.map((_, i) => i), trail: [], note: "" };
+  const { full, tokens } = cleanQuery(query);
+  // 1) whole cleaned query  2) each remaining word, longest first
+  let r = full ? runStages(full) : null;
+  // 2a) a named entity in any word wins ("tesla shares" → Tesla), 2b) then aliases/assets, longest word first
+  if (!r && tokens.length > 1) for (const t of tokens) { r = stageEntity(t); if (r) break; }
+  if (!r && tokens.length > 1) for (const t of tokens) { r = runStages(t); if (r) break; }
+  return r ? dedupeTrail(r) : { assets: [], trail: [], note: "" };
+}
+
+
+/* ============================================================
+   3. VENUES  (call-to-action targets)
+   Each asset class has a default venue list, with per-country
+   overrides where a local venue is the natural place to buy.
+   REF is appended to every outbound link so partner / order-flow
+   attribution can be tracked. Set it to your partner tag.
+   ============================================================ */
+const REF = "ref=vestail";
+const V = (name, url) => ({ name, url });
+const VENUES = {
+  "Residential property": { default: [V("Local agents", null)], US: [V("Zillow", "https://www.zillow.com"), V("Redfin", "https://www.redfin.com")], GB: [V("Rightmove", "https://www.rightmove.co.uk"), V("Zoopla", "https://www.zoopla.co.uk")], NG: [V("PropertyPro", "https://www.propertypro.ng")], AE: [V("Bayut", "https://www.bayut.com"), V("Property Finder", "https://www.propertyfinder.ae")], IN: [V("99acres", "https://www.99acres.com"), V("MagicBricks", "https://www.magicbricks.com")], DE: [V("ImmoScout24", "https://www.immobilienscout24.de")], BR: [V("ZAP Imóveis", "https://www.zapimoveis.com.br")], CN: [V("Lianjia", "https://www.lianjia.com")], SA: [V("Aqar", "https://sa.aqar.fm")], KR: [V("Zigbang", "https://www.zigbang.com")] },
+  "Agricultural land":    { default: [V("Local agents", null)], US: [V("LandWatch", "https://www.landwatch.com")], GB: [V("Savills", "https://www.savills.co.uk")], BR: [V("ZAP Imóveis", "https://www.zapimoveis.com.br")] },
+  "Commercial property":  { default: [V("Local agents", null)], US: [V("LoopNet", "https://www.loopnet.com")], GB: [V("Rightmove Commercial", "https://www.rightmove.co.uk")], AE: [V("Bayut", "https://www.bayut.com")] },
+  "Domestic equities":    { default: [V("Interactive Brokers", "https://www.interactivebrokers.com")], US: [V("Robinhood", "https://robinhood.com"), V("Fidelity", "https://www.fidelity.com")], GB: [V("Hargreaves Lansdown", "https://www.hl.co.uk"), V("Trading 212", "https://www.trading212.com")], NG: [V("Chaka", "https://chaka.com"), V("Bamboo", "https://investbamboo.com")], IN: [V("Zerodha", "https://zerodha.com"), V("Groww", "https://groww.in")], DE: [V("Trade Republic", "https://traderepublic.com")], BR: [V("XP", "https://www.xpi.com.br")], AE: [V("Sarwa", "https://www.sarwa.co")] },
+  "Foreign equities":     { default: [V("Interactive Brokers", "https://www.interactivebrokers.com")], NG: [V("Bamboo", "https://investbamboo.com"), V("Interactive Brokers", "https://www.interactivebrokers.com")], IN: [V("Vested", "https://vestedfinance.com")], GB: [V("Trading 212", "https://www.trading212.com")] },
+  "Government bonds":     { default: [V("Interactive Brokers", "https://www.interactivebrokers.com")], US: [V("TreasuryDirect", "https://www.treasurydirect.gov")], GB: [V("Hargreaves Lansdown", "https://www.hl.co.uk")], IN: [V("RBI Retail Direct", "https://rbiretaildirect.org.in")] },
+  "Corporate bonds":      { default: [V("Interactive Brokers", "https://www.interactivebrokers.com")] },
+  "Cryptocurrency":       { default: [V("Coinbase", "https://www.coinbase.com"), V("Binance", "https://www.binance.com")], NG: [V("Luno", "https://www.luno.com"), V("Quidax", "https://www.quidax.io")], IN: [V("CoinDCX", "https://coindcx.com")], KR: [V("Upbit", "https://upbit.com")] },
+  "Foreign currency accounts": { default: [V("Wise", "https://wise.com"), V("Revolut", "https://www.revolut.com")] },
+  "Gold bullion":         { default: [V("BullionVault", "https://www.bullionvault.com"), V("Kitco", "https://www.kitco.com")] },
+  "Private company shares": { default: [V("AngelList", "https://www.angellist.com"), V("Republic", "https://republic.com")] },
+  "Foreign bank accounts": { default: [V("Wise", "https://wise.com"), V("HSBC Expat", "https://www.expat.hsbc.com")] },
+  "Firearms":             { default: [V("Licensed dealers only", null)] },
+  "Private aircraft":     { default: [V("Controller", "https://www.controller.com"), V("AvBuyer", "https://www.avbuyer.com")] },
+  "Yachts / vessels":     { default: [V("YachtWorld", "https://www.yachtworld.com"), V("Boat Trader", "https://www.boattrader.com")] },
+  "Offshore trusts":      { default: [V("Licensed trustee", null)] },
+  "Media companies":      { default: [V("Regulator approval + advisory", null)] },
+  "Telecom licences":     { default: [V("Regulator auction", null)] },
+  "Mining rights":        { default: [V("Ministry / cadastre", null)] },
+  "Precious gems":        { default: [V("Blue Nile", "https://www.bluenile.com"), V("Brilliant Earth", "https://www.brilliantearth.com")] }
+};
+function venuesFor(assetIdx, code) {
+  if (apiLive && apiVenues.has(`${assetIdx}|${code}`)) return apiVenues.get(`${assetIdx}|${code}`);
+  const v = VENUES[ASSETS[assetIdx]] || { default: [] };
+  return v[code] || v.default;
+}
+const withRef = url => url ? url + (url.includes("?") ? "&" : "?") + REF : null;
+
+/* ============================================================
+   3b. API MODE (optional)
+   Set window.VESTAIL_API to the API base in a script tag placed before
+   this one, e.g.  window.VESTAIL_API = "https://api.vestail.example/v1";
+   and the page loads assets, the board and the HUD from the API.
+   Set window.VESTAIL_API_KEY too and Buy presses go through
+   POST /orders/click, which records them and returns the tagged
+   redirect. Without VESTAIL_API, or if the API can't be reached, the
+   page runs entirely on the inline data above, as before.
+   ============================================================ */
+const API = typeof window.VESTAIL_API === "string" && window.VESTAIL_API ? window.VESTAIL_API.replace(/\/+$/, "") : null;
+const API_KEY = typeof window.VESTAIL_API_KEY === "string" && window.VESTAIL_API_KEY ? window.VESTAIL_API_KEY : null;
+const STATUS_NUM = { can_own: 2, conditional: 1, cannot_own: 0 };
+const SESSION = (crypto.randomUUID && crypto.randomUUID()) || String(Math.random()).slice(2);
+let apiLive = false;       // true while the board comes from the API
+let ASSET_IDS = [];        // asset index -> API id
+const apiVenues = new Map(); // "index|CODE" -> venues, already tagged by the API
+async function api(path, init) {
+  const r = await fetch(API + path, init);
+  if (!r.ok) throw new Error(`${init && init.method || "GET"} ${path}: ${r.status}`);
+  return r.json();
+}
+const esc = s => String(s).replace(/[&<>"']/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
+// Inline venues get the ref tag here; API venues arrive tagged.
+const hrefOf = v => v.tagged ? v.url : withRef(v.url);
+
+/* ============================================================
+   4. STATE + RENDER
+   ============================================================ */
+const $ = id => document.getElementById(id);
+const rows = $("rows"), tip = $("tip"), q = $("q"), clearBtn = $("clear"), trailEl = $("trail"), boardHead = $("boardHead");
+let view = "status", who = "citizen", selected = null; // selected = asset index chosen for the buy column
+let firstPaint = true;
+
+function ctaHTML(c, assetIdx, status) {
+  if (status === 0) return `<div class="cta off"><span class="cta-btn disabled">Not permitted</span><span class="cta-sub">${ASSETS[assetIdx]}</span></div>`;
+  const vs = venuesFor(assetIdx, c.code);
+  const primary = vs[0], secondary = vs[1];
+  if (!primary) return `<div class="cta"><span class="cta-sub">${ASSETS[assetIdx]}</span></div>`;
+  const label = status === 1 ? "Check eligibility" : "Buy";
+  // data-* lets API mode record the press before following the link.
+  const data = v => `data-country="${esc(c.code)}" data-asset="${assetIdx}" data-venue="${esc(v.name)}"`;
+  const btn = primary.url
+    ? `<a class="cta-btn ${status === 1 ? "cond" : ""}" href="${esc(hrefOf(primary))}" ${data(primary)} target="_blank" rel="noopener">${label} on ${esc(primary.name)}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></a>`
+    : `<span class="cta-btn muted">${esc(primary.name)}</span>`;
+  const alt = secondary && secondary.url ? `<a class="cta-alt" href="${esc(hrefOf(secondary))}" ${data(secondary)} target="_blank" rel="noopener">or ${esc(secondary.name)}</a>` : `<span class="cta-sub">${ASSETS[assetIdx]}</span>`;
+  return `<div class="cta">${btn}${alt}</div>`;
+}
+
+// Board from the inline data: the resolution plus one entry per country row.
+function boardLocal() {
+  const res = resolve(q.value);
+  // If the search narrowed to a single asset per row, that becomes the selection automatically.
+  const autoSel = res.assets.length === 1 || !!res.perCountry;
+  const data = COUNTRIES.map(c => {
+    const vals = c[who];
+    const idx = res.perCountry ? res.perCountry(c) : res.assets;
+    let tiles = idx.map(i => ({ i, s: vals[i] }));
+    if (view === "status") tiles = tiles.slice().sort((a, b) => b.s - a.s || a.i - b.i);
+    const sel = autoSel ? idx[0] : (selected !== null && idx.includes(selected) ? selected : null);
+    return { code: c.code, name: c.name, flag: c.flag, tiles, sel,
+      yes: tiles.filter(t => t.s === 2).length, cond: tiles.filter(t => t.s === 1).length, no: tiles.filter(t => t.s === 0).length };
+  });
+  if (view === "status") data.sort((a, b) => b.yes - a.yes || a.no - b.no || a.name.localeCompare(b.name));
+  return { res, data };
+}
+
+// The same board from GET /matrix. The API already sorts, counts and picks each row's asset.
+async function boardFromApi() {
+  const m = await api(`/matrix?${new URLSearchParams({ q: q.value, who, sort: view })}`);
+  const r = m.resolution;
+  const res = { assets: r.assets, perCountry: !!r.perCountry, trail: r.trail.map(label => ({ label })), note: r.note };
+  const autoSel = r.assets.length === 1 || !!r.perCountry;
+  const tag = vs => vs.map(v => ({ ...v, tagged: true }));
+  const data = m.rows.map(row => {
+    const tiles = row.cells.map(x => ({ i: x.index, s: STATUS_NUM[x.status] }));
+    const idx = tiles.map(t => t.i);
+    const sel = autoSel ? idx[0] : (selected !== null && idx.includes(selected) ? selected : null);
+    if (row.cta && sel !== null) apiVenues.set(`${sel}|${row.code}`, tag(row.cta.venues));
+    return { code: row.code, name: row.name, flag: row.flag, tiles, sel,
+      yes: row.summary.can_own, cond: row.summary.conditional, no: row.summary.cannot_own };
+  });
+  // A tile picked by hand on a multi-asset board has no cta; fetch its venues where it can be bought.
+  await Promise.all(data.map(async c => {
+    if (c.sel === null || apiVenues.has(`${c.sel}|${c.code}`)) return;
+    if (!c.tiles.find(t => t.i === c.sel).s) return;
+    const vs = await api(`/venues/${encodeURIComponent(ASSET_IDS[c.sel])}?country=${encodeURIComponent(c.code)}`);
+    apiVenues.set(`${c.sel}|${c.code}`, tag(vs));
+  }));
+  return { res, data };
+}
+
+// Fetches can finish out of order while the user types; only the latest render paints.
+let renderSeq = 0;
+async function render() {
+  const seq = ++renderSeq;
+  let board = null;
+  if (apiLive) {
+    try { board = await boardFromApi(); }
+    catch (err) { console.warn("Vestail API unavailable, using inline data.", err); apiLive = false; }
+    if (seq !== renderSeq) return;
+  }
+  paint(board || boardLocal());
+}
+
+function paint({ res, data }) {
+  clearBtn.classList.toggle("on", q.value.trim().length > 0);
+
+  // trail
+  trailEl.innerHTML = "";
+  if (res.trail.length) {
+    res.trail.forEach((t, i) => {
+      if (i) { const a = document.createElement("span"); a.className = "arrow"; a.textContent = "→"; trailEl.appendChild(a); }
+      const s = document.createElement("span"); s.className = "step"; s.style.animationDelay = (i * 60) + "ms"; s.textContent = t.label; trailEl.appendChild(s);
+    });
+    if (res.note) { const w = document.createElement("span"); w.className = "why"; w.textContent = res.note; trailEl.appendChild(w); }
+  } else if (q.value.trim()) {
+    trailEl.innerHTML = `<span class="why">Nothing matched. Try the class it belongs to, like <b>equities</b>, <b>land</b> or <b>crypto</b>, or a name like <b>Google</b>.</span>`;
+  } else {
+    trailEl.innerHTML = `<span class="why">${selected !== null ? `Showing <b>${ASSETS[selected]}</b> in the buy column. Click another tile to switch, or clear to reset.` : "Click any tile to see where to buy it."}</span>`;
+  }
+
+  rows.innerHTML = "";
+  if (!res.assets.length) { boardHead.classList.add("hide"); return; }
+
+  boardHead.classList.remove("hide");
+  $("hAssets").textContent = view === "status" ? "Assets, most open first" : "Assets 1–20";
+  $("hWho").textContent = who === "citizen" ? "Citizens" : "Foreigners";
+
+  data.forEach((c, r) => {
+    const n = c.tiles.length;
+    const row = document.createElement("article");
+    row.className = "row" + (c.sel !== null ? " has-sel" : "") + (firstPaint ? " in" : "");
+    if (firstPaint) row.style.animationDelay = (r * 45) + "ms";
+    const score = n === 1
+      ? `${LABEL[c.tiles[0].s]}`
+      : `${c.yes} of ${n} open${c.cond ? ` · ${c.cond} conditional` : ""}${c.no ? ` · ${c.no} closed` : ""}`;
+    row.innerHTML = `
+      <div class="who"><span class="flag" aria-hidden="true">${esc(c.flag)}</span>
+        <div><div class="name">${esc(c.name)}</div><div class="score">${score}</div></div></div>
+      <div class="grid" role="group" aria-label="${esc(c.name)}"></div>
+      <div class="buy">${c.sel !== null ? ctaHTML(c, c.sel, c.tiles.find(t => t.i === c.sel).s) : `<span class="cta-hint">Pick an asset</span>`}</div>`;
+    const grid = row.querySelector(".grid");
+    c.tiles.forEach((t, k) => {
+      const b = document.createElement("button");
+      b.className = "tile " + CLASS[t.s] + (c.sel === t.i ? " sel" : "") + (firstPaint ? " in" : "");
+      b.type = "button"; b.dataset.i = t.i;
+      if (firstPaint) b.style.animationDelay = (r * 45 + k * 12) + "ms";
+      b.setAttribute("aria-label", `${ASSETS[t.i]}: ${LABEL[t.s]}`);
+      b.setAttribute("aria-pressed", c.sel === t.i);
+      b.dataset.text = `<b>${ASSETS[t.i]}</b> · ${LABEL[t.s]}`;
+      grid.appendChild(b);
+    });
+    rows.appendChild(row);
+  });
+  firstPaint = false;
+}
+
+/* --- buy: record the press with the API, then follow its redirect --- */
+async function buyViaApi(link) {
+  // Open the tab now, inside the click, or popup blockers stop it after the await.
+  const win = window.open("", "_blank");
+  if (win) win.opener = null;
+  const go = url => { if (win) win.location.href = url; else location.href = url; };
+  try {
+    const out = await api("/orders/click", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${API_KEY}` },
+      body: JSON.stringify({ country: link.dataset.country, asset: ASSET_IDS[+link.dataset.asset], who,
+        venue: link.dataset.venue, query: q.value.trim() || undefined, session: SESSION }),
+    });
+    if (!/^https?:\/\//i.test(out.redirect)) throw new Error("Unexpected redirect " + out.redirect);
+    go(out.redirect);
+    loadActivity().catch(() => {});
+  } catch (err) {
+    // The venue link is already tagged, so a failed record never blocks the buyer.
+    console.warn("Click not recorded; opening the venue directly.", err);
+    go(link.href);
+  }
+}
+
+/* --- interactions --- */
+rows.addEventListener("click", e => {
+  const link = e.target.closest("a[data-venue]");
+  if (link) {
+    // Modified clicks (new tab, etc.) keep the browser's behaviour and skip recording.
+    if (apiLive && API_KEY && !(e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button)) { e.preventDefault(); buyViaApi(link); }
+    return;
+  }
+  const t = e.target.closest(".tile"); if (!t) return;
+  const i = +t.dataset.i;
+  selected = selected === i ? null : i;
+  render();
+});
+document.querySelectorAll("[role=tab]").forEach(b => b.addEventListener("click", () => {
+  view = b.dataset.view; document.querySelectorAll("[role=tab]").forEach(x => x.setAttribute("aria-selected", x === b)); render();
+}));
+document.querySelectorAll("[role=radio]").forEach(b => b.addEventListener("click", () => {
+  who = b.dataset.who; document.querySelectorAll("[role=radio]").forEach(x => x.setAttribute("aria-selected", x === b)); render();
+}));
+q.addEventListener("input", () => { selected = null; render(); });
+clearBtn.addEventListener("click", () => { q.value = ""; selected = null; render(); q.focus(); });
+document.querySelectorAll(".chip").forEach(ch => ch.addEventListener("click", () => { q.value = ch.dataset.q; selected = null; render(); q.focus(); }));
+document.addEventListener("keydown", e => { if (e.key === "Escape" && selected !== null) { selected = null; render(); } });
+
+function showTip(el) {
+  const r = el.getBoundingClientRect();
+  tip.innerHTML = el.dataset.text; tip.style.left = (r.left + r.width / 2) + "px"; tip.style.top = r.top + "px"; tip.classList.add("show");
+}
+function hideTip() { tip.classList.remove("show"); }
+rows.addEventListener("mouseover", e => { const t = e.target.closest(".tile"); if (t) showTip(t); });
+rows.addEventListener("mouseout", e => { if (e.target.closest(".tile")) hideTip(); });
+rows.addEventListener("focusin", e => { const t = e.target.closest(".tile"); if (t) showTip(t); });
+rows.addEventListener("focusout", hideTip);
+window.addEventListener("scroll", hideTip, { passive: true });
+
+/* ---------- Traction HUD (placeholder feed; wire to the order log) ---------- */
+const RECENT = [
+  ["🇳🇬", "Foreign equities", "Bamboo", "just now"], ["🇬🇧", "Gold bullion", "BullionVault", "1m ago"],
+  ["🇮🇳", "Cryptocurrency", "CoinDCX", "2m ago"], ["🇺🇸", "Government bonds", "TreasuryDirect", "3m ago"],
+  ["🇦🇪", "Residential property", "Bayut", "4m ago"], ["🇩🇪", "Domestic equities", "Trade Republic", "6m ago"],
+  ["🇧🇷", "Foreign equities", "Interactive Brokers", "7m ago"], ["🇰🇷", "Cryptocurrency", "Upbit", "9m ago"],
+  ["🇳🇬", "Foreign currency accounts", "Wise", "11m ago"], ["🇸🇦", "Gold bullion", "Kitco", "12m ago"]
+];
+const tickerEl = document.getElementById("ticker");
+function renderTicker(items) {
+  tickerEl.textContent = "";
+  items.forEach(([f, a, v, t]) => {
+    const li = document.createElement("li");
+    li.innerHTML = `<span>${esc(f)}</span><span><span class="long">Someone bought </span><b>${esc(a)}</b> via <b>${esc(v)}</b></span><span class="t">${esc(t)}</span>`;
+    tickerEl.appendChild(li);
+  });
+}
+let tickI = 0;
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+if (!reduce) setInterval(() => { const n = tickerEl.children.length; if (!n) return; tickI = (tickI + 1) % n; tickerEl.style.transform = `translateY(${-tickI * 40}px)`; }, 3200);
+
+const fmt = (n, f, pre) => pre + (f === "compact" ? (n >= 1e6 ? (n / 1e6).toFixed(1) + "M" : n >= 1e3 ? Math.round(n / 1e3) + "k" : n) : Math.round(n).toLocaleString());
+// Counts up once on first paint; later updates set the number without replaying the motion.
+let statsShown = false;
+function showStats() {
+  const animate = !statsShown && !reduce;
+  statsShown = true;
+  document.querySelectorAll(".stat .v").forEach(el => {
+    const target = +el.dataset.count, f = el.dataset.fmt, pre = el.dataset.prefix || "";
+    if (!animate) { el.textContent = fmt(target, f, pre); return; }
+    const t0 = performance.now() + 500, dur = 1400;
+    (function step(now) { const p = Math.min(1, Math.max(0, (now - t0) / dur)); const e = 1 - Math.pow(1 - p, 3); el.textContent = fmt(target * e, f, pre); if (p < 1) requestAnimationFrame(step); })(t0);
+  });
+}
+
+// HUD from GET /activity: stats into the counters, recent buys into the ticker.
+async function loadActivity() {
+  const { stats, recent } = await api("/activity");
+  const [vol, orders, buyers] = document.querySelectorAll(".stat");
+  const delta = (el, pct) => { const d = el.querySelector(".d"); if (d) { d.textContent = pct ? `${pct > 0 ? "+" : ""}${pct}%` : ""; } };
+  vol.querySelector(".v").dataset.count = stats.volume_30d_usd; delta(vol, stats.volume_30d_delta_pct);
+  orders.querySelector(".v").dataset.count = stats.orders_routed; delta(orders, stats.orders_delta_pct);
+  buyers.querySelector(".v").dataset.count = stats.active_buyers_7d;
+  renderTicker(recent.map(r => [r.flag, r.asset, r.venue, r.ago]));
+  showStats();
+}
+
+/* --- start --- */
+async function start() {
+  if (API) {
+    try {
+      const assets = (await api("/assets")).slice().sort((a, b) => a.index - b.index);
+      ASSET_IDS = assets.map(a => a.id);
+      ASSETS.splice(0, ASSETS.length, ...assets.map(a => a.name));
+      apiLive = true;
+    } catch (err) { console.warn("Vestail API unavailable, using inline data.", err); }
+  }
+  ASSETS.forEach(a => { const li = document.createElement("li"); li.textContent = a; $("key").appendChild(li); });
+  render();
+  if (apiLive) {
+    try { await loadActivity(); return; }
+    catch (err) { console.warn("Activity unavailable, showing the inline HUD.", err); }
+  }
+  renderTicker(RECENT);
+  showStats();
+}
+start();
+
+// segmented control thumb position
+document.querySelectorAll(".seg").forEach(seg => seg.addEventListener("click", e => {
+  const btns = [...seg.querySelectorAll("button")]; const i = btns.indexOf(e.target.closest("button")); if (i >= 0) seg.dataset.pos = i;
+}));
+</script>
+</body>
+</html>

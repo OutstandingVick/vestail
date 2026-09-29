@@ -1,5 +1,5 @@
 {
-  "version": "1.0",
+  "version": "2.0",
   "statusScale": {
     "0": "cannot_own",
     "1": "conditional",
@@ -11,50 +11,210 @@
       "name": "Nigeria",
       "flag": "🇳🇬",
       "rules": {
-        "citizen": [
-          2,
-          2,
-          2,
-          2,
-          1,
-          2,
-          2,
-          1,
-          2,
-          2,
-          2,
-          1,
-          1,
-          1,
-          2,
-          1,
-          1,
-          1,
-          1,
-          2
-        ],
-        "foreigner": [
-          1,
-          0,
-          1,
-          2,
-          2,
-          2,
-          2,
-          1,
-          2,
-          2,
-          1,
-          2,
-          0,
-          1,
-          1,
-          2,
-          0,
-          0,
-          0,
-          2
-        ]
+        "citizen": {
+          "residential_property": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "agricultural_land": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "commercial_property": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "domestic_equities": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_equities": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "government_bonds": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "corporate_bonds": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "cryptocurrency": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_currency_accounts": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "gold_bullion": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "private_company_shares": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_bank_accounts": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "firearms": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "private_aircraft": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "yachts_vessels": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "offshore_trusts": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "media_companies": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "telecom_licences": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "mining_rights": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "precious_gems": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          }
+        },
+        "foreigner": {
+          "residential_property": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "agricultural_land": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "commercial_property": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "domestic_equities": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_equities": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "government_bonds": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "corporate_bonds": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "cryptocurrency": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_currency_accounts": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "gold_bullion": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "private_company_shares": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_bank_accounts": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "firearms": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "private_aircraft": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "yachts_vessels": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "offshore_trusts": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "media_companies": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "telecom_licences": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "mining_rights": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "precious_gems": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          }
+        }
       }
     },
     {
@@ -62,50 +222,210 @@
       "name": "United Kingdom",
       "flag": "🇬🇧",
       "rules": {
-        "citizen": [
-          2,
-          2,
-          2,
-          2,
-          2,
-          2,
-          2,
-          2,
-          2,
-          2,
-          2,
-          2,
-          1,
-          2,
-          2,
-          2,
-          2,
-          1,
-          2,
-          2
-        ],
-        "foreigner": [
-          2,
-          2,
-          2,
-          2,
-          2,
-          2,
-          2,
-          2,
-          2,
-          2,
-          2,
-          2,
-          0,
-          2,
-          2,
-          2,
-          1,
-          1,
-          1,
-          2
-        ]
+        "citizen": {
+          "residential_property": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "agricultural_land": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "commercial_property": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "domestic_equities": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_equities": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "government_bonds": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "corporate_bonds": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "cryptocurrency": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_currency_accounts": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "gold_bullion": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "private_company_shares": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_bank_accounts": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "firearms": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "private_aircraft": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "yachts_vessels": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "offshore_trusts": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "media_companies": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "telecom_licences": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "mining_rights": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "precious_gems": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          }
+        },
+        "foreigner": {
+          "residential_property": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "agricultural_land": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "commercial_property": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "domestic_equities": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_equities": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "government_bonds": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "corporate_bonds": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "cryptocurrency": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_currency_accounts": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "gold_bullion": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "private_company_shares": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_bank_accounts": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "firearms": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "private_aircraft": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "yachts_vessels": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "offshore_trusts": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "media_companies": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "telecom_licences": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "mining_rights": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "precious_gems": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          }
+        }
       }
     },
     {
@@ -113,50 +433,210 @@
       "name": "United States",
       "flag": "🇺🇸",
       "rules": {
-        "citizen": [
-          2,
-          2,
-          2,
-          2,
-          2,
-          2,
-          2,
-          2,
-          2,
-          2,
-          2,
-          1,
-          2,
-          2,
-          2,
-          2,
-          2,
-          1,
-          2,
-          2
-        ],
-        "foreigner": [
-          2,
-          1,
-          2,
-          2,
-          2,
-          2,
-          2,
-          2,
-          2,
-          2,
-          2,
-          2,
-          0,
-          1,
-          1,
-          2,
-          0,
-          0,
-          1,
-          2
-        ]
+        "citizen": {
+          "residential_property": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "agricultural_land": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "commercial_property": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "domestic_equities": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_equities": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "government_bonds": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "corporate_bonds": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "cryptocurrency": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_currency_accounts": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "gold_bullion": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "private_company_shares": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_bank_accounts": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "firearms": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "private_aircraft": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "yachts_vessels": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "offshore_trusts": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "media_companies": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "telecom_licences": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "mining_rights": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "precious_gems": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          }
+        },
+        "foreigner": {
+          "residential_property": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "agricultural_land": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "commercial_property": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "domestic_equities": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_equities": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "government_bonds": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "corporate_bonds": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "cryptocurrency": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_currency_accounts": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "gold_bullion": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "private_company_shares": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_bank_accounts": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "firearms": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "private_aircraft": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "yachts_vessels": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "offshore_trusts": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "media_companies": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "telecom_licences": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "mining_rights": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "precious_gems": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          }
+        }
       }
     },
     {
@@ -164,50 +644,210 @@
       "name": "UAE",
       "flag": "🇦🇪",
       "rules": {
-        "citizen": [
-          2,
-          2,
-          2,
-          2,
-          2,
-          2,
-          2,
-          1,
-          2,
-          2,
-          2,
-          2,
-          0,
-          1,
-          2,
-          1,
-          1,
-          0,
-          0,
-          2
-        ],
-        "foreigner": [
-          1,
-          0,
-          1,
-          2,
-          2,
-          2,
-          2,
-          1,
-          2,
-          2,
-          1,
-          2,
-          0,
-          1,
-          1,
-          1,
-          0,
-          0,
-          0,
-          2
-        ]
+        "citizen": {
+          "residential_property": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "agricultural_land": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "commercial_property": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "domestic_equities": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_equities": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "government_bonds": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "corporate_bonds": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "cryptocurrency": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_currency_accounts": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "gold_bullion": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "private_company_shares": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_bank_accounts": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "firearms": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "private_aircraft": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "yachts_vessels": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "offshore_trusts": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "media_companies": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "telecom_licences": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "mining_rights": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "precious_gems": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          }
+        },
+        "foreigner": {
+          "residential_property": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "agricultural_land": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "commercial_property": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "domestic_equities": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_equities": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "government_bonds": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "corporate_bonds": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "cryptocurrency": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_currency_accounts": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "gold_bullion": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "private_company_shares": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_bank_accounts": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "firearms": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "private_aircraft": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "yachts_vessels": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "offshore_trusts": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "media_companies": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "telecom_licences": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "mining_rights": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "precious_gems": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          }
+        }
       }
     },
     {
@@ -215,50 +855,210 @@
       "name": "China",
       "flag": "🇨🇳",
       "rules": {
-        "citizen": [
-          2,
-          0,
-          1,
-          2,
-          1,
-          2,
-          2,
-          0,
-          1,
-          2,
-          2,
-          1,
-          0,
-          1,
-          1,
-          0,
-          0,
-          0,
-          0,
-          2
-        ],
-        "foreigner": [
-          1,
-          0,
-          1,
-          1,
-          2,
-          1,
-          1,
-          0,
-          2,
-          2,
-          1,
-          2,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          2
-        ]
+        "citizen": {
+          "residential_property": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "agricultural_land": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "commercial_property": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "domestic_equities": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_equities": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "government_bonds": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "corporate_bonds": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "cryptocurrency": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_currency_accounts": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "gold_bullion": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "private_company_shares": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_bank_accounts": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "firearms": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "private_aircraft": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "yachts_vessels": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "offshore_trusts": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "media_companies": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "telecom_licences": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "mining_rights": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "precious_gems": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          }
+        },
+        "foreigner": {
+          "residential_property": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "agricultural_land": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "commercial_property": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "domestic_equities": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_equities": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "government_bonds": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "corporate_bonds": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "cryptocurrency": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_currency_accounts": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "gold_bullion": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "private_company_shares": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_bank_accounts": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "firearms": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "private_aircraft": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "yachts_vessels": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "offshore_trusts": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "media_companies": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "telecom_licences": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "mining_rights": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "precious_gems": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          }
+        }
       }
     },
     {
@@ -266,50 +1066,210 @@
       "name": "India",
       "flag": "🇮🇳",
       "rules": {
-        "citizen": [
-          2,
-          1,
-          2,
-          2,
-          1,
-          2,
-          2,
-          1,
-          1,
-          2,
-          2,
-          1,
-          1,
-          1,
-          2,
-          0,
-          1,
-          1,
-          1,
-          2
-        ],
-        "foreigner": [
-          1,
-          0,
-          1,
-          1,
-          2,
-          1,
-          1,
-          1,
-          2,
-          2,
-          1,
-          2,
-          0,
-          1,
-          1,
-          1,
-          0,
-          0,
-          0,
-          2
-        ]
+        "citizen": {
+          "residential_property": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "agricultural_land": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "commercial_property": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "domestic_equities": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_equities": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "government_bonds": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "corporate_bonds": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "cryptocurrency": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_currency_accounts": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "gold_bullion": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "private_company_shares": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_bank_accounts": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "firearms": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "private_aircraft": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "yachts_vessels": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "offshore_trusts": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "media_companies": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "telecom_licences": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "mining_rights": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "precious_gems": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          }
+        },
+        "foreigner": {
+          "residential_property": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "agricultural_land": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "commercial_property": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "domestic_equities": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_equities": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "government_bonds": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "corporate_bonds": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "cryptocurrency": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_currency_accounts": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "gold_bullion": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "private_company_shares": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_bank_accounts": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "firearms": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "private_aircraft": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "yachts_vessels": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "offshore_trusts": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "media_companies": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "telecom_licences": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "mining_rights": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "precious_gems": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          }
+        }
       }
     },
     {
@@ -317,50 +1277,210 @@
       "name": "Brazil",
       "flag": "🇧🇷",
       "rules": {
-        "citizen": [
-          2,
-          1,
-          2,
-          2,
-          2,
-          2,
-          2,
-          2,
-          1,
-          2,
-          2,
-          1,
-          1,
-          2,
-          2,
-          1,
-          1,
-          1,
-          1,
-          2
-        ],
-        "foreigner": [
-          2,
-          1,
-          2,
-          2,
-          2,
-          2,
-          2,
-          2,
-          2,
-          2,
-          2,
-          2,
-          0,
-          1,
-          2,
-          2,
-          0,
-          1,
-          1,
-          2
-        ]
+        "citizen": {
+          "residential_property": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "agricultural_land": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "commercial_property": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "domestic_equities": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_equities": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "government_bonds": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "corporate_bonds": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "cryptocurrency": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_currency_accounts": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "gold_bullion": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "private_company_shares": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_bank_accounts": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "firearms": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "private_aircraft": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "yachts_vessels": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "offshore_trusts": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "media_companies": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "telecom_licences": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "mining_rights": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "precious_gems": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          }
+        },
+        "foreigner": {
+          "residential_property": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "agricultural_land": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "commercial_property": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "domestic_equities": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_equities": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "government_bonds": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "corporate_bonds": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "cryptocurrency": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_currency_accounts": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "gold_bullion": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "private_company_shares": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_bank_accounts": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "firearms": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "private_aircraft": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "yachts_vessels": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "offshore_trusts": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "media_companies": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "telecom_licences": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "mining_rights": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "precious_gems": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          }
+        }
       }
     },
     {
@@ -368,50 +1488,210 @@
       "name": "Saudi Arabia",
       "flag": "🇸🇦",
       "rules": {
-        "citizen": [
-          2,
-          2,
-          2,
-          2,
-          1,
-          2,
-          2,
-          0,
-          2,
-          2,
-          2,
-          1,
-          1,
-          1,
-          2,
-          0,
-          0,
-          0,
-          1,
-          2
-        ],
-        "foreigner": [
-          1,
-          0,
-          1,
-          1,
-          2,
-          1,
-          1,
-          0,
-          2,
-          2,
-          1,
-          2,
-          0,
-          1,
-          1,
-          1,
-          0,
-          0,
-          0,
-          2
-        ]
+        "citizen": {
+          "residential_property": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "agricultural_land": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "commercial_property": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "domestic_equities": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_equities": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "government_bonds": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "corporate_bonds": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "cryptocurrency": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_currency_accounts": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "gold_bullion": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "private_company_shares": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_bank_accounts": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "firearms": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "private_aircraft": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "yachts_vessels": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "offshore_trusts": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "media_companies": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "telecom_licences": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "mining_rights": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "precious_gems": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          }
+        },
+        "foreigner": {
+          "residential_property": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "agricultural_land": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "commercial_property": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "domestic_equities": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_equities": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "government_bonds": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "corporate_bonds": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "cryptocurrency": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_currency_accounts": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "gold_bullion": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "private_company_shares": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_bank_accounts": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "firearms": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "private_aircraft": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "yachts_vessels": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "offshore_trusts": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "media_companies": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "telecom_licences": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "mining_rights": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "precious_gems": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          }
+        }
       }
     },
     {
@@ -419,50 +1699,210 @@
       "name": "Germany",
       "flag": "🇩🇪",
       "rules": {
-        "citizen": [
-          2,
-          2,
-          2,
-          2,
-          2,
-          2,
-          2,
-          2,
-          2,
-          2,
-          2,
-          2,
-          1,
-          2,
-          2,
-          2,
-          2,
-          1,
-          1,
-          2
-        ],
-        "foreigner": [
-          2,
-          2,
-          2,
-          2,
-          2,
-          2,
-          2,
-          2,
-          2,
-          2,
-          2,
-          2,
-          0,
-          2,
-          2,
-          2,
-          1,
-          1,
-          1,
-          2
-        ]
+        "citizen": {
+          "residential_property": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "agricultural_land": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "commercial_property": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "domestic_equities": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_equities": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "government_bonds": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "corporate_bonds": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "cryptocurrency": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_currency_accounts": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "gold_bullion": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "private_company_shares": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_bank_accounts": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "firearms": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "private_aircraft": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "yachts_vessels": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "offshore_trusts": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "media_companies": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "telecom_licences": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "mining_rights": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "precious_gems": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          }
+        },
+        "foreigner": {
+          "residential_property": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "agricultural_land": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "commercial_property": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "domestic_equities": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_equities": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "government_bonds": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "corporate_bonds": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "cryptocurrency": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_currency_accounts": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "gold_bullion": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "private_company_shares": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_bank_accounts": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "firearms": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "private_aircraft": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "yachts_vessels": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "offshore_trusts": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "media_companies": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "telecom_licences": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "mining_rights": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "precious_gems": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          }
+        }
       }
     },
     {
@@ -470,50 +1910,210 @@
       "name": "South Korea",
       "flag": "🇰🇷",
       "rules": {
-        "citizen": [
-          2,
-          1,
-          2,
-          2,
-          1,
-          2,
-          2,
-          1,
-          2,
-          2,
-          2,
-          1,
-          0,
-          1,
-          2,
-          1,
-          1,
-          1,
-          1,
-          2
-        ],
-        "foreigner": [
-          1,
-          1,
-          1,
-          1,
-          2,
-          1,
-          1,
-          0,
-          2,
-          2,
-          1,
-          2,
-          0,
-          1,
-          1,
-          1,
-          0,
-          0,
-          0,
-          2
-        ]
+        "citizen": {
+          "residential_property": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "agricultural_land": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "commercial_property": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "domestic_equities": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_equities": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "government_bonds": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "corporate_bonds": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "cryptocurrency": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_currency_accounts": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "gold_bullion": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "private_company_shares": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_bank_accounts": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "firearms": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "private_aircraft": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "yachts_vessels": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "offshore_trusts": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "media_companies": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "telecom_licences": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "mining_rights": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "precious_gems": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          }
+        },
+        "foreigner": {
+          "residential_property": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "agricultural_land": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "commercial_property": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "domestic_equities": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_equities": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "government_bonds": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "corporate_bonds": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "cryptocurrency": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_currency_accounts": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "gold_bullion": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "private_company_shares": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "foreign_bank_accounts": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          },
+          "firearms": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "private_aircraft": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "yachts_vessels": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "offshore_trusts": {
+            "status": 1,
+            "sources": [],
+            "verified_at": null
+          },
+          "media_companies": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "telecom_licences": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "mining_rights": {
+            "status": 0,
+            "sources": [],
+            "verified_at": null
+          },
+          "precious_gems": {
+            "status": 2,
+            "sources": [],
+            "verified_at": null
+          }
+        }
       }
     }
   ]

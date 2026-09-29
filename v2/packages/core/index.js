@@ -7,6 +7,7 @@
  *   core.resolve("Google")            -> { assets:[3,4], perCountry, trail, note }
  *   core.matrix("Google", "citizen")  -> rows for every country, one status each
  *   core.venues("cryptocurrency", "NG")
+ *   core.rule("NG", "citizen", "Cryptocurrency") -> { status, statusKey, sources, verified_at }
  *
  * All data is passed in; nothing is hard-coded. Feed it the JSON files in /data
  * or your own database rows shaped the same way (see /data/schema).
@@ -46,11 +47,38 @@ export function createVestail(data) {
   const CATEGORIES = Array.isArray(catSrc) ? Object.fromEntries(catSrc.map(c => [c.name, c.assets])) : catSrc;
   const ALIASES = data.aliases.aliases || data.aliases;
   const ENTITIES = data.entities.entities || data.entities;
-  const COUNTRIES = (data.countries.countries || data.countries).map(c => ({
-    code: c.code, name: c.name, flag: c.flag,
-    citizen: c.rules ? c.rules.citizen : c.citizen,
-    foreigner: c.rules ? c.rules.foreigner : c.foreigner
-  }));
+  const ASSET_IDS = data.assets.map(a => (typeof a === "string" ? null : a.id));
+
+  /**
+   * One buyer type's rules as a status array in asset order, plus provenance.
+   * Keyed rules ({ asset_id: { status, sources, verified_at } }) are the data
+   * format; positional arrays are still accepted for the inline app data.
+   * A keyed set must cover exactly the known assets, so a missing or misspelt
+   * asset fails at load instead of shifting every rule after it.
+   */
+  function ruleRow(rules, where) {
+    if (Array.isArray(rules)) {
+      if (rules.length !== ASSETS.length) throw new Error(`${where}: expected ${ASSETS.length} rules, got ${rules.length}`);
+      return { statuses: rules, provenance: rules.map(() => ({ sources: [], verified_at: null })) };
+    }
+    if (ASSET_IDS.includes(null)) throw new Error(`${where}: keyed rules need assets with ids`);
+    const extra = Object.keys(rules).filter(k => !ASSET_IDS.includes(k));
+    if (extra.length) throw new Error(`${where}: unknown asset ${extra.join(", ")}`);
+    const rows = ASSET_IDS.map(id => {
+      const r = rules[id];
+      if (!r) throw new Error(`${where}: no rule for ${id}`);
+      if (![0, 1, 2].includes(r.status)) throw new Error(`${where}.${id}: status must be 0, 1 or 2`);
+      return r;
+    });
+    return { statuses: rows.map(r => r.status), provenance: rows.map(r => ({ sources: r.sources || [], verified_at: r.verified_at ?? null })) };
+  }
+
+  const COUNTRIES = (data.countries.countries || data.countries).map(c => {
+    const src = c.rules || c;
+    const citizen = ruleRow(src.citizen, `${c.code}.citizen`), foreigner = ruleRow(src.foreigner, `${c.code}.foreigner`);
+    return { code: c.code, name: c.name, flag: c.flag, citizen: citizen.statuses, foreigner: foreigner.statuses,
+      provenance: { citizen: citizen.provenance, foreigner: foreigner.provenance } };
+  });
   const VENUES = data.venues ? (data.venues.venues || data.venues) : {};
   const REF = data.venues && data.venues.ref ? data.venues.ref : null;
 
@@ -135,5 +163,14 @@ export function createVestail(data) {
     return { query, who, resolution: { stage: res.stage, trail: res.trail, note: res.note, assets: res.assetNames || [] }, rows };
   }
 
-  return { ASSETS, COUNTRIES, resolve, venues, matrix, stages: { stageEntity, stageAlias, stageCategory, stageAsset } };
+  /** One rule with its provenance, or null for an unknown country or asset (index or name). */
+  function rule(code, who, asset) {
+    const c = COUNTRIES.find(x => x.code === code);
+    const i = typeof asset === "number" ? asset : A[asset];
+    if (!c || i === undefined || !c[who]) return null;
+    const status = c[who][i];
+    return { status, statusKey: STATUS[status], ...c.provenance[who][i] };
+  }
+
+  return { ASSETS, COUNTRIES, resolve, venues, matrix, rule, stages: { stageEntity, stageAlias, stageCategory, stageAsset } };
 }

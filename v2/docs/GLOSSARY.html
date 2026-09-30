@@ -137,10 +137,12 @@
   <h2 id="design">Design system</h2>
   <div class="card">
     <dl>
-      <dt>Type</dt><dd><b>Bricolage Grotesque</b> for display (headline, country names, stat numbers); <b>Plus Jakarta Sans</b> for body. Loaded from Google Fonts with system fallbacks.</dd>
-      <dt>Colour tokens</dt><dd><code>--bg #F3F4F6</code>, <code>--surface #FFF</code>, <code>--ink #111827</code>, <code>--accent #2F4BFF</code>, <code>--yes #23A55A</code>, <code>--cond #E0A421</code>, <code>--no #DC4B3B</code>. Full dark theme via <code>prefers-color-scheme</code> and <code>data-theme</code>.</dd>
-      <dt>Shape</dt><dd>Pill controls, 20px cards, 6px tiles, 14px insets. Two shadow levels: resting and hover.</dd>
+      <dt>Brand</dt><dd>Vestail's identity from v1 (<code>app/globals.css</code> and <code>public/brand/</code> on <code>main</code>): the orange wordmark and character, inlined in the page, and the same mark as the favicon.</dd>
+      <dt>Type</dt><dd><b>Outfit</b> at 400, 600 and 700 for everything, as in v1. Loaded from Google Fonts with system fallbacks.</dd>
+      <dt>Colour tokens</dt><dd>Dark only, like v1. Page: a violet <code>#7C41F1</code> to navy <code>#0A122A</code> gradient on a fixed layer. Cards <code>#151922</code> at 85% with a hairline white ring; fields and chips white at 7%. Text <code>#E8E4D9</code>, headings white. Primary action orange <code>#FF580A</code> with a navy label; gold <code>#C9A227</code> for emphasis only. Verdicts use v1's colours and nothing else does: can own <code>#8FBD7F</code>, conditional <code>#D9A84D</code>, cannot own <code>#D98D84</code> (always hatched).</dd>
+      <dt>Shape</dt><dd>As v1: 28px panels, 16px fields and country cards, 12px buttons, pill toggles and chips, 6px tiles. A 1px white ring instead of borders; a soft drop shadow on raised panels.</dd>
       <dt>Motion</dt><dd>Headline words rise in; tiles pop in with a stagger on first paint only; toggles slide a thumb; trail chips pop; selection scales and dims. Everything honours <code>prefers-reduced-motion</code>.</dd>
+      <dt>Why dark only</dt><dd>v1 is deliberately dark-only: its verdict colours hold their meaning and contrast against a dark ground, and a light theme would need a second, separately checked set. v2 follows it.</dd>
       <dt>Responsive</dt><dd>Breakpoints at 900px (stack) and 480px (fluid tiles, full-width buttons, shortened copy). Safe-area insets declared for notched phones.</dd>
     </dl>
   </div>

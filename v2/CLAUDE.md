@@ -28,3 +28,4 @@ Vestail is a country × asset-class ownership matrix with venue routing. This re
 - `node packages/core/test.js` — resolver tests only
 - `npm start -w @vestail/api` — the API on http://localhost:8787/v1
 - open `app/index.html` — the app (no server needed); see `DEPLOY.md` to point it at the API
+- `node scripts/serve-page.js` — the app on http://localhost:8080, connected to the local API (set `VESTAIL_API_KEY` to record Buy presses)

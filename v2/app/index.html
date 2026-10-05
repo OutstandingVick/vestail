@@ -242,7 +242,8 @@
   .cta-act { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
   .cta-note { margin: 0; font-size: 13.5px; color: var(--ink-3); }
   .cta-route { font-size: 14px; font-weight: 600; color: var(--ink-2); }
-  .cta-empty { display: flex; align-items: center; gap: 10px; padding: 16px 18px; border-radius: var(--r-md); box-shadow: inset 0 0 0 1.5px var(--line); color: var(--ink-3); font-size: 14px; }
+  /* With nothing picked, a plain prompt sits just above the chart it refers to. */
+  .cta-empty { display: flex; align-items: center; gap: 8px; margin-bottom: -10px; color: var(--ink-3); font-size: 14px; }
   .cta-empty svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; flex: none; }
   .cta-btn { display: inline-flex; align-items: center; gap: 6px; background: var(--accent); color: var(--accent-ink); font-weight: 700; font-size: 14px; text-decoration: none; padding: 11px 18px; border-radius: var(--r-sm); white-space: nowrap; transition: transform .2s var(--ease), box-shadow .2s var(--ease), filter .2s; }
   .cta-btn svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; transition: transform .2s var(--ease); }
@@ -1054,8 +1055,9 @@ function paint({ res, data }) {
     row.innerHTML = `
       <header class="who"><span class="flag" aria-hidden="true">${esc(c.flag)}</span>
         <div><h3 class="name">${esc(c.name)}</h3><div class="score">${score}</div></div></header>
+      ${c.sel === null ? `<div class="cta-empty"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M8 20v6M14 14v12M20 18v8M26 8v18"/></svg>Pick a bar to see where to buy it</div>` : ""}
       <div class="grid ${n <= 3 ? "labeled" : "bars"}" role="group" aria-label="${esc(c.name)}: assets by verdict"></div>
-      <div class="buy">${c.sel !== null ? ctaHTML(c, c.sel, c.tiles.find(t => t.i === c.sel).s) : `<div class="cta-empty"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M8 20v6M14 14v12M20 18v8M26 8v18"/></svg>Pick a bar to see where to buy it</div>`}</div>`;
+      ${c.sel !== null ? `<div class="buy">${ctaHTML(c, c.sel, c.tiles.find(t => t.i === c.sel).s)}</div>` : ""}`;
     const grid = row.querySelector(".grid");
     c.tiles.forEach((t, k) => {
       const b = document.createElement("button");

@@ -266,6 +266,48 @@
       "asset": "equity-by-home"
     },
     {
+      "name": "SoftBank",
+      "kind": "Listed company",
+      "home": "JP",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "Honda",
+      "kind": "Listed company",
+      "home": "JP",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "Mitsubishi",
+      "kind": "Listed company",
+      "home": "JP",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "Shoprite",
+      "kind": "Listed company",
+      "home": "ZA",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "Sasol",
+      "kind": "Listed company",
+      "home": "ZA",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "Standard Bank",
+      "kind": "Listed company",
+      "home": "ZA",
+      "asset": "equity-by-home"
+    },
+    {
+      "name": "Anglo American",
+      "kind": "Listed company",
+      "home": "ZA",
+      "asset": "equity-by-home"
+    },
+    {
       "name": "SAP",
       "kind": "Listed company",
       "home": "DE",

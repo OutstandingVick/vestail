@@ -200,7 +200,8 @@
   .who { display: flex; align-items: center; gap: 14px; min-width: 0; }
   .flag { font-size: 26px; line-height: 1; width: 52px; height: 52px; display: grid; place-items: center; background: var(--surface-2); box-shadow: var(--ring); border-radius: var(--r-md); flex: none; }
   .name { font-family: var(--font-display); font-weight: 600; color: var(--ink); font-size: 20px; letter-spacing: -.01em; margin: 0; }
-  .score { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 13.5px; color: var(--ink-3); margin-top: 4px; font-variant-numeric: tabular-nums; }
+  .score { display: flex; flex-wrap: wrap; gap: 3px 14px; font-size: 13.5px; color: var(--ink-3); margin-top: 4px; font-variant-numeric: tabular-nums; }
+  .score .line { flex-basis: 100%; color: var(--ink-2); font-size: 14px; }
   .cnt { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
   .cnt::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
   .cnt.yes::before { background: var(--yes); } .cnt.cond::before { background: var(--cond); }
@@ -214,6 +215,10 @@
    */
   .grid.bars { padding: 12px; border-radius: var(--r-md); }
   .track { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 4px; padding: 5px; background: #fff; border-radius: var(--r-sm); }
+  /* One row of up to ten: a gap divides the open group from the restricted one when sorted by status. */
+  .track.one { display: flex; }
+  .track.one .tile { flex: 1 1 0; min-width: 0; }
+  .track.one .tile.split { margin-left: 8px; }
   .track .tile { position: relative; height: 34px; border: 0; padding: 0; border-radius: 7px; cursor: pointer; transition: transform .15s var(--ease), opacity .25s, box-shadow .15s, filter .15s; }
   .tile.yes { background: var(--yes); } .tile.cond { background: var(--cond); }
   .tile.no { background: var(--no); background-image: repeating-linear-gradient(135deg, var(--no-hatch) 0 2px, transparent 2px 5px); }
@@ -953,18 +958,30 @@ const rows = $("rows"), tip = $("tip"), q = $("q"), clearBtn = $("clear"), trail
 let view = "status", who = "citizen", selected = null; // selected = asset index chosen for the buy column
 let firstPaint = true;
 
-// With no search, cards show ten key asset classes (the same ten everywhere, so cards stay
-// comparable); "Show all 20" reveals the rest. Counts always cover all twenty.
-const KEY_ASSETS = ["Residential property", "Agricultural land", "Commercial property", "Domestic equities", "Foreign equities",
-  "Government bonds", "Corporate bonds", "Cryptocurrency", "Gold bullion", "Foreign currency accounts"];
+// With no search, each card shows ten of its twenty assets, split so both groups appear:
+// its conditional and closed assets first, then open ones to fill the rest. A selected
+// asset always stays in view. "Show all 20" reveals everything; counts always cover all twenty.
 let showAll = false;
 const showAllBtn = $("showAll");
-showAllBtn.addEventListener("click", () => {
-  showAll = !showAll;
-  // Hiding the extra ten drops a selection that would disappear with them.
-  if (!showAll && selected !== null && !KEY_ASSETS.includes(ASSETS[selected])) selected = null;
-  render();
-});
+showAllBtn.addEventListener("click", () => { showAll = !showAll; render(); });
+function pickTen(tiles, sel) {
+  const open = tiles.filter(t => t.s === 2), cond = tiles.filter(t => t.s === 1), no = tiles.filter(t => t.s === 0);
+  const restricted = cond.length + no.length;
+  // Restrictions first, but at least three open bars whenever the country has open assets,
+  // and at least one bar for each restricted group, so every card shows the split.
+  const openSlots = restricted >= 7 ? Math.min(open.length, 3) : Math.min(open.length, 10 - restricted);
+  let rest = 10 - openSlots;
+  let noSlots = no.length ? Math.min(no.length, Math.max(1, Math.round(rest * no.length / (restricted || 1)))) : 0;
+  let condSlots = Math.min(cond.length, rest - noSlots);
+  noSlots = Math.min(no.length, rest - condSlots); // hand unused slots back to closed
+  const chosen = [...open.slice(0, openSlots + (10 - openSlots - condSlots - noSlots)), ...cond.slice(0, condSlots), ...no.slice(0, noSlots)];
+  if (sel !== null && !chosen.some(t => t.i === sel)) {
+    const drop = chosen.map(t => t.s).lastIndexOf(2);
+    chosen[drop >= 0 ? drop : chosen.length - 1] = tiles.find(t => t.i === sel);
+  }
+  const keep = new Set(chosen.map(t => t.i));
+  return tiles.filter(t => keep.has(t.i)); // keep the board's sort order
+}
 
 // Acknowledged conditions, per country, asset and buyer type, so a re-render keeps the tick.
 const acks = new Set();
@@ -1073,22 +1090,26 @@ function paint({ res, data }) {
   boardHead.classList.remove("hide");
   const full = res.assets.length === ASSETS.length;
   showAllBtn.hidden = !full;
-  showAllBtn.textContent = showAll ? "Show 10 key assets" : "Show all 20";
+  showAllBtn.textContent = showAll ? "Show 10 per country" : "Show all 20";
   showAllBtn.setAttribute("aria-pressed", showAll);
   const order = view === "status" ? "most open first" : "in index order";
-  $("hAssets").textContent = full && !showAll ? `10 key assets, ${order} · counts cover all 20` : (view === "status" ? "Assets, most open first" : "Assets 1–20");
+  $("hAssets").textContent = full && !showAll ? `10 assets per country, restrictions included · counts cover all 20` : (view === "status" ? "Assets, most open first" : "Assets 1–20");
   $("hWho").textContent = who === "citizen" ? "Citizens" : "Foreigners";
 
   data.forEach((c, r) => {
     const n = c.tiles.length;
-    const shown = full && !showAll ? c.tiles.filter(t => KEY_ASSETS.includes(ASSETS[t.i])) : c.tiles;
+    const shown = full && !showAll ? pickTen(c.tiles, c.sel) : c.tiles;
     const row = document.createElement("article");
     row.className = "row" + (c.sel !== null ? " has-sel" : "") + (firstPaint ? " in" : "");
     if (firstPaint) row.style.animationDelay = (r * 45) + "ms";
-    // Counted summary with a dot per verdict; a one-asset card just names its verdict.
+    // Summary in plain words: what this buyer can own, then what needs approval or is off-limits.
+    // A one-asset card just names its verdict.
+    const buyers = who === "citizen" ? "Citizens" : "Foreigners";
     const score = n === 1
       ? `<span class="cnt ${CLASS[c.tiles[0].s]}">${LABEL[c.tiles[0].s]}</span>`
-      : `<span class="cnt yes">${c.yes} open</span>${c.cond ? `<span class="cnt cond">${c.cond} conditional</span>` : ""}${c.no ? `<span class="cnt no">${c.no} closed</span>` : ""}`;
+      : `<span class="line">${buyers} can own ${c.yes} of ${n} assets.</span>`
+        + (c.cond ? `<span class="cnt cond">${c.cond} ${c.cond === 1 ? "needs" : "need"} a licence or approval</span>` : "")
+        + (c.no ? `<span class="cnt no">${c.no} ${c.no === 1 ? "is" : "are"} off-limits</span>` : "");
     row.innerHTML = `
       <header class="who"><span class="flag" aria-hidden="true">${esc(c.flag)}</span>
         <div><h3 class="name">${esc(c.name)}</h3><div class="score">${score}</div></div></header>
@@ -1097,10 +1118,11 @@ function paint({ res, data }) {
       ${c.sel !== null ? `<div class="buy">${ctaHTML(c, c.sel, c.tiles.find(t => t.i === c.sel).s)}</div>` : ""}`;
     const grid = row.querySelector(".grid");
     // Bars live in a white track inside the orange panel; chips go straight in.
-    const holder = n <= 3 ? grid : grid.appendChild(Object.assign(document.createElement("div"), { className: "track" }));
+    const holder = n <= 3 ? grid : grid.appendChild(Object.assign(document.createElement("div"), { className: "track" + (shown.length <= 10 ? " one" : "") }));
     shown.forEach((t, k) => {
+      const splitHere = view === "status" && shown.length <= 10 && k > 0 && (shown[k - 1].s === 2) !== (t.s === 2);
       const b = document.createElement("button");
-      b.className = "tile " + CLASS[t.s] + (c.sel === t.i ? " sel" : "") + (firstPaint ? " in" : "");
+      b.className = "tile " + CLASS[t.s] + (c.sel === t.i ? " sel" : "") + (splitHere ? " split" : "") + (firstPaint ? " in" : "");
       b.type = "button"; b.dataset.i = t.i;
       if (firstPaint) b.style.animationDelay = (r * 45 + k * 12) + "ms";
       if (n <= 3) b.innerHTML = `<i aria-hidden="true"></i>${esc(ASSETS[t.i])}`;

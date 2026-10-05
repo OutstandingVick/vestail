@@ -137,7 +137,7 @@
   .ticker li .t { margin-left: auto; color: var(--ink-3); font-size: 12px; flex: none; }
   .ticker ul { transition: transform .5s var(--ease); }
   @keyframes pulse { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--purple) 55%, transparent); } 100% { box-shadow: 0 0 0 8px transparent; } }
-  @media (max-width: 480px) { .stats { gap: 8px; } .stat { padding: 11px 12px; } .stat .l { font-size: 11.5px; } .stat .d { display: none; } .ticker li .t { display: none; } .long { display: none; } .ticker li { font-size: 13px; } }
+  @media (max-width: 480px) { .stat { padding: 2px 6px; } .stat .v { font-size: 30px; } .stat .l { font-size: 12.5px; margin-top: 8px; } .stat .d { font-size: 11.5px; padding: 2px 7px; } .ticker li .t { display: none; } .long { display: none; } .ticker li { font-size: 13px; } }
 
   .chips { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 8px; margin: 18px auto 0; animation: rise .7s .42s var(--ease) both; }
   .chips .try { font-size: 13.5px; color: var(--ink-3); margin-right: 4px; }
@@ -330,10 +330,15 @@
     .key ol { columns: 2; }
   }
   @media (max-width: 480px) {
-    .hero { padding: 36px 0 20px; }
-    .hero p { font-size: 15.5px; }
-    .searchbar input { font-size: 16px; padding: 15px 84px 15px 46px; }
-    .searchbar > svg { left: 17px; }
+    .hero { padding: 32px 0 20px; }
+    .hero > p { font-size: 16px; }
+    .proof { font-size: 13px; gap: 6px 16px; margin-bottom: 20px; }
+    .searchbar { padding: 6px 6px 6px 16px; gap: 6px; margin-top: 26px; }
+    .searchbar > svg { width: 18px; height: 18px; }
+    .searchbar input { font-size: 16px; padding: 10px 2px; }
+    .searchbar .go { padding: 11px 15px; font-size: 14px; }
+    .chips .try { display: none; }
+    .hud { margin-top: 44px; }
     .grid { grid-template-columns: repeat(10, minmax(0, 1fr)); grid-auto-rows: auto; width: 100%; }
     .tile { aspect-ratio: 1; }
     .tile:hover, .tile.sel { transform: scale(1.12); }
@@ -1151,6 +1156,9 @@ document.querySelectorAll("[data-focus-search]").forEach(b => b.addEventListener
   q.scrollIntoView({ behavior: reduce || document.hidden ? "auto" : "smooth", block: "center" });
   q.focus({ preventScroll: true });
 }));
+
+// A full placeholder is cut mid-word in the phone-width pill; give narrow screens a short one.
+if (matchMedia("(max-width: 480px)").matches) q.placeholder = "Google, a house, gold…";
 
 /* --- start --- */
 async function start() {

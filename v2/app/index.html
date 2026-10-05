@@ -179,20 +179,21 @@
   .row:hover { transform: translateY(-2px); box-shadow: var(--card-hover); }
   .row.has-sel { box-shadow: 0 0 0 1px color-mix(in srgb, var(--purple) 45%, transparent), 0 20px 40px -26px color-mix(in srgb, var(--purple) 40%, transparent); }
   /*
-   * Cards are brand orange. Their content panels (the chart and the buy panel)
-   * stay white, so verdict colours sit on the ground they were checked against.
-   * Text on the orange is near-black: white measures ~2.9:1 on #FF580A, near-black
-   * 6.2:1. Rings on the orange are dark, not orange.
+   * Cards share the page's warm off-white, so a stronger ring and the soft drop
+   * set them apart. The chart panel is brand orange; the verdict bars nearly
+   * match it in tone (1.0-1.3:1), so each bar carries a white outline (3.2:1 on
+   * the orange) and its height still repeats the verdict.
    */
-  .row { background: var(--orange); box-shadow: 0 20px 40px -24px rgb(255 88 10 / .6); }
-  .row:hover { box-shadow: 0 0 0 1px rgba(13,13,15,.28), 0 26px 50px -24px rgb(255 88 10 / .7); }
-  .row.has-sel { box-shadow: 0 0 0 2px var(--ink-0), 0 20px 40px -24px rgb(255 88 10 / .6); }
-  .row .name, .row .score, .row .cta-empty { color: var(--ink-0); }
-  .row .score, .row .cta-empty { opacity: .78; }
-  .row .flag { background: rgba(255,255,255,.28); box-shadow: inset 0 0 0 1px rgba(255,255,255,.45); }
-  .row .cnt::before { box-shadow: 0 0 0 1.5px #fff; }
-  .row .grid.bars, .row .grid.labeled { background: #fff; box-shadow: none; }
+  .row { background: var(--bg); box-shadow: 0 0 0 1px color-mix(in srgb, var(--paper) 14%, transparent), 0 20px 40px -26px rgba(13,13,15,.22); }
+  .row:hover { box-shadow: 0 0 0 1px color-mix(in srgb, var(--paper) 24%, transparent), 0 26px 50px -24px rgba(13,13,15,.26); }
+  .row.has-sel { box-shadow: 0 0 0 2px var(--ink-0), 0 20px 40px -26px rgba(13,13,15,.22); }
+  .row .flag { background: var(--surface); }
+  .row .grid.bars, .row .grid.labeled { background: var(--orange); box-shadow: none; }
   .row .grid.labeled { padding: 12px; border-radius: var(--r-md); }
+  .row .grid.bars .tile { box-shadow: 0 0 0 2px #fff; }
+  .row .grid.bars .tile.sel { box-shadow: 0 0 0 2px #fff, 0 0 0 4.5px var(--ink-0); }
+  .row .grid.labeled .tile { background-color: var(--surface); box-shadow: none; }
+  .row .grid.labeled .tile.sel { box-shadow: 0 0 0 2px var(--ink-0); }
   /* Header, like the reference's icon and title: the flag in a soft tile, the name, then a counted summary. */
   .who { display: flex; align-items: center; gap: 14px; min-width: 0; }
   .flag { font-size: 26px; line-height: 1; width: 52px; height: 52px; display: grid; place-items: center; background: var(--surface-2); box-shadow: var(--ring); border-radius: var(--r-md); flex: none; }

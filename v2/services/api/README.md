@@ -22,8 +22,8 @@ The spec is served at `/v1/openapi.json`. Parameters and bodies are validated ag
 
 ## Behaviour the spec leaves open
 
-- **Error codes beyond API.md:** `unauthorized` (401), `rate_limited` (429), `not_found` (unknown route), `internal` (500).
-- **Cannot own:** `/rules/{country}/{asset}` returns no venues, `/matrix` returns a cta with no venues, and `/orders/click` refuses the click. Conditional cells route normally; there is no acknowledgement step yet.
+- **Error codes beyond API.md:** `unauthorized` (401), `rate_limited` (429), `acknowledgement_required` (400), `not_found` (unknown route), `internal` (500).
+- **Cannot own:** `/rules/{country}/{asset}` returns no venues, `/matrix` returns a cta with no venues, and `/orders/click` refuses the click. Conditional cells route only when the click carries `acknowledged: true`, as in Vestail v1; otherwise it's refused with `acknowledgement_required`.
 - **Provenance:** `/rules/{country}/{asset}` returns the rule's `sources` and `verified_at` (added to the spec's `Rule`). Both are `[]` / `null` until the rule is sourced.
 - **Clicks** must name a venue the rule lookup would list with an online url; the redirect is that url, tagged by the core. Clicks are attributed to the matching key's index, never the key itself.
 - **`/activity`** puts recorded clicks first. Outside production it mixes in `data/activity.sample.json`; in production the stats come from recorded clicks only, and volume is 0 until real order data exists.

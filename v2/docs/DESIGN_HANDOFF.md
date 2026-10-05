@@ -46,7 +46,7 @@ Top to bottom:
 | Verdict | What shows |
 |---|---|
 | Can own | Primary button **"Buy on {venue}"**, plus "or {second venue}" as a text link |
-| Conditional | Amber button **"Check eligibility on {venue}"** |
+| Conditional | An acknowledgement checkbox, then an amber **"Buy on {venue}"** button that stays locked until it's ticked |
 | Cannot own | Disabled **"Not permitted"** |
 | No online venue | The route as text: "Licensed dealers only", "Regulator auction", "Local agents" |
 | Nothing selected | Hint: "Pick an asset" |
@@ -87,7 +87,7 @@ Same content and states as section 3, with stronger hierarchy and scanability, e
 
 ### B. New states the product needs
 
-1. **Conditional acknowledgement.** In v1, a buyer must tick *"I understand I can buy and hold this, but {limit} requires {requires}"* before a conditional version can be bought. v2 must get the same gate on its amber cells: the checkbox, its copy, and how the "Check eligibility" button changes once the box is ticked.
+1. **Conditional acknowledgement** (built in a first version). A checkbox above the amber button reads *"I understand I can buy and hold {asset} here, but a licence, cap, approval or KYC check may apply to me."* The buy links stay locked until it's ticked, and the API refuses the purchase otherwise. Refine it: the checkbox, its copy, the locked and unlocked button, and room for a specific condition once rules record one (v1 names it: *"…but {limit} requires {requires}"*).
 2. **Provenance.** Every rule will carry `sources` (a title and link for each) and `verified_at` (a date, or none). Design:
    - how a tile, tooltip or card shows where a verdict comes from;
    - an "unverified" state, which is how every rule starts;

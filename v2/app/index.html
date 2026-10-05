@@ -176,6 +176,15 @@
   .cta-alt { font-size: 12.5px; color: var(--ink-2); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .2s, color .2s; }
   .cta-alt:hover { color: var(--ink); border-color: var(--ink); }
   .cta-sub { font-size: 12px; color: var(--ink-3); }
+  /* Conditional gate: the buy links stay locked until the condition is acknowledged (as in v1). */
+  .ack { display: flex; align-items: flex-start; gap: 9px; max-width: 250px; font-size: 12.5px; line-height: 1.4; color: var(--ink-2); text-align: left; cursor: pointer; }
+  .ack input { appearance: none; flex: none; width: 18px; height: 18px; margin: 1px 0 0; border-radius: 5px; background: var(--surface-2); box-shadow: inset 0 0 0 1.5px var(--cond); cursor: pointer; display: grid; place-items: center; transition: background .15s; }
+  .ack input::after { content: ""; width: 9px; height: 5px; border: solid var(--ink-0); border-width: 0 0 2px 2px; transform: rotate(-45deg) translate(1px, -1px); opacity: 0; }
+  .ack input:checked { background: var(--cond); }
+  .ack input:checked::after { opacity: 1; }
+  .ack input:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+  .ack b { color: var(--ink); font-weight: 600; }
+  .cta a[aria-disabled="true"] { opacity: .4; cursor: not-allowed; pointer-events: none; box-shadow: none; }
   .cta-hint { font-size: 13px; color: var(--ink-3); }
 
   /* ---------- Key + footer ---------- */
@@ -829,19 +838,30 @@ const rows = $("rows"), tip = $("tip"), q = $("q"), clearBtn = $("clear"), trail
 let view = "status", who = "citizen", selected = null; // selected = asset index chosen for the buy column
 let firstPaint = true;
 
+// Acknowledged conditions, per country, asset and buyer type, so a re-render keeps the tick.
+const acks = new Set();
+const ackKey = (code, assetIdx) => `${code}|${assetIdx}|${who}`;
+
 function ctaHTML(c, assetIdx, status) {
   if (status === 0) return `<div class="cta off"><span class="cta-btn disabled">Not permitted</span><span class="cta-sub">${ASSETS[assetIdx]}</span></div>`;
   const vs = venuesFor(assetIdx, c.code);
   const primary = vs[0], secondary = vs[1];
   if (!primary) return `<div class="cta"><span class="cta-sub">${ASSETS[assetIdx]}</span></div>`;
-  const label = status === 1 ? "Check eligibility" : "Buy";
-  // data-* lets API mode record the press before following the link.
-  const data = v => `data-country="${esc(c.code)}" data-asset="${assetIdx}" data-venue="${esc(v.name)}"`;
+  // A conditional cell is only bought after the buyer acknowledges the condition, as in v1.
+  const gated = status === 1 && !!primary.url, key = ackKey(c.code, assetIdx), acked = acks.has(key);
+  const locked = gated && !acked;
+  // data-* lets API mode record the press before following the link. A locked link keeps its
+  // target in data-href and has no href, so it can't be followed until the box is ticked.
+  const attrs = v => `data-country="${esc(c.code)}" data-asset="${assetIdx}" data-venue="${esc(v.name)}" `
+    + (locked ? `data-href="${esc(hrefOf(v))}" aria-disabled="true"` : `href="${esc(hrefOf(v))}"`);
   const btn = primary.url
-    ? `<a class="cta-btn ${status === 1 ? "cond" : ""}" href="${esc(hrefOf(primary))}" ${data(primary)} target="_blank" rel="noopener">${label} on ${esc(primary.name)}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></a>`
+    ? `<a class="cta-btn ${status === 1 ? "cond" : ""}" ${attrs(primary)} target="_blank" rel="noopener">Buy on ${esc(primary.name)}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></a>`
     : `<span class="cta-btn muted">${esc(primary.name)}</span>`;
-  const alt = secondary && secondary.url ? `<a class="cta-alt" href="${esc(hrefOf(secondary))}" ${data(secondary)} target="_blank" rel="noopener">or ${esc(secondary.name)}</a>` : `<span class="cta-sub">${ASSETS[assetIdx]}</span>`;
-  return `<div class="cta">${btn}${alt}</div>`;
+  const alt = secondary && secondary.url ? `<a class="cta-alt" ${attrs(secondary)} target="_blank" rel="noopener">or ${esc(secondary.name)}</a>` : `<span class="cta-sub">${ASSETS[assetIdx]}</span>`;
+  const gate = gated
+    ? `<label class="ack"><input type="checkbox" data-ack="${esc(key)}"${acked ? " checked" : ""}><span>I understand I can buy and hold <b>${esc(ASSETS[assetIdx].toLowerCase())}</b> here, but a licence, cap, approval or KYC check may apply to me.</span></label>`
+    : "";
+  return `<div class="cta">${gate}${btn}${alt}</div>`;
 }
 
 // Board from the inline data: the resolution plus one entry per country row.
@@ -964,7 +984,9 @@ async function buyViaApi(link) {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${API_KEY}` },
       body: JSON.stringify({ country: link.dataset.country, asset: ASSET_IDS[+link.dataset.asset], who,
-        venue: link.dataset.venue, query: q.value.trim() || undefined, session: SESSION }),
+        venue: link.dataset.venue, query: q.value.trim() || undefined, session: SESSION,
+        // The API refuses a conditional click without this; it is only true if the box was ticked.
+        acknowledged: !!link.closest(".cta").querySelector("input[data-ack]:checked") || undefined }),
     });
     if (!/^https?:\/\//i.test(out.redirect)) throw new Error("Unexpected redirect " + out.redirect);
     go(out.redirect);
@@ -977,9 +999,18 @@ async function buyViaApi(link) {
 }
 
 /* --- interactions --- */
+rows.addEventListener("change", e => {
+  const box = e.target.closest("input[data-ack]"); if (!box) return;
+  if (box.checked) acks.add(box.dataset.ack); else acks.delete(box.dataset.ack);
+  box.closest(".cta").querySelectorAll("a[data-venue]").forEach(a => {
+    if (box.checked) { a.href = a.dataset.href; a.removeAttribute("aria-disabled"); }
+    else { a.dataset.href = a.getAttribute("href"); a.removeAttribute("href"); a.setAttribute("aria-disabled", "true"); }
+  });
+});
 rows.addEventListener("click", e => {
   const link = e.target.closest("a[data-venue]");
   if (link) {
+    if (link.getAttribute("aria-disabled") === "true") { e.preventDefault(); return; }
     // Modified clicks (new tab, etc.) keep the browser's behaviour and skip recording.
     if (apiLive && API_KEY && !(e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button)) { e.preventDefault(); buyViaApi(link); }
     return;

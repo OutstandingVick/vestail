@@ -20,7 +20,7 @@ const rebase = n => Array.isArray(n) ? n.map(rebase) : n && typeof n === "object
 
 const SAMPLE_PATH = { country: "NG", asset: "cryptocurrency" };
 const SAMPLE_QUERY = { "/resolve": "?q=tesla%20shares", "/matrix": "?q=Google", "/venues/{asset}": "?country=NG" };
-const CLICK = { country: "NG", asset: "cryptocurrency", who: "citizen", venue: "Luno" };
+const CLICK = { country: "NG", asset: "cryptocurrency", who: "citizen", venue: "Luno", acknowledged: true };
 
 for (const [path, ops] of Object.entries(spec.paths)) {
   for (const [method, op] of Object.entries(ops)) {

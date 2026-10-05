@@ -125,7 +125,7 @@
 
   <h2 id="cta">Buy column</h2>
   <div class="card">
-    <p>For the selected asset in each row the column shows one of four things: <b>Buy on [venue]</b> (blue, green tile), <b>Check eligibility on [venue]</b> (amber tile), <b>Not permitted</b> (red tile), or the name of the licensed route when there is no online venue (firearms, trusts, media, telecom, mining). A secondary venue appears as a text link. Venue choice is local override first, default second. Every link opens in a new tab with the ref tag.</p>
+    <p>For the selected asset in each row the column shows one of four things: <b>Buy on [venue]</b> (blue, green tile), <b>Buy on [venue]</b> in amber behind an acknowledgement checkbox (amber tile; the link stays locked until the buyer ticks it), <b>Not permitted</b> (red tile), or the name of the licensed route when there is no online venue (firearms, trusts, media, telecom, mining). A secondary venue appears as a text link. Venue choice is local override first, default second. Every link opens in a new tab with the ref tag.</p>
     <p>With the API connected (<code>window.VESTAIL_API</code> and <code>window.VESTAIL_API_KEY</code>), a click goes to <code>POST /orders/click</code>, which records it and returns the tagged redirect; the page opens the tab during the click and then follows it, so popup blockers allow it. If recording fails the buyer still goes to the venue link, which is already tagged. The API only redirects to a venue listed for that rule, so a cannot-own cell can't be routed. Without the API every link opens directly, as before.</p>
   </div>
 
@@ -168,12 +168,12 @@
     <div class="step"><b>10 · Vestail</b><span>Renamed from the example's working name, Own: <code>v2/</code>, <code>@vestail/core</code>, <code>@vestail/api</code>, <code>VESTAIL_*</code> settings, and the <code>ref=vestail</code> tag.</span></div>
     <div class="step"><b>11 · Keyed rules and provenance</b><span>Rules moved from arrays indexed by asset position to objects keyed by asset id, each with <code>sources</code> and <code>verified_at</code> (empty until filled). Every board is identical before and after. The core refuses to load a missing, unknown or invalid rule; <code>/rules/{country}/{asset}</code> returns the provenance; the data schema validates it.</span></div>
     <div class="step"><b>12 · Brand and story sections</b><span>The page took Vestail v1's identity (gradient, Outfit, logo, orange actions, v1's verdict colours). Six sections followed below the board, shaped by Awwwards startup sites (Abatable, Reckoner, Base Power, Moto): the problem (one asset, three answers, drawn from the page's own rules), how it works, the three verdicts, buy in one place (onchain from your wallet; offchain through licensed partners, marked planned), why trust Vestail, and a FAQ, then a closing call to action. The top bar gained section links and a Search pill.</span></div>
+    <div class="step"><b>13 · Conditional acknowledgement</b><span>A conditional cell now shows a checkbox ("I understand I can buy and hold … but a licence, cap, approval or KYC check may apply to me") and its buy links stay locked until it's ticked, as in v1. The API enforces it: <code>POST /orders/click</code> refuses a conditional click without <code>acknowledged: true</code>.</span></div>
   </div>
 
   <h2 id="next">Open questions</h2>
   <div class="card"><dl>
     <dt>Rule provenance</dt><dd>Every rule now has <code>sources</code> and <code>verified_at</code>, but all are empty: every status is still illustrative until it is checked against a real document. The grid does not show provenance yet.</dd>
-    <dt>Conditional cells</dt><dd>A conditional cell routes like a permitted one, behind a "Check eligibility" label. Decide whether the buyer must acknowledge the condition first, as Vestail v1 requires.</dd>
     <dt>Partner keys</dt><dd>The page has to carry an API key to record clicks, and anything in a public page can be read. Decide how partner keys and per-partner ref tags work before relying on click attribution.</dd>
     <dt>Click and rate-limit storage</dt><dd>Both live in the API process's memory, so they reset on restart and are not shared between instances. Move them to a store before running more than one.</dd>
     <dt>Securities master</dt><dd>Replace the hand-seeded entity list with ticker/ISIN lookup so any listed company resolves.</dd>

@@ -200,3 +200,4 @@ components:
         venue: { type: string }
         query: { type: string, description: The text the user typed, for resolver analytics }
         session: { type: string }
+        acknowledged: { type: boolean, description: "Required as true when the rule is conditional: the buyer has acknowledged the condition (licence, cap, approval or KYC) before buying. Without it a conditional click is refused with acknowledgement_required." }

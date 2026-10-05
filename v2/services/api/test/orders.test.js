@@ -12,7 +12,8 @@ const click = async (body, key = KEY) => {
   });
   return { res, body: await res.json() };
 };
-const luno = { country: "NG", asset: "cryptocurrency", who: "citizen", venue: "Luno", session: "s1", query: "bitcoin" };
+// Crypto is conditional for a Nigerian citizen in the sample rules, so this click carries the acknowledgement.
+const luno = { country: "NG", asset: "cryptocurrency", who: "citizen", venue: "Luno", session: "s1", query: "bitcoin", acknowledged: true };
 
 test("a valid click is recorded and returns the tagged redirect", async () => {
   const { res, body } = await click(luno);
@@ -49,6 +50,24 @@ test("a cannot_own cell cannot be routed", async () => {
   const { res, body } = await click({ ...luno, who: "foreigner", asset: blocked });
   assert.equal(res.status, 400);
   assert.equal(body.error.code, "validation");
+});
+
+test("a conditional rule needs the acknowledgement", async () => {
+  const rule = await (await app.request("/v1/rules/NG/cryptocurrency")).json();
+  assert.equal(rule.status, "conditional", "fixture: NG crypto is conditional for citizens");
+  for (const acknowledged of [undefined, false]) {
+    const { res, body } = await click({ ...luno, acknowledged });
+    assert.equal(res.status, 400);
+    assert.equal(body.error.code, "acknowledgement_required");
+  }
+  assert.equal((await click({ ...luno, acknowledged: "yes" })).body.error.code, "validation", "must be a boolean");
+});
+
+test("a can_own rule needs no acknowledgement", async () => {
+  const rule = await (await app.request("/v1/rules/US/domestic_equities")).json();
+  assert.equal(rule.status, "can_own", "fixture: US domestic equities are open to citizens");
+  const { res } = await click({ country: "US", asset: "domestic_equities", who: "citizen", venue: "Robinhood" });
+  assert.equal(res.status, 201);
 });
 
 test("a venue not listed for the rule is refused", async () => {

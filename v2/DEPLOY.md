@@ -66,7 +66,7 @@ On the API, set `VESTAIL_CORS_ORIGINS` to the origin the page is served from (e.
 - **Rules are illustrative.** Every rule's `sources` is empty and `verified_at` is null until checked against a real document. See `data/schema/README.md`.
 - **Activity starts at zero** in production and volume stays 0 until real order data exists. That's intended.
 - **Venue links are homepages** with the shared `ref=vestail` tag; partner deep links and per-partner tags are still to be agreed.
-- **Conditional cells** route behind "Check eligibility" with no acknowledgement step yet.
+- **Conditional cells** can only be bought after the buyer ticks the acknowledgement; with the API connected, `POST /orders/click` refuses a conditional click without it. The wording is generic ("a licence, cap, approval or KYC check may apply") until each rule records its specific condition.
 
 ## Relationship to Vestail v1
 

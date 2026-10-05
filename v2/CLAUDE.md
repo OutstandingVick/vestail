@@ -14,6 +14,7 @@ Vestail is a country × asset-class ownership matrix with venue routing. This re
 - Never invent `sources` or `verified_at`. They stay `[]` and `null` until a rule is checked against a real document.
 - The resolver returns a `trail` for every hit. Any new stage must add to the trail. Never resolve silently.
 - Entities beat aliases. "tesla shares" must resolve to Tesla, not the generic "shares" bucket. `packages/core/test.js` guards this; run it after any resolver change.
+- Conditional cells are bought only after the buyer acknowledges the condition: the page locks the links until the checkbox is ticked, and `POST /orders/click` refuses a conditional click without `acknowledged: true`. Cannot-own cells are never routed. Don't loosen either.
 - Every outbound venue url carries the ref tag (`ref=vestail`). With the API connected, Buy presses go through `POST /orders/click`, which returns the tagged redirect. Ask before changing venues or tag logic; they tie to commercial agreements.
 - HUD numbers must come from real order data before any public launch. Never ship the sample figures to production.
 

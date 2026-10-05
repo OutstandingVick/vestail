@@ -9,7 +9,7 @@ test("empty query returns all 20 assets for every country", async () => {
   assert.equal(res.status, 200);
   assert.equal(body.who, "citizen");
   assert.equal(body.resolution.stage, "all");
-  assert.ok(body.rows.length >= 10);
+  assert.equal(body.rows.length, 12, "a row per country");
   for (const r of body.rows) {
     assert.equal(r.cells.length, 20);
     assert.ok(r.cells.every(x => STATUSES.includes(x.status) && /^[a-z_]+$/.test(x.asset)));

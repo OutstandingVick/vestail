@@ -6,7 +6,7 @@ A brief for designing the next version of the Vestail v2 interface. It stands on
 
 **Vestail v1** (live at vestail.fun) answers one narrow question: *which tokenized version of this stock am I actually allowed to hold?* One ticker, such as NVDA, exists onchain as several different legal claims. xStocks holds real shares in custody; Ondo's note only tracks the price; Backpack's is an entitlement through a broker. Vestail gives each version a verdict for the buyer's declared country and routes a purchase only to versions they may hold.
 
-**Vestail v2** widens that question to *what can I own in this country, and where do I buy it?* It covers 20 asset classes (property, farmland, equities, bonds, crypto, gold, aircraft, firearms…) across 10 countries, for citizens and for foreigners. Mentors see it as the start of an **open compliance layer**: the same rule data, later extended to tax and immigration.
+**Vestail v2** widens that question to *what can I own in this country, and where do I buy it?* It covers 20 asset classes (property, farmland, equities, bonds, crypto, gold, aircraft, firearms…) across 12 countries, for citizens and for foreigners. Mentors see it as the start of an **open compliance layer**: the same rule data, later extended to tax and immigration.
 
 Two principles carry over from v1 and must survive any redesign:
 
@@ -21,7 +21,7 @@ A person deciding whether and where to buy something, often across borders: a Ni
 
 Top to bottom:
 
-1. **Top bar.** Vestail wordmark left; scope line right ("10 countries · 20 asset classes · citizens and foreigners").
+1. **Top bar.** Vestail wordmark left; scope line right ("12 countries · 20 asset classes · citizens and foreigners").
 2. **Hero.** Headline *"What can you actually own here?"*, one-line explanation, then a large **search field** ("Google, bitcoin, a house, farmland, a Gulfstream…").
 3. **Activity strip.** Three stat cards (volume bought through Vestail, last 30 days, with change; orders routed to venues, with change; active buyers this week) and a one-line **live ticker** ("🇳🇬 Someone bought Foreign equities via Bamboo · just now").
 4. **Suggestion chips** that fill the search: Google, Bitcoin, A house, Farmland, Gold, Dangote, Private jet.
@@ -122,7 +122,7 @@ The page gets everything from an API, which keeps these shapes stable:
 - **Rule:** country, asset, buyer type, verdict, venues, `sources[]`, `verified_at`.
 - **Activity:** five stats (30-day volume and its change, orders routed and its change, active buyers this week) and a list of recent buys, each as flag, asset, venue and "time ago".
 
-The counts are fixed: 10 countries, 20 assets and 2 buyer types now, with a third buyer type, **resident**, planned. Names run long ("Foreign currency accounts", "United Kingdom"), and venue names vary ("ZAP Imóveis", "RBI Retail Direct").
+The counts are fixed: 12 countries, 20 assets and 2 buyer types now, with a third buyer type, **resident**, planned. Names run long ("Foreign currency accounts", "United Kingdom"), and venue names vary ("ZAP Imóveis", "RBI Retail Direct").
 
 ## 7. Constraints
 

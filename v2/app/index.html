@@ -134,9 +134,10 @@
   @keyframes pulse { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--purple) 55%, transparent); } 100% { box-shadow: 0 0 0 8px transparent; } }
   @media (max-width: 480px) { .stats { gap: 8px; } .stat { padding: 11px 12px; } .stat .l { font-size: 11.5px; } .stat .d { display: none; } .ticker li .t { display: none; } .long { display: none; } .ticker li { font-size: 13px; } }
 
-  .chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 14px auto 0; animation: rise .7s .5s var(--ease) both; }
-  .chip { border: 0; box-shadow: var(--ring); background: var(--surface-2); color: var(--ink-2); border-radius: var(--r-pill); padding: 7px 14px; font-size: 13.5px; font-weight: 400; cursor: pointer; transition: transform .2s var(--ease), background .2s, color .2s, border-color .2s; }
-  .chip:hover { transform: translateY(-2px); color: var(--ink); background: var(--surface-3); }
+  .chips { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 8px; margin: 18px auto 0; animation: rise .7s .5s var(--ease) both; }
+  .chips .try { font-size: 13.5px; color: var(--ink-3); margin-right: 4px; }
+  .chip { border: 0; box-shadow: var(--ring); background: transparent; color: var(--ink-2); border-radius: var(--r-pill); padding: 7px 14px; font-size: 13.5px; font-weight: 400; cursor: pointer; transition: transform .15s var(--ease), background .2s, color .2s, box-shadow .2s; }
+  .chip:hover { color: var(--ink); background: var(--surface); box-shadow: 0 0 0 1px color-mix(in srgb, var(--purple) 55%, transparent); }
   .chip:active { transform: translateY(0) scale(.98); }
 
   /* ---------- Controls ---------- */
@@ -372,6 +373,7 @@
       </div>
     </div>
     <div class="chips" aria-label="Try one">
+      <span class="try" aria-hidden="true">Try</span>
       <button class="chip" data-q="Google">Google</button>
       <button class="chip" data-q="Bitcoin">Bitcoin</button>
       <button class="chip" data-q="a house">A house</button>

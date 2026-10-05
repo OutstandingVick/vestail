@@ -178,6 +178,18 @@
   }
   .row:hover { transform: translateY(-2px); box-shadow: var(--card-hover); }
   .row.has-sel { box-shadow: 0 0 0 1px color-mix(in srgb, var(--purple) 45%, transparent), 0 20px 40px -26px color-mix(in srgb, var(--purple) 40%, transparent); }
+  /*
+   * Cards are brand purple. Their content panels (the chart and the buy panel)
+   * stay light, so verdict colours sit on the ground they were checked against;
+   * text on the purple is white, and rings on it are white, not purple.
+   */
+  .row { background: var(--purple); box-shadow: 0 20px 40px -24px color-mix(in srgb, var(--purple) 70%, transparent); }
+  .row:hover { box-shadow: 0 0 0 1px rgba(255,255,255,.45), 0 26px 50px -24px color-mix(in srgb, var(--purple) 80%, transparent); }
+  .row.has-sel { box-shadow: 0 0 0 2px #fff, 0 20px 40px -24px color-mix(in srgb, var(--purple) 70%, transparent); }
+  .row .name, .row .score, .row .cta-empty { color: #fff; }
+  .row .flag { background: rgba(255,255,255,.16); box-shadow: inset 0 0 0 1px rgba(255,255,255,.28); }
+  .row .cnt::before { box-shadow: 0 0 0 1.5px #fff; }
+  .row .grid.bars { background: #fff; box-shadow: none; }
   /* Header, like the reference's icon and title: the flag in a soft tile, the name, then a counted summary. */
   .who { display: flex; align-items: center; gap: 14px; min-width: 0; }
   .flag { font-size: 26px; line-height: 1; width: 52px; height: 52px; display: grid; place-items: center; background: var(--surface-2); box-shadow: var(--ring); border-radius: var(--r-md); flex: none; }

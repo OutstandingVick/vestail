@@ -433,21 +433,11 @@
   .plot .end { fill: var(--purple); }
   .xaxis { display: flex; justify-content: space-between; margin-top: 10px; font-size: 11.5px; color: var(--ink-3); }
 
-  /* 01 · The problem: one asset, three answers */
-  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  .same .label { font-size: 13px; color: var(--ink-3); margin-bottom: 16px; }
-  .same .label b { color: var(--ink); font-weight: 600; }
-  .same ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
-  .same li { display: flex; align-items: center; gap: 12px; background: var(--surface-2); box-shadow: var(--ring); border-radius: var(--r-md); padding: 12px 14px; }
-  .same .fl { font-size: 22px; }
-  .same .who-l { flex: 1; color: var(--ink); font-weight: 600; font-size: 15px; }
-  .same .who-l span { display: block; font-weight: 400; font-size: 12.5px; color: var(--ink-3); }
+  /* Verdict chip, shared with the how-it-works mock. */
   .vtag { display: inline-flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 600; color: var(--ink); white-space: nowrap; }
   .vtag i { width: 16px; height: 16px; border-radius: var(--r-tile); flex: none; }
   .vtag.yes i { background: var(--yes); } .vtag.cond i { background: var(--cond); }
   .vtag.no i { background: var(--no); background-image: repeating-linear-gradient(135deg, var(--no-hatch) 0 2px, transparent 2px 5px); }
-  .claims li { align-items: flex-start; }
-  .claims .who-l span { margin-top: 2px; }
 
   /* 02 · How it works */
   .steps .num { font-size: 13px; font-weight: 700; color: var(--purple-ink); letter-spacing: .06em; margin-bottom: 18px; }
@@ -493,7 +483,7 @@
   .closing .go:hover { transform: translateY(-2px); }
 
   @media (max-width: 900px) {
-    .cols-3, .cols-4, .split, .cols-2 { grid-template-columns: 1fr; }
+    .cols-3, .cols-4, .cols-2 { grid-template-columns: 1fr; }
     .sec { padding-top: 72px; }
     .nav a:not(.pill) { display: none; }
     .board { grid-template-columns: 1fr; }
@@ -1392,17 +1382,6 @@ async function loadActivity() {
 }
 
 
-/* --- 01 · same asset, three answers: built from the rules on this page, so it can't disagree with the board --- */
-function renderSameAsset() {
-  const el = $("sameAsset"), idx = ASSETS.indexOf("Agricultural land");
-  if (!el || idx < 0) return;
-  const tag = { 2: ["yes", "Can own"], 1: ["cond", "Conditional"], 0: ["no", "Cannot own"] };
-  const picks = [2, 1, 0].map(s => COUNTRIES.find(c => c.foreigner[idx] === s)).filter(Boolean);
-  el.innerHTML = picks.map(c => {
-    const [cls, label] = tag[c.foreigner[idx]];
-    return `<li><span class="fl" aria-hidden="true">${esc(c.flag)}</span><span class="who-l">${esc(c.name)}<span>Foreigner</span></span><span class="vtag ${cls}"><i></i>${label}</span></li>`;
-  }).join("");
-}
 // "See where" takes the eye from the search to the answer.
 $("seeWhere").addEventListener("click", () => {
   document.querySelector(".controls").scrollIntoView({ behavior: reduce || document.hidden ? "auto" : "smooth", block: "start" });
@@ -1428,7 +1407,6 @@ async function start() {
     } catch (err) { console.warn("Vestail API unavailable, using inline data.", err); }
   }
   ASSETS.forEach(a => { const li = document.createElement("li"); li.textContent = a; $("key").appendChild(li); });
-  renderSameAsset();
   render();
   if (apiLive) {
     try { await loadActivity(); return; }

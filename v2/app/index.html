@@ -169,6 +169,10 @@
   .board-head { display: flex; justify-content: space-between; padding: 0 4px 12px; font-size: 11.5px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); }
   .board-head span:first-child { display: none; }
   .board-head.hide { display: none; }
+  .board-head { align-items: center; }
+  .showall { margin-left: auto; margin-right: 18px; border: 0; background: none; padding: 4px 0; font: inherit; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; font-weight: 600; color: var(--purple-ink); cursor: pointer; }
+  .showall:hover { text-decoration: underline; }
+  .showall[hidden] { display: none; }
   .board { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; align-items: start; }
   .row {
     display: flex; flex-direction: column; gap: 22px;
@@ -190,8 +194,6 @@
   .row .flag { background: var(--surface); }
   .row .grid.bars, .row .grid.labeled { background: var(--orange); box-shadow: none; }
   .row .grid.labeled { padding: 12px; border-radius: var(--r-md); }
-  .row .grid.bars .tile { box-shadow: 0 0 0 2px #fff; }
-  .row .grid.bars .tile.sel { box-shadow: 0 0 0 2px #fff, 0 0 0 4.5px var(--ink-0); }
   .row .grid.labeled .tile { background-color: var(--surface); box-shadow: none; }
   .row .grid.labeled .tile.sel { box-shadow: 0 0 0 2px var(--ink-0); }
   /* Header, like the reference's icon and title: the flag in a soft tile, the name, then a counted summary. */
@@ -205,18 +207,20 @@
   .cnt.no::before { background: var(--no); background-image: repeating-linear-gradient(135deg, var(--no-hatch) 0 1.5px, transparent 1.5px 3px); }
 
   /*
-   * Verdicts as a slim bar chart, after the reference's reporting card. Height
-   * repeats the verdict (full / two-thirds / short), so it reads without colour;
-   * sorted by status the bars fall like a staircase.
+   * Verdicts as a segmented track: ten equal segments in a white track on the
+   * orange panel (twenty in two rows when every asset is shown). Colour gives the
+   * verdict; cannot own is hatched and conditional carries a centre dot, so the
+   * three differ without colour.
    */
-  .grid.bars { display: flex; align-items: flex-end; gap: 6px; height: 92px; padding: 16px 16px 14px; background: var(--surface-2); box-shadow: var(--ring); border-radius: var(--r-md); }
-  .grid.bars .tile { flex: 1 1 0; min-width: 0; max-width: 22px; border: 0; padding: 0; border-radius: var(--r-pill); cursor: pointer; transform-origin: bottom;
-    transition: transform .18s var(--ease), opacity .25s, box-shadow .18s, filter .18s; }
-  .grid.bars .tile.yes { height: 100%; } .grid.bars .tile.cond { height: 66%; } .grid.bars .tile.no { height: 38%; }
+  .grid.bars { padding: 12px; border-radius: var(--r-md); }
+  .track { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 4px; padding: 5px; background: #fff; border-radius: var(--r-sm); }
+  .track .tile { position: relative; height: 34px; border: 0; padding: 0; border-radius: 7px; cursor: pointer; transition: transform .15s var(--ease), opacity .25s, box-shadow .15s, filter .15s; }
   .tile.yes { background: var(--yes); } .tile.cond { background: var(--cond); }
   .tile.no { background: var(--no); background-image: repeating-linear-gradient(135deg, var(--no-hatch) 0 2px, transparent 2px 5px); }
-  .grid.bars .tile:hover, .grid.bars .tile:focus-visible { filter: brightness(1.08); transform: scaleX(1.25); outline: 0; z-index: 1; position: relative; }
-  .grid.bars .tile.sel { box-shadow: 0 0 0 2px var(--surface-2), 0 0 0 4px var(--ink); transform: scaleX(1.25); position: relative; z-index: 1; }
+  .track .tile.cond::before { content: ""; position: absolute; left: 50%; top: 50%; width: 6px; height: 6px; margin: -3px 0 0 -3px; border-radius: 50%; background: #fff; }
+  .track .tile:hover, .track .tile:focus-visible { filter: brightness(1.08); outline: 0; z-index: 1; }
+  .track .tile:focus-visible { box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--purple); }
+  .track .tile.sel { box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--ink-0); z-index: 1; }
   .row.has-sel .tile:not(.sel) { opacity: var(--tile-dim); }
   .row.has-sel .tile:not(.sel):hover { opacity: 1; }
 
@@ -232,9 +236,9 @@
   .grid.labeled .tile.yes, .grid.labeled .tile.cond, .grid.labeled .tile.no { background-color: var(--surface-2); background-image: none; }
 
   .row.in { animation: rise .55s var(--ease) both; }
-  .grid.bars .tile.in { animation: grow .5s var(--ease) both; }
+  .track .tile.in { animation: fade-in .4s var(--ease) both; }
   .grid.labeled .tile.in { animation: pop .4s var(--ease) both; }
-  @keyframes grow { from { transform: scaleY(0); } to { transform: none; } }
+  @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
   /*
    * The buy panel, after the reference's session and payment rows: an inset
    * card with a verdict-coloured edge, the asset and a verdict pill, then the
@@ -405,10 +409,8 @@
     .row { padding: 20px; gap: 18px; border-radius: var(--r-card); }
     .flag { width: 46px; height: 46px; font-size: 24px; }
     .name { font-size: 18px; }
-    /* Twenty bars won't take a thumb in one row: two rows of ten, each bar ~3x wider, with a padded hit area. */
-    .grid.bars { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); grid-auto-rows: 44px; row-gap: 10px; column-gap: 4px; height: auto; align-items: end; justify-items: center; padding: 14px 12px 12px; }
-    .grid.bars .tile { width: 100%; max-width: 24px; position: relative; }
-    .grid.bars .tile::after { content: ""; position: absolute; inset: -6px -2px; }
+    .track .tile { height: 30px; }
+    .track .tile::after { content: ""; position: absolute; inset: -4px -2px; }
     .cta-act { flex-direction: column; align-items: stretch; gap: 10px; }
     .cta-btn { justify-content: center; }
     .cta-alt { align-self: center; }
@@ -484,7 +486,7 @@
   </div>
   <div class="trail" id="trail" aria-live="polite"></div>
 
-  <div class="board-head" id="boardHead"><span>Country</span><span id="hAssets">Assets, most open first</span><span style="text-align:right" id="hWho">Citizens</span></div>
+  <div class="board-head" id="boardHead"><span>Country</span><span id="hAssets">Assets, most open first</span><button type="button" class="showall" id="showAll" aria-pressed="false">Show all 20</button><span style="text-align:right" id="hWho">Citizens</span></div>
   <div class="board" id="rows"></div>
 
   <section class="key">
@@ -951,6 +953,19 @@ const rows = $("rows"), tip = $("tip"), q = $("q"), clearBtn = $("clear"), trail
 let view = "status", who = "citizen", selected = null; // selected = asset index chosen for the buy column
 let firstPaint = true;
 
+// With no search, cards show ten key asset classes (the same ten everywhere, so cards stay
+// comparable); "Show all 20" reveals the rest. Counts always cover all twenty.
+const KEY_ASSETS = ["Residential property", "Agricultural land", "Commercial property", "Domestic equities", "Foreign equities",
+  "Government bonds", "Corporate bonds", "Cryptocurrency", "Gold bullion", "Foreign currency accounts"];
+let showAll = false;
+const showAllBtn = $("showAll");
+showAllBtn.addEventListener("click", () => {
+  showAll = !showAll;
+  // Hiding the extra ten drops a selection that would disappear with them.
+  if (!showAll && selected !== null && !KEY_ASSETS.includes(ASSETS[selected])) selected = null;
+  render();
+});
+
 // Acknowledged conditions, per country, asset and buyer type, so a re-render keeps the tick.
 const acks = new Set();
 const ackKey = (code, assetIdx) => `${code}|${assetIdx}|${who}`;
@@ -1056,11 +1071,17 @@ function paint({ res, data }) {
   if (!res.assets.length) { boardHead.classList.add("hide"); return; }
 
   boardHead.classList.remove("hide");
-  $("hAssets").textContent = view === "status" ? "Assets, most open first" : "Assets 1–20";
+  const full = res.assets.length === ASSETS.length;
+  showAllBtn.hidden = !full;
+  showAllBtn.textContent = showAll ? "Show 10 key assets" : "Show all 20";
+  showAllBtn.setAttribute("aria-pressed", showAll);
+  const order = view === "status" ? "most open first" : "in index order";
+  $("hAssets").textContent = full && !showAll ? `10 key assets, ${order} · counts cover all 20` : (view === "status" ? "Assets, most open first" : "Assets 1–20");
   $("hWho").textContent = who === "citizen" ? "Citizens" : "Foreigners";
 
   data.forEach((c, r) => {
     const n = c.tiles.length;
+    const shown = full && !showAll ? c.tiles.filter(t => KEY_ASSETS.includes(ASSETS[t.i])) : c.tiles;
     const row = document.createElement("article");
     row.className = "row" + (c.sel !== null ? " has-sel" : "") + (firstPaint ? " in" : "");
     if (firstPaint) row.style.animationDelay = (r * 45) + "ms";
@@ -1075,7 +1096,9 @@ function paint({ res, data }) {
       <div class="grid ${n <= 3 ? "labeled" : "bars"}" role="group" aria-label="${esc(c.name)}: assets by verdict"></div>
       ${c.sel !== null ? `<div class="buy">${ctaHTML(c, c.sel, c.tiles.find(t => t.i === c.sel).s)}</div>` : ""}`;
     const grid = row.querySelector(".grid");
-    c.tiles.forEach((t, k) => {
+    // Bars live in a white track inside the orange panel; chips go straight in.
+    const holder = n <= 3 ? grid : grid.appendChild(Object.assign(document.createElement("div"), { className: "track" }));
+    shown.forEach((t, k) => {
       const b = document.createElement("button");
       b.className = "tile " + CLASS[t.s] + (c.sel === t.i ? " sel" : "") + (firstPaint ? " in" : "");
       b.type = "button"; b.dataset.i = t.i;
@@ -1084,7 +1107,7 @@ function paint({ res, data }) {
       b.setAttribute("aria-label", `${ASSETS[t.i]}: ${LABEL[t.s]}`);
       b.setAttribute("aria-pressed", c.sel === t.i);
       b.dataset.text = `<b>${ASSETS[t.i]}</b> · ${LABEL[t.s]}`;
-      grid.appendChild(b);
+      holder.appendChild(b);
     });
     rows.appendChild(row);
   });

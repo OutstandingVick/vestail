@@ -112,6 +112,7 @@
       <dt>Trail</dt><dd>Resolution chips plus one explanatory line; when nothing is searched it shows a hint about the buy column.</dd>
       <dt>Board</dt><dd>One card per country. Desktop is three columns (identity · grid · buy); below 900px it stacks; below 480px tiles stretch to the full width.</dd>
       <dt>Key</dt><dd>The 20 asset classes in tile order for the By-asset view.</dd>
+      <dt>Story sections</dt><dd>Six numbered sections after the key (problem, how it works, verdicts, buy, trust, FAQ) and a closing call to action whose button returns to the search.</dd>
     </dl>
     <h3>Interactions</h3>
     <dl>
@@ -166,6 +167,7 @@
     <div class="step"><b>9 · Page on the API</b><span>With <code>window.VESTAIL_API</code> set the page loads assets, boards and the HUD from the API and sends Buy presses through <code>POST /orders/click</code>; without it, or when the API is down, it runs on its inline data as before. The API gained CORS so the page can call it from another origin.</span></div>
     <div class="step"><b>10 · Vestail</b><span>Renamed from the example's working name, Own: <code>v2/</code>, <code>@vestail/core</code>, <code>@vestail/api</code>, <code>VESTAIL_*</code> settings, and the <code>ref=vestail</code> tag.</span></div>
     <div class="step"><b>11 · Keyed rules and provenance</b><span>Rules moved from arrays indexed by asset position to objects keyed by asset id, each with <code>sources</code> and <code>verified_at</code> (empty until filled). Every board is identical before and after. The core refuses to load a missing, unknown or invalid rule; <code>/rules/{country}/{asset}</code> returns the provenance; the data schema validates it.</span></div>
+    <div class="step"><b>12 · Brand and story sections</b><span>The page took Vestail v1's identity (gradient, Outfit, logo, orange actions, v1's verdict colours). Six sections followed below the board, shaped by Awwwards startup sites (Abatable, Reckoner, Base Power, Moto): the problem (one asset, three answers, drawn from the page's own rules), how it works, the three verdicts, buy in one place (onchain from your wallet; offchain through licensed partners, marked planned), why trust Vestail, and a FAQ, then a closing call to action. The top bar gained section links and a Search pill.</span></div>
   </div>
 
   <h2 id="next">Open questions</h2>

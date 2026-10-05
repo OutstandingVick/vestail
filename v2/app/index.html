@@ -178,7 +178,9 @@
   .showall { margin-left: auto; margin-right: 18px; border: 0; background: none; padding: 4px 0; font: inherit; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; font-weight: 600; color: var(--purple-ink); cursor: pointer; }
   .showall:hover { text-decoration: underline; }
   .showall[hidden] { display: none; }
-  .board { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; align-items: start; }
+  .board { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; align-items: start; }
+  /* Three cards a row on wide screens, two on laptops and tablets, one on phones (below 900px). */
+  @media (max-width: 1280px) { .board { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   .row {
     display: flex; flex-direction: column; gap: 22px;
     background: var(--surface); border: 0; border-radius: var(--r-xl); padding: 26px;

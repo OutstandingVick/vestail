@@ -94,20 +94,23 @@
   .hero h1 .w:nth-child(2) { animation-delay: .06s } .hero h1 .w:nth-child(3) { animation-delay: .12s } .hero h1 .w:nth-child(4) { animation-delay: .18s } .hero h1 .w:nth-child(5) { animation-delay: .24s } .hero h1 .w:nth-child(6) { animation-delay: .30s }
   .hero > p { margin: 0 auto; max-width: 54ch; color: var(--ink-3); font-size: 18px; line-height: 1.55; animation: rise .7s .3s var(--ease) both; }
 
-  .searchbar { position: relative; max-width: 680px; margin: 30px auto 0; animation: rise .7s .38s var(--ease) both; }
-  .searchbar input {
-    width: 100%; font: inherit; font-size: 17px; color: var(--ink); background: var(--surface);
-    border: 0; border-radius: var(--r-md); padding: 18px 96px 18px 54px;
-    box-shadow: var(--shadow-1); transition: box-shadow .25s var(--ease), border-color .25s, transform .25s var(--ease);
-  }
+  /* The search is the hero's call to action: one pill holding the field, Clear, and the orange action. */
+  .searchbar { display: flex; align-items: center; gap: 8px; max-width: 700px; margin: 34px auto 0; padding: 8px 8px 8px 22px;
+    background: var(--surface); border-radius: var(--r-pill); box-shadow: var(--ring), 0 30px 60px -30px rgba(0,0,0,.6);
+    transition: box-shadow .25s var(--ease); animation: rise .7s .38s var(--ease) both; }
+  .searchbar:hover { box-shadow: 0 0 0 1px color-mix(in srgb, var(--paper) 16%, transparent), 0 30px 60px -30px rgba(0,0,0,.6); }
+  .searchbar:focus-within { box-shadow: 0 0 0 2px var(--purple), 0 0 0 7px color-mix(in srgb, var(--purple) 22%, transparent), 0 30px 60px -30px rgba(0,0,0,.6); }
+  .searchbar > svg { flex: none; width: 20px; height: 20px; stroke: var(--ink-3); fill: none; stroke-width: 2.2; stroke-linecap: round; pointer-events: none; }
+  .searchbar input { flex: 1; min-width: 0; font: inherit; font-size: 17px; color: var(--ink); background: transparent; border: 0; padding: 12px 4px; outline: 0; }
   .searchbar input::-webkit-search-cancel-button, .searchbar input::-webkit-search-decoration { -webkit-appearance: none; display: none; }
   .searchbar input::placeholder { color: var(--ink-3); }
-  .searchbar input:hover { box-shadow: var(--shadow-2); }
-  .searchbar input:focus { outline: 0; box-shadow: 0 0 0 2px var(--accent), 0 0 0 6px color-mix(in srgb, var(--accent) 22%, transparent), var(--shadow-2); }
-  .searchbar > svg { position: absolute; left: 22px; top: 50%; transform: translateY(-50%); width: 20px; height: 20px; stroke: var(--ink-3); fill: none; stroke-width: 2.2; stroke-linecap: round; pointer-events: none; }
-  .searchbar button { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); border: 0; background: var(--surface-2); color: var(--ink-2); font-size: 13px; font-weight: 600; cursor: pointer; padding: 8px 14px; border-radius: var(--r-pill); display: none; }
-  .searchbar button.on { display: inline-block; }
-  .searchbar button:hover { background: var(--surface-3); color: var(--ink); }
+  .searchbar #clear { flex: none; border: 0; background: var(--surface-2); color: var(--ink-2); font-size: 13px; font-weight: 600; cursor: pointer; padding: 8px 14px; border-radius: var(--r-pill); display: none; }
+  .searchbar #clear.on { display: inline-block; }
+  .searchbar #clear:hover { background: var(--surface-3); color: var(--ink); }
+  .searchbar .go { flex: none; border: 0; cursor: pointer; background: var(--orange); color: var(--navy); font-weight: 700; font-size: 15px; padding: 13px 22px; border-radius: var(--r-pill);
+    box-shadow: 0 10px 26px -10px rgb(255 88 10 / .75); transition: transform .15s var(--ease), box-shadow .2s var(--ease); }
+  .searchbar .go:hover { transform: translateY(-1px); box-shadow: 0 14px 30px -10px rgb(255 88 10 / .85); }
+  .searchbar .go:active { transform: scale(.97); }
 
   /* ---------- Traction HUD ---------- */
   .hud { max-width: 680px; margin: 22px auto 0; animation: rise .7s .42s var(--ease) both; }
@@ -351,6 +354,7 @@
       <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
       <input id="q" type="search" placeholder="Google, bitcoin, a house, farmland, a Gulfstream…" aria-label="Search assets" autocomplete="off">
       <button id="clear" type="button">Clear</button>
+      <button class="go" type="button" id="seeWhere">See where</button>
     </div>
     <div class="hud" aria-label="Activity on Vestail">
       <div class="stats">
@@ -1123,6 +1127,10 @@ function renderSameAsset() {
     return `<li><span class="fl" aria-hidden="true">${esc(c.flag)}</span><span class="who-l">${esc(c.name)}<span>Foreigner</span></span><span class="vtag ${cls}"><i></i>${label}</span></li>`;
   }).join("");
 }
+// "See where" takes the eye from the search to the answer.
+$("seeWhere").addEventListener("click", () => {
+  document.querySelector(".controls").scrollIntoView({ behavior: reduce || document.hidden ? "auto" : "smooth", block: "start" });
+});
 document.querySelectorAll("[data-focus-search]").forEach(b => b.addEventListener("click", e => {
   e.preventDefault();
   // Smooth scrolling only animates on a visible page; jump otherwise (and under reduced motion).

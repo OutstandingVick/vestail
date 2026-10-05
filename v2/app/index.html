@@ -522,6 +522,13 @@
     .searchbar input { font-size: 16px; padding: 10px 2px; }
     .searchbar .go { padding: 11px 15px; font-size: 14px; }
     .chips .try { display: none; }
+    /* The logo and two pills overrun a phone bar, so the quieter button stands down —
+       the board is a scroll away — and the bar tightens around what is left. */
+    .top { min-height: 64px; gap: 12px; }
+    .top .brand svg { height: 26px; }
+    .btn.ghost { display: none; }
+    .btn { font-size: 14px; padding: 10px 16px; }
+    .sec, #board { scroll-margin-top: 76px; }
     .problem::before { background-size: 72px 72px; }
     .problem .asking { margin-top: 22px; }
     .problem .deck { margin-top: 32px; }

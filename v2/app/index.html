@@ -319,6 +319,12 @@
   @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
 
   /* ---------- Responsive ---------- */
+  /* Three charted cards need room; below this the fan becomes one column, upright. */
+  @media (max-width: 1040px) {
+    .problem .deck { grid-template-columns: 1fr; max-width: 540px; margin-inline: auto; gap: 16px; }
+    .qcard.tilt-l, .qcard.tilt-r, .qcard.lead-card { transform: none; }
+    .qcard:hover, .qcard.lead-card:hover { transform: translateY(-4px); }
+  }
 
   /* ---------- Top nav (v1 pattern: text links, then one orange pill) ---------- */
   .nav { display: flex; align-items: center; gap: 22px; }

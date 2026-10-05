@@ -368,7 +368,9 @@
   /* Fanned like a hand of cards: the outer two lean away, the middle stands up and forward. */
   .qcard.tilt-l { transform: rotate(-1.8deg); }
   .qcard.tilt-r { transform: rotate(1.8deg); }
-  .qcard.lead-card { position: relative; z-index: 1; transform: translateY(-14px); }
+  /* The middle card is tinted, as in the reference. It takes the lavender the country
+     cards already use, rather than a fourth colour: orange marks actions, never surfaces. */
+  .qcard.lead-card { position: relative; z-index: 1; transform: translateY(-14px); background: #e3deef; --card-muted: #5c5964; }
 
   /* 01 · The problem: one asset, three answers */
   .split { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }

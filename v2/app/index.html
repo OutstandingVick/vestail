@@ -52,7 +52,8 @@
     --card-hover: 0 0 0 1px color-mix(in srgb, var(--purple) 40%, transparent), inset 0 1px 0 color-mix(in srgb, var(--paper) 6%, transparent), 0 28px 56px -24px rgba(0,0,0,.8);
     --shadow-1: var(--card);
     --shadow-2: var(--card-raised);
-    --r-xl: 28px; --r-lg: 28px; --r-md: 16px; --r-sm: 12px; --r-pill: 999px;
+    /* Corner scale, and only these: panels 28, cards 20, fields 16, buttons and small tiles 12, verdict tiles 6, pills. */
+    --r-xl: 28px; --r-lg: 28px; --r-card: 20px; --r-md: 16px; --r-sm: 12px; --r-pill: 999px;
     --font-display: "Outfit", ui-sans-serif, system-ui, sans-serif;
     --font-body: "Outfit", ui-sans-serif, system-ui, sans-serif;
     --ease: cubic-bezier(.2,.8,.2,1);
@@ -170,14 +171,14 @@
   .board { display: flex; flex-direction: column; gap: 10px; }
   .row {
     display: grid; grid-template-columns: 240px 1fr 220px; gap: 20px; align-items: center;
-    background: var(--surface); border: 0; border-radius: 20px; padding: 18px 24px;
+    background: var(--surface); border: 0; border-radius: var(--r-card); padding: 18px 24px;
     box-shadow: var(--shadow-1);
     transition: transform .25s var(--ease), box-shadow .25s var(--ease), border-color .25s;
   }
   .row:hover { transform: translateY(-2px); box-shadow: var(--card-hover); }
   .row.has-sel { box-shadow: 0 0 0 1px color-mix(in srgb, var(--purple) 55%, transparent), inset 0 1px 0 color-mix(in srgb, var(--paper) 5%, transparent), 0 24px 48px -28px color-mix(in srgb, var(--purple) 45%, transparent); }
   .who { display: flex; align-items: center; gap: 14px; min-width: 0; }
-  .flag { font-size: 26px; line-height: 1; width: 46px; height: 46px; display: grid; place-items: center; background: var(--surface-2); box-shadow: var(--ring); border-radius: 14px; flex: none; }
+  .flag { font-size: 26px; line-height: 1; width: 46px; height: 46px; display: grid; place-items: center; background: var(--surface-2); box-shadow: var(--ring); border-radius: var(--r-sm); flex: none; }
   .name { font-family: var(--font-display); font-weight: 600; color: var(--ink); font-size: 18px; letter-spacing: -.01em; }
   .score { font-size: 13px; color: var(--ink-3); margin-top: 2px; font-variant-numeric: tabular-nums; }
 
@@ -254,7 +255,10 @@
   .cols-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
   .cols-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
   .cols-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-  .ico { width: 30px; height: 30px; stroke: var(--orange); fill: none; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; margin-bottom: 18px; }
+  /* Icons sit in a purple-tinted tile: emphasis, not an action. */
+  .ico { box-sizing: content-box; width: 24px; height: 24px; padding: 11px; border-radius: var(--r-sm); stroke: var(--purple-ink); fill: none; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; margin-bottom: 22px;
+    background: color-mix(in srgb, var(--purple) 14%, transparent); box-shadow: 0 0 0 1px color-mix(in srgb, var(--purple) 30%, transparent); }
+  .cols-3 > .panel:hover, .cols-4 > .panel:hover, .cols-2 > .panel:hover { transform: translateY(-3px); box-shadow: var(--card-hover); }
 
   /* 01 · The problem: one asset, three answers */
   .split { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }

@@ -53,27 +53,27 @@ Top to bottom:
 
 Pressing Buy records the click and opens the venue in a new tab.
 
-## 4. Brand (match v1 exactly)
+## 4. Brand
 
-Dark only, deliberately: v1's verdict colours are tuned for, and checked against, a dark ground.
+Dark only, deliberately: the verdict colours are tuned for, and checked against, a dark ground.
 
 | Token | Value | Use |
 |---|---|---|
-| Navy | `#0A122A` | Page base, label colour on orange |
-| Violet | `#7C41F1` | Page gradient, left → navy on the right |
-| Card | `#151922` at 85% | Panels and country cards, with a 1px white ring at 10% |
-| Field | white at 7% | Inputs, chips, insets |
-| Paper | `#E8E4D9` | Body text; headings pure white |
-| Orange | `#FF580A` | The one primary action, with a navy label |
-| Gold | `#C9A227` | Emphasis only, **never** a verdict |
+| Background | `#0D0D0F` | Page, with one soft purple glow behind the hero |
+| Surface | `#17171A` | Cards and panels: hairline ring, faint top highlight |
+| Text | `#F5F4F0` | Body and headings; greys are mixed from it (one family) |
+| Muted | `#99979F` | Labels, supporting copy |
+| Orange | `#FF580A` | **Actions only**, with a near-black label |
+| Purple | `#7C5CFF` | **Brand emphasis**: highlights, selection, focus, icon tiles; never an action, never a verdict |
 | Can own | `#8FBD7F` | Verdict only |
 | Conditional | `#D9A84D` | Verdict only |
 | Cannot own | `#D98D84` | Verdict only, **always hatched** so it reads without colour |
 
-- **Type:** Outfit, weights 400, 600 and 700 only, normal tracking.
-- **Shape:** 28px panels, 16px fields and cards, 12px buttons, pill toggles and chips, 6px tiles. Rings, not borders.
-- **Logo:** an orange "vestail" wordmark with a small character (two orange strokes forming a V, with eyes). It is available as SVG in the repo at `public/brand/` on `main`.
-- **Rules:** verdict colours are used for nothing but verdicts; red is never shown by colour alone; motion respects reduced-motion settings and entrance animation plays on first paint only; layouts work down to phone width (≈375px).
+- **Type:** Outfit at 300, 400, 600 and 700. Display lines pair Light with Bold; counting numbers use tabular figures.
+- **Shape:** panels 28px, cards 20px, fields 16px, buttons and small tiles 12px, verdict tiles 6px, pills for actions, chips and toggles. Rings, not borders.
+- **Logo:** the orange "vestail" wordmark with its small character (two strokes forming a V, with eyes). SVG on `main` at `public/brand/`.
+- **Rules:** verdict colours are used for nothing but verdicts; red is never colour alone; motion respects reduced-motion settings and entrance animation plays on first paint only; layouts work down to phone width (≈375px).
+- **Reference:** the hero follows a Lightyear-style layout: trust row, two-weight headline, one call to action, an open stat trio.
 
 ## 5. What to design
 

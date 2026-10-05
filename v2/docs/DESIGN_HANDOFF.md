@@ -32,7 +32,8 @@ Top to bottom:
    - a verdict bar chart, 20 bars with no search (height and colour both encode the verdict), or labelled chips for 1 to 3 assets after one;
    - a **buy column**.
 8. **Asset key.** The 20 asset classes in order.
-9. **Footer disclaimer.** Sample rules only; links carry a tracking tag.
+9. **Story sections** (below the board): six numbered sections, of which **01 · The problem** is the set piece — centred on faint graph paper, a two-tone upper-case headline, an "Are you tired of…" lead-in, and three fanned cards (the middle one tinted and upright) each closing with a small chart.
+10. **Footer disclaimer.** Sample rules only; links carry a tracking tag.
 
 ### Interactions
 

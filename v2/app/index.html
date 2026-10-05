@@ -53,7 +53,6 @@
     --font-body: "Outfit", ui-sans-serif, system-ui, sans-serif;
     --ease: cubic-bezier(.2,.8,.2,1);
     --tip-bg: var(--paper); --tip-fg: var(--ink-0);
-    --gold: var(--purple-ink);           /* old emphasis token, now purple; removed below */
     color-scheme: dark;
   }
 
@@ -68,7 +67,7 @@
   body { position: relative; }
   body::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 1100px; z-index: -1; pointer-events: none;
     background: radial-gradient(60% 55% at 50% 0%, color-mix(in srgb, var(--purple) 26%, transparent), transparent 70%); }
-  ::selection { background: var(--gold); color: var(--ink-0); }
+  ::selection { background: var(--purple); color: #fff; }
   a { color: inherit; }
   button { font: inherit; }
   :focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
@@ -109,7 +108,7 @@
   .stat { background: var(--surface); border: 0; border-radius: var(--r-md); padding: 14px 16px; text-align: left; box-shadow: var(--shadow-1); }
   .stat .v { font-family: var(--font-display); font-weight: 700; color: var(--ink); font-size: clamp(22px, 3vw, 30px); letter-spacing: -.01em; line-height: 1.05; font-variant-numeric: tabular-nums; }
   .stat .l { font-size: 12.5px; color: var(--ink-2); margin-top: 3px; }
-  .stat .d { display: inline-block; font-size: 12px; font-weight: 600; color: var(--gold); margin-left: 6px; }
+  .stat .d { display: inline-block; font-size: 12px; font-weight: 600; color: var(--purple-ink); margin-left: 6px; }
   .ticker { margin-top: 10px; height: 40px; overflow: hidden; position: relative; background: var(--surface); border: 0; border-radius: var(--r-pill); box-shadow: var(--shadow-1); }
   .ticker .live { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 700; color: var(--ink-2); z-index: 1; }
   .ticker .live i { width: 7px; height: 7px; border-radius: 50%; background: var(--orange); box-shadow: 0 0 0 0 color-mix(in srgb, var(--orange) 45%, transparent); animation: pulse 1.8s ease-out infinite; }
@@ -226,7 +225,7 @@
   /* ---------- Story sections ---------- */
   .sec { padding: 104px 0 0; scroll-margin-top: 24px; }
   .eyebrow { display: inline-flex; gap: 10px; align-items: baseline; font-size: 12.5px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 14px; }
-  .eyebrow b { color: var(--gold); font-weight: 600; letter-spacing: .06em; }
+  .eyebrow b { color: var(--purple-ink); font-weight: 600; letter-spacing: .06em; }
   .sec h2 { font-size: clamp(30px, 4.4vw, 50px); line-height: 1.08; font-weight: 700; color: var(--ink); letter-spacing: -.01em; margin: 0; max-width: 20ch; }
   .sec .lead { font-size: 17px; color: var(--ink-2); max-width: 56ch; margin: 16px 0 0; }
   .sec-head { margin-bottom: 40px; }
@@ -255,7 +254,7 @@
   .claims .who-l span { margin-top: 2px; }
 
   /* 02 · How it works */
-  .steps .num { font-size: 13px; font-weight: 700; color: var(--gold); letter-spacing: .06em; margin-bottom: 18px; }
+  .steps .num { font-size: 13px; font-weight: 700; color: var(--purple-ink); letter-spacing: .06em; margin-bottom: 18px; }
   .mock { margin-top: 22px; background: var(--surface-2); box-shadow: var(--ring); border-radius: var(--r-md); padding: 14px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; min-height: 72px; }
   .mock .chipx { background: var(--surface-3); border-radius: var(--r-pill); padding: 6px 12px; font-size: 13px; color: var(--ink); }
   .mock .chipx.on { background: var(--paper); color: var(--ink-0); font-weight: 600; }
@@ -274,7 +273,7 @@
   /* 04 · Buy in one place: two doors */
   .door { display: flex; flex-direction: column; gap: 14px; min-height: 100%; }
   .door .tag { align-self: flex-start; font-size: 12px; font-weight: 600; border-radius: var(--r-pill); padding: 5px 11px; box-shadow: var(--ring); color: var(--ink-2); }
-  .door .tag.live { color: var(--gold); box-shadow: 0 0 0 1px color-mix(in srgb, var(--gold) 45%, transparent); }
+  .door .tag.live { color: var(--purple-ink); background: color-mix(in srgb, var(--purple) 14%, transparent); box-shadow: 0 0 0 1px color-mix(in srgb, var(--purple) 45%, transparent); }
   .door h3 { font-size: 24px; }
   .door ul { list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
   .door li { background: var(--surface-2); box-shadow: var(--ring); border-radius: var(--r-pill); padding: 6px 12px; font-size: 13.5px; color: var(--ink); }

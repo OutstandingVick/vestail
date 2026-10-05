@@ -493,6 +493,13 @@
   .closing .go { display: inline-flex; margin-top: 28px; background: var(--orange); color: var(--navy); font-weight: 700; font-size: 16px; border: 0; border-radius: var(--r-pill); padding: 15px 26px; cursor: pointer; box-shadow: 0 8px 24px -8px rgb(255 88 10 / .7); transition: transform .2s var(--ease); }
   .closing .go:hover { transform: translateY(-2px); }
 
+  /* Five links plus two buttons stop fitting here; the links go and the bar keeps
+     the logo and the actions. The sections stay reachable by scrolling. */
+  @media (max-width: 1040px) {
+    .top { grid-template-columns: 1fr auto; }
+    .top .nav { display: none; }
+  }
+
   /* Three charted cards need room; below this the fan becomes one column, upright. */
   @media (max-width: 1040px) {
     .problem .deck { grid-template-columns: 1fr; max-width: 540px; margin-inline: auto; gap: 16px; }
@@ -503,7 +510,6 @@
   @media (max-width: 900px) {
     .cols-3, .cols-4, .cols-2 { grid-template-columns: 1fr; }
     .sec { padding-top: 72px; }
-    .nav a:not(.pill) { display: none; }
     .board { grid-template-columns: 1fr; }
     .key ol { columns: 2; }
   }

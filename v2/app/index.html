@@ -359,9 +359,9 @@
   .problem .asking { margin: 30px 0 0; font-family: var(--font-display); font-weight: 300; font-size: clamp(20px, 2.6vw, 34px); color: var(--ink-3); letter-spacing: -.01em; }
 
   /* Three complaint cards abreast; the middle one leads. */
-  .problem .deck { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; align-items: start; margin-top: 46px; text-align: left; }
+  .problem .deck { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; align-items: stretch; margin-top: 46px; text-align: left; }
 
-  .qcard { background: var(--surface); border-radius: var(--r-lg); padding: 26px 24px 24px; box-shadow: var(--card-raised); }
+  .qcard { display: flex; flex-direction: column; background: var(--surface); border-radius: var(--r-lg); padding: 26px 24px 24px; box-shadow: var(--card-raised); }
 
   .qcard h3 { margin: 0 0 22px; font-family: var(--font-display); font-size: 21px; line-height: 1.22; font-weight: 600; letter-spacing: -.012em; color: var(--ink); }
 
@@ -373,7 +373,7 @@
   .qcard.lead-card { position: relative; z-index: 1; transform: translateY(-14px); background: #e3deef; --card-muted: #5c5964; }
 
   /* Each card ends in a small chart: a caption row, then the figure itself. */
-  .viz { margin: 0; }
+  .viz { margin: auto 0 0; }  /* the chart sits at the foot of the card, whatever the headline's length */
   .viz-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 14px; font-size: 11.5px; color: var(--card-muted, var(--ink-3)); }
   .viz-head b { font-weight: 600; color: var(--ink); font-size: 12.5px; }
 

@@ -1,4 +1,4 @@
-// Regenerates data/*.json from the inline data in app/index.html. Run from repo root: node scripts/split-data-from-app.js
+// Regenerates data/*.json from the inline data in app/index.html. Run from repo root: node scripts/split-data-from-app.cjs
 const fs=require('fs');
 const s=fs.readFileSync('app/index.html','utf8');
 let js=s.split('<script>')[1].split('</script>')[0];

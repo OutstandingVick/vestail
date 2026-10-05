@@ -77,7 +77,12 @@
   button { font: inherit; }
   :focus-visible { outline: 2px solid var(--purple); outline-offset: 2px; }
 
-  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 20px; }
+  /*
+   * Side margins are a fifth of what a 1120px column would leave (80% less), never
+   * under 20px: on a wide screen the content spreads out instead of floating in the
+   * middle. Hero copy and section text keep their own reading widths.
+   */
+  .wrap { margin: 0 auto; padding: 0 max(20px, calc((100vw - 1120px) / 2 * .2)); }
 
   /* ---------- Top bar ---------- */
   .top { display: flex; align-items: center; justify-content: space-between; padding: 22px 0 6px; }

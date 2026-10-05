@@ -385,6 +385,14 @@
   .bars3 .key i { background: var(--purple); }
   .bars3 .key span { color: var(--purple-ink); font-weight: 600; }
 
+  /* Card 2: the same twelve versions, flat in a wallet and sorted by verdict in law. */
+  .dots { display: grid; grid-template-columns: repeat(6, 1fr); gap: 7px; }
+  .dots i { aspect-ratio: 1; border-radius: 7px; background: var(--yes); }
+  .dots.flat i { background: color-mix(in srgb, var(--ink) 15%, transparent); }
+  .dots i.c { background: var(--cond); }
+  .dots i.n { background: var(--no); background-image: repeating-linear-gradient(135deg, var(--no-hatch) 0 2px, transparent 2px 5px); }
+  .viz-head.gap { margin-top: 20px; }
+
   /* 01 · The problem: one asset, three answers */
   .split { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
   .same .label { font-size: 13px; color: var(--ink-3); margin-bottom: 16px; }
@@ -568,7 +576,13 @@
         </figure>
       </article>
       <article class="qcard lead-card">
-        <h3>The same asset answering differently in every country</h3>
+        <h3>Tokens that look identical in your wallet</h3>
+        <figure class="viz">
+          <figcaption class="viz-head"><b>In your wallet</b><span>One ticker, 12 versions</span></figcaption>
+          <div class="dots flat" role="img" aria-label="Twelve identical grey squares: a wallet shows every version the same way."><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <figcaption class="viz-head gap"><b>In law</b><span>What you may actually hold</span></figcaption>
+          <div class="dots" role="img" aria-label="The same twelve, now in three verdicts: some you can own, some need approval, some you cannot own."><i class="y"></i><i class="y"></i><i class="c"></i><i class="y"></i><i class="n"></i><i class="y"></i><i class="c"></i><i class="y"></i><i class="c"></i><i class="n"></i><i class="y"></i><i class="n"></i></div>
+        </figure>
       </article>
       <article class="qcard tilt-r">
         <h3>Finding out at redemption, not at purchase</h3>

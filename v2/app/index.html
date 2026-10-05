@@ -337,6 +337,9 @@
     transition: transform .15s var(--ease), box-shadow .2s var(--ease), background .2s, color .2s; }
   .btn.solid { background: var(--orange); color: var(--navy); box-shadow: 0 8px 24px -10px rgb(255 88 10 / .7); }
   .btn.ghost { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--ink) 24%, transparent); }
+  .btn.solid:hover { transform: translateY(-1px); box-shadow: 0 12px 28px -10px rgb(255 88 10 / .85); }
+  .btn.ghost:hover { box-shadow: inset 0 0 0 1.5px var(--ink); }
+  .btn:active { transform: scale(.97); }
 
   /* ---------- Story sections ---------- */
   .sec { padding: 104px 0 0; scroll-margin-top: 24px; }

@@ -319,13 +319,6 @@
   @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
 
   /* ---------- Responsive ---------- */
-  /* Three charted cards need room; below this the fan becomes one column, upright. */
-  @media (max-width: 1040px) {
-    .problem .deck { grid-template-columns: 1fr; max-width: 540px; margin-inline: auto; gap: 16px; }
-    .qcard.tilt-l, .qcard.tilt-r, .qcard.lead-card { transform: none; }
-    .qcard:hover, .qcard.lead-card:hover { transform: translateY(-4px); }
-  }
-
   /* ---------- Top nav (v1 pattern: text links, then one orange pill) ---------- */
   .nav { display: flex; align-items: center; gap: 22px; }
   .nav a { font-size: 14px; font-weight: 600; color: var(--ink-2); text-decoration: none; transition: color .2s; }
@@ -362,7 +355,7 @@
    * out at the edges; the content sits above it, unmasked, so no text fades.
    */
   .problem::before {
-    content: ""; position: absolute; inset: -24px -40px 0; z-index: 0; pointer-events: none;
+    content: ""; position: absolute; inset: -24px 0 0; z-index: 0; pointer-events: none;
     background-image: linear-gradient(to right, color-mix(in srgb, var(--ink) 7%, transparent) 1px, transparent 1px),
                       linear-gradient(to bottom, color-mix(in srgb, var(--ink) 7%, transparent) 1px, transparent 1px);
     background-size: 112px 112px; background-position: center top;
@@ -481,6 +474,13 @@
   .closing h2 { margin: 0 auto; max-width: 18ch; font-size: clamp(30px, 4.4vw, 50px); line-height: 1.08; font-weight: 700; color: var(--ink); }
   .closing .go { display: inline-flex; margin-top: 28px; background: var(--orange); color: var(--navy); font-weight: 700; font-size: 16px; border: 0; border-radius: var(--r-pill); padding: 15px 26px; cursor: pointer; box-shadow: 0 8px 24px -8px rgb(255 88 10 / .7); transition: transform .2s var(--ease); }
   .closing .go:hover { transform: translateY(-2px); }
+
+  /* Three charted cards need room; below this the fan becomes one column, upright. */
+  @media (max-width: 1040px) {
+    .problem .deck { grid-template-columns: 1fr; max-width: 540px; margin-inline: auto; gap: 16px; }
+    .qcard.tilt-l, .qcard.tilt-r, .qcard.lead-card { transform: none; }
+    .qcard:hover, .qcard.lead-card:hover { transform: translateY(-4px); }
+  }
 
   @media (max-width: 900px) {
     .cols-3, .cols-4, .cols-2 { grid-template-columns: 1fr; }

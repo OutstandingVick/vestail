@@ -55,19 +55,19 @@ Pressing Buy records the click and opens the venue in a new tab.
 
 ## 4. Brand
 
-Dark only, deliberately: the verdict colours are tuned for, and checked against, a dark ground.
+Light: a warm off-white page with white cards and near-black text, after a Lightyear-style reference. Contrast is measured, not assumed; the verdict colours are deepened from v1's (which were tuned for dark) so they hold 3:1 on white.
 
 | Token | Value | Use |
 |---|---|---|
-| Background | `#0D0D0F` | Page, with one soft purple glow behind the hero |
-| Surface | `#17171A` | Cards and panels: hairline ring, faint top highlight |
-| Text | `#F5F4F0` | Body and headings; greys are mixed from it (one family) |
-| Muted | `#99979F` | Labels, supporting copy |
+| Background | `#F5F3EE` | Page (warm off-white), with one soft purple glow behind the hero |
+| Surface | `#FFFFFF` | Cards and panels: hairline ring, soft warm shadow |
+| Text | `#0D0D0F` | Body and headings; greys are mixed from it (one family) |
+| Muted | `#6F6C75` | Labels, supporting copy (4.6:1 on the page) |
 | Orange | `#FF580A` | **Actions only**, with a near-black label |
 | Purple | `#7C5CFF` | **Brand emphasis**: highlights, selection, focus, icon tiles; never an action, never a verdict |
-| Can own | `#8FBD7F` | Verdict only |
-| Conditional | `#D9A84D` | Verdict only |
-| Cannot own | `#D98D84` | Verdict only, **always hatched** so it reads without colour |
+| Can own | `#5C9A4A` | Verdict only |
+| Conditional | `#BF861C` | Verdict only |
+| Cannot own | `#C9604F` | Verdict only, **always hatched** so it reads without colour |
 
 - **Type:** Outfit at 300, 400, 600 and 700. Display lines pair Light with Bold; counting numbers use tabular figures.
 - **Shape:** panels 28px, cards 20px, fields 16px, buttons and small tiles 12px, verdict tiles 6px, pills for actions, chips and toggles. Rings, not borders.

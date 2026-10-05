@@ -179,17 +179,20 @@
   .row:hover { transform: translateY(-2px); box-shadow: var(--card-hover); }
   .row.has-sel { box-shadow: 0 0 0 1px color-mix(in srgb, var(--purple) 45%, transparent), 0 20px 40px -26px color-mix(in srgb, var(--purple) 40%, transparent); }
   /*
-   * Cards are brand purple. Their content panels (the chart and the buy panel)
-   * stay light, so verdict colours sit on the ground they were checked against;
-   * text on the purple is white, and rings on it are white, not purple.
+   * Cards are brand orange. Their content panels (the chart and the buy panel)
+   * stay white, so verdict colours sit on the ground they were checked against.
+   * Text on the orange is near-black: white measures ~2.9:1 on #FF580A, near-black
+   * 6.2:1. Rings on the orange are dark, not orange.
    */
-  .row { background: var(--purple); box-shadow: 0 20px 40px -24px color-mix(in srgb, var(--purple) 70%, transparent); }
-  .row:hover { box-shadow: 0 0 0 1px rgba(255,255,255,.45), 0 26px 50px -24px color-mix(in srgb, var(--purple) 80%, transparent); }
-  .row.has-sel { box-shadow: 0 0 0 2px #fff, 0 20px 40px -24px color-mix(in srgb, var(--purple) 70%, transparent); }
-  .row .name, .row .score, .row .cta-empty { color: #fff; }
-  .row .flag { background: rgba(255,255,255,.16); box-shadow: inset 0 0 0 1px rgba(255,255,255,.28); }
+  .row { background: var(--orange); box-shadow: 0 20px 40px -24px rgb(255 88 10 / .6); }
+  .row:hover { box-shadow: 0 0 0 1px rgba(13,13,15,.28), 0 26px 50px -24px rgb(255 88 10 / .7); }
+  .row.has-sel { box-shadow: 0 0 0 2px var(--ink-0), 0 20px 40px -24px rgb(255 88 10 / .6); }
+  .row .name, .row .score, .row .cta-empty { color: var(--ink-0); }
+  .row .score, .row .cta-empty { opacity: .78; }
+  .row .flag { background: rgba(255,255,255,.28); box-shadow: inset 0 0 0 1px rgba(255,255,255,.45); }
   .row .cnt::before { box-shadow: 0 0 0 1.5px #fff; }
-  .row .grid.bars { background: #fff; box-shadow: none; }
+  .row .grid.bars, .row .grid.labeled { background: #fff; box-shadow: none; }
+  .row .grid.labeled { padding: 12px; border-radius: var(--r-md); }
   /* Header, like the reference's icon and title: the flag in a soft tile, the name, then a counted summary. */
   .who { display: flex; align-items: center; gap: 14px; min-width: 0; }
   .flag { font-size: 26px; line-height: 1; width: 52px; height: 52px; display: grid; place-items: center; background: var(--surface-2); box-shadow: var(--ring); border-radius: var(--r-md); flex: none; }
@@ -1045,7 +1048,7 @@ function paint({ res, data }) {
   } else if (q.value.trim()) {
     trailEl.innerHTML = `<span class="why">Nothing matched. Try the class it belongs to, like <b>equities</b>, <b>land</b> or <b>crypto</b>, or a name like <b>Google</b>.</span>`;
   } else {
-    trailEl.innerHTML = `<span class="why">${selected !== null ? `Showing <b>${ASSETS[selected]}</b> in the buy column. Click another tile to switch, or clear to reset.` : "Pick any bar to see where to buy it."}</span>`;
+    trailEl.innerHTML = `<span class="why">${selected !== null ? `Showing <b>${ASSETS[selected]}</b> below each chart. Pick another bar to switch, or clear to reset.` : "Pick any bar to see where to buy it."}</span>`;
   }
 
   rows.innerHTML = "";

@@ -165,21 +165,21 @@
   .trail .why b { color: var(--ink); font-weight: 600; }
 
   /* ---------- Board ---------- */
-  .board-head { display: grid; grid-template-columns: 240px 1fr 220px; gap: 20px; padding: 0 22px 8px; font-size: 12.5px; font-weight: 600; color: var(--ink-3); }
+  .board-head { display: grid; grid-template-columns: 240px 1fr 220px; gap: 20px; padding: 0 24px 10px; font-size: 11.5px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); }
   .board-head.hide { display: none; }
   .board { display: flex; flex-direction: column; gap: 10px; }
   .row {
     display: grid; grid-template-columns: 240px 1fr 220px; gap: 20px; align-items: center;
-    background: var(--surface); border: 0; border-radius: var(--r-md); padding: 16px 22px;
+    background: var(--surface); border: 0; border-radius: 20px; padding: 18px 24px;
     box-shadow: var(--shadow-1);
     transition: transform .25s var(--ease), box-shadow .25s var(--ease), border-color .25s;
   }
   .row:hover { transform: translateY(-2px); box-shadow: var(--card-hover); }
-  .row.has-sel { box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 45%, transparent); }
+  .row.has-sel { box-shadow: 0 0 0 1px color-mix(in srgb, var(--purple) 55%, transparent), inset 0 1px 0 color-mix(in srgb, var(--paper) 5%, transparent), 0 24px 48px -28px color-mix(in srgb, var(--purple) 45%, transparent); }
   .who { display: flex; align-items: center; gap: 14px; min-width: 0; }
-  .flag { font-size: 30px; line-height: 1; width: 44px; height: 44px; display: grid; place-items: center; background: var(--surface-2); border-radius: var(--r-md); flex: none; }
-  .name { font-family: var(--font-display); font-weight: 600; color: var(--ink); font-size: 17px; }
-  .score { font-size: 12.5px; color: var(--ink-2); margin-top: 1px; }
+  .flag { font-size: 26px; line-height: 1; width: 46px; height: 46px; display: grid; place-items: center; background: var(--surface-2); box-shadow: var(--ring); border-radius: 14px; flex: none; }
+  .name { font-family: var(--font-display); font-weight: 600; color: var(--ink); font-size: 18px; letter-spacing: -.01em; }
+  .score { font-size: 13px; color: var(--ink-3); margin-top: 2px; font-variant-numeric: tabular-nums; }
 
   .grid { display: grid; grid-template-columns: repeat(10, 24px); grid-auto-rows: 24px; gap: 5px; }
   .tile { border: 0; padding: 0; border-radius: 6px; background: var(--surface-2); cursor: pointer; transition: transform .18s var(--ease), opacity .25s, box-shadow .18s; }
@@ -188,7 +188,7 @@
   .tile:hover, .tile:focus-visible { transform: scale(1.22); z-index: 1; position: relative; box-shadow: 0 4px 10px rgba(0,0,0,.35); outline: 0; }
   .row.has-sel .tile:not(.sel) { opacity: var(--tile-dim); }
   .row.has-sel .tile:not(.sel):hover { opacity: 1; }
-  .tile.sel { transform: scale(1.22); box-shadow: 0 0 0 2.5px #151922, 0 0 0 4.5px var(--ink); position: relative; z-index: 1; }
+  .tile.sel { transform: scale(1.22); box-shadow: 0 0 0 2.5px var(--surface), 0 0 0 4.5px var(--paper); position: relative; z-index: 1; }
 
   .row.in { animation: rise .55s var(--ease) both; }
   .tile.in { animation: pop .4s var(--ease) both; }

@@ -165,22 +165,28 @@
   .trail .why { width: 100%; padding-top: 2px; }
   .trail .why b { color: var(--ink); font-weight: 600; }
 
-  /* ---------- Board ---------- */
-  .board-head { display: grid; grid-template-columns: 240px 1fr 220px; gap: 20px; padding: 0 24px 10px; font-size: 11.5px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); }
+  /* ---------- Board: a two-column grid of country cards ---------- */
+  .board-head { display: flex; justify-content: space-between; padding: 0 4px 12px; font-size: 11.5px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); }
+  .board-head span:first-child { display: none; }
   .board-head.hide { display: none; }
-  .board { display: flex; flex-direction: column; gap: 10px; }
+  .board { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; align-items: start; }
   .row {
-    display: grid; grid-template-columns: 240px 1fr 220px; gap: 20px; align-items: center;
-    background: var(--surface); border: 0; border-radius: var(--r-card); padding: 18px 24px;
-    box-shadow: var(--shadow-1);
-    transition: transform .25s var(--ease), box-shadow .25s var(--ease), border-color .25s;
+    display: flex; flex-direction: column; gap: 22px;
+    background: var(--surface); border: 0; border-radius: var(--r-xl); padding: 26px;
+    box-shadow: var(--card-raised);
+    transition: transform .25s var(--ease), box-shadow .25s var(--ease);
   }
   .row:hover { transform: translateY(-2px); box-shadow: var(--card-hover); }
-  .row.has-sel { box-shadow: 0 0 0 1px color-mix(in srgb, var(--purple) 55%, transparent), 0 20px 40px -26px color-mix(in srgb, var(--purple) 40%, transparent); }
+  .row.has-sel { box-shadow: 0 0 0 1px color-mix(in srgb, var(--purple) 45%, transparent), 0 20px 40px -26px color-mix(in srgb, var(--purple) 40%, transparent); }
+  /* Header, like the reference's icon and title: the flag in a soft tile, the name, then a counted summary. */
   .who { display: flex; align-items: center; gap: 14px; min-width: 0; }
-  .flag { font-size: 26px; line-height: 1; width: 46px; height: 46px; display: grid; place-items: center; background: var(--surface-2); box-shadow: var(--ring); border-radius: var(--r-sm); flex: none; }
-  .name { font-family: var(--font-display); font-weight: 600; color: var(--ink); font-size: 18px; letter-spacing: -.01em; }
-  .score { font-size: 13px; color: var(--ink-3); margin-top: 2px; font-variant-numeric: tabular-nums; }
+  .flag { font-size: 26px; line-height: 1; width: 52px; height: 52px; display: grid; place-items: center; background: var(--surface-2); box-shadow: var(--ring); border-radius: var(--r-md); flex: none; }
+  .name { font-family: var(--font-display); font-weight: 600; color: var(--ink); font-size: 20px; letter-spacing: -.01em; margin: 0; }
+  .score { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 13.5px; color: var(--ink-3); margin-top: 4px; font-variant-numeric: tabular-nums; }
+  .cnt { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+  .cnt::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+  .cnt.yes::before { background: var(--yes); } .cnt.cond::before { background: var(--cond); }
+  .cnt.no::before { background: var(--no); background-image: repeating-linear-gradient(135deg, var(--no-hatch) 0 1.5px, transparent 1.5px 3px); }
 
   .grid { display: grid; grid-template-columns: repeat(10, 24px); grid-auto-rows: 24px; gap: 5px; }
   .tile { border: 0; padding: 0; border-radius: var(--r-tile); background: var(--surface-2); cursor: pointer; transition: transform .18s var(--ease), opacity .25s, box-shadow .18s; }
@@ -323,8 +329,7 @@
     .cols-3, .cols-4, .split, .cols-2 { grid-template-columns: 1fr; }
     .sec { padding-top: 72px; }
     .nav a:not(.pill) { display: none; }
-    .board-head { display: none; }
-    .row { grid-template-columns: 1fr; gap: 14px; padding: 16px; }
+    .board { grid-template-columns: 1fr; }
     .buy { justify-content: flex-start; }
     .cta { align-items: flex-start; }
     .key ol { columns: 2; }
@@ -994,12 +999,13 @@ function paint({ res, data }) {
     const row = document.createElement("article");
     row.className = "row" + (c.sel !== null ? " has-sel" : "") + (firstPaint ? " in" : "");
     if (firstPaint) row.style.animationDelay = (r * 45) + "ms";
+    // Counted summary with a dot per verdict; a one-asset card just names its verdict.
     const score = n === 1
-      ? `${LABEL[c.tiles[0].s]}`
-      : `${c.yes} of ${n} open${c.cond ? ` · ${c.cond} conditional` : ""}${c.no ? ` · ${c.no} closed` : ""}`;
+      ? `<span class="cnt ${CLASS[c.tiles[0].s]}">${LABEL[c.tiles[0].s]}</span>`
+      : `<span class="cnt yes">${c.yes} open</span>${c.cond ? `<span class="cnt cond">${c.cond} conditional</span>` : ""}${c.no ? `<span class="cnt no">${c.no} closed</span>` : ""}`;
     row.innerHTML = `
-      <div class="who"><span class="flag" aria-hidden="true">${esc(c.flag)}</span>
-        <div><div class="name">${esc(c.name)}</div><div class="score">${score}</div></div></div>
+      <header class="who"><span class="flag" aria-hidden="true">${esc(c.flag)}</span>
+        <div><h3 class="name">${esc(c.name)}</h3><div class="score">${score}</div></div></header>
       <div class="grid" role="group" aria-label="${esc(c.name)}"></div>
       <div class="buy">${c.sel !== null ? ctaHTML(c, c.sel, c.tiles.find(t => t.i === c.sel).s) : `<span class="cta-hint">Pick an asset</span>`}</div>`;
     const grid = row.querySelector(".grid");

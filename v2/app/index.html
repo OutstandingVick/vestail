@@ -345,6 +345,17 @@
     background: color-mix(in srgb, var(--purple) 14%, transparent); box-shadow: 0 0 0 1px color-mix(in srgb, var(--purple) 30%, transparent); }
   .cols-3 > .panel:hover, .cols-4 > .panel:hover, .cols-2 > .panel:hover { transform: translateY(-3px); box-shadow: var(--card-hover); }
 
+  /*
+   * 01 · The problem, after the reference: centred, with a three-line headline
+   * whose first lines sit back in grey and whose last line lands in near-black.
+   * Upper case here only — the other sections stay sentence case.
+   */
+  .problem { text-align: center; }
+  .problem > .eyebrow { justify-content: center; }
+  .problem h2 { max-width: 22ch; margin: 0 auto; text-transform: uppercase; font-size: clamp(32px, 5.6vw, 66px); line-height: 1.02; letter-spacing: -.02em; }
+  .problem h2 .ln { display: block; color: var(--ink-3); }
+  .problem h2 .hit { color: var(--ink); }
+
   /* 01 · The problem: one asset, three answers */
   .split { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
   .same .label { font-size: 13px; color: var(--ink-3); margin-bottom: 16px; }

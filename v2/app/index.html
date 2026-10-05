@@ -350,7 +350,20 @@
    * whose first lines sit back in grey and whose last line lands in near-black.
    * Upper case here only — the other sections stay sentence case.
    */
-  .problem { text-align: center; }
+  .problem { position: relative; isolation: isolate; text-align: center; }
+  /*
+   * The reference's faint graph paper. It lives on its own layer, masked to fade
+   * out at the edges; the content sits above it, unmasked, so no text fades.
+   */
+  .problem::before {
+    content: ""; position: absolute; inset: -24px -40px 0; z-index: 0; pointer-events: none;
+    background-image: linear-gradient(to right, color-mix(in srgb, var(--ink) 7%, transparent) 1px, transparent 1px),
+                      linear-gradient(to bottom, color-mix(in srgb, var(--ink) 7%, transparent) 1px, transparent 1px);
+    background-size: 112px 112px; background-position: center top;
+    -webkit-mask-image: radial-gradient(115% 78% at 50% 34%, #000 30%, transparent 76%);
+    mask-image: radial-gradient(115% 78% at 50% 34%, #000 30%, transparent 76%);
+  }
+  .problem > * { position: relative; z-index: 1; }
   .problem > .eyebrow { justify-content: center; }
   .problem h2 { max-width: 22ch; margin: 0 auto; font-weight: 800; text-transform: uppercase; font-size: clamp(32px, 5.6vw, 66px); line-height: 1.02; letter-spacing: -.02em; }
   .problem h2 .ln { display: block; color: var(--ink-3); }

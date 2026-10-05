@@ -188,17 +188,37 @@
   .cnt.yes::before { background: var(--yes); } .cnt.cond::before { background: var(--cond); }
   .cnt.no::before { background: var(--no); background-image: repeating-linear-gradient(135deg, var(--no-hatch) 0 1.5px, transparent 1.5px 3px); }
 
-  .grid { display: grid; grid-template-columns: repeat(10, 24px); grid-auto-rows: 24px; gap: 5px; }
-  .tile { border: 0; padding: 0; border-radius: var(--r-tile); background: var(--surface-2); cursor: pointer; transition: transform .18s var(--ease), opacity .25s, box-shadow .18s; }
+  /*
+   * Verdicts as a slim bar chart, after the reference's reporting card. Height
+   * repeats the verdict (full / two-thirds / short), so it reads without colour;
+   * sorted by status the bars fall like a staircase.
+   */
+  .grid.bars { display: flex; align-items: flex-end; gap: 6px; height: 92px; padding: 16px 16px 14px; background: var(--surface-2); box-shadow: var(--ring); border-radius: var(--r-md); }
+  .grid.bars .tile { flex: 1 1 0; min-width: 0; max-width: 22px; border: 0; padding: 0; border-radius: var(--r-pill); cursor: pointer; transform-origin: bottom;
+    transition: transform .18s var(--ease), opacity .25s, box-shadow .18s, filter .18s; }
+  .grid.bars .tile.yes { height: 100%; } .grid.bars .tile.cond { height: 66%; } .grid.bars .tile.no { height: 38%; }
   .tile.yes { background: var(--yes); } .tile.cond { background: var(--cond); }
   .tile.no { background: var(--no); background-image: repeating-linear-gradient(135deg, var(--no-hatch) 0 2px, transparent 2px 5px); }
-  .tile:hover, .tile:focus-visible { transform: scale(1.22); z-index: 1; position: relative; box-shadow: 0 4px 10px rgba(13,13,15,.22); outline: 0; }
+  .grid.bars .tile:hover, .grid.bars .tile:focus-visible { filter: brightness(1.08); transform: scaleX(1.25); outline: 0; z-index: 1; position: relative; }
+  .grid.bars .tile.sel { box-shadow: 0 0 0 2px var(--surface-2), 0 0 0 4px var(--ink); transform: scaleX(1.25); position: relative; z-index: 1; }
   .row.has-sel .tile:not(.sel) { opacity: var(--tile-dim); }
   .row.has-sel .tile:not(.sel):hover { opacity: 1; }
-  .tile.sel { transform: scale(1.22); box-shadow: 0 0 0 2.5px var(--surface), 0 0 0 4.5px var(--paper); position: relative; z-index: 1; }
+
+  /* One to three assets: labelled chips, so each answer says what it is. */
+  .grid.labeled { display: flex; flex-wrap: wrap; gap: 8px; }
+  .grid.labeled .tile { display: inline-flex; align-items: center; gap: 9px; padding: 10px 15px 10px 12px; border: 0; border-radius: var(--r-pill); cursor: pointer;
+    font: inherit; font-size: 14px; font-weight: 600; color: var(--ink); background: var(--surface-2); box-shadow: var(--ring); transition: box-shadow .18s, opacity .25s; }
+  .grid.labeled .tile i { width: 12px; height: 12px; border-radius: var(--r-tile); flex: none; }
+  .grid.labeled .tile.yes i { background: var(--yes); } .grid.labeled .tile.cond i { background: var(--cond); }
+  .grid.labeled .tile.no i { background: var(--no); background-image: repeating-linear-gradient(135deg, var(--no-hatch) 0 1.5px, transparent 1.5px 3.5px); }
+  .grid.labeled .tile:hover, .grid.labeled .tile:focus-visible { box-shadow: 0 0 0 1px color-mix(in srgb, var(--purple) 55%, transparent); outline: 0; }
+  .grid.labeled .tile.sel { box-shadow: 0 0 0 2px var(--purple); }
+  .grid.labeled .tile.yes, .grid.labeled .tile.cond, .grid.labeled .tile.no { background-color: var(--surface-2); background-image: none; }
 
   .row.in { animation: rise .55s var(--ease) both; }
-  .tile.in { animation: pop .4s var(--ease) both; }
+  .grid.bars .tile.in { animation: grow .5s var(--ease) both; }
+  .grid.labeled .tile.in { animation: pop .4s var(--ease) both; }
+  @keyframes grow { from { transform: scaleY(0); } to { transform: none; } }
   .buy { display: flex; justify-content: flex-end; }
   .cta { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; animation: pop .3s var(--ease) both; }
   .cta-btn { display: inline-flex; align-items: center; gap: 6px; background: var(--accent); color: var(--accent-ink); font-weight: 700; font-size: 14px; text-decoration: none; padding: 11px 18px; border-radius: var(--r-sm); white-space: nowrap; transition: transform .2s var(--ease), box-shadow .2s var(--ease), filter .2s; }
@@ -1006,7 +1026,7 @@ function paint({ res, data }) {
     row.innerHTML = `
       <header class="who"><span class="flag" aria-hidden="true">${esc(c.flag)}</span>
         <div><h3 class="name">${esc(c.name)}</h3><div class="score">${score}</div></div></header>
-      <div class="grid" role="group" aria-label="${esc(c.name)}"></div>
+      <div class="grid ${n <= 3 ? "labeled" : "bars"}" role="group" aria-label="${esc(c.name)}: assets by verdict"></div>
       <div class="buy">${c.sel !== null ? ctaHTML(c, c.sel, c.tiles.find(t => t.i === c.sel).s) : `<span class="cta-hint">Pick an asset</span>`}</div>`;
     const grid = row.querySelector(".grid");
     c.tiles.forEach((t, k) => {
@@ -1014,6 +1034,7 @@ function paint({ res, data }) {
       b.className = "tile " + CLASS[t.s] + (c.sel === t.i ? " sel" : "") + (firstPaint ? " in" : "");
       b.type = "button"; b.dataset.i = t.i;
       if (firstPaint) b.style.animationDelay = (r * 45 + k * 12) + "ms";
+      if (n <= 3) b.innerHTML = `<i aria-hidden="true"></i>${esc(ASSETS[t.i])}`;
       b.setAttribute("aria-label", `${ASSETS[t.i]}: ${LABEL[t.s]}`);
       b.setAttribute("aria-pressed", c.sel === t.i);
       b.dataset.text = `<b>${ASSETS[t.i]}</b> · ${LABEL[t.s]}`;

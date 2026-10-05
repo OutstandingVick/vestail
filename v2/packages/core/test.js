@@ -15,6 +15,7 @@ const r = core.rule("NG", "citizen", "Cryptocurrency");
 check(r && r.statusKey === "conditional" && Array.isArray(r.sources) && r.verified_at === null, "rule() returns status and provenance");
 check(core.rule("XX", "citizen", 0) === null && core.rule("NG", "citizen", "Moon rocks") === null, "rule() is null for unknown country or asset");
 const countries = load("countries.json");
+check(m.rows.length === countries.countries.length, `the matrix has a row per country (${m.rows.length})`);
 const withRules = edit => { const c = structuredClone(countries); edit(c.countries[0].rules.citizen); return c; };
 const throwsOn = (c, re) => { try { createVestail({ ...base, countries: c }); return false; } catch (e) { return re.test(e.message); } };
 const base = { assets: load("assets.json").assets, categories: load("categories.json"), aliases: load("aliases.json"), entities: load("entities.json"), venues: load("venues.json") };

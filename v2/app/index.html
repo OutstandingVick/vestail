@@ -60,8 +60,14 @@
   html { scroll-padding-top: env(safe-area-inset-top, 0px); }
   *, *::before, *::after { box-sizing: inherit; }
   body { margin: 0; background: var(--bg); color: var(--paper); font-family: var(--font-body); font-size: 15px; line-height: 1.5; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
-  /* v1's page gradient: a fixed layer rather than fixed attachment, which iOS ignores. */
-  body::before { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none; background: linear-gradient(90deg, var(--violet), var(--navy)); }
+  /*
+   * A near-black ground with one soft purple glow behind the hero. It scrolls
+   * with the page (absolute, not fixed) so the glow stays with the headline
+   * and the sections below sit on plain ground.
+   */
+  body { position: relative; }
+  body::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 1100px; z-index: -1; pointer-events: none;
+    background: radial-gradient(60% 55% at 50% 0%, color-mix(in srgb, var(--purple) 26%, transparent), transparent 70%); }
   ::selection { background: var(--gold); color: var(--ink-0); }
   a { color: inherit; }
   button { font: inherit; }

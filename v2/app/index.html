@@ -46,8 +46,12 @@
     --no-hatch: rgba(13,16,21,.42);
     --tile-dim: .5;
     --ring: 0 0 0 1px var(--line);
-    --shadow-1: var(--ring);
-    --shadow-2: var(--ring), 0 25px 50px -12px rgba(0,0,0,.25);
+    /* One card treatment: hairline ring, a faint top highlight for depth, a soft drop. */
+    --card: var(--ring), inset 0 1px 0 color-mix(in srgb, var(--paper) 5%, transparent);
+    --card-raised: var(--card), 0 24px 48px -24px rgba(0,0,0,.7);
+    --card-hover: 0 0 0 1px color-mix(in srgb, var(--purple) 40%, transparent), inset 0 1px 0 color-mix(in srgb, var(--paper) 6%, transparent), 0 28px 56px -24px rgba(0,0,0,.8);
+    --shadow-1: var(--card);
+    --shadow-2: var(--card-raised);
     --r-xl: 28px; --r-lg: 28px; --r-md: 16px; --r-sm: 12px; --r-pill: 999px;
     --font-display: "Outfit", ui-sans-serif, system-ui, sans-serif;
     --font-body: "Outfit", ui-sans-serif, system-ui, sans-serif;
@@ -170,7 +174,7 @@
     box-shadow: var(--shadow-1);
     transition: transform .25s var(--ease), box-shadow .25s var(--ease), border-color .25s;
   }
-  .row:hover { transform: translateY(-2px); box-shadow: var(--shadow-2); }
+  .row:hover { transform: translateY(-2px); box-shadow: var(--card-hover); }
   .row.has-sel { box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 45%, transparent); }
   .who { display: flex; align-items: center; gap: 14px; min-width: 0; }
   .flag { font-size: 30px; line-height: 1; width: 44px; height: 44px; display: grid; place-items: center; background: var(--surface-2); border-radius: var(--r-md); flex: none; }
@@ -244,7 +248,7 @@
   .sec h2 { font-size: clamp(30px, 4.4vw, 50px); line-height: 1.08; font-weight: 700; color: var(--ink); letter-spacing: -.01em; margin: 0; max-width: 20ch; }
   .sec .lead { font-size: 17px; color: var(--ink-2); max-width: 56ch; margin: 16px 0 0; }
   .sec-head { margin-bottom: 40px; }
-  .panel { background: var(--surface); box-shadow: var(--shadow-2); border-radius: var(--r-lg); padding: 28px; }
+  .panel { background: var(--surface); box-shadow: var(--card-raised); border-radius: var(--r-lg); padding: 28px; transition: box-shadow .25s var(--ease), transform .25s var(--ease); }
   .panel h3 { font-size: 19px; font-weight: 600; color: var(--ink); margin: 0 0 8px; }
   .panel p { margin: 0; color: var(--ink-2); font-size: 15px; }
   .cols-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }

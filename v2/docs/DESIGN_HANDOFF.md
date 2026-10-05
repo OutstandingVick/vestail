@@ -29,7 +29,7 @@ Top to bottom:
 6. **Trail.** How the search was understood, as chips joined by arrows, with one explanatory sentence. Example: `Google → Listed company (US) → Equities → Domestic in US, foreign elsewhere` and *"Google is a listed company from US, so it counts as domestic equity there and foreign equity everywhere else."*
 7. **Board.** One card per country:
    - flag and name, with a summary such as "9 of 20 open · 6 conditional · 5 closed", or the single verdict when only one asset applies;
-   - a grid of verdict tiles, 20 with no search, 1 to 3 after one;
+   - a verdict bar chart, 20 bars with no search (height and colour both encode the verdict), or labelled chips for 1 to 3 assets after one;
    - a **buy column**.
 8. **Asset key.** The 20 asset classes in order.
 9. **Footer disclaimer.** Sample rules only; links carry a tracking tag.

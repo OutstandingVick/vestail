@@ -57,8 +57,8 @@
     <dt>Asset class</dt><dd>One of the 20 things a person might own (residential property, gold bullion, foreign equities…). Each is a tile. Defined in <code>data/assets.json</code>.</dd>
     <dt>Status</dt><dd>The rule for one (country, asset, buyer type). Three values: <span class="sw" style="background:var(--yes)"></span><b>can own</b> (2), <span class="sw" style="background:var(--cond)"></span><b>conditional</b> (1) — licence, cap or approval needed, <span class="sw" style="background:var(--no);background-image:repeating-linear-gradient(135deg,rgba(255,255,255,.55) 0 2px,transparent 2px 5px)"></span><b>cannot own</b> (0). Red is hatched so it reads without colour.</dd>
     <dt>Buyer type</dt><dd>Who is buying. <b>Citizen</b> holds the country's passport; <b>foreigner</b> does not. Each country stores a full rule set for both. A <b>resident</b> type is planned.</dd>
-    <dt>Row</dt><dd>One country: flag, name, summary count, 20-tile grid, buy column.</dd>
-    <dt>Grid / tiles</dt><dd>The 20-box visual. In <b>By status</b> view tiles are sorted green → amber → red and countries are ranked most-open first; in <b>By asset 1–20</b> view tiles keep their fixed index so you can compare one asset down the column.</dd>
+    <dt>Card</dt><dd>One country: flag tile, name, a counted summary per verdict, the verdict chart, and the buy panel. Cards sit two to a row (one on phones).</dd>
+    <dt>Verdict chart</dt><dd>The card's slim bar chart: one rounded bar per asset, coloured by verdict and sized by it too (full, two-thirds, short), so it reads without colour. In By status view bars are sorted green → amber → red and countries ranked most-open first; in By asset 1–20 view bars keep their fixed index. When a search narrows to one to three assets the bars become labelled chips. On phones the twenty bars wrap into two rows so each is a usable tap target.</dd>
     <dt>Category</dt><dd>A group of asset classes a single word fans out to. "Stocks" → Equities → domestic, foreign, private company shares. <code>data/categories.json</code>.</dd>
     <dt>Alias</dt><dd>An everyday word that maps to an asset class or a category: house, gilts, farmland, crypto. <code>data/aliases.json</code>.</dd>
     <dt>Entity</dt><dd>A specific named thing: Google, Bitcoin, a Gulfstream, UK gilts. Each knows its asset class; listed companies also know their home country. <code>data/entities.json</code>.</dd>
@@ -110,7 +110,7 @@
       <dt>Hero</dt><dd>Headline, one-sentence promise, the search field, the HUD, then suggestion chips that fill the search.</dd>
       <dt>Controls</dt><dd>Two segmented toggles (Citizens/Foreigners, By status/By asset) and the legend.</dd>
       <dt>Trail</dt><dd>Resolution chips plus one explanatory line; when nothing is searched it shows a hint about the buy column.</dd>
-      <dt>Board</dt><dd>One card per country. Desktop is three columns (identity · grid · buy); below 900px it stacks; below 480px tiles stretch to the full width.</dd>
+      <dt>Board</dt><dd>A grid of country cards, two per row on wide screens and one below 900px. Each card's buy panel is an inset card with a verdict-coloured edge, the asset, a verdict pill and the action; empty, it is a dashed prompt.</dd>
       <dt>Key</dt><dd>The 20 asset classes in tile order for the By-asset view.</dd>
       <dt>Story sections</dt><dd>Six numbered sections after the key (problem, how it works, verdicts, buy, trust, FAQ) and a closing call to action whose button returns to the search.</dd>
     </dl>
@@ -172,6 +172,7 @@
     <div class="step"><b>13 · Conditional acknowledgement</b><span>A conditional cell now shows a checkbox ("I understand I can buy and hold … but a licence, cap, approval or KYC check may apply to me") and its buy links stay locked until it's ticked, as in v1. The API enforces it: <code>POST /orders/click</code> refuses a conditional click without <code>acknowledged: true</code>.</span></div>
     <div class="step"><b>14 · Premium hero and cards</b><span>A new palette (#0D0D0F ground, #17171A surface, #F5F4F0 text, #99979F muted, purple #7C5CFF beside the orange) and a hero after a Lightyear reference: a true-claims trust row, a Light/Bold headline, one search pill with an orange "See where", chips beneath, and an open stat trio with purple change chips. Cards share one treatment and the corner scale is enforced. Built against the Appllama design skill's rules (one role per accent, one grey family, one corner scale, tabular figures); the Appllama MCP was not connected.</span></div>
     <div class="step"><b>15 · Light ground</b><span>The page moved to a warm off-white (#F5F3EE) with white cards and near-black text. Muted grey, small purple text and the verdict colours were darkened to keep their contrast; focus rings turned purple (white vanished on light); shadows became soft and warm.</span></div>
+    <div class="step"><b>16 · Country cards</b><span>After a card-grid reference: the board became two columns of cards with a flag-tile header and a dotted verdict count; the 20-tile wall became a slim bar chart whose bar heights repeat the verdict (labelled chips for one to three assets); and the buy area became an inset panel with a verdict edge and pill, holding the acknowledgement for conditional cells. Panels settle in from 97% rather than popping; phone bars wrap to two rows for tap size.</span></div>
   </div>
 
   <h2 id="next">Open questions</h2>

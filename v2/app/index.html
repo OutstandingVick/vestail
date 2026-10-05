@@ -194,7 +194,92 @@
   @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
 
   /* ---------- Responsive ---------- */
+
+  /* ---------- Top nav (v1 pattern: text links, then one orange pill) ---------- */
+  .nav { display: flex; align-items: center; gap: 22px; }
+  .nav a { font-size: 14px; font-weight: 600; color: var(--ink-2); text-decoration: none; transition: color .2s; }
+  .nav a:hover { color: var(--ink); }
+  .nav .pill { background: var(--orange); color: var(--navy); padding: 10px 18px; border-radius: var(--r-pill); box-shadow: 0 8px 24px -8px rgb(255 88 10 / .7); transition: transform .2s var(--ease); }
+  .nav .pill:hover { color: var(--navy); transform: translateY(-1px); }
+
+  /* ---------- Story sections ---------- */
+  .sec { padding: 104px 0 0; scroll-margin-top: 24px; }
+  .eyebrow { display: inline-flex; gap: 10px; align-items: baseline; font-size: 12.5px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 14px; }
+  .eyebrow b { color: var(--gold); font-weight: 600; letter-spacing: .06em; }
+  .sec h2 { font-size: clamp(30px, 4.4vw, 50px); line-height: 1.08; font-weight: 700; color: var(--ink); letter-spacing: -.01em; margin: 0; max-width: 20ch; }
+  .sec .lead { font-size: 17px; color: var(--ink-2); max-width: 56ch; margin: 16px 0 0; }
+  .sec-head { margin-bottom: 40px; }
+  .panel { background: var(--surface); box-shadow: var(--shadow-2); border-radius: var(--r-lg); padding: 28px; }
+  .panel h3 { font-size: 19px; font-weight: 600; color: var(--ink); margin: 0 0 8px; }
+  .panel p { margin: 0; color: var(--ink-2); font-size: 15px; }
+  .cols-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .cols-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .cols-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .ico { width: 30px; height: 30px; stroke: var(--orange); fill: none; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; margin-bottom: 18px; }
+
+  /* 01 · The problem: one asset, three answers */
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .same .label { font-size: 13px; color: var(--ink-3); margin-bottom: 16px; }
+  .same .label b { color: var(--ink); font-weight: 600; }
+  .same ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .same li { display: flex; align-items: center; gap: 12px; background: var(--surface-2); box-shadow: var(--ring); border-radius: var(--r-md); padding: 12px 14px; }
+  .same .fl { font-size: 22px; }
+  .same .who-l { flex: 1; color: var(--ink); font-weight: 600; font-size: 15px; }
+  .same .who-l span { display: block; font-weight: 400; font-size: 12.5px; color: var(--ink-3); }
+  .vtag { display: inline-flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 600; color: var(--ink); white-space: nowrap; }
+  .vtag i { width: 16px; height: 16px; border-radius: 5px; flex: none; }
+  .vtag.yes i { background: var(--yes); } .vtag.cond i { background: var(--cond); }
+  .vtag.no i { background: var(--no); background-image: repeating-linear-gradient(135deg, var(--no-hatch) 0 2px, transparent 2px 5px); }
+  .claims li { align-items: flex-start; }
+  .claims .who-l span { margin-top: 2px; }
+
+  /* 02 · How it works */
+  .steps .num { font-size: 13px; font-weight: 700; color: var(--gold); letter-spacing: .06em; margin-bottom: 18px; }
+  .mock { margin-top: 22px; background: var(--surface-2); box-shadow: var(--ring); border-radius: var(--r-md); padding: 14px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; min-height: 72px; }
+  .mock .chipx { background: var(--surface-3); border-radius: var(--r-pill); padding: 6px 12px; font-size: 13px; color: var(--ink); }
+  .mock .chipx.on { background: var(--paper); color: var(--ink-0); font-weight: 600; }
+  .mock .q { flex: 1; display: flex; align-items: center; gap: 8px; color: var(--ink); font-size: 14px; }
+  .mock .q svg { width: 16px; height: 16px; stroke: var(--ink-3); fill: none; stroke-width: 2.2; stroke-linecap: round; }
+  .mock .btnx { background: var(--orange); color: var(--navy); font-weight: 700; font-size: 13px; border-radius: var(--r-sm); padding: 8px 12px; margin-left: auto; }
+
+  /* 03 · Verdicts */
+  .verdict .sw-big { width: 44px; height: 44px; border-radius: 12px; margin-bottom: 20px; }
+  .verdict.yes .sw-big { background: var(--yes); } .verdict.cond .sw-big { background: var(--cond); }
+  .verdict.no .sw-big { background: var(--no); background-image: repeating-linear-gradient(135deg, var(--no-hatch) 0 3px, transparent 3px 7px); }
+  .verdict dl { margin: 20px 0 0; display: grid; gap: 12px; }
+  .verdict dt { font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); }
+  .verdict dd { margin: 3px 0 0; color: var(--paper); font-size: 15px; }
+
+  /* 04 · Buy in one place: two doors */
+  .door { display: flex; flex-direction: column; gap: 14px; min-height: 100%; }
+  .door .tag { align-self: flex-start; font-size: 12px; font-weight: 600; border-radius: var(--r-pill); padding: 5px 11px; box-shadow: var(--ring); color: var(--ink-2); }
+  .door .tag.live { color: var(--gold); box-shadow: 0 0 0 1px color-mix(in srgb, var(--gold) 45%, transparent); }
+  .door h3 { font-size: 24px; }
+  .door ul { list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .door li { background: var(--surface-2); box-shadow: var(--ring); border-radius: var(--r-pill); padding: 6px 12px; font-size: 13.5px; color: var(--ink); }
+  .door li em { font-style: normal; color: var(--ink-3); }
+  .rest { margin-top: 16px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; color: var(--ink-2); font-size: 15px; padding: 18px 28px; }
+  .rest b { color: var(--ink); font-weight: 600; }
+
+  /* 06 · FAQ */
+  .faq { display: grid; gap: 10px; }
+  .faq details { background: var(--surface); box-shadow: var(--shadow-1); border-radius: var(--r-md); padding: 0 22px; }
+  .faq summary { list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 20px 0; font-size: 17px; font-weight: 600; color: var(--ink); }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after { content: "+"; font-size: 24px; font-weight: 400; color: var(--ink-3); transition: transform .25s var(--ease); }
+  .faq details[open] summary::after { transform: rotate(45deg); }
+  .faq details p { margin: 0 0 20px; color: var(--ink-2); max-width: 70ch; }
+
+  /* Closing call to action */
+  .closing { margin-top: 104px; text-align: center; padding: 64px 28px; }
+  .closing h2 { margin: 0 auto; max-width: 18ch; font-size: clamp(30px, 4.4vw, 50px); line-height: 1.08; font-weight: 700; color: var(--ink); }
+  .closing .go { display: inline-flex; margin-top: 28px; background: var(--orange); color: var(--navy); font-weight: 700; font-size: 16px; border: 0; border-radius: var(--r-pill); padding: 15px 26px; cursor: pointer; box-shadow: 0 8px 24px -8px rgb(255 88 10 / .7); transition: transform .2s var(--ease); }
+  .closing .go:hover { transform: translateY(-2px); }
+
   @media (max-width: 900px) {
+    .cols-3, .cols-4, .split, .cols-2 { grid-template-columns: 1fr; }
+    .sec { padding-top: 72px; }
+    .nav a:not(.pill) { display: none; }
     .board-head { display: none; }
     .row { grid-template-columns: 1fr; gap: 14px; padding: 16px; }
     .buy { justify-content: flex-start; }
@@ -219,7 +304,13 @@
 <div class="wrap">
   <nav class="top">
     <a class="brand" href="#" aria-label="Vestail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="298.4 324.6 786.5 179.1" aria-hidden="true" focusable="false"> <g transform="translate(311.72 325.00) scale(1.7600)"> <line x1="12" y1="42" x2="27" y2="65" stroke="#FF580A" stroke-width="27" stroke-linecap="round"/> <line x1="60" y1="82" x2="83" y2="23" stroke="#FF580A" stroke-width="30" stroke-linecap="round"/> <ellipse cx="84.26" cy="39.59" rx="4.6" ry="6.6" fill="#141414"/> <circle cx="85.66" cy="37.19" r="1.7" fill="#FFFFFF"/> <ellipse cx="70.84" cy="34.36" rx="4.6" ry="6.6" fill="#141414"/> <circle cx="72.24" cy="31.96" r="1.7" fill="#FFFFFF"/> </g> <path d="M569.86 474.334 528.1120000000001 379.666H556.336L586.3240000000001 457.674H572.408L602.592 379.666H629.836L588.284 474.334ZM682.952 476.294Q668.056 476.294 656.492 469.924Q644.928 463.554 638.1659999999999 452.38199999999995Q631.404 441.21 631.404 426.902Q631.404 412.79 637.97 401.716Q644.536 390.642 655.904 384.076Q667.2719999999999 377.51 681.188 377.51Q694.908 377.51 705.394 383.68399999999997Q715.88 389.858 721.858 400.53999999999996Q727.836 411.222 727.836 424.746Q727.836 427.294 727.542 429.94Q727.248 432.586 726.4639999999999 435.918L646.888 436.11400000000003V416.906L714.508 416.71L704.12 424.746Q703.728 416.318 701.082 410.634Q698.436 404.95 693.4380000000001 401.91200000000003Q688.44 398.874 681.188 398.874Q673.544 398.874 667.86 402.304Q662.176 405.734 659.138 411.908Q656.1 418.082 656.1 426.51Q656.1 435.134 659.3340000000001 441.504Q662.568 447.874 668.644 451.304Q674.72 454.734 682.756 454.734Q690.008 454.734 695.888 452.284Q701.768 449.834 706.08 444.934L721.172 460.026Q714.312 468.062 704.414 472.178Q694.516 476.294 682.952 476.294ZM772.328 476.49Q764.292 476.49 756.55 474.334Q748.808 472.178 742.3399999999999 468.356Q735.872 464.534 731.168 459.046L746.456 443.562Q751.356 449.05 757.8240000000001 451.794Q764.292 454.538 772.132 454.538Q778.404 454.538 781.6379999999999 452.774Q784.872 451.01 784.872 447.482Q784.872 443.562 781.442 441.406Q778.012 439.25 772.5239999999999 437.78Q767.036 436.31 761.058 434.448Q755.0799999999999 432.586 749.5919999999999 429.548Q744.1039999999999 426.51 740.674 421.12Q737.244 415.73 737.244 407.106Q737.244 398.09000000000003 741.654 391.42600000000004Q746.064 384.762 754.296 381.038Q762.528 377.31399999999996 773.6999999999999 377.31399999999996Q785.46 377.31399999999996 794.966 381.42999999999995Q804.472 385.546 810.744 393.778L795.26 409.262Q790.948 403.97 785.558 401.61800000000005Q780.168 399.266 773.896 399.266Q768.212 399.266 765.174 401.03Q762.136 402.794 762.136 405.93Q762.136 409.45799999999997 765.566 411.418Q768.996 413.378 774.4839999999999 414.84799999999996Q779.972 416.318 785.95 418.18Q791.928 420.04200000000003 797.318 423.374Q802.708 426.706 806.1379999999999 432.194Q809.568 437.682 809.568 446.306Q809.568 460.222 799.572 468.356Q789.576 476.49 772.328 476.49ZM836.812 474.334V340.27H862.488V474.334ZM814.664 402.206V379.666H884.636V402.206ZM934.812 476.294Q921.876 476.294 911.488 469.826Q901.1 463.358 895.22 452.18600000000004Q889.34 441.014 889.34 427.098Q889.34 412.986 895.22 401.81399999999996Q901.1 390.642 911.488 384.174Q921.876 377.706 934.812 377.706Q945.004 377.706 953.04 381.822Q961.076 385.938 965.8779999999999 393.288Q970.68 400.63800000000003 971.072 409.85V443.954Q970.68 453.362 965.8779999999999 460.61400000000003Q961.076 467.866 953.04 472.08Q945.004 476.294 934.812 476.294ZM939.516 452.578Q950.2959999999999 452.578 956.96 445.424Q963.624 438.27 963.624 426.902Q963.624 419.454 960.586 413.672Q957.548 407.89 952.158 404.656Q946.768 401.422 939.516 401.422Q932.46 401.422 927.0699999999999 404.656Q921.68 407.89 918.6419999999999 413.672Q915.6039999999999 419.454 915.6039999999999 426.902Q915.6039999999999 434.546 918.6419999999999 440.328Q921.68 446.11 927.0699999999999 449.344Q932.46 452.578 939.516 452.578ZM962.252 474.334V448.854L966.3679999999999 425.726L962.252 402.99V379.666H987.732V474.334ZM1006.548 474.334V379.666H1032.4199999999998V474.334ZM1019.4839999999999 364.378Q1013.212 364.378 1009.096 360.164Q1004.9799999999999 355.95 1004.9799999999999 349.678Q1004.9799999999999 343.602 1009.096 339.28999999999996Q1013.212 334.978 1019.4839999999999 334.978Q1025.952 334.978 1029.97 339.28999999999996Q1033.988 343.602 1033.988 349.678Q1033.988 355.95 1029.97 360.164Q1025.952 364.378 1019.4839999999999 364.378ZM1051.2359999999999 474.334V332.626H1076.912V474.334Z" fill="#FF580A"/> </svg></a>
-    <span class="meta">10 countries · 20 asset classes · citizens and foreigners</span>
+    <div class="nav" aria-label="Main">
+      <a href="#how">How it works</a>
+      <a href="#verdicts">Verdicts</a>
+      <a href="#buy">Buy</a>
+      <a href="#faq">FAQ</a>
+      <a class="pill" href="#q" data-focus-search>Search</a>
+    </div>
   </nav>
 
   <section class="hero">
@@ -278,7 +369,147 @@
     <h2>The 20 asset classes</h2>
     <ol id="key"></ol>
   </section>
-  <footer>Sample rules for layout review only; replace the data before relying on any cell. Buy links open partner venues in a new tab with a tracking tag so referrals and order flow can be attributed.</footer>
+
+  <!-- 01 · The problem -->
+  <section class="sec" id="problem" aria-labelledby="h-problem">
+    <div class="sec-head">
+      <p class="eyebrow"><b>01</b> The problem</p>
+      <h2 id="h-problem">The same asset isn't the same for everyone.</h2>
+      <p class="lead">Whether you can own something depends on where it is, where you're from, and which version you're buying. The rules are scattered across statutes, regulators and issuer terms, so most people buy blind and find out at the worst moment.</p>
+    </div>
+    <div class="split">
+      <div class="panel same">
+        <div class="label">Same asset, three countries: <b id="sameAssetName">Agricultural land</b>, bought by a foreigner</div>
+        <ul id="sameAsset"></ul>
+      </div>
+      <div class="panel same claims">
+        <div class="label">Same ticker, three legal claims: <b>NVDA</b> onchain</div>
+        <ul>
+          <li><span class="who-l">xStocks<span>Backed 1:1 by shares held in custody. You have a claim on a share.</span></span></li>
+          <li><span class="who-l">Ondo<span>A note that tracks the price. Your claim is on Ondo, not on a share.</span></span></li>
+          <li><span class="who-l">Backpack<span>An entitlement through a licensed broker. Your claim runs against the intermediary.</span></span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 · How it works -->
+  <section class="sec" id="how" aria-labelledby="h-how">
+    <div class="sec-head">
+      <p class="eyebrow"><b>02</b> How it works</p>
+      <h2 id="h-how">Three steps from “can I?” to “bought.”</h2>
+    </div>
+    <div class="cols-3 steps">
+      <div class="panel">
+        <div class="num">STEP 01</div>
+        <h3>Say who you are</h3>
+        <p>Pick your country and whether you're a citizen or a foreigner there. You declare it; Vestail never asks for ID.</p>
+        <div class="mock" aria-hidden="true"><span class="chipx">🇳🇬 Nigeria</span><span class="chipx on">Citizen</span><span class="chipx">Foreigner</span></div>
+      </div>
+      <div class="panel">
+        <div class="num">STEP 02</div>
+        <h3>Search anything</h3>
+        <p>A company, a coin, “a house”, “farmland”, “gold”. Vestail works out what kind of asset it is and shows you how it got there.</p>
+        <div class="mock" aria-hidden="true"><span class="q"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>farmland</span><span class="chipx">→ Agricultural land</span></div>
+      </div>
+      <div class="panel">
+        <div class="num">STEP 03</div>
+        <h3>See the verdict, then buy</h3>
+        <p>Every country answers in one of three verdicts. Where you're allowed, Vestail takes you straight to a place to buy.</p>
+        <div class="mock" aria-hidden="true"><span class="vtag yes"><i></i>Can own</span><span class="btnx">Buy ↗</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 · Verdicts -->
+  <section class="sec" id="verdicts" aria-labelledby="h-verdicts">
+    <div class="sec-head">
+      <p class="eyebrow"><b>03</b> Three verdicts</p>
+      <h2 id="h-verdicts">Not yes or no. The middle is where people get hurt.</h2>
+      <p class="lead">A two-state answer has to lie about the large middle: assets anyone can buy but can't redeem, collect on or sell without clearing a gate. Vestail gives it its own name.</p>
+    </div>
+    <div class="cols-3">
+      <div class="panel verdict yes">
+        <div class="sw-big" aria-hidden="true"></div>
+        <h3>Can own</h3>
+        <p>The rules permit someone like you to hold it, with no further gate.</p>
+        <dl><dt>What Vestail does</dt><dd>Shows you where to buy it.</dd></dl>
+      </div>
+      <div class="panel verdict cond">
+        <div class="sw-big" aria-hidden="true"></div>
+        <h3>Conditional</h3>
+        <p>Allowed, but behind a licence, cap, approval or KYC check, often one you only meet at exit.</p>
+        <dl><dt>What Vestail does</dt><dd>Names the condition, and asks you to acknowledge it before you buy.</dd></dl>
+      </div>
+      <div class="panel verdict no">
+        <div class="sw-big" aria-hidden="true"></div>
+        <h3>Cannot own</h3>
+        <p>The rules exclude someone like you from holding it.</p>
+        <dl><dt>What Vestail does</dt><dd>Never routes it. Not even a quote.</dd></dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 · Buy in one place -->
+  <section class="sec" id="buy" aria-labelledby="h-buy">
+    <div class="sec-head">
+      <p class="eyebrow"><b>04</b> Buy in one place</p>
+      <h2 id="h-buy">Find it, check it, buy it, without leaving Vestail.</h2>
+      <p class="lead">Vestail is becoming the place you buy what you're allowed to own: onchain assets straight from your own wallet, and a careful set of offchain ones through licensed partners.</p>
+    </div>
+    <div class="cols-2">
+      <div class="panel door">
+        <span class="tag live">Live for tokenized stocks</span>
+        <h3>Onchain, from your wallet</h3>
+        <p>Bought inside Vestail and settled to your own wallet. Vestail never holds your funds; it finds the version you may hold and routes the trade.</p>
+        <ul><li>Tokenized stocks</li><li>Crypto <em>· next</em></li><li>Tokenized gold <em>· next</em></li><li>Tokenized treasuries <em>· next</em></li></ul>
+      </div>
+      <div class="panel door">
+        <span class="tag">Planned</span>
+        <h3>Offchain, through licensed partners</h3>
+        <p>A deliberately short list of lower-risk assets, bought in Vestail through regulated partners who hold the licence and your assets.</p>
+        <ul><li>Real estate</li><li>Listed shares</li><li>Government bonds</li></ul>
+      </div>
+    </div>
+    <div class="panel rest"><b>Everything else</b> Aircraft, yachts, firearms, mining rights and regulated sectors: Vestail shows you the rule and the right route, from licensed dealers to regulator auctions.</div>
+  </section>
+
+  <!-- 05 · Why trust Vestail -->
+  <section class="sec" id="trust" aria-labelledby="h-trust">
+    <div class="sec-head">
+      <p class="eyebrow"><b>05</b> Why trust Vestail</p>
+      <h2 id="h-trust">An answer is only as good as where it comes from.</h2>
+    </div>
+    <div class="cols-4">
+      <div class="panel"><svg class="ico" viewBox="0 0 32 32" aria-hidden="true"><path d="M9 4h10l6 6v18H9zM19 4v6h6M13 16h8M13 21h8"/></svg><h3>Sourced rules</h3><p>Every rule carries the documents it rests on and the date it was last checked.</p></div>
+      <div class="panel"><svg class="ico" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 5v22M7 27h18M6 11h20M6 11l-3 8a4 4 0 0 0 6 0zM26 11l-3 8a4 4 0 0 0 6 0z"/></svg><h3>Neutral by rule</h3><p>Money never changes a verdict or the order of venues. We say who pays us.</p></div>
+      <div class="panel"><svg class="ico" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 15a5 5 0 1 0 0-10 5 5 0 0 0 0 10zM7 27a9 9 0 0 1 18 0"/></svg><h3>You declare, we disclose</h3><p>No ID checks and no blocking. Vestail shows you the rules; the choice stays yours.</p></div>
+      <div class="panel"><svg class="ico" viewBox="0 0 32 32" aria-hidden="true"><path d="M10 22V14a6 6 0 0 1 12 0v8l2 3H8zM14 28h4"/></svg><h3>Rules change; so do we</h3><p>When a regulator moves, the rule is rechecked and its date updated, so you can see how fresh an answer is.</p></div>
+    </div>
+  </section>
+
+  <!-- 06 · FAQ -->
+  <section class="sec" id="faq" aria-labelledby="h-faq">
+    <div class="sec-head">
+      <p class="eyebrow"><b>06</b> Questions</p>
+      <h2 id="h-faq">Fair questions, straight answers.</h2>
+    </div>
+    <div class="faq">
+      <details><summary>Is this legal advice?</summary><p>No. Vestail shows what the rules say for the country and buyer type you declare, with sources, so you can decide. For a big or unusual purchase, check with a professional in that country.</p></details>
+      <details><summary>Where do the rules come from?</summary><p>From statutes, regulator guidance and issuer terms. Each rule lists its sources and the date it was last verified. During this preview the rules are illustrative and not yet sourced; don't rely on them.</p></details>
+      <details><summary>Does Vestail hold my money?</summary><p>Not for onchain purchases: you buy from your own wallet and the asset settles there. Offchain purchases will go through licensed partners, who hold your assets under their own regulation.</p></details>
+      <details><summary>Why can’t I buy something marked “cannot own”?</summary><p>Because the rules exclude someone in your position from holding it, and selling it to you anyway is exactly what Vestail exists to prevent. Change your country or buyer type only if it's genuinely true for you.</p></details>
+      <details><summary>How does Vestail make money?</summary><p>A small fee on purchases made in Vestail, and referral fees from some venues. Neither ever changes a verdict or which venue we show first.</p></details>
+      <details><summary>Which countries and assets are covered?</summary><p>Ten countries and twenty asset classes today, for citizens and foreigners, with residents planned. More countries come as their rules are sourced.</p></details>
+    </div>
+  </section>
+
+  <!-- Closing -->
+  <section class="panel closing" aria-labelledby="h-close">
+    <h2 id="h-close">Acquire assets you're actually allowed to own, wherever you are.</h2>
+    <button class="go" type="button" data-focus-search>Find what you can own</button>
+  </section>
+  <footer>Vestail · sample rules for layout review only; replace the data before relying on any cell. Buy links open partner venues in a new tab with a tracking tag so referrals and order flow can be attributed.</footer>
 </div>
 <div id="tip" role="tooltip"></div>
 <script>
@@ -827,6 +1058,25 @@ async function loadActivity() {
   showStats();
 }
 
+
+/* --- 01 · same asset, three answers: built from the rules on this page, so it can't disagree with the board --- */
+function renderSameAsset() {
+  const el = $("sameAsset"), idx = ASSETS.indexOf("Agricultural land");
+  if (!el || idx < 0) return;
+  const tag = { 2: ["yes", "Can own"], 1: ["cond", "Conditional"], 0: ["no", "Cannot own"] };
+  const picks = [2, 1, 0].map(s => COUNTRIES.find(c => c.foreigner[idx] === s)).filter(Boolean);
+  el.innerHTML = picks.map(c => {
+    const [cls, label] = tag[c.foreigner[idx]];
+    return `<li><span class="fl" aria-hidden="true">${esc(c.flag)}</span><span class="who-l">${esc(c.name)}<span>Foreigner</span></span><span class="vtag ${cls}"><i></i>${label}</span></li>`;
+  }).join("");
+}
+document.querySelectorAll("[data-focus-search]").forEach(b => b.addEventListener("click", e => {
+  e.preventDefault();
+  // Smooth scrolling only animates on a visible page; jump otherwise (and under reduced motion).
+  q.scrollIntoView({ behavior: reduce || document.hidden ? "auto" : "smooth", block: "center" });
+  q.focus({ preventScroll: true });
+}));
+
 /* --- start --- */
 async function start() {
   if (API) {
@@ -838,6 +1088,7 @@ async function start() {
     } catch (err) { console.warn("Vestail API unavailable, using inline data.", err); }
   }
   ASSETS.forEach(a => { const li = document.createElement("li"); li.textContent = a; $("key").appendChild(li); });
+  renderSameAsset();
   render();
   if (apiLive) {
     try { await loadActivity(); return; }

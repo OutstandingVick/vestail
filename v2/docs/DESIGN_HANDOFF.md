@@ -21,7 +21,7 @@ A person deciding whether and where to buy something, often across borders: a Ni
 
 Top to bottom:
 
-1. **Top bar.** Vestail wordmark left; scope line right ("12 countries · 20 asset classes · citizens and foreigners").
+1. **Top bar.** Sticky, full width, white with a hairline under it: Vestail wordmark left, five section links centred on the bar, and two buttons right — outlined "See the board" and the orange "Search". The scope line ("12 countries · 20 asset classes") moved into the hero's trust row.
 2. **Hero.** Headline *"What can you actually own here?"*, one-line explanation, then a large **search field** ("Google, bitcoin, a house, farmland, a Gulfstream…").
 3. **Activity strip.** Three stat cards (volume bought through Vestail, last 30 days, with change; orders routed to venues, with change; active buyers this week) and a one-line **live ticker** ("🇳🇬 Someone bought Foreign equities via Bamboo · just now").
 4. **Suggestion chips** that fill the search: Google, Bitcoin, A house, Farmland, Gold, Dangote, Private jet.

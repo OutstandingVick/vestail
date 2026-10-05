@@ -17,23 +17,28 @@
     padding-bottom: env(safe-area-inset-bottom, 0px);
 
     /*
-     * Vestail's tokens, taken from v1 (app/globals.css on main). Dark only, as
-     * in v1: the verdict colours are tuned for, and proven against, a dark ground.
+     * Vestail v2 brand. Dark only: the verdict colours are tuned for, and
+     * checked against, a dark ground. One grey family (warm-neutral), two
+     * accents with fixed jobs: orange is the only colour for actions, purple
+     * is the brand's emphasis (highlights, selection, focus). Neither is ever
+     * a verdict.
      */
-    --ink-0: #0d1015;                    /* v1 ink: deepest surface */
-    --navy: #0a122a; --violet: #7c41f1;  /* the two ends of the page gradient */
-    --orange: #ff580a;                   /* primary action */
-    --gold: #c9a227;                     /* emphasis, never a verdict */
-    --paper: #e8e4d9;                    /* body text */
+    --ink-0: #0d0d0f;                    /* background */
+    --navy: #0d0d0f;                     /* label colour on orange */
+    --orange: #ff580a;                   /* actions, and nothing else */
+    --purple: #7c5cff;                   /* brand emphasis */
+    --purple-ink: #b9a8ff;               /* purple for small text on dark */
+    --paper: #f5f4f0;                    /* text */
+    --muted: #99979f;
 
-    --bg: var(--navy);
-    --surface: color-mix(in srgb, #151922 85%, transparent);  /* v1 card */
-    --surface-2: rgba(255,255,255,.07);                        /* v1 field */
-    --surface-3: rgba(255,255,255,.12);
-    --ink: #ffffff;
-    --ink-2: rgba(255,255,255,.72);
-    --ink-3: rgba(255,255,255,.5);
-    --line: rgba(255,255,255,.1);
+    --bg: #0d0d0f;
+    --surface: #17171a;
+    --surface-2: color-mix(in srgb, #f5f4f0 6%, #17171a);
+    --surface-3: color-mix(in srgb, #f5f4f0 11%, #17171a);
+    --ink: #f5f4f0;
+    --ink-2: color-mix(in srgb, #f5f4f0 78%, #99979f);
+    --ink-3: var(--muted);
+    --line: color-mix(in srgb, #f5f4f0 9%, transparent);
     --accent: var(--orange);
     --accent-ink: var(--navy);
     /* Verdict colours, v1's exactly, and used for nothing else. */
@@ -48,6 +53,7 @@
     --font-body: "Outfit", ui-sans-serif, system-ui, sans-serif;
     --ease: cubic-bezier(.2,.8,.2,1);
     --tip-bg: var(--paper); --tip-fg: var(--ink-0);
+    --gold: var(--purple-ink);           /* old emphasis token, now purple; removed below */
     color-scheme: dark;
   }
 

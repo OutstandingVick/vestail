@@ -304,40 +304,43 @@
   .cta-hint { font-size: 13px; color: var(--ink-3); }
 
   /* ---------- Key + footer ---------- */
-  /* The user-approved exception: the footer carries the action orange as a full-width field. */
-  footer { position: relative; isolation: isolate; overflow: hidden; margin: clamp(60px, 8vw, 110px) clamp(16px, 3vw, 48px) 32px; border-radius: 34px;
-    padding: clamp(56px, 7vw, 104px) max(20px, calc((100vw - 1120px) / 2 * .2)) clamp(28px, 3vw, 44px);
-    background: var(--orange); color: var(--ink); }
-  /* Brand block, then three link columns, as in the reference. */
-  .foot-grid { display: grid; grid-template-columns: minmax(260px, 1.5fr) repeat(3, minmax(130px, .8fr)); gap: clamp(32px, 4vw, 72px); align-items: start; }
+  footer { position: relative; isolation: isolate; overflow: hidden; min-height: 690px;
+    margin: clamp(60px, 8vw, 110px) clamp(16px, 3vw, 48px) 32px; border-radius: 220px 34px 34px 220px;
+    padding: clamp(64px, 7vw, 96px) clamp(28px, 6vw, 92px) 220px;
+    background: #EBEBFF; color: var(--ink); }
+  .foot-grid { display: grid; grid-template-columns: minmax(250px, 1.2fr) repeat(2, minmax(150px, .65fr)) minmax(300px, 1.25fr);
+    gap: clamp(32px, 4vw, 72px); align-items: start; }
 
   .foot-logo { display: inline-flex; text-decoration: none; }
-  .foot-logo svg { display: block; height: 30px; width: auto; filter: brightness(0); }
-  /* The reference's pill, with its small lit dot before the label. */
+  .foot-logo svg { display: block; height: 34px; width: auto; }
   .foot-cta { display: inline-flex; align-items: center; gap: 10px; margin-top: 26px; font: inherit; font-size: 15px; font-weight: 500; color: #fff;
     background: var(--ink); border: 0; box-shadow: inset 0 0 0 1px rgb(255 255 255 / .12); border-radius: var(--r-pill);
     padding: 11px 20px; cursor: pointer; transition: background .2s, box-shadow .2s; }
   .foot-cta i { flex: none; width: 7px; height: 7px; border-radius: 50%; background: #fff; }
   .foot-cta:hover { background: #252529; box-shadow: inset 0 0 0 1px rgb(255 255 255 / .24); }
 
-  .foot-line { margin: 22px 0 0; max-width: 30ch; color: rgb(13 13 15 / .82); font-size: 15px; line-height: 1.6; }
+  .foot-line { margin: 22px 0 0; max-width: 24ch; color: var(--ink); font-family: var(--font-display); font-size: 26px; font-weight: 650; line-height: 1.08; letter-spacing: -.025em; }
 
-  /* Sentence case and white, not the small caps the old footer used. */
-  .foot-col h3 { margin: 0 0 20px; font-family: var(--font-display); font-size: 17px; font-weight: 500; letter-spacing: -.01em; color: var(--ink); }
+  .foot-col h3, .foot-connect h3 { margin: 0 0 20px; font-family: var(--font-display); font-size: 14px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--ink); }
 
-  /* Each link led by a small dot, as the reference marks its lists. */
   .foot-col ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
-  .foot-col li { display: grid; grid-template-columns: auto 1fr; align-items: baseline; gap: 10px; }
-  .foot-col li::before { content: ""; width: 3px; height: 3px; margin-top: .55em; border-radius: 50%; background: rgb(13 13 15 / .46); }
+  .foot-col li { display: block; }
   .foot-col a, .foot-col li span { color: rgb(13 13 15 / .82); font-size: 15px; line-height: 1.4; text-decoration: none; }
 
   .foot-col a { transition: color .15s var(--ease); }
   .foot-col a:hover { color: var(--ink); }
   .foot-col a:focus-visible, .foot-cta:focus-visible, .foot-logo:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; border-radius: 2px; }
 
-  /* A hairline, then the copyright line, as the reference closes. */
-  .foot-base { margin-top: clamp(80px, 11vw, 150px); padding-top: 26px; box-shadow: inset 0 1px 0 rgb(13 13 15 / .16);
-    color: rgb(13 13 15 / .82); font-size: 14px; }
+  .foot-signup { display: flex; min-height: 54px; border: 1.5px solid var(--ink); border-radius: var(--r-pill); overflow: hidden; }
+  .foot-signup input { min-width: 0; flex: 1; border: 0; outline: 0; padding: 0 20px; background: transparent; color: var(--ink); font: inherit; font-size: 15px; }
+  .foot-signup input::placeholder { color: rgb(13 13 15 / .48); }
+  .foot-signup button { flex: none; border: 0; border-radius: var(--r-pill); padding: 0 25px; background: var(--ink); color: #fff; font: inherit; font-weight: 650; cursor: pointer; transition: background .15s; }
+  .foot-signup button:hover { background: var(--orange); }
+  .foot-social { margin-top: 32px; }
+  .foot-social-links { display: flex; flex-wrap: wrap; gap: 10px; }
+  .foot-social-links a { display: inline-flex; align-items: center; min-height: 40px; padding: 0 16px; border-radius: var(--r-pill); background: rgb(255 255 255 / .62); color: var(--ink); font-size: 13px; font-weight: 650; text-decoration: none; transition: background .15s, color .15s; }
+  .foot-social-links a:hover { background: var(--ink); color: #fff; }
+  .foot-base { position: absolute; inset-inline-start: clamp(28px, 6vw, 92px); top: clamp(178px, 18vw, 218px); color: rgb(13 13 15 / .68); font-size: 13px; }
 
   /*
    * The globe, cropped by the right edge the way the reference crops its sphere.
@@ -345,8 +348,7 @@
    * continents — the right motif for a product about where you are. Drawn in
    * currentColor so it holds up whatever the footer's field colour is.
    */
-  .foot-globe { position: absolute; z-index: -1; pointer-events: none; right: -26%; bottom: -22%;
-    width: min(700px, 70vw); height: auto; aspect-ratio: 1; color: inherit; }
+  .foot-globe { display: none; }
   .foot-globe .land { fill: none; stroke: currentColor; stroke-width: 7; stroke-linecap: round; opacity: .2; }
   .foot-globe .rim { fill: currentColor; fill-opacity: .03; stroke: currentColor; stroke-opacity: .09; stroke-width: 2; }
 
@@ -355,10 +357,10 @@
    * content, cropped by the footer's edge. The footer isolates its stacking
    * context, so this sits above the background and below everything else.
    */
-  .foot-mark { position: absolute; z-index: -1; left: max(20px, calc((100vw - 1120px) / 2 * .2)); right: 0; bottom: -.16em; pointer-events: none;
-    font-family: var(--font-display); font-weight: 800; font-size: clamp(120px, 23vw, 360px); line-height: .76; letter-spacing: -.05em;
-    color: rgb(13 13 15 / .06); white-space: nowrap; }
-  .foot-mark span { color: rgb(13 13 15 / .18); }
+  .foot-mark { position: absolute; z-index: -1; inset-inline-end: clamp(24px, 4vw, 64px); bottom: -.08em; pointer-events: none;
+    font-family: var(--font-display); font-weight: 800; font-size: clamp(150px, 24vw, 360px); line-height: .72; letter-spacing: -.065em;
+    color: var(--ink); white-space: nowrap; }
+  .foot-mark span { color: var(--orange); }
 
 
   #tip { z-index: 30; position: fixed; pointer-events: none; opacity: 0; transform: translate(-50%, calc(-100% - 12px)) scale(.96); background: var(--tip-bg); color: var(--tip-fg); padding: 7px 11px; border-radius: var(--r-sm); font-size: 13px; white-space: nowrap; z-index: 10; transition: opacity .12s, transform .12s var(--ease); }
@@ -707,11 +709,12 @@
     .cta-btn { justify-content: center; }
     .cta-alt { align-self: center; }
     .top .meta { display: none; }
-    footer { margin-inline: 16px; padding: 44px 20px 24px; border-radius: 24px; }
-    .foot-grid { grid-template-columns: 1fr 1fr; gap: 32px 20px; }
+    footer { min-height: 0; margin-inline: 16px; padding: 88px 32px 170px; border-radius: 190px 190px 34px 34px; }
+    .foot-grid { grid-template-columns: 1fr 1fr; gap: 44px 24px; }
     .foot-brand { grid-column: 1 / -1; }
-    .foot-base { margin-top: 64px; }
-    .foot-mark { font-size: clamp(88px, 26vw, 150px); }
+    .foot-connect { grid-column: 1 / -1; }
+    .foot-base { position: static; grid-column: 1 / -1; margin-top: -20px; }
+    .foot-mark { inset-inline: 32px auto; font-size: clamp(82px, 25vw, 118px); }
   }
 </style>
 </head>
@@ -989,12 +992,20 @@
         <li><a href="#faq">Questions</a></li>
       </ul>
     </div>
-    <div class="foot-col">
-      <h3>Status</h3>
-      <ul>
-        <li><span>Sample rules only</span></li>
-        <li><span>Not legal advice</span></li>
-      </ul>
+    <div class="foot-connect">
+      <h3>Get the latest from Vestail</h3>
+      <form class="foot-signup" aria-label="Vestail updates">
+        <input type="email" name="email" autocomplete="email" placeholder="Email address" aria-label="Email address">
+        <button type="button">Subscribe</button>
+      </form>
+      <div class="foot-social">
+        <h3>Follow us</h3>
+        <div class="foot-social-links" aria-label="Vestail social channels">
+          <a href="#" aria-label="Vestail on LinkedIn">LinkedIn</a>
+          <a href="#" aria-label="Vestail on X">X</a>
+          <a href="#" aria-label="Vestail on Instagram">Instagram</a>
+        </div>
+      </div>
     </div>
   </div>
   <svg class="foot-globe" viewBox="-520 -520 1040 1040" aria-hidden="true" focusable="false">

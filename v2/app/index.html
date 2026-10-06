@@ -202,7 +202,7 @@
    */
   .row { background: var(--country-card); --card-muted: #4d4a52; box-shadow: 0 20px 40px -26px rgba(13,13,15,.22); }
   /* On the coloured card, muted text is a step darker so it keeps 4.5:1. */
-  .row .score, .row .cta-empty, .row .cta-kicker { color: var(--card-muted); }
+  .row .cta-empty, .row .cta-kicker { color: var(--card-muted); }
   .row:hover { box-shadow: 0 26px 50px -24px rgba(13,13,15,.26); }
   .row.has-sel { box-shadow: 0 20px 40px -26px rgba(13,13,15,.22); }
   /* The flag stands on its own: no tile behind it. */
@@ -216,12 +216,6 @@
   .who { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; min-width: 0; }
   .flag { font-size: 26px; line-height: 1; width: 52px; height: 52px; display: grid; place-items: center; background: var(--surface-2); box-shadow: var(--ring); border-radius: var(--r-md); flex: none; }
   .name { font-family: var(--font-display); font-weight: 600; color: var(--ink); font-size: 20px; letter-spacing: -.01em; margin: 0; }
-  .score { display: flex; flex-wrap: wrap; gap: 3px 14px; font-size: 13.5px; color: var(--ink-3); margin-top: 4px; font-variant-numeric: tabular-nums; }
-  .score .line { flex-basis: 100%; color: var(--ink-2); font-size: 14px; }
-  .cnt { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
-  .cnt::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
-  .cnt.yes::before { background: var(--yes); } .cnt.cond::before { background: var(--cond); }
-  .cnt.no::before { background: var(--no); background-image: repeating-linear-gradient(135deg, var(--no-hatch) 0 1.5px, transparent 1.5px 3px); }
 
   /*
    * Verdicts as circles: ten across (twenty in two rows when every asset is shown).
@@ -1275,16 +1269,9 @@ function paint({ res, data }) {
     const row = document.createElement("article");
     row.className = "row" + (c.sel !== null ? " has-sel" : "") + (firstPaint ? " in" : "");
     if (firstPaint) row.style.animationDelay = (r * 45) + "ms";
-    // Summary in plain words: what this buyer can own, then what needs approval or is off-limits.
-    // A one-asset card just names its verdict.
-    const buyers = who === "citizen" ? "Citizens" : "Foreigners";
-    const score = n === 1
-      ? `<span class="cnt ${CLASS[c.tiles[0].s]}">${LABEL[c.tiles[0].s]}</span>`
-      : `<span class="line">${buyers} can own ${c.yes} of ${n} assets.</span>`
-        + (c.no ? `<span class="cnt no">${c.no} ${c.no === 1 ? "is" : "are"} off-limits</span>` : "");
     row.innerHTML = `
       <header class="who"><span class="flag" aria-hidden="true">${esc(c.flag)}</span>
-        <div><h3 class="name">${esc(c.name)}</h3><div class="score">${score}</div></div></header>
+        <div><h3 class="name">${esc(c.name)}</h3></div></header>
       ${c.sel === null ? `<div class="cta-empty"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="8" cy="16" r="2.5"/><circle cx="16" cy="16" r="2.5"/><circle cx="24" cy="16" r="2.5"/></svg>Pick a circle to see where to buy it</div>` : ""}
       <div class="grid ${n <= 3 ? "labeled" : "bars"}" role="group" aria-label="${esc(c.name)}: assets by verdict"></div>
       ${c.sel !== null ? `<div class="buy">${ctaHTML(c, c.sel, c.tiles.find(t => t.i === c.sel).s)}</div>` : ""}`;

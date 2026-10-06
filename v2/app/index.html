@@ -1432,7 +1432,6 @@ async function start() {
       apiLive = true;
     } catch (err) { console.warn("Vestail API unavailable, using inline data.", err); }
   }
-  ASSETS.forEach(a => { const li = document.createElement("li"); li.textContent = a; $("key").appendChild(li); });
   render();
   if (apiLive) {
     try { await loadActivity(); return; }

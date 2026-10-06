@@ -303,7 +303,21 @@
   .cta-hint { font-size: 13px; color: var(--ink-3); }
 
   /* ---------- Key + footer ---------- */
-  footer { padding: 28px 0 44px; font-size: 13px; color: var(--ink-3); max-width: 70ch; }
+  footer { margin: 20px 0 32px; padding: clamp(34px, 5vw, 64px); border-radius: 34px; overflow: hidden; background: var(--ink); color: var(--surface); }
+  .footer-top { display: grid; grid-template-columns: minmax(220px, 1.35fr) repeat(3, minmax(120px, .7fr)); gap: 42px; align-items: start; }
+  .footer-kicker { margin: 0 0 18px; color: var(--orange); font-size: 13px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+  .footer-intro { margin: 0; max-width: 30ch; color: rgb(255 255 255 / .66); font-size: 15px; line-height: 1.6; }
+  .footer-group h3 { margin: 0 0 18px; color: rgb(255 255 255 / .45); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; }
+  .footer-links { display: grid; gap: 13px; }
+  .footer-links a { width: fit-content; color: var(--surface); font-size: 14px; font-weight: 700; text-decoration: none; transition: color .15s var(--ease); }
+  .footer-links a:hover { color: var(--orange); }
+  .footer-links a:focus-visible { outline: 2px solid var(--orange); outline-offset: 4px; border-radius: 2px; }
+  .footer-mid { display: flex; justify-content: space-between; gap: 24px; align-items: end; margin-top: clamp(64px, 9vw, 120px); color: rgb(255 255 255 / .6); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; }
+  .footer-legal, .footer-social { display: flex; flex-wrap: wrap; gap: 14px 28px; }
+  .footer-mid a { color: inherit; text-decoration: none; }
+  .footer-mid a:hover { color: var(--orange); }
+  .footer-wordmark { margin: 28px 0 -0.16em; color: var(--surface); font-size: clamp(78px, 18.5vw, 260px); font-weight: 800; line-height: .78; letter-spacing: -.085em; text-transform: lowercase; white-space: nowrap; }
+  .footer-wordmark span { color: var(--orange); }
 
   #tip { z-index: 30; position: fixed; pointer-events: none; opacity: 0; transform: translate(-50%, calc(-100% - 12px)) scale(.96); background: var(--tip-bg); color: var(--tip-fg); padding: 7px 11px; border-radius: var(--r-sm); font-size: 13px; white-space: nowrap; z-index: 10; transition: opacity .12s, transform .12s var(--ease); }
   #tip.show { opacity: 1; transform: translate(-50%, calc(-100% - 12px)) scale(1); }
@@ -612,6 +626,8 @@
     .sec { padding-top: 72px; }
     .board { grid-template-columns: 1fr; }
     #verdicts .verdict { min-height: 250px; }
+    .footer-top { grid-template-columns: 1.35fr 1fr 1fr; }
+    .footer-brand { grid-column: 1 / -1; }
   }
   @media (max-width: 480px) {
     .hero { padding: 32px 0 20px; }
@@ -651,6 +667,11 @@
     .cta-btn { justify-content: center; }
     .cta-alt { align-self: center; }
     .top .meta { display: none; }
+    footer { margin-top: 12px; padding: 30px 22px; border-radius: 24px; }
+    .footer-top { grid-template-columns: 1fr 1fr; gap: 34px 22px; }
+    .footer-brand { grid-column: 1 / -1; }
+    .footer-mid { align-items: flex-start; flex-direction: column; margin-top: 58px; }
+    .footer-wordmark { margin-top: 38px; font-size: clamp(70px, 24vw, 110px); }
   }
 </style>
 </head>
@@ -910,7 +931,38 @@
     <h2 id="h-close">Acquire assets you're actually allowed to own, wherever you are.</h2>
     <button class="go" type="button" data-focus-search>Find what you can own</button>
   </section>
-  <footer>Vestail · sample rules for layout review only; replace the data before relying on any cell. Buy links open partner venues in a new tab with a tracking tag so referrals and order flow can be attributed.</footer>
+  <footer aria-label="Vestail footer">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <p class="footer-kicker">Own with clarity</p>
+        <p class="footer-intro">Check what you can own, understand the conditions, and find the right route to buy it.</p>
+      </div>
+      <div class="footer-group">
+        <h3>Explore</h3>
+        <nav class="footer-links" aria-label="Explore">
+          <a href="#problem">The problem</a><a href="#how">How it works</a><a href="#verdicts">Verdicts</a>
+        </nav>
+      </div>
+      <div class="footer-group">
+        <h3>Product</h3>
+        <nav class="footer-links" aria-label="Product">
+          <a href="#board">Ownership board</a><a href="#buy">Buying routes</a><a href="#faq">Questions</a>
+        </nav>
+      </div>
+      <div class="footer-group">
+        <h3>Start here</h3>
+        <nav class="footer-links" aria-label="Start here">
+          <a href="#" data-focus-search>Search an asset</a><a href="#board">See the board</a>
+        </nav>
+      </div>
+    </div>
+    <div class="footer-mid">
+      <span>© 2026 Vestail. Ownership rules, made legible.</span>
+      <div class="footer-social" aria-label="Social channels"><span>LinkedIn</span><span>X</span><span>Instagram</span></div>
+      <div class="footer-legal"><span>Sample rules for layout review only</span></div>
+    </div>
+    <div class="footer-wordmark" aria-hidden="true">vestail<span>.</span></div>
+  </footer>
 </div>
 <div id="tip" role="tooltip"></div>
 <script>

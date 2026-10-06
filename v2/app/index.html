@@ -197,14 +197,14 @@
   .row.has-sel { box-shadow: 0 0 0 1px color-mix(in srgb, var(--purple) 45%, transparent), 0 20px 40px -26px color-mix(in srgb, var(--purple) 40%, transparent); }
   /*
    * Country cards use a warm orange surface, set apart from the off-white page by
-   * the tint, a ring and a soft drop. Verdict circles sit directly on this surface
+   * the tint and a soft drop. Verdict circles sit directly on this surface
    * so the board stays open rather than nesting two more cards inside each country.
    */
-  .row { background: var(--country-card); --card-muted: #4d4a52; box-shadow: 0 0 0 1px color-mix(in srgb, var(--paper) 14%, transparent), 0 20px 40px -26px rgba(13,13,15,.22); }
+  .row { background: var(--country-card); --card-muted: #4d4a52; box-shadow: 0 20px 40px -26px rgba(13,13,15,.22); }
   /* On the coloured card, muted text is a step darker so it keeps 4.5:1. */
   .row .score, .row .cta-empty, .row .cta-kicker { color: var(--card-muted); }
-  .row:hover { box-shadow: 0 0 0 1px color-mix(in srgb, var(--paper) 24%, transparent), 0 26px 50px -24px rgba(13,13,15,.26); }
-  .row.has-sel { box-shadow: 0 0 0 2px var(--ink-0), 0 20px 40px -26px rgba(13,13,15,.22); }
+  .row:hover { box-shadow: 0 26px 50px -24px rgba(13,13,15,.26); }
+  .row.has-sel { box-shadow: 0 20px 40px -26px rgba(13,13,15,.22); }
   /* The flag stands on its own: no tile behind it. */
   .row .flag { background: none; box-shadow: none; border-radius: 0; width: auto; height: auto; font-size: 38px; }
   .row .grid.bars { background: none; box-shadow: none; }

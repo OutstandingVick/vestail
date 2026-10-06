@@ -213,7 +213,7 @@
   .row .grid.labeled .tile { background-color: var(--surface); box-shadow: none; }
   .row .grid.labeled .tile.sel { box-shadow: 0 0 0 2px var(--ink-0); }
   /* Header, like the reference's icon and title: the flag in a soft tile, the name, then a counted summary. */
-  .who { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; min-width: 0; }
+  .who { display: flex; flex-direction: column; align-items: flex-start; gap: 20px; min-width: 0; }
   .flag { font-size: 26px; line-height: 1; width: 52px; height: 52px; display: grid; place-items: center; background: var(--surface-2); box-shadow: var(--ring); border-radius: var(--r-md); flex: none; }
   .name { font-family: var(--font-display); font-weight: 600; color: var(--ink); font-size: 20px; letter-spacing: -.01em; margin: 0; }
 
@@ -1272,7 +1272,7 @@ function paint({ res, data }) {
     row.innerHTML = `
       <header class="who"><span class="flag" aria-hidden="true">${esc(c.flag)}</span>
         <div><h3 class="name">${esc(c.name)}</h3></div></header>
-      ${c.sel === null ? `<div class="cta-empty"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="8" cy="16" r="2.5"/><circle cx="16" cy="16" r="2.5"/><circle cx="24" cy="16" r="2.5"/></svg>Pick a circle to see where to buy it</div>` : ""}
+      ${c.sel === null ? `<div class="cta-empty"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="8" cy="16" r="2.5"/><circle cx="16" cy="16" r="2.5"/><circle cx="24" cy="16" r="2.5"/></svg>Pick a circle to see what you can own</div>` : ""}
       <div class="grid ${n <= 3 ? "labeled" : "bars"}" role="group" aria-label="${esc(c.name)}: assets by verdict"></div>
       ${c.sel !== null ? `<div class="buy">${ctaHTML(c, c.sel, c.tiles.find(t => t.i === c.sel).s)}</div>` : ""}`;
     const grid = row.querySelector(".grid");

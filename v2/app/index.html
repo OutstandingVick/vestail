@@ -337,6 +337,10 @@
 
   .footer-links { display: grid; gap: 13px; }
   .footer-links a { width: fit-content; color: var(--surface); font-size: 14px; font-weight: 700; text-decoration: none; transition: color .15s var(--ease); }
+  .foot-col a { transition: color .15s var(--ease); }
+  .foot-col a:hover { color: #fff; }
+  .foot-col a:focus-visible, .foot-cta:focus-visible, .foot-logo:focus-visible { outline: 2px solid var(--orange); outline-offset: 4px; border-radius: 2px; }
+
   .footer-links a:hover { color: var(--orange); }
   .footer-links a:focus-visible { outline: 2px solid var(--orange); outline-offset: 4px; border-radius: 2px; }
   .footer-mid { display: flex; justify-content: space-between; gap: 24px; align-items: end; margin-top: clamp(64px, 9vw, 120px); color: rgb(255 255 255 / .6); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; }

@@ -650,12 +650,6 @@
     .faq summary { min-height: 184px; }
   }
 
-  /* Closing call to action */
-  .closing { margin-top: 104px; text-align: center; padding: 64px 28px; }
-  .closing h2 { margin: 0 auto; max-width: 18ch; font-size: clamp(30px, 4.4vw, 50px); line-height: 1.08; font-weight: 700; color: var(--ink); }
-  .closing .go { display: inline-flex; margin-top: 28px; background: var(--orange); color: var(--navy); font-weight: 700; font-size: 16px; border: 0; border-radius: var(--r-pill); padding: 15px 26px; cursor: pointer; box-shadow: 0 8px 24px -8px rgb(255 88 10 / .7); transition: transform .2s var(--ease); }
-  .closing .go:hover { transform: translateY(-2px); }
-
   /* Five links plus two buttons stop fitting here; the links go and the bar keeps
      the logo and the actions. The sections stay reachable by scrolling. */
   @media (max-width: 1040px) {
@@ -675,8 +669,8 @@
     .sec { padding-top: 72px; }
     .board { grid-template-columns: 1fr; }
     #verdicts .verdict { min-height: 250px; }
-    .footer-top { grid-template-columns: 1.35fr 1fr 1fr; }
-    .footer-brand { grid-column: 1 / -1; }
+    .foot-grid { grid-template-columns: 1fr 1fr 1fr; }
+    .foot-brand { grid-column: 1 / -1; }
   }
   @media (max-width: 480px) {
     .hero { padding: 32px 0 20px; }
@@ -716,11 +710,11 @@
     .cta-btn { justify-content: center; }
     .cta-alt { align-self: center; }
     .top .meta { display: none; }
-    footer { margin-top: 12px; padding: 30px 22px; border-radius: 24px; }
-    .footer-top { grid-template-columns: 1fr 1fr; gap: 34px 22px; }
-    .footer-brand { grid-column: 1 / -1; }
-    .footer-mid { align-items: flex-start; flex-direction: column; margin-top: 58px; }
-    .footer-wordmark { margin-top: 38px; font-size: clamp(70px, 24vw, 110px); }
+    footer { padding: 44px 20px 24px; }
+    .foot-grid { grid-template-columns: 1fr 1fr; gap: 32px 20px; }
+    .foot-brand { grid-column: 1 / -1; }
+    .foot-base { margin-top: 64px; }
+    .foot-mark { font-size: clamp(88px, 26vw, 150px); }
   }
 </style>
 </head>
@@ -972,11 +966,6 @@
     </div>
   </section>
 
-  <!-- Closing -->
-  <section class="panel closing" aria-labelledby="h-close">
-    <h2 id="h-close">Acquire assets you're actually allowed to own, wherever you are.</h2>
-    <button class="go" type="button" data-focus-search>Find what you can own</button>
-  </section>
 </div>
 
   <footer aria-label="Vestail footer">

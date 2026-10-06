@@ -308,6 +308,9 @@
   footer { position: relative; isolation: isolate; overflow: hidden; margin-top: clamp(60px, 8vw, 110px);
     padding: clamp(56px, 7vw, 104px) max(20px, calc((100vw - 1120px) / 2 * .2)) clamp(28px, 3vw, 44px);
     background: #0a0a0b; color: var(--surface); }
+  /* Brand block, then three link columns, as in the reference. */
+  .foot-grid { display: grid; grid-template-columns: minmax(260px, 1.5fr) repeat(3, minmax(130px, .8fr)); gap: clamp(32px, 4vw, 72px); align-items: start; }
+
   .footer-top { display: grid; grid-template-columns: minmax(220px, 1.35fr) repeat(3, minmax(120px, .7fr)); gap: 42px; align-items: start; }
   .footer-kicker { margin: 0 0 18px; color: var(--orange); font-size: 13px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
   .footer-intro { margin: 0; max-width: 30ch; color: rgb(255 255 255 / .66); font-size: 15px; line-height: 1.6; }

@@ -583,7 +583,11 @@
   .faq details[open] { transform: none; }
   .faq summary { min-height: 224px; list-style: none; display: flex; flex-direction: column; align-items: flex-start; gap: 24px; cursor: pointer; font-size: 22px; line-height: 1.2; font-weight: 500; letter-spacing: -.02em; color: var(--ink); }
   .faq summary::-webkit-details-marker { display: none; }
-  .faq summary::after { content: "Read answer"; margin-top: auto; border-bottom: 1px dotted currentColor; color: var(--ink-2); font-size: 13px; font-weight: 600; letter-spacing: 0; }
+  .faq summary::after { content: "Read answer"; display: inline-flex; align-items: center; min-height: 44px; margin-top: auto; padding: 0 18px; border-radius: var(--r-pill); background: var(--orange); color: var(--navy); font-size: 13px; font-weight: 700; letter-spacing: 0; box-shadow: 0 8px 20px -12px rgb(255 88 10 / .8); transition: transform .15s var(--ease), box-shadow .15s var(--ease); }
+  .faq summary:hover::after { box-shadow: 0 10px 24px -10px rgb(255 88 10 / .9); }
+  .faq summary:active::after { transform: scale(.96); }
+  .faq summary:focus-visible { outline: none; }
+  .faq summary:focus-visible::after { outline: 2px solid var(--ink); outline-offset: 3px; }
   .faq details[open] summary { min-height: auto; }
   .faq details[open] summary::after { content: "Close answer"; margin-top: 6px; }
   .faq details p { margin: 24px 0 0; color: var(--ink-2); font-size: 15px; line-height: 1.55; }

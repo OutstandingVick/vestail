@@ -466,12 +466,20 @@
   }
 
   /* 03 · Verdicts */
-  .verdict .sw-big { width: 44px; height: 44px; border-radius: var(--r-sm); margin-bottom: 20px; }
+  #verdicts .sec-head { margin-bottom: clamp(48px, 7vw, 76px); }
+  #verdicts h2 { max-width: 14ch; font-size: clamp(46px, 6vw, 76px); line-height: 1.02; font-weight: 300; letter-spacing: -.04em; }
+  #verdicts .lead { max-width: 48ch; margin-top: 26px; font-size: 18px; line-height: 1.55; }
+  #verdicts > .cols-3 { gap: 18px; }
+  #verdicts .verdict { display: flex; min-height: 310px; flex-direction: column; padding: 32px; border-radius: 24px; background: color-mix(in srgb, var(--ink) 5%, var(--surface)); box-shadow: none; }
+  #verdicts .verdict:hover { transform: none; box-shadow: none; }
+  .verdict .sw-big { width: 32px; height: 32px; flex: none; border-radius: 8px; margin: 0 0 auto; }
   .verdict.yes .sw-big { background: var(--yes); } .verdict.cond .sw-big { background: var(--cond); }
   .verdict.no .sw-big { background: var(--no); background-image: repeating-linear-gradient(135deg, var(--no-hatch) 0 3px, transparent 3px 7px); }
-  .verdict dl { margin: 20px 0 0; display: grid; gap: 12px; }
+  #verdicts .verdict h3 { margin: 64px 0 10px; font-size: 23px; font-weight: 500; letter-spacing: -.02em; }
+  #verdicts .verdict p { font-size: 16px; line-height: 1.5; }
+  .verdict dl { margin: 18px 0 0; display: grid; gap: 12px; }
   .verdict dt { font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); }
-  .verdict dd { margin: 3px 0 0; color: var(--paper); font-size: 15px; }
+  .verdict dd { margin: 3px 0 0; color: var(--ink-2); font-size: 15px; line-height: 1.5; }
 
   /* 04 · Buy in one place: two doors */
   .door { display: flex; flex-direction: column; gap: 14px; min-height: 100%; }
@@ -517,6 +525,7 @@
     .cols-3, .cols-4, .cols-2 { grid-template-columns: 1fr; }
     .sec { padding-top: 72px; }
     .board { grid-template-columns: 1fr; }
+    #verdicts .verdict { min-height: 250px; }
   }
   @media (max-width: 480px) {
     .hero { padding: 32px 0 20px; }
@@ -533,6 +542,10 @@
     .btn.ghost { display: none; }
     .btn { font-size: 14px; padding: 10px 16px; }
     .sec, #board { scroll-margin-top: 76px; }
+    #verdicts h2 { font-size: 42px; }
+    #verdicts .lead { margin-top: 20px; font-size: 16px; }
+    #verdicts .sec-head { margin-bottom: 38px; }
+    #verdicts .verdict { min-height: 240px; padding: 26px; }
     .problem { margin-top: 72px; padding: 48px 20px 40px; }
     .problem::before { background-size: 72px 72px; }
     .problem .asking { margin-top: 22px; }

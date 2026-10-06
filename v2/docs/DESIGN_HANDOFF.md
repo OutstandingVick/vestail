@@ -56,14 +56,14 @@ Pressing Buy records the click and opens the venue in a new tab.
 
 ## 4. Brand
 
-Light: a warm off-white page with white cards and near-black text, after a Lightyear-style reference. Contrast is measured, not assumed; the verdict colours are deepened from v1's (which were tuned for dark) so they hold 3:1 on white.
+Light: a warm sage page with white cards and near-black text, after a Lightyear-style reference. Contrast is measured, not assumed; the verdict colours are deepened from v1's (which were tuned for dark) so they hold 3:1 on white.
 
 | Token | Value | Use |
 |---|---|---|
-| Background | `#F5F3EE` | Page (warm off-white), with one soft purple glow behind the hero |
+| Background | `#E3E4DC` | Page (warm sage), with one soft purple glow behind the hero |
 | Surface | `#FFFFFF` | Cards and panels: hairline ring, soft warm shadow |
 | Text | `#0D0D0F` | Body and headings; greys are mixed from it (one family) |
-| Muted | `#6F6C75` | Labels, supporting copy (4.6:1 on the page) |
+| Muted | `#636069` | Labels, supporting copy (4.8:1 on the page) |
 | Orange | `#FF580A` | **Actions only**, with a near-black label |
 | Purple | `#7C5CFF` | **Brand emphasis**: highlights, selection, focus, icon tiles; never an action, never a verdict |
 | Can own | `#5C9A4A` | Verdict only |

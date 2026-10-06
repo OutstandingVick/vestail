@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<meta name="theme-color" content="#f5f3ee">
+<meta name="theme-color" content="#e3e4dc">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-2 6 102 93'%3E%3Cline x1='12' y1='42' x2='27' y2='65' stroke='%23FF580A' stroke-width='27' stroke-linecap='round'/%3E%3Cline x1='60' y1='82' x2='83' y2='23' stroke='%23FF580A' stroke-width='30' stroke-linecap='round'/%3E%3Cellipse cx='84.26' cy='39.59' rx='4.6' ry='6.6' fill='%23141414'/%3E%3Ccircle cx='85.66' cy='37.19' r='1.7' fill='%23FFFFFF'/%3E%3Cellipse cx='70.84' cy='34.36' rx='4.6' ry='6.6' fill='%23141414'/%3E%3Ccircle cx='72.24' cy='31.96' r='1.7' fill='%23FFFFFF'/%3E%3C/svg%3E">
 <style>
   /* ---------- Design tokens ---------- */
@@ -29,9 +29,9 @@
     --purple: #7c5cff;                   /* brand emphasis */
     --purple-ink: #5a3df0;               /* purple for small text on light */
     --paper: #17171a;                    /* text */
-    --muted: #6f6c75;                    /* labels; darker than #99979F so it reads on off-white */
+    --muted: #636069;                    /* labels; dark enough to hold 4.5:1 on the page, on white and on the lavender cards */
 
-    --bg: #f5f3ee;
+    --bg: #e3e4dc;
     --surface: #ffffff;
     --surface-2: color-mix(in srgb, #17171a 4%, #ffffff);
     --surface-3: color-mix(in srgb, #17171a 8%, #ffffff);
@@ -57,7 +57,7 @@
     --font-display: "Outfit", ui-sans-serif, system-ui, sans-serif;
     --font-body: "Outfit", ui-sans-serif, system-ui, sans-serif;
     --ease: cubic-bezier(.2,.8,.2,1);
-    --tip-bg: var(--paper); --tip-fg: #f5f3ee;
+    --tip-bg: var(--paper); --tip-fg: var(--bg);
     color-scheme: light;
   }
 
@@ -454,7 +454,7 @@
   .steps .num { font-size: 13px; font-weight: 700; color: var(--purple-ink); letter-spacing: .06em; margin-bottom: 18px; }
   .mock { margin-top: 22px; background: var(--surface-2); box-shadow: var(--ring); border-radius: var(--r-md); padding: 14px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; min-height: 72px; }
   .mock .chipx { background: var(--surface-3); border-radius: var(--r-pill); padding: 6px 12px; font-size: 13px; color: var(--ink); }
-  .mock .chipx.on { background: var(--paper); color: #f5f3ee; font-weight: 600; }
+  .mock .chipx.on { background: var(--paper); color: var(--bg); font-weight: 600; }
   .mock .q { flex: 1; display: flex; align-items: center; gap: 8px; color: var(--ink); font-size: 14px; }
   .mock .q svg { width: 16px; height: 16px; stroke: var(--ink-3); fill: none; stroke-width: 2.2; stroke-linecap: round; }
   .mock .btnx { background: var(--orange); color: var(--navy); font-weight: 700; font-size: 13px; border-radius: var(--r-sm); padding: 8px 12px; margin-left: auto; }

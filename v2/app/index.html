@@ -454,13 +454,22 @@
   .process-step { position: relative; display: grid; grid-template-columns: 48px minmax(0, 1fr); column-gap: 24px; row-gap: 8px; padding: 36px 48px 36px 0; border-bottom: 1px solid var(--line); }
   .process-step h3 { grid-column: 2; margin: 0; font-size: clamp(22px, 2.2vw, 30px); line-height: 1.1; font-weight: 650; color: var(--ink); }
   .process-step p { grid-column: 2; margin: 0; max-width: 58ch; color: var(--ink-2); font-size: 15px; line-height: 1.55; }
-  .steps .num { font-size: 13px; font-weight: 700; color: var(--purple-ink); letter-spacing: .06em; margin-bottom: 18px; }
-  .mock { margin-top: 22px; background: var(--surface-2); box-shadow: var(--ring); border-radius: var(--r-md); padding: 14px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; min-height: 72px; }
-  .mock .chipx { background: var(--surface-3); border-radius: var(--r-pill); padding: 6px 12px; font-size: 13px; color: var(--ink); }
-  .mock .chipx.on { background: var(--paper); color: var(--bg); font-weight: 600; }
-  .mock .q { flex: 1; display: flex; align-items: center; gap: 8px; color: var(--ink); font-size: 14px; }
-  .mock .q svg { width: 16px; height: 16px; stroke: var(--ink-3); fill: none; stroke-width: 2.2; stroke-linecap: round; }
-  .mock .btnx { background: var(--orange); color: var(--navy); font-weight: 700; font-size: 13px; border-radius: var(--r-sm); padding: 8px 12px; margin-left: auto; }
+  .process-step .num { grid-row: 1 / span 2; width: 40px; height: 40px; display: grid; place-items: center; background: var(--surface-2); color: var(--ink-2); font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .process-corner { position: absolute; top: 15px; right: 3px; width: 16px; height: 16px; border-top: 3px solid var(--purple); border-right: 3px solid var(--purple); }
+  @media (max-width: 900px) {
+    .how-process { grid-template-columns: 1fr; gap: 44px; }
+    .how-process .how-intro { position: static; }
+    .how-intro h2 { max-width: none; }
+  }
+  @media (max-width: 480px) {
+    .how-process { gap: 34px; }
+    .how-intro h2 { font-size: 44px; }
+    .process-step { grid-template-columns: 40px minmax(0, 1fr); column-gap: 16px; padding: 28px 28px 28px 0; }
+    .process-step h3 { font-size: 21px; }
+    .process-step p { font-size: 14px; }
+    .process-step .num { width: 36px; height: 36px; }
+    .process-corner { top: 12px; width: 13px; height: 13px; }
+  }
 
   /* 03 · Verdicts */
   .verdict .sw-big { width: 44px; height: 44px; border-radius: var(--r-sm); margin-bottom: 20px; }

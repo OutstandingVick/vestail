@@ -197,9 +197,8 @@
   .row.has-sel { box-shadow: 0 0 0 1px color-mix(in srgb, var(--purple) 45%, transparent), 0 20px 40px -26px color-mix(in srgb, var(--purple) 40%, transparent); }
   /*
    * Country cards use a warm orange surface, set apart from the off-white page by
-   * the tint, a ring and a soft drop. The chart panel is brand orange; the verdict bars nearly
-   * match it in tone (1.0-1.3:1), so each bar carries a white outline (3.2:1 on
-   * the orange) and its height still repeats the verdict.
+   * the tint, a ring and a soft drop. Verdict circles sit directly on this surface
+   * so the board stays open rather than nesting two more cards inside each country.
    */
   .row { background: var(--country-card); --card-muted: #4d4a52; box-shadow: 0 0 0 1px color-mix(in srgb, var(--paper) 14%, transparent), 0 20px 40px -26px rgba(13,13,15,.22); }
   /* On the coloured card, muted text is a step darker so it keeps 4.5:1. */
@@ -208,7 +207,8 @@
   .row.has-sel { box-shadow: 0 0 0 2px var(--ink-0), 0 20px 40px -26px rgba(13,13,15,.22); }
   /* The flag stands on its own: no tile behind it. */
   .row .flag { background: none; box-shadow: none; border-radius: 0; width: auto; height: auto; font-size: 38px; }
-  .row .grid.bars, .row .grid.labeled { background: var(--orange); box-shadow: none; }
+  .row .grid.bars { background: none; box-shadow: none; }
+  .row .grid.labeled { background: var(--orange); box-shadow: none; }
   .row .grid.labeled { padding: 12px; border-radius: var(--r-md); }
   .row .grid.labeled .tile { background-color: var(--surface); box-shadow: none; }
   .row .grid.labeled .tile.sel { box-shadow: 0 0 0 2px var(--ink-0); }
@@ -224,18 +224,17 @@
   .cnt.no::before { background: var(--no); background-image: repeating-linear-gradient(135deg, var(--no-hatch) 0 1.5px, transparent 1.5px 3px); }
 
   /*
-   * Verdicts as a segmented track: ten equal segments in a white track on the
-   * orange panel (twenty in two rows when every asset is shown). Colour gives the
-   * verdict; cannot own is hatched and conditional carries a centre dot, so the
-   * three differ without colour.
+   * Verdicts as circles: ten across (twenty in two rows when every asset is shown).
+   * Colour gives the verdict; cannot own is hatched and conditional carries a
+   * centre dot, so the three differ without colour.
    */
-  .grid.bars { padding: 12px; border-radius: var(--r-md); }
-  .track { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 4px; padding: 5px; background: #fff; border-radius: var(--r-sm); }
+  .grid.bars { padding: 0; }
+  .track { display: grid; grid-template-columns: repeat(10, minmax(0, 34px)); justify-content: space-between; gap: 8px 4px; padding: 0; background: none; }
   /* One row of up to ten: a gap divides the open group from the restricted one when sorted by status. */
-  .track.one { display: flex; }
-  .track.one .tile { flex: 1 1 0; min-width: 0; }
+  .track.one { display: flex; justify-content: space-between; }
+  .track.one .tile { flex: 0 1 34px; min-width: 0; }
   .track.one .tile.split { margin-left: 8px; }
-  .track .tile { position: relative; height: 34px; border: 0; padding: 0; border-radius: 7px; cursor: pointer; transition: transform .15s var(--ease), opacity .25s, box-shadow .15s, filter .15s; }
+  .track .tile { position: relative; width: 100%; max-width: 34px; height: auto; aspect-ratio: 1; border: 0; padding: 0; border-radius: 50%; cursor: pointer; transition: transform .15s var(--ease), opacity .25s, box-shadow .15s, filter .15s; }
   .tile.yes { background: var(--yes); } .tile.cond { background: var(--cond); }
   .tile.no { background: var(--no); background-image: repeating-linear-gradient(135deg, var(--no-hatch) 0 2px, transparent 2px 5px); }
   .track .tile.cond::before { content: ""; position: absolute; left: 50%; top: 50%; width: 6px; height: 6px; margin: -3px 0 0 -3px; border-radius: 50%; background: #fff; }
@@ -532,8 +531,8 @@
     .row { padding: 20px; gap: 18px; border-radius: var(--r-card); }
     .row .flag { font-size: 32px; }
     .name { font-size: 18px; }
-    .track .tile { height: 30px; }
-    .track .tile::after { content: ""; position: absolute; inset: -4px -2px; }
+    .track .tile { max-width: 30px; }
+    .track .tile::after { content: ""; position: absolute; inset: -4px; border-radius: 50%; }
     .cta-act { flex-direction: column; align-items: stretch; gap: 10px; }
     .cta-btn { justify-content: center; }
     .cta-alt { align-self: center; }
@@ -1118,8 +1117,8 @@ showAllBtn.addEventListener("click", () => { showAll = !showAll; render(); });
 function pickTen(tiles, sel) {
   const open = tiles.filter(t => t.s === 2), cond = tiles.filter(t => t.s === 1), no = tiles.filter(t => t.s === 0);
   const restricted = cond.length + no.length;
-  // Restrictions first, but at least three open bars whenever the country has open assets,
-  // and at least one bar for each restricted group, so every card shows the split.
+  // Restrictions first, but at least three open circles whenever the country has open assets,
+  // and at least one circle for each restricted group, so every card shows the split.
   const openSlots = restricted >= 7 ? Math.min(open.length, 3) : Math.min(open.length, 10 - restricted);
   let rest = 10 - openSlots;
   let noSlots = no.length ? Math.min(no.length, Math.max(1, Math.round(rest * no.length / (restricted || 1)))) : 0;
@@ -1232,7 +1231,7 @@ function paint({ res, data }) {
   } else if (q.value.trim()) {
     trailEl.innerHTML = `<span class="why">Nothing matched. Try the class it belongs to, like <b>equities</b>, <b>land</b> or <b>crypto</b>, or a name like <b>Google</b>.</span>`;
   } else {
-    trailEl.innerHTML = `<span class="why">${selected !== null ? `Showing <b>${ASSETS[selected]}</b> below each chart. Pick another bar to switch, or clear to reset.` : "Pick any bar to see where to buy it."}</span>`;
+    trailEl.innerHTML = `<span class="why">${selected !== null ? `Showing <b>${ASSETS[selected]}</b> below each chart. Pick another circle to switch, or clear to reset.` : "Pick any circle to see where to buy it."}</span>`;
   }
 
   rows.innerHTML = "";
@@ -1264,11 +1263,11 @@ function paint({ res, data }) {
     row.innerHTML = `
       <header class="who"><span class="flag" aria-hidden="true">${esc(c.flag)}</span>
         <div><h3 class="name">${esc(c.name)}</h3><div class="score">${score}</div></div></header>
-      ${c.sel === null ? `<div class="cta-empty"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M8 20v6M14 14v12M20 18v8M26 8v18"/></svg>Pick a bar to see where to buy it</div>` : ""}
+      ${c.sel === null ? `<div class="cta-empty"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="8" cy="16" r="2.5"/><circle cx="16" cy="16" r="2.5"/><circle cx="24" cy="16" r="2.5"/></svg>Pick a circle to see where to buy it</div>` : ""}
       <div class="grid ${n <= 3 ? "labeled" : "bars"}" role="group" aria-label="${esc(c.name)}: assets by verdict"></div>
       ${c.sel !== null ? `<div class="buy">${ctaHTML(c, c.sel, c.tiles.find(t => t.i === c.sel).s)}</div>` : ""}`;
     const grid = row.querySelector(".grid");
-    // Bars live in a white track inside the orange panel; chips go straight in.
+    // Verdict circles sit directly on the card; small result sets use labelled chips.
     const holder = n <= 3 ? grid : grid.appendChild(Object.assign(document.createElement("div"), { className: "track" + (shown.length <= 10 ? " one" : "") }));
     shown.forEach((t, k) => {
       const splitHere = view === "status" && shown.length <= 10 && k > 0 && (shown[k - 1].s === 2) !== (t.s === 2);

@@ -357,13 +357,13 @@
    * whose first lines sit back in grey and whose last line lands in near-black.
    * Upper case here only — the other sections stay sentence case.
    */
-  .problem { position: relative; isolation: isolate; text-align: center; }
+  .problem { position: relative; isolation: isolate; overflow: hidden; margin-top: 104px; padding: clamp(56px, 7vw, 92px) clamp(24px, 5vw, 72px) clamp(48px, 6vw, 72px); background: #f3f0ff; border-radius: var(--r-xl); text-align: center; }
   /*
    * The reference's faint graph paper. It lives on its own layer, masked to fade
    * out at the edges; the content sits above it, unmasked, so no text fades.
    */
   .problem::before {
-    content: ""; position: absolute; inset: -24px 0 0; z-index: 0; pointer-events: none;
+    content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
     background-image: linear-gradient(to right, color-mix(in srgb, var(--ink) 7%, transparent) 1px, transparent 1px),
                       linear-gradient(to bottom, color-mix(in srgb, var(--ink) 7%, transparent) 1px, transparent 1px);
     background-size: 112px 112px; background-position: center top;
@@ -539,6 +539,7 @@
     .btn.ghost { display: none; }
     .btn { font-size: 14px; padding: 10px 16px; }
     .sec, #board { scroll-margin-top: 76px; }
+    .problem { margin-top: 72px; padding: 48px 20px 40px; }
     .problem::before { background-size: 72px 72px; }
     .problem .asking { margin-top: 22px; }
     .problem .deck { margin-top: 32px; }

@@ -26,6 +26,7 @@
     --ink-0: #0d0d0f;                    /* darkest ink: labels on amber, ticks */
     --navy: #0d0d0f;                     /* label colour on orange */
     --orange: #ff580a;                   /* actions */
+    --faq-card: color-mix(in srgb, var(--orange) 10%, #fff); /* pale orange surface */
     --purple: #7c5cff;                   /* brand emphasis */
     --purple-ink: #5a3df0;               /* purple for small text on light */
     --country-card: #ffa770;              /* country-card surface */
@@ -575,7 +576,7 @@
   #faq .sec-head { margin-bottom: 46px; }
   #faq h2 { max-width: 12ch; color: var(--ink); font-weight: 300; font-size: clamp(46px, 5.8vw, 72px); line-height: 1; letter-spacing: -.04em; }
   .faq { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
-  .faq details { min-height: 280px; padding: 28px; border-radius: 16px; background: #f7f6ef; color: var(--ink); box-shadow: 0 20px 44px -30px rgb(0 0 0 / .65); transition: transform .15s var(--ease), box-shadow .15s var(--ease); }
+  .faq details { min-height: 280px; padding: 28px; border-radius: 16px; background: var(--faq-card); color: var(--ink); box-shadow: 0 20px 44px -30px rgb(0 0 0 / .65); transition: transform .15s var(--ease), box-shadow .15s var(--ease); }
   .faq details:nth-child(1) { transform: rotate(-1.4deg); }
   .faq details:nth-child(5) { transform: rotate(1.2deg); }
   .faq details:hover { transform: translateY(-3px); box-shadow: 0 28px 52px -30px rgb(0 0 0 / .75); }

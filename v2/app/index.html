@@ -379,6 +379,9 @@
   .nav-menu > summary::-webkit-details-marker { display: none; }
   .nav-menu > summary::after { content: "▾"; font-size: 10px; transition: transform .15s var(--ease); }
   .nav-menu[open] > summary::after { transform: rotate(180deg); }
+  .actions .resources-menu > summary { min-height: 44px; padding-inline: 14px; border-radius: var(--r-pill); box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--ink) 18%, transparent); }
+  .actions .resources-menu > summary:hover { color: var(--ink); box-shadow: inset 0 0 0 1.5px var(--ink); }
+  .actions .resources-menu .nav-panel { inset-inline: auto 0; transform: none; }
   .nav-panel { position: absolute; z-index: 80; inset-block-start: calc(100% + 10px); inset-inline-start: 50%; width: max-content; min-width: 250px; max-width: min(420px, calc(100vw - 32px));
     display: grid; gap: 4px; padding: 10px; transform: translateX(-50%); border-radius: 18px; background: var(--surface);
     box-shadow: 0 22px 56px rgb(30 24 70 / .16), inset 0 0 0 1px rgb(13 13 15 / .08); }
@@ -819,7 +822,9 @@
             <p>Technical documentation for building with Vestail.</p>
           </div>
         </details>
-        <details class="nav-menu">
+      </div>
+      <div class="actions">
+        <details class="nav-menu resources-menu">
           <summary>Resources</summary>
           <div class="nav-panel">
             <a href="#how">How it works</a>
@@ -832,8 +837,6 @@
             <span>Research articles <small>Later</small></span>
           </div>
         </details>
-      </div>
-      <div class="actions">
         <button class="btn solid" type="button" data-focus-search>Try App</button>
       </div>
     </nav>
@@ -1123,6 +1126,24 @@
 
 /* Reuse the canonical full-colour lockup already rendered in the footer. */
 document.querySelector('.foot-mark').append(document.querySelector('.foot-logo svg').cloneNode(true));
+
+const navMenus = [...document.querySelectorAll('.nav-menu')];
+navMenus.forEach(menu => {
+  menu.addEventListener('toggle', () => {
+    if (menu.open) navMenus.forEach(other => { if (other !== menu) other.open = false; });
+  });
+  menu.querySelectorAll('a').forEach(link => link.addEventListener('click', () => { menu.open = false; }));
+});
+document.addEventListener('click', event => {
+  if (!event.target.closest('.nav-menu')) navMenus.forEach(menu => { menu.open = false; });
+});
+document.addEventListener('keydown', event => {
+  if (event.key !== 'Escape') return;
+  const openMenu = navMenus.find(menu => menu.open);
+  if (!openMenu) return;
+  openMenu.open = false;
+  openMenu.querySelector('summary').focus();
+});
 
 /* ============================================================
    1. DATA

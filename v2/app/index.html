@@ -213,7 +213,7 @@
   .row .grid.labeled .tile { background-color: var(--surface); box-shadow: none; }
   .row .grid.labeled .tile.sel { box-shadow: 0 0 0 2px var(--ink-0); }
   /* Header, like the reference's icon and title: the flag in a soft tile, the name, then a counted summary. */
-  .who { display: flex; align-items: center; gap: 14px; min-width: 0; }
+  .who { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; min-width: 0; }
   .flag { font-size: 26px; line-height: 1; width: 52px; height: 52px; display: grid; place-items: center; background: var(--surface-2); box-shadow: var(--ring); border-radius: var(--r-md); flex: none; }
   .name { font-family: var(--font-display); font-weight: 600; color: var(--ink); font-size: 20px; letter-spacing: -.01em; margin: 0; }
   .score { display: flex; flex-wrap: wrap; gap: 3px 14px; font-size: 13.5px; color: var(--ink-3); margin-top: 4px; font-variant-numeric: tabular-nums; }
@@ -1280,7 +1280,6 @@ function paint({ res, data }) {
     const score = n === 1
       ? `<span class="cnt ${CLASS[c.tiles[0].s]}">${LABEL[c.tiles[0].s]}</span>`
       : `<span class="line">${buyers} can own ${c.yes} of ${n} assets.</span>`
-        + (c.cond ? `<span class="cnt cond">${c.cond} ${c.cond === 1 ? "needs" : "need"} a licence or approval</span>` : "")
         + (c.no ? `<span class="cnt no">${c.no} ${c.no === 1 ? "is" : "are"} off-limits</span>` : "");
     row.innerHTML = `
       <header class="who"><span class="flag" aria-hidden="true">${esc(c.flag)}</span>

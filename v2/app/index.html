@@ -541,14 +541,51 @@
     .route-state { grid-column: 2; }
   }
 
-  /* 06 · FAQ */
-  .faq { display: grid; gap: 10px; }
-  .faq details { background: var(--surface); box-shadow: var(--shadow-1); border-radius: var(--r-md); padding: 0 22px; }
-  .faq summary { list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 20px 0; font-size: 17px; font-weight: 600; color: var(--ink); }
+  /* 05 · Trust: editorial introduction beside a ruled feature list. */
+  .trust-layout { display: grid; grid-template-columns: minmax(260px, .72fr) minmax(0, 1.28fr); gap: clamp(64px, 9vw, 140px); align-items: start; }
+  .trust-intro { position: sticky; top: 112px; }
+  #trust .trust-intro h2 { max-width: 10ch; font-size: clamp(48px, 5.8vw, 76px); line-height: .98; font-weight: 300; letter-spacing: -.045em; }
+  .trust-intro .lead { max-width: 32ch; margin-top: 26px; font-size: 17px; line-height: 1.55; }
+  .trust-link { display: inline-flex; align-items: center; gap: 8px; margin-top: 28px; color: var(--ink); font-size: 14px; font-weight: 600; text-decoration: none; }
+  .trust-link span { color: var(--orange); font-size: 18px; }
+  .trust-link:hover { text-decoration: underline; }
+  .trust-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .trust-item { min-height: 260px; padding: 32px 34px; border-bottom: 1px solid var(--line); }
+  .trust-item:nth-child(odd) { border-right: 1px solid var(--line); }
+  .trust-item .ico { margin-bottom: 52px; }
+  .trust-item h3 { margin: 0 0 10px; font-size: 23px; font-weight: 600; letter-spacing: -.02em; }
+  .trust-item p { margin: 0; color: var(--ink-2); font-size: 15px; line-height: 1.55; }
+
+  /* 06 · FAQ: a wall of paper cards that remain native, accessible details. */
+  #faq { margin-top: 104px; padding: clamp(42px, 5vw, 68px); border-radius: 34px; background: var(--ink); }
+  #faq .sec-head { margin-bottom: 46px; }
+  #faq h2 { max-width: 12ch; color: var(--surface); font-weight: 300; font-size: clamp(46px, 5.8vw, 72px); line-height: 1; letter-spacing: -.04em; }
+  .faq { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
+  .faq details { min-height: 280px; padding: 28px; border-radius: 16px; background: #f7f6ef; color: var(--ink); box-shadow: 0 20px 44px -30px rgb(0 0 0 / .65); transition: transform .15s var(--ease), box-shadow .15s var(--ease); }
+  .faq details:nth-child(1) { transform: rotate(-1.4deg); }
+  .faq details:nth-child(5) { transform: rotate(1.2deg); }
+  .faq details:hover { transform: translateY(-3px); box-shadow: 0 28px 52px -30px rgb(0 0 0 / .75); }
+  .faq details[open] { transform: none; }
+  .faq summary { min-height: 224px; list-style: none; display: flex; flex-direction: column; align-items: flex-start; gap: 24px; cursor: pointer; font-size: 22px; line-height: 1.2; font-weight: 500; letter-spacing: -.02em; color: var(--ink); }
   .faq summary::-webkit-details-marker { display: none; }
-  .faq summary::after { content: "+"; font-size: 24px; font-weight: 400; color: var(--ink-3); transition: transform .25s var(--ease); }
-  .faq details[open] summary::after { transform: rotate(45deg); }
-  .faq details p { margin: 0 0 20px; color: var(--ink-2); max-width: 70ch; }
+  .faq summary::after { content: "Read answer"; margin-top: auto; border-bottom: 1px dotted currentColor; color: var(--ink-2); font-size: 13px; font-weight: 600; letter-spacing: 0; }
+  .faq details[open] summary { min-height: auto; }
+  .faq details[open] summary::after { content: "Close answer"; margin-top: 6px; }
+  .faq details p { margin: 24px 0 0; color: var(--ink-2); font-size: 15px; line-height: 1.55; }
+  @media (max-width: 900px) {
+    .trust-layout { grid-template-columns: 1fr; gap: 46px; }
+    .trust-intro { position: static; }
+    #trust .trust-intro h2 { max-width: 12ch; }
+    .faq { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 600px) {
+    .trust-list, .faq { grid-template-columns: 1fr; }
+    .trust-item { min-height: auto; padding: 28px 0; border-right: 0 !important; }
+    .trust-item .ico { margin-bottom: 30px; }
+    #faq { padding: 34px 20px; border-radius: 24px; }
+    .faq details, .faq details:nth-child(1), .faq details:nth-child(5) { min-height: 240px; transform: none; }
+    .faq summary { min-height: 184px; }
+  }
 
   /* Closing call to action */
   .closing { margin-top: 104px; text-align: center; padding: 64px 28px; }
@@ -838,21 +875,24 @@
 
   <!-- 05 · Why trust Vestail -->
   <section class="sec" id="trust" aria-labelledby="h-trust">
-    <div class="sec-head">
-      <h2 id="h-trust">An answer is only as good as where it comes from.</h2>
-    </div>
-    <div class="cols-4">
-      <div class="panel"><svg class="ico" viewBox="0 0 32 32" aria-hidden="true"><path d="M9 4h10l6 6v18H9zM19 4v6h6M13 16h8M13 21h8"/></svg><h3>Sourced rules</h3><p>Every rule carries the documents it rests on and the date it was last checked.</p></div>
-      <div class="panel"><svg class="ico" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 5v22M7 27h18M6 11h20M6 11l-3 8a4 4 0 0 0 6 0zM26 11l-3 8a4 4 0 0 0 6 0z"/></svg><h3>Neutral by rule</h3><p>Money never changes a verdict or the order of venues. We say who pays us.</p></div>
-      <div class="panel"><svg class="ico" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 15a5 5 0 1 0 0-10 5 5 0 0 0 0 10zM7 27a9 9 0 0 1 18 0"/></svg><h3>You declare, we disclose</h3><p>No ID checks and no blocking. Vestail shows you the rules; the choice stays yours.</p></div>
-      <div class="panel"><svg class="ico" viewBox="0 0 32 32" aria-hidden="true"><path d="M10 22V14a6 6 0 0 1 12 0v8l2 3H8zM14 28h4"/></svg><h3>Rules change; so do we</h3><p>When a regulator moves, the rule is rechecked and its date updated, so you can see how fresh an answer is.</p></div>
+    <div class="trust-layout">
+      <div class="trust-intro">
+        <h2 id="h-trust">An answer is only as good as where it comes from.</h2>
+        <p class="lead">Clear rules, visible sources and incentives that never change the answer.</p>
+        <a class="trust-link" href="#faq">Read common questions <span aria-hidden="true">↳</span></a>
+      </div>
+      <div class="trust-list">
+        <article class="trust-item"><svg class="ico" viewBox="0 0 32 32" aria-hidden="true"><path d="M9 4h10l6 6v18H9zM19 4v6h6M13 16h8M13 21h8"/></svg><h3>Sourced rules</h3><p>Every rule carries the documents it rests on and the date it was last checked.</p></article>
+        <article class="trust-item"><svg class="ico" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 5v22M7 27h18M6 11h20M6 11l-3 8a4 4 0 0 0 6 0zM26 11l-3 8a4 4 0 0 0 6 0z"/></svg><h3>Neutral by rule</h3><p>Money never changes a verdict or the order of venues. We say who pays us.</p></article>
+        <article class="trust-item"><svg class="ico" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 15a5 5 0 1 0 0-10 5 5 0 0 0 0 10zM7 27a9 9 0 0 1 18 0"/></svg><h3>You declare, we disclose</h3><p>No ID checks and no blocking. Vestail shows you the rules; the choice stays yours.</p></article>
+        <article class="trust-item"><svg class="ico" viewBox="0 0 32 32" aria-hidden="true"><path d="M10 22V14a6 6 0 0 1 12 0v8l2 3H8zM14 28h4"/></svg><h3>Rules change; so do we</h3><p>When a regulator moves, the rule is rechecked and its date updated, so you can see how fresh an answer is.</p></article>
+      </div>
     </div>
   </section>
 
   <!-- 06 · FAQ -->
   <section class="sec" id="faq" aria-labelledby="h-faq">
     <div class="sec-head">
-      <p class="eyebrow"><b>06</b> Questions</p>
       <h2 id="h-faq">Fair questions, straight answers.</h2>
     </div>
     <div class="faq">

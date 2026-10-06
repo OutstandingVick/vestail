@@ -311,7 +311,6 @@
   /* Brand block, then three link columns, as in the reference. */
   .foot-grid { display: grid; grid-template-columns: minmax(260px, 1.5fr) repeat(3, minmax(130px, .8fr)); gap: clamp(32px, 4vw, 72px); align-items: start; }
 
-  .footer-top { display: grid; grid-template-columns: minmax(220px, 1.35fr) repeat(3, minmax(120px, .7fr)); gap: 42px; align-items: start; }
   .foot-logo { display: inline-flex; text-decoration: none; }
   .foot-logo svg { display: block; height: 30px; width: auto; }
   /* The reference's pill, with its small lit dot before the label. */
@@ -323,34 +322,23 @@
 
   .foot-line { margin: 22px 0 0; max-width: 30ch; color: rgb(255 255 255 / .6); font-size: 15px; line-height: 1.6; }
 
-  .footer-kicker { margin: 0 0 18px; color: var(--orange); font-size: 13px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
-  .footer-intro { margin: 0; max-width: 30ch; color: rgb(255 255 255 / .66); font-size: 15px; line-height: 1.6; }
   /* Sentence case and white, not the small caps the old footer used. */
   .foot-col h3 { margin: 0 0 20px; font-family: var(--font-display); font-size: 17px; font-weight: 500; letter-spacing: -.01em; color: #fff; }
 
-  .footer-group h3 { margin: 0 0 18px; color: rgb(255 255 255 / .45); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; }
   /* Each link led by a small dot, as the reference marks its lists. */
   .foot-col ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
   .foot-col li { display: grid; grid-template-columns: auto 1fr; align-items: baseline; gap: 10px; }
   .foot-col li::before { content: ""; width: 3px; height: 3px; margin-top: .55em; border-radius: 50%; background: rgb(255 255 255 / .4); }
   .foot-col a, .foot-col li span { color: rgb(255 255 255 / .62); font-size: 15px; line-height: 1.4; text-decoration: none; }
 
-  .footer-links { display: grid; gap: 13px; }
-  .footer-links a { width: fit-content; color: var(--surface); font-size: 14px; font-weight: 700; text-decoration: none; transition: color .15s var(--ease); }
   .foot-col a { transition: color .15s var(--ease); }
   .foot-col a:hover { color: #fff; }
   .foot-col a:focus-visible, .foot-cta:focus-visible, .foot-logo:focus-visible { outline: 2px solid var(--orange); outline-offset: 4px; border-radius: 2px; }
 
-  .footer-links a:hover { color: var(--orange); }
-  .footer-links a:focus-visible { outline: 2px solid var(--orange); outline-offset: 4px; border-radius: 2px; }
   /* A hairline, then the copyright line, as the reference closes. */
   .foot-base { margin-top: clamp(80px, 11vw, 150px); padding-top: 26px; box-shadow: inset 0 1px 0 rgb(255 255 255 / .1);
     color: rgb(255 255 255 / .45); font-size: 14px; }
 
-  .footer-mid { display: flex; justify-content: space-between; gap: 24px; align-items: end; margin-top: clamp(64px, 9vw, 120px); color: rgb(255 255 255 / .6); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; }
-  .footer-legal, .footer-social { display: flex; flex-wrap: wrap; gap: 14px 28px; }
-  .footer-mid a { color: inherit; text-decoration: none; }
-  .footer-mid a:hover { color: var(--orange); }
   /*
    * The reference sets its wordmark huge and nearly invisible behind the
    * content, cropped by the footer's edge. The footer isolates its stacking
@@ -361,8 +349,6 @@
     color: rgb(255 255 255 / .05); white-space: nowrap; }
   .foot-mark span { color: rgb(255 88 10 / .22); }
 
-  .footer-wordmark { margin: 28px 0 -0.16em; color: var(--surface); font-size: clamp(78px, 18.5vw, 260px); font-weight: 800; line-height: .78; letter-spacing: -.085em; text-transform: lowercase; white-space: nowrap; }
-  .footer-wordmark span { color: var(--orange); }
 
   #tip { z-index: 30; position: fixed; pointer-events: none; opacity: 0; transform: translate(-50%, calc(-100% - 12px)) scale(.96); background: var(--tip-bg); color: var(--tip-fg); padding: 7px 11px; border-radius: var(--r-sm); font-size: 13px; white-space: nowrap; z-index: 10; transition: opacity .12s, transform .12s var(--ease); }
   #tip.show { opacity: 1; transform: translate(-50%, calc(-100% - 12px)) scale(1); }

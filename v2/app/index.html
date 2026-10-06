@@ -379,6 +379,15 @@
   .nav-menu > summary::-webkit-details-marker { display: none; }
   .nav-menu > summary::after { content: "▾"; font-size: 10px; transition: transform .15s var(--ease); }
   .nav-menu[open] > summary::after { transform: rotate(180deg); }
+  .nav-panel { position: absolute; z-index: 80; inset-block-start: calc(100% + 10px); inset-inline-start: 50%; width: max-content; min-width: 250px; max-width: min(420px, calc(100vw - 32px));
+    display: grid; gap: 4px; padding: 10px; transform: translateX(-50%); border-radius: 18px; background: var(--surface);
+    box-shadow: 0 22px 56px rgb(30 24 70 / .16), inset 0 0 0 1px rgb(13 13 15 / .08); }
+  .nav-panel a, .nav-panel > span { display: flex; align-items: center; justify-content: space-between; gap: 18px; min-height: 40px; padding: 9px 12px; border-radius: 10px;
+    color: var(--ink); font-size: 14px; line-height: 1.3; text-decoration: none; white-space: normal; }
+  .nav-panel a:hover, .nav-panel a:focus-visible { background: #EBEBFF; color: var(--purple-ink); }
+  .nav-panel > span { color: var(--ink-3); }
+  .nav-panel small { flex: none; font-size: 10px; font-weight: 650; letter-spacing: .04em; text-transform: uppercase; }
+  .nav-panel p { grid-column: 1 / -1; margin: 6px 8px 2px; max-width: 34ch; color: var(--ink-3); font-size: 12px; line-height: 1.45; }
   /* The pair of buttons on the right. Solid is the page's one orange action. */
   .btn { display: inline-flex; align-items: center; justify-content: center; font: inherit; font-size: 22.5px; font-weight: 600; white-space: nowrap;
     border: 0; cursor: pointer; padding: 11px 20px; border-radius: var(--r-pill); text-decoration: none;

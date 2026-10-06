@@ -447,6 +447,9 @@
   .how-process .how-intro { margin: 0; position: sticky; top: 112px; }
   .how-intro h2 { max-width: 8ch; font-size: clamp(44px, 5.8vw, 76px); line-height: .94; letter-spacing: -.04em; }
   .how-intro .lead { max-width: 31ch; margin-top: 24px; font-size: 16px; line-height: 1.55; }
+  .how-link { display: inline-flex; flex-direction: row-reverse; align-items: center; gap: 9px; margin-top: 28px; color: var(--ink); font-size: 14px; font-weight: 600; text-decoration: none; }
+  .how-link span { color: var(--orange); font-size: 18px; transition: transform .15s var(--ease); }
+  .how-link:hover span, .how-link:focus-visible span { transform: translate(2px, 2px); }
   .steps .num { font-size: 13px; font-weight: 700; color: var(--purple-ink); letter-spacing: .06em; margin-bottom: 18px; }
   .mock { margin-top: 22px; background: var(--surface-2); box-shadow: var(--ring); border-radius: var(--r-md); padding: 14px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; min-height: 72px; }
   .mock .chipx { background: var(--surface-3); border-radius: var(--r-pill); padding: 6px 12px; font-size: 13px; color: var(--ink); }

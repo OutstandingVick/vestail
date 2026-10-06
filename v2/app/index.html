@@ -347,6 +347,16 @@
   .footer-legal, .footer-social { display: flex; flex-wrap: wrap; gap: 14px 28px; }
   .footer-mid a { color: inherit; text-decoration: none; }
   .footer-mid a:hover { color: var(--orange); }
+  /*
+   * The reference sets its wordmark huge and nearly invisible behind the
+   * content, cropped by the footer's edge. The footer isolates its stacking
+   * context, so this sits above the background and below everything else.
+   */
+  .foot-mark { position: absolute; z-index: -1; left: max(20px, calc((100vw - 1120px) / 2 * .2)); right: 0; bottom: -.16em; pointer-events: none;
+    font-family: var(--font-display); font-weight: 800; font-size: clamp(120px, 23vw, 360px); line-height: .76; letter-spacing: -.05em;
+    color: rgb(255 255 255 / .05); white-space: nowrap; }
+  .foot-mark span { color: rgb(255 88 10 / .22); }
+
   .footer-wordmark { margin: 28px 0 -0.16em; color: var(--surface); font-size: clamp(78px, 18.5vw, 260px); font-weight: 800; line-height: .78; letter-spacing: -.085em; text-transform: lowercase; white-space: nowrap; }
   .footer-wordmark span { color: var(--orange); }
 

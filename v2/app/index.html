@@ -305,7 +305,7 @@
 
   /* ---------- Key + footer ---------- */
   /* The user-approved exception: the footer carries the action orange as a full-width field. */
-  footer { position: relative; isolation: isolate; overflow: hidden; margin-top: clamp(60px, 8vw, 110px);
+  footer { position: relative; isolation: isolate; overflow: hidden; margin: clamp(60px, 8vw, 110px) clamp(16px, 3vw, 48px) 32px; border-radius: 34px;
     padding: clamp(56px, 7vw, 104px) max(20px, calc((100vw - 1120px) / 2 * .2)) clamp(28px, 3vw, 44px);
     background: var(--orange); color: var(--ink); }
   /* Brand block, then three link columns, as in the reference. */
@@ -707,7 +707,7 @@
     .cta-btn { justify-content: center; }
     .cta-alt { align-self: center; }
     .top .meta { display: none; }
-    footer { padding: 44px 20px 24px; }
+    footer { margin-inline: 16px; padding: 44px 20px 24px; border-radius: 24px; }
     .foot-grid { grid-template-columns: 1fr 1fr; gap: 32px 20px; }
     .foot-brand { grid-column: 1 / -1; }
     .foot-base { margin-top: 64px; }

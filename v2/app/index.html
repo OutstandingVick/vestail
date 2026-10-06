@@ -29,11 +29,11 @@
     --faq-card: color-mix(in srgb, var(--orange) 10%, #fff); /* pale orange surface */
     --purple: #7c5cff;                   /* brand emphasis */
     --purple-ink: #5a3df0;               /* purple for small text on light */
-    --country-card: #ffa770;              /* country-card surface */
+    --country-card: #EBEBFF;              /* country-card surface */
     --paper: #17171a;                    /* text */
     --muted: #636069;                    /* labels; dark enough to hold 4.5:1 on the page and white */
 
-    --bg: #e3e4dc;
+    --bg: #F8F7FF;
     --surface: #ffffff;
     --surface-2: color-mix(in srgb, #17171a 4%, #ffffff);
     --surface-3: color-mix(in srgb, #17171a 8%, #ffffff);
@@ -44,7 +44,7 @@
     --accent: var(--orange);
     --accent-ink: var(--navy);
     /* Verdict colours: v1's three hues, deepened to hold their shape on white. Used for nothing else. */
-    --yes: #5c9a4a; --cond: #bf861c; --no: #c9604f;
+    --yes: #7C5CFF; --cond: #FFA770; --no: #FF580A;
     --no-hatch: rgba(255,255,255,.55);
     --tile-dim: .35;
     --ring: 0 0 0 1px var(--line);
@@ -758,7 +758,6 @@
 
   <!-- 01 · The problem -->
   <section class="sec problem" id="problem" aria-labelledby="h-problem">
-    <p class="eyebrow"><b>01</b> The problem</p>
     <h2 id="h-problem"><span class="ln">Buying an asset</span> <span class="ln">shouldn’t feel like</span> <span class="ln hit">a guess</span></h2>
     <p class="asking">Are you tired of…</p>
 
@@ -807,8 +806,7 @@
   <!-- 02 · How it works -->
   <section class="sec how-process" id="how" aria-labelledby="h-how">
     <div class="sec-head how-intro">
-      <p class="eyebrow"><b aria-hidden="true">✳</b> The Vestail process</p>
-      <h2 id="h-how">How it works</h2>
+      <h2 id="h-how">The Vestail process</h2>
       <p class="lead">Three clear steps take you from “can I own this?” to a place where you can buy it.</p>
       <a class="how-link" href="#board">Explore the board <span aria-hidden="true">↳</span></a>
     </div>
@@ -837,7 +835,6 @@
   <!-- 03 · Verdicts -->
   <section class="sec" id="verdicts" aria-labelledby="h-verdicts">
     <div class="sec-head">
-      <p class="eyebrow"><b>03</b> Three verdicts</p>
       <h2 id="h-verdicts">Not yes or no. The middle is where people get hurt.</h2>
       <p class="lead">A two-state answer has to lie about the large middle: assets anyone can buy but can't redeem, collect on or sell without clearing a gate. Vestail gives it its own name.</p>
     </div>
@@ -937,36 +934,39 @@
     <button class="go" type="button" data-focus-search>Find what you can own</button>
   </section>
   <footer aria-label="Vestail footer">
-    <div class="footer-top">
-      <div class="footer-brand">
-        <p class="footer-kicker">Own with clarity</p>
-        <p class="footer-intro">Check what you can own, understand the conditions, and find the right route to buy it.</p>
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a class="foot-logo" href="#" aria-label="Vestail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="298.4 324.6 786.5 179.1" aria-hidden="true" focusable="false"> <g transform="translate(311.72 325.00) scale(1.7600)"> <line x1="12" y1="42" x2="27" y2="65" stroke="#FF580A" stroke-width="27" stroke-linecap="round"/> <line x1="60" y1="82" x2="83" y2="23" stroke="#FF580A" stroke-width="30" stroke-linecap="round"/> <ellipse cx="84.26" cy="39.59" rx="4.6" ry="6.6" fill="#141414"/> <circle cx="85.66" cy="37.19" r="1.7" fill="#FFFFFF"/> <ellipse cx="70.84" cy="34.36" rx="4.6" ry="6.6" fill="#141414"/> <circle cx="72.24" cy="31.96" r="1.7" fill="#FFFFFF"/> </g> <path d="M569.86 474.334 528.1120000000001 379.666H556.336L586.3240000000001 457.674H572.408L602.592 379.666H629.836L588.284 474.334ZM682.952 476.294Q668.056 476.294 656.492 469.924Q644.928 463.554 638.1659999999999 452.38199999999995Q631.404 441.21 631.404 426.902Q631.404 412.79 637.97 401.716Q644.536 390.642 655.904 384.076Q667.2719999999999 377.51 681.188 377.51Q694.908 377.51 705.394 383.68399999999997Q715.88 389.858 721.858 400.53999999999996Q727.836 411.222 727.836 424.746Q727.836 427.294 727.542 429.94Q727.248 432.586 726.4639999999999 435.918L646.888 436.11400000000003V416.906L714.508 416.71L704.12 424.746Q703.728 416.318 701.082 410.634Q698.436 404.95 693.4380000000001 401.91200000000003Q688.44 398.874 681.188 398.874Q673.544 398.874 667.86 402.304Q662.176 405.734 659.138 411.908Q656.1 418.082 656.1 426.51Q656.1 435.134 659.3340000000001 441.504Q662.568 447.874 668.644 451.304Q674.72 454.734 682.756 454.734Q690.008 454.734 695.888 452.284Q701.768 449.834 706.08 444.934L721.172 460.026Q714.312 468.062 704.414 472.178Q694.516 476.294 682.952 476.294ZM772.328 476.49Q764.292 476.49 756.55 474.334Q748.808 472.178 742.3399999999999 468.356Q735.872 464.534 731.168 459.046L746.456 443.562Q751.356 449.05 757.8240000000001 451.794Q764.292 454.538 772.132 454.538Q778.404 454.538 781.6379999999999 452.774Q784.872 451.01 784.872 447.482Q784.872 443.562 781.442 441.406Q778.012 439.25 772.5239999999999 437.78Q767.036 436.31 761.058 434.448Q755.0799999999999 432.586 749.5919999999999 429.548Q744.1039999999999 426.51 740.674 421.12Q737.244 415.73 737.244 407.106Q737.244 398.09000000000003 741.654 391.42600000000004Q746.064 384.762 754.296 381.038Q762.528 377.31399999999996 773.6999999999999 377.31399999999996Q785.46 377.31399999999996 794.966 381.42999999999995Q804.472 385.546 810.744 393.778L795.26 409.262Q790.948 403.97 785.558 401.61800000000005Q780.168 399.266 773.896 399.266Q768.212 399.266 765.174 401.03Q762.136 402.794 762.136 405.93Q762.136 409.45799999999997 765.566 411.418Q768.996 413.378 774.4839999999999 414.84799999999996Q779.972 416.318 785.95 418.18Q791.928 420.04200000000003 797.318 423.374Q802.708 426.706 806.1379999999999 432.194Q809.568 437.682 809.568 446.306Q809.568 460.222 799.572 468.356Q789.576 476.49 772.328 476.49ZM836.812 474.334V340.27H862.488V474.334ZM814.664 402.206V379.666H884.636V402.206ZM934.812 476.294Q921.876 476.294 911.488 469.826Q901.1 463.358 895.22 452.18600000000004Q889.34 441.014 889.34 427.098Q889.34 412.986 895.22 401.81399999999996Q901.1 390.642 911.488 384.174Q921.876 377.706 934.812 377.706Q945.004 377.706 953.04 381.822Q961.076 385.938 965.8779999999999 393.288Q970.68 400.63800000000003 971.072 409.85V443.954Q970.68 453.362 965.8779999999999 460.61400000000003Q961.076 467.866 953.04 472.08Q945.004 476.294 934.812 476.294ZM939.516 452.578Q950.2959999999999 452.578 956.96 445.424Q963.624 438.27 963.624 426.902Q963.624 419.454 960.586 413.672Q957.548 407.89 952.158 404.656Q946.768 401.422 939.516 401.422Q932.46 401.422 927.0699999999999 404.656Q921.68 407.89 918.6419999999999 413.672Q915.6039999999999 419.454 915.6039999999999 426.902Q915.6039999999999 434.546 918.6419999999999 440.328Q921.68 446.11 927.0699999999999 449.344Q932.46 452.578 939.516 452.578ZM962.252 474.334V448.854L966.3679999999999 425.726L962.252 402.99V379.666H987.732V474.334ZM1006.548 474.334V379.666H1032.4199999999998V474.334ZM1019.4839999999999 364.378Q1013.212 364.378 1009.096 360.164Q1004.9799999999999 355.95 1004.9799999999999 349.678Q1004.9799999999999 343.602 1009.096 339.28999999999996Q1013.212 334.978 1019.4839999999999 334.978Q1025.952 334.978 1029.97 339.28999999999996Q1033.988 343.602 1033.988 349.678Q1033.988 355.95 1029.97 360.164Q1025.952 364.378 1019.4839999999999 364.378ZM1051.2359999999999 474.334V332.626H1076.912V474.334Z" fill="#FF580A"/> </svg></a>
+        <p class="foot-line">Ownership rules, made legible.</p>
+        <button class="foot-cta" type="button" data-focus-search><i aria-hidden="true"></i>Search an asset</button>
       </div>
-      <div class="footer-group">
-        <h3>Explore</h3>
-        <nav class="footer-links" aria-label="Explore">
-          <a href="#problem">The problem</a><a href="#how">How it works</a><a href="#verdicts">Verdicts</a>
-        </nav>
+      <div class="foot-col">
+        <h3>Navigation</h3>
+        <ul>
+          <li><a href="#problem">The problem</a></li>
+          <li><a href="#how">How it works</a></li>
+          <li><a href="#verdicts">Verdicts</a></li>
+          <li><a href="#buy">Buy</a></li>
+        </ul>
       </div>
-      <div class="footer-group">
-        <h3>Product</h3>
-        <nav class="footer-links" aria-label="Product">
-          <a href="#board">Ownership board</a><a href="#buy">Buying routes</a><a href="#faq">Questions</a>
-        </nav>
+      <div class="foot-col">
+        <h3>The board</h3>
+        <ul>
+          <li><a href="#board">Ownership board</a></li>
+          <li><a href="#trust">Why trust Vestail</a></li>
+          <li><a href="#faq">Questions</a></li>
+        </ul>
       </div>
-      <div class="footer-group">
-        <h3>Start here</h3>
-        <nav class="footer-links" aria-label="Start here">
-          <a href="#" data-focus-search>Search an asset</a><a href="#board">See the board</a>
-        </nav>
+      <div class="foot-col">
+        <h3>Status</h3>
+        <ul>
+          <li><span>Sample rules only</span></li>
+          <li><span>Not legal advice</span></li>
+        </ul>
       </div>
     </div>
-    <div class="footer-mid">
-      <span>© 2026 Vestail. Ownership rules, made legible.</span>
-      <div class="footer-social" aria-label="Social channels"><span>LinkedIn</span><span>X</span><span>Instagram</span></div>
-      <div class="footer-legal"><span>Sample rules for layout review only</span></div>
-    </div>
-    <div class="footer-wordmark" aria-hidden="true">vestail<span>.</span></div>
+    <div class="foot-mark" aria-hidden="true">vestail<span>.</span></div>
+    <div class="foot-base"><span>© 2026 Vestail. All rights reserved.</span></div>
   </footer>
 </div>
 <div id="tip" role="tooltip"></div>

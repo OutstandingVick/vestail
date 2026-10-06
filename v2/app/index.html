@@ -19,17 +19,18 @@
     /*
      * Vestail v2 brand. Light: a warm off-white ground, white cards, near-black
      * text. One grey family (warm-neutral, mixed from the text colour), two
-     * accents with fixed jobs: orange is the only colour for actions, purple
-     * is the brand's emphasis (highlights, selection, focus). Neither is ever
-     * a verdict.
+     * accents with fixed jobs: vivid orange marks actions, soft orange marks
+     * country cards, and purple is the brand's emphasis (highlights, selection,
+     * focus). None is ever a verdict.
      */
     --ink-0: #0d0d0f;                    /* darkest ink: labels on amber, ticks */
     --navy: #0d0d0f;                     /* label colour on orange */
-    --orange: #ff580a;                   /* actions, and nothing else */
+    --orange: #ff580a;                   /* actions */
     --purple: #7c5cff;                   /* brand emphasis */
     --purple-ink: #5a3df0;               /* purple for small text on light */
+    --country-card: #ffa770;              /* country-card surface */
     --paper: #17171a;                    /* text */
-    --muted: #636069;                    /* labels; dark enough to hold 4.5:1 on the page, on white and on the lavender cards */
+    --muted: #636069;                    /* labels; dark enough to hold 4.5:1 on the page and white */
 
     --bg: #e3e4dc;
     --surface: #ffffff;
@@ -195,13 +196,13 @@
   .row:hover { transform: translateY(-2px); box-shadow: var(--card-hover); }
   .row.has-sel { box-shadow: 0 0 0 1px color-mix(in srgb, var(--purple) 45%, transparent), 0 20px 40px -26px color-mix(in srgb, var(--purple) 40%, transparent); }
   /*
-   * Cards are light lavender (#E3DEEF), set apart from the off-white page by the
-   * tint, a ring and a soft drop. The chart panel is brand orange; the verdict bars nearly
+   * Country cards use a warm orange surface, set apart from the off-white page by
+   * the tint, a ring and a soft drop. The chart panel is brand orange; the verdict bars nearly
    * match it in tone (1.0-1.3:1), so each bar carries a white outline (3.2:1 on
    * the orange) and its height still repeats the verdict.
    */
-  .row { background: #e3deef; --card-muted: #5c5964; box-shadow: 0 0 0 1px color-mix(in srgb, var(--paper) 14%, transparent), 0 20px 40px -26px rgba(13,13,15,.22); }
-  /* On the lavender card, muted text is a step darker so it keeps 4.5:1 (#99979F-family grey drops to 3.9). */
+  .row { background: var(--country-card); --card-muted: #4d4a52; box-shadow: 0 0 0 1px color-mix(in srgb, var(--paper) 14%, transparent), 0 20px 40px -26px rgba(13,13,15,.22); }
+  /* On the coloured card, muted text is a step darker so it keeps 4.5:1. */
   .row .score, .row .cta-empty, .row .cta-kicker { color: var(--card-muted); }
   .row:hover { box-shadow: 0 0 0 1px color-mix(in srgb, var(--paper) 24%, transparent), 0 26px 50px -24px rgba(13,13,15,.26); }
   .row.has-sel { box-shadow: 0 0 0 2px var(--ink-0), 0 20px 40px -26px rgba(13,13,15,.22); }

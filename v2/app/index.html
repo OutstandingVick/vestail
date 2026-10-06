@@ -372,8 +372,13 @@
   /* ---------- Responsive ---------- */
   /* ---------- Top nav (v1 pattern: text links, then one orange pill) ---------- */
   .nav { display: flex; align-items: center; gap: clamp(18px, 2vw, 30px); }
-  .nav a { font-size: 16px; font-weight: 500; color: var(--ink); text-decoration: none; white-space: nowrap; transition: color .2s; }
-  .nav a:hover { color: var(--ink-3); }
+  .nav > a, .nav-menu > summary { font-size: 16px; font-weight: 500; color: var(--ink); text-decoration: none; white-space: nowrap; transition: color .15s; }
+  .nav > a:hover, .nav-menu > summary:hover { color: var(--ink-3); }
+  .nav-menu { position: relative; }
+  .nav-menu > summary { display: flex; align-items: center; gap: 6px; min-height: 40px; cursor: pointer; list-style: none; }
+  .nav-menu > summary::-webkit-details-marker { display: none; }
+  .nav-menu > summary::after { content: "▾"; font-size: 10px; transition: transform .15s var(--ease); }
+  .nav-menu[open] > summary::after { transform: rotate(180deg); }
   /* The pair of buttons on the right. Solid is the page's one orange action. */
   .btn { display: inline-flex; align-items: center; justify-content: center; font: inherit; font-size: 22.5px; font-weight: 600; white-space: nowrap;
     border: 0; cursor: pointer; padding: 11px 20px; border-radius: var(--r-pill); text-decoration: none;

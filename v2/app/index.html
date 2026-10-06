@@ -343,6 +343,10 @@
 
   .footer-links a:hover { color: var(--orange); }
   .footer-links a:focus-visible { outline: 2px solid var(--orange); outline-offset: 4px; border-radius: 2px; }
+  /* A hairline, then the copyright line, as the reference closes. */
+  .foot-base { margin-top: clamp(80px, 11vw, 150px); padding-top: 26px; box-shadow: inset 0 1px 0 rgb(255 255 255 / .1);
+    color: rgb(255 255 255 / .45); font-size: 14px; }
+
   .footer-mid { display: flex; justify-content: space-between; gap: 24px; align-items: end; margin-top: clamp(64px, 9vw, 120px); color: rgb(255 255 255 / .6); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; }
   .footer-legal, .footer-social { display: flex; flex-wrap: wrap; gap: 14px 28px; }
   .footer-mid a { color: inherit; text-decoration: none; }

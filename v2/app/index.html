@@ -524,6 +524,11 @@
   .legend2 { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-bottom: 10px; font-size: 11.5px; color: var(--ink-3); }
   .qmedia-risk ~ .legend2 { margin-top: 0; }
   @media (max-width: 900px) { .qmedia { aspect-ratio: 4 / 3; } }
+  @media (max-width: 600px) {
+    .qmedia-human img { object-position: 42% 56%; }
+    .qmedia-portfolio img { object-position: 50% 43%; }
+    .qmedia-risk img { object-position: 64% 50%; }
+  }
   .legend2 span { display: inline-flex; align-items: center; gap: 6px; }
   .legend2 span::before { content: ""; width: 14px; height: 2px; border-radius: 2px; background: currentColor; }
   .legend2 .a::before { background: color-mix(in srgb, var(--ink) 30%, transparent); }

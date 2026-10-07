@@ -636,26 +636,27 @@
   .trust-item h3 { margin: 0 0 10px; font-size: 23px; font-weight: 600; letter-spacing: -.02em; }
   .trust-item p { margin: 0; color: var(--ink-2); font-size: 15px; line-height: 1.55; }
 
-  /* 06 · FAQ: a wall of paper cards that remain native, accessible details. */
-  #faq { margin-top: 104px; padding: clamp(42px, 5vw, 68px); border-radius: 34px; background: #ebebff; }
-  #faq .sec-head { margin-bottom: 46px; }
-  #faq h2 { max-width: 12ch; color: var(--ink); font-weight: 300; font-size: clamp(46px, 5.8vw, 72px); line-height: 1; letter-spacing: -.04em; }
-  .faq { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
-  .faq details { min-height: 280px; padding: 28px; border-radius: 16px; background: var(--faq-card); color: var(--ink); box-shadow: 0 20px 44px -30px rgb(0 0 0 / .65); transition: transform .15s var(--ease), box-shadow .15s var(--ease); }
-  .faq details:nth-child(1) { transform: rotate(-1.4deg); }
-  .faq details:nth-child(5) { transform: rotate(1.2deg); }
-  .faq details:hover { transform: translateY(-3px); box-shadow: 0 28px 52px -30px rgb(0 0 0 / .75); }
-  .faq details[open] { transform: none; }
-  .faq summary { min-height: 224px; list-style: none; display: flex; flex-direction: column; align-items: flex-start; gap: 24px; cursor: pointer; font-size: 22px; line-height: 1.2; font-weight: 500; letter-spacing: -.02em; color: var(--ink); }
+  /* 06 · FAQ: a clean help directory that keeps every answer native and expandable. */
+  #faq { margin-top: 104px; padding: 0; overflow: hidden; border-radius: 34px; background: var(--surface); box-shadow: var(--card-raised); }
+  #faq .sec-head { margin: 0; padding: clamp(48px, 6vw, 76px) clamp(24px, 5vw, 64px) 36px; text-align: center; background: #EBEBFF; }
+  #faq h2 { max-width: none; color: var(--ink); font-weight: 750; font-size: clamp(42px, 5vw, 64px); line-height: 1; letter-spacing: -.04em; }
+  #faq .lead { margin: 18px auto 0; max-width: 62ch; }
+  .faq-options { display: inline-flex; align-items: center; min-height: 40px; margin-top: 26px; padding: 0 16px; border: 0; border-radius: var(--r-pill); background: rgb(13 13 15 / .07); color: var(--ink); font: inherit; font-size: 13px; font-weight: 650; cursor: pointer; }
+  .faq-options:focus-visible { outline: 2px solid var(--purple); outline-offset: 3px; }
+  .faq { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(34px, 5vw, 72px) clamp(28px, 5vw, 64px); padding: clamp(52px, 7vw, 86px) clamp(28px, 6vw, 84px); }
+  .faq details { min-width: 0; color: var(--ink); }
+  .faq summary { min-height: 142px; list-style: none; display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto 1fr; align-content: start; column-gap: 9px; cursor: pointer; font-size: 20px; line-height: 1.2; font-weight: 650; letter-spacing: -.02em; color: var(--ink); }
   .faq summary::-webkit-details-marker { display: none; }
-  .faq summary::after { content: "Read answer"; display: inline-flex; align-items: center; min-height: 44px; margin-top: auto; padding: 0 18px; border-radius: var(--r-pill); background: var(--orange); color: var(--navy); font-size: 13px; font-weight: 700; letter-spacing: 0; box-shadow: 0 8px 20px -12px rgb(255 88 10 / .8); transition: transform .15s var(--ease), box-shadow .15s var(--ease); }
-  .faq summary:hover::after { box-shadow: 0 10px 24px -10px rgb(255 88 10 / .9); }
+  .faq-icon { grid-row: 1; width: 22px; text-align: center; color: var(--orange); font-size: 18px; line-height: 1.2; }
+  .faq summary small { grid-column: 1 / -1; margin-top: 9px; color: var(--ink-2); font-size: 14px; font-weight: 400; line-height: 1.45; letter-spacing: 0; }
+  .faq summary::after { content: "View answer"; grid-column: 1 / -1; align-self: end; justify-self: start; display: inline-flex; align-items: center; min-height: 40px; margin-top: 20px; padding: 0 18px; border-radius: var(--r-pill); background: var(--ink); color: #fff; font-size: 12px; font-weight: 700; letter-spacing: .02em; text-transform: uppercase; transition: transform .15s var(--ease), background .15s; }
+  .faq summary:hover::after { background: var(--orange); color: var(--ink); }
   .faq summary:active::after { transform: scale(.96); }
   .faq summary:focus-visible { outline: none; }
-  .faq summary:focus-visible::after { outline: 2px solid var(--ink); outline-offset: 3px; }
+  .faq summary:focus-visible::after { outline: 2px solid var(--purple); outline-offset: 3px; }
   .faq details[open] summary { min-height: auto; }
-  .faq details[open] summary::after { content: "Close answer"; margin-top: 6px; }
-  .faq details p { margin: 24px 0 0; color: var(--ink-2); font-size: 15px; line-height: 1.55; }
+  .faq details[open] summary::after { content: "Close answer"; }
+  .faq details p { margin: 18px 0 0; padding-top: 18px; box-shadow: inset 0 1px 0 rgb(13 13 15 / .1); color: var(--ink-2); font-size: 14px; line-height: 1.55; }
   @media (max-width: 900px) {
     .trust-layout { grid-template-columns: 1fr; gap: 46px; }
     .trust-intro { position: static; }
@@ -666,9 +667,10 @@
     .trust-list, .faq { grid-template-columns: 1fr; }
     .trust-item { min-height: auto; padding: 28px 0; border-right: 0 !important; }
     .trust-item .ico { margin-bottom: 30px; }
-    #faq { padding: 34px 20px; border-radius: 24px; }
-    .faq details, .faq details:nth-child(1), .faq details:nth-child(5) { min-height: 240px; transform: none; }
-    .faq summary { min-height: 184px; }
+    #faq { border-radius: 24px; }
+    #faq .sec-head { padding: 42px 20px 30px; }
+    .faq { padding: 36px 22px 44px; gap: 34px; }
+    .faq summary { min-height: 132px; }
   }
 
   /* Five links plus two buttons stop fitting here; the links go and the bar keeps
@@ -1059,15 +1061,17 @@
   <!-- 06 · FAQ -->
   <section class="sec" id="faq" aria-labelledby="h-faq">
     <div class="sec-head">
-      <h2 id="h-faq">Fair questions, straight answers.</h2>
+      <h2 id="h-faq">FAQs</h2>
+      <p class="lead">Check the most frequently asked ownership questions before you buy.</p>
+      <button class="faq-options" type="button" aria-expanded="false">Open all answers ▾</button>
     </div>
     <div class="faq">
-      <details><summary>Is this legal advice?</summary><p>No. Vestail shows what the rules say for the country and buyer type you declare, with sources, so you can decide. For a big or unusual purchase, check with a professional in that country.</p></details>
-      <details><summary>Where do the rules come from?</summary><p>From statutes, regulator guidance and issuer terms. Each rule lists its sources and the date it was last verified. During this preview the rules are illustrative and not yet sourced; don't rely on them.</p></details>
-      <details><summary>Does Vestail hold my money?</summary><p>Not for onchain purchases: you buy from your own wallet and the asset settles there. Offchain purchases will go through licensed partners, who hold your assets under their own regulation.</p></details>
-      <details><summary>Why can’t I buy something marked “cannot own”?</summary><p>Because the rules exclude someone in your position from holding it, and selling it to you anyway is exactly what Vestail exists to prevent. Change your country or buyer type only if it's genuinely true for you.</p></details>
-      <details><summary>How does Vestail make money?</summary><p>A small fee on purchases made in Vestail, and referral fees from some venues. Neither ever changes a verdict or which venue we show first.</p></details>
-      <details><summary>Which countries and assets are covered?</summary><p>Twelve countries and twenty asset classes today, for citizens and foreigners, with residents planned. More countries come as their rules are sourced.</p></details>
+      <details><summary><span class="faq-icon" aria-hidden="true">§</span><span>Legal guidance</span><small>Understand what Vestail’s answers do—and do not—replace.</small></summary><p>No. Vestail shows what the rules say for the country and buyer type you declare, with sources, so you can decide. For a big or unusual purchase, check with a professional in that country.</p></details>
+      <details><summary><span class="faq-icon" aria-hidden="true">⌕</span><span>Rule sources</span><small>See where verdicts come from and how freshness is shown.</small></summary><p>From statutes, regulator guidance and issuer terms. Each rule lists its sources and the date it was last verified. During this preview the rules are illustrative and not yet sourced; don't rely on them.</p></details>
+      <details><summary><span class="faq-icon" aria-hidden="true">◇</span><span>Custody and money</span><small>Learn when assets stay in your wallet or with a licensed partner.</small></summary><p>Not for onchain purchases: you buy from your own wallet and the asset settles there. Offchain purchases will go through licensed partners, who hold your assets under their own regulation.</p></details>
+      <details><summary><span class="faq-icon" aria-hidden="true">⊘</span><span>Restricted assets</span><small>Why Vestail stops routes for assets you cannot own.</small></summary><p>Because the rules exclude someone in your position from holding it, and selling it to you anyway is exactly what Vestail exists to prevent. Change your country or buyer type only if it's genuinely true for you.</p></details>
+      <details><summary><span class="faq-icon" aria-hidden="true">¤</span><span>Pricing and incentives</span><small>How Vestail earns money without changing a verdict.</small></summary><p>A small fee on purchases made in Vestail, and referral fees from some venues. Neither ever changes a verdict or which venue we show first.</p></details>
+      <details><summary><span class="faq-icon" aria-hidden="true">◎</span><span>Coverage</span><small>Review supported countries, buyer types and asset classes.</small></summary><p>Twelve countries and twenty asset classes today, for citizens and foreigners, with residents planned. More countries come as their rules are sourced.</p></details>
     </div>
   </section>
 
@@ -1143,6 +1147,15 @@ document.addEventListener('keydown', event => {
   if (!openMenu) return;
   openMenu.open = false;
   openMenu.querySelector('summary').focus();
+});
+
+const faqOptions = document.querySelector('.faq-options');
+const faqItems = [...document.querySelectorAll('.faq details')];
+faqOptions.addEventListener('click', () => {
+  const shouldOpen = faqItems.some(item => !item.open);
+  faqItems.forEach(item => { item.open = shouldOpen; });
+  faqOptions.setAttribute('aria-expanded', String(shouldOpen));
+  faqOptions.textContent = shouldOpen ? 'Close all answers ▴' : 'Open all answers ▾';
 });
 
 /* ============================================================

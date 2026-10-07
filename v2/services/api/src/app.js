@@ -13,6 +13,7 @@ import { registerRules } from "./routes/rules.js";
 import { registerVenues } from "./routes/venues.js";
 import { registerActivity } from "./routes/activity.js";
 import { registerOrders } from "./routes/orders.js";
+import { registerTokens } from "./routes/tokens.js";
 import { createAuth, keysFromEnv } from "./auth.js";
 import { rateLimit } from "./ratelimit.js";
 
@@ -48,6 +49,7 @@ export function createApp({
   registerRules(v1, ctx);
   registerVenues(v1, ctx);
   registerActivity(v1, ctx);
+  registerTokens(v1, ctx);
   registerOrders(v1, ctx);
 
   app.route("/v1", v1);

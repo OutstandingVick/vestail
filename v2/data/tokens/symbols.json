@@ -1,0 +1,16 @@
+{
+  "$comment": "Which v2 asset class governs each tokenised symbol. equity-by-home: domestic equities in `home`, foreign equities everywhere else (the resolver's own rule). Pre-IPO names are governed by the private company shares rule. `entity` is the name in entities.json, when there is one, so a resolved entity can be joined to its tokens.",
+  "symbols": {
+    "NVDA":   { "name": "NVIDIA",            "entity": "Nvidia",    "class": "equity-by-home", "home": "US" },
+    "TSLA":   { "name": "Tesla",             "entity": "Tesla",     "class": "equity-by-home", "home": "US" },
+    "AAPL":   { "name": "Apple",             "entity": "Apple",     "class": "equity-by-home", "home": "US" },
+    "MSFT":   { "name": "Microsoft",         "entity": "Microsoft", "class": "equity-by-home", "home": "US" },
+    "GOOGL":  { "name": "Alphabet",          "entity": "Alphabet",  "class": "equity-by-home", "home": "US" },
+    "AMZN":   { "name": "Amazon",            "entity": "Amazon",    "class": "equity-by-home", "home": "US" },
+    "SPY":    { "name": "S&P 500 ETF",       "entity": null,        "class": "equity-by-home", "home": "US" },
+    "QQQ":    { "name": "Nasdaq-100 ETF",    "entity": null,        "class": "equity-by-home", "home": "US" },
+    "SPCX":   { "name": "SpaceX",            "entity": null,        "class": "private_company_shares", "home": "US" },
+    "OPENAI": { "name": "OpenAI",            "entity": null,        "class": "private_company_shares", "home": "US" },
+    "KALSHI": { "name": "Kalshi",            "entity": null,        "class": "private_company_shares", "home": "US" }
+  }
+}

@@ -81,3 +81,34 @@ test("body is validated against the spec", async () => {
   assert.equal((await click({ ...luno, country: "XX" })).body.error.code, "unknown_country");
   assert.equal((await click({ ...luno, asset: "moon_rocks" })).body.error.code, "unknown_asset");
 });
+
+const nvdaNG = async () => (await (await app.request("/v1/tokens/NVDA?country=NG")).json()).tokens[0].mint;
+const swap = mint => ({ country: "NG", asset: "foreign_equities", who: "citizen", venue: "Jupiter", mint });
+
+test("a token swap click is judged by the token verdict", async () => {
+  const mint = await nvdaNG();
+  const refused = await click(swap(mint));
+  assert.equal(refused.body.error.code, "acknowledgement_required");
+  const ok = await click({ ...swap(mint), acknowledged: true });
+  assert.equal(ok.res.status, 201);
+  assert.equal(ok.body.redirect, `https://jup.ag/swap/USDC-${mint}?ref=vestail`);
+});
+
+test("a not-assessed token is never routed, even acknowledged", async () => {
+  const mint = await nvdaNG();
+  const { body } = await click({ ...swap(mint), country: "GB", acknowledged: true });
+  assert.equal(body.error.code, "not_assessed");
+});
+
+test("a cannot_own token is refused", async () => {
+  const mint = await nvdaNG();
+  const { body } = await click({ ...swap(mint), country: "US", asset: "domestic_equities", acknowledged: true });
+  assert.equal(body.error.code, "validation");
+});
+
+test("a swap click must name the governing class, Jupiter, and a known mint", async () => {
+  const mint = await nvdaNG();
+  assert.equal((await click({ ...swap(mint), asset: "gold_bullion", acknowledged: true })).body.error.code, "validation");
+  assert.equal((await click({ ...swap(mint), venue: "Bamboo", acknowledged: true })).body.error.code, "validation");
+  assert.equal((await click({ ...swap("NotAMint111"), acknowledged: true })).body.error.code, "unknown_mint");
+});

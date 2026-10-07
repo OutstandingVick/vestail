@@ -229,7 +229,7 @@
   .track.one { display: flex; justify-content: space-between; }
   .track.one .tile { flex: 0 1 34px; min-width: 0; }
   .track.one .tile.split { margin-left: 8px; }
-  .track .tile { position: relative; width: 100%; max-width: 34px; height: auto; aspect-ratio: 1; border: 0; padding: 0; border-radius: 50%; cursor: pointer; transition: transform .15s var(--ease), opacity .25s, box-shadow .15s, filter .15s; }
+  .track .tile { position: relative; width: 100%; max-width: 34px; height: auto; aspect-ratio: 1; border: 1.5px solid rgba(13,13,15,.24); padding: 0; border-radius: 50%; cursor: pointer; transition: transform .15s var(--ease), opacity .25s, box-shadow .15s, filter .15s; }
   .tile.yes { background: var(--yes); } .tile.cond { background: var(--cond); }
   .tile.no { background: var(--no); background-image: repeating-linear-gradient(135deg, var(--no-hatch) 0 2px, transparent 2px 5px); }
   .track .tile.cond::before { content: ""; position: absolute; left: 50%; top: 50%; width: 6px; height: 6px; margin: -3px 0 0 -3px; border-radius: 50%; background: #fff; }

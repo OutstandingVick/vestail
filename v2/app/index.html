@@ -437,8 +437,8 @@
   .nav-menu > summary::-webkit-details-marker { display: none; }
   .nav-menu > summary::after { content: "▾"; font-size: 13px; transition: transform .15s var(--ease); }
   .nav-menu[open] > summary::after { transform: rotate(180deg); }
-  .theme-toggle { position: relative; display: grid; place-items: center; flex: none; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 50%; background: transparent; color: var(--ink); box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--ink) 18%, transparent); cursor: pointer; transition: background .15s, box-shadow .15s; }
-  .theme-toggle:hover { background: var(--surface-2); box-shadow: inset 0 0 0 1.5px var(--ink); }
+  .theme-toggle { position: relative; display: grid; place-items: center; flex: none; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 50%; background: transparent; color: var(--ink); cursor: pointer; transition: background .15s; }
+  .theme-toggle:hover { background: var(--surface-2); }
   .theme-toggle:active { transform: scale(.96); }
   .theme-toggle svg { width: 22px; height: 22px; overflow: visible; }
   .theme-toggle circle { fill: none; stroke: currentColor; stroke-width: 1.8; }

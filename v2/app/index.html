@@ -533,14 +533,14 @@
   /* 02 · How it works */
   .how-process { display: grid; grid-template-columns: minmax(240px, .72fr) minmax(0, 1.5fr); gap: clamp(56px, 9vw, 148px); align-items: start; }
   .how-process .how-intro { margin: 0; position: sticky; top: 112px; }
-  .how-intro h2 { max-width: 8ch; font-size: clamp(44px, 5.8vw, 76px); line-height: .94; letter-spacing: -.04em; }
+  .how-intro h2 { max-width: 8ch; font-family: var(--font-manrope); font-size: clamp(44px, 5.8vw, 76px); line-height: .94; font-weight: 800; letter-spacing: -.04em; }
   .how-intro .lead { max-width: 31ch; margin-top: 24px; font-size: 16px; line-height: 1.55; }
   .how-link { display: inline-flex; flex-direction: row-reverse; align-items: center; gap: 9px; margin-top: 28px; color: var(--ink); font-size: 14px; font-weight: 600; text-decoration: none; }
   .how-link span { color: var(--orange); font-size: 18px; transition: transform .15s var(--ease); }
   .how-link:hover span, .how-link:focus-visible span { transform: translate(2px, 2px); }
   .process-list { border-top: 1px solid var(--line); }
   .process-step { position: relative; display: grid; grid-template-columns: 48px minmax(0, 1fr); column-gap: 24px; row-gap: 8px; padding: 36px 48px 36px 0; border-bottom: 1px solid var(--line); }
-  .process-step h3 { grid-column: 2; margin: 0; font-size: clamp(22px, 2.2vw, 30px); line-height: 1.1; font-weight: 650; color: var(--ink); }
+  .process-step h3 { grid-column: 2; margin: 0; font-family: var(--font-manrope); font-size: clamp(22px, 2.2vw, 30px); line-height: 1.1; font-weight: 700; color: var(--ink); }
   .process-step p { grid-column: 2; margin: 0; max-width: 58ch; color: var(--ink-2); font-size: 15px; line-height: 1.55; }
   .process-step .num { grid-row: 1 / span 2; width: 40px; height: 40px; display: grid; place-items: center; background: var(--surface-2); color: var(--ink-2); font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; }
   .process-corner { position: absolute; top: 15px; right: 3px; width: 16px; height: 16px; border-top: 3px solid var(--purple); border-right: 3px solid var(--purple); }

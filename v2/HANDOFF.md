@@ -18,7 +18,8 @@ Three things carry over from v1 and must not be quietly dropped:
 
 ```
 v2/
-├── app/index.html        the whole front end: one self-contained file, no build step (~1470 lines)
+├── web/                  the product app: Next.js, Privy sign-in, search, verdicts, tokens, buying (web/README.md)
+├── app/index.html        the marketing page: one self-contained file, no build step (~1470 lines)
 ├── packages/core/        @vestail/core — resolver + rule matrix, zero dependencies, data injected
 ├── services/api/         @vestail/api — Hono on Node, implements docs/api/openapi.yaml
 ├── data/*.json           assets, categories, aliases, entities, countries, venues, activity sample
@@ -93,6 +94,14 @@ Type is Outfit (300–800). Corner scale: panels 28, cards 20, fields 16, button
 - Country cards as a two/three-column grid with a segmented verdict track and an inset buy panel.
 - A sticky, full-width nav.
 - 12 countries, 20 assets, 2 buyer types.
+
+## 7b. The app (`web/`)
+
+The landing page's Try App leads here. Sign-in is Privy (email or Solana wallet, embedded wallets for email users).
+The first screen is a giant search; the buyer declares country and buyer type beside it. Tokenised stocks from v1
+(`data/tokens/`) appear under the equity classes, judged by issuer policy capped by the class rule; not-assessed tokens
+are never bought. Buys go through server routes that re-check the rule and record the click with `POST /orders/click`
+(which now accepts `mint` for Jupiter swaps). See `web/README.md`.
 
 ## 8. What is next
 

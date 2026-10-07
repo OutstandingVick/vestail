@@ -371,11 +371,11 @@
 
   .foot-logo { display: inline-flex; text-decoration: none; }
   .foot-logo svg { display: block; height: 34px; width: auto; }
-  .foot-cta { display: inline-flex; align-items: center; gap: 10px; margin-top: 26px; font: inherit; font-size: 15px; font-weight: 500; color: #fff;
-    background: var(--ink); border: 0; box-shadow: inset 0 0 0 1px rgb(255 255 255 / .12); border-radius: var(--r-pill);
+  .foot-cta { display: inline-flex; align-items: center; gap: 10px; margin-top: 26px; font: inherit; font-size: 15px; font-weight: 500; color: #0d0d0f;
+    background: var(--orange); border: 0; box-shadow: none; border-radius: var(--r-pill);
     padding: 11px 20px; cursor: pointer; transition: background .2s, box-shadow .2s; }
-  .foot-cta i { flex: none; width: 7px; height: 7px; border-radius: 50%; background: #fff; }
-  .foot-cta:hover { background: #252529; box-shadow: inset 0 0 0 1px rgb(255 255 255 / .24); }
+  .foot-cta i { flex: none; width: 7px; height: 7px; border-radius: 50%; background: #0d0d0f; }
+  .foot-cta:hover { background: #ff7130; box-shadow: none; }
 
   .foot-line { margin: 22px 0 0; max-width: 24ch; color: var(--ink); font-family: var(--font-manrope); font-size: 26px; font-weight: 700; line-height: 1.08; letter-spacing: -.025em; }
 
@@ -392,12 +392,12 @@
   .foot-signup { display: flex; min-height: 54px; border: 1.5px solid var(--ink); border-radius: var(--r-pill); overflow: hidden; }
   .foot-signup input { min-width: 0; flex: 1; border: 0; outline: 0; padding: 0 20px; background: transparent; color: var(--ink); font: inherit; font-size: 15px; }
   .foot-signup input::placeholder { color: var(--ink-3); }
-  .foot-signup button { flex: none; border: 0; border-radius: var(--r-pill); padding: 0 25px; background: var(--ink); color: #fff; font: inherit; font-weight: 650; cursor: pointer; transition: background .15s; }
-  .foot-signup button:hover { background: var(--orange); }
+  .foot-signup button { flex: none; border: 0; border-radius: var(--r-pill); padding: 0 25px; background: var(--orange); color: #0d0d0f; font: inherit; font-weight: 650; cursor: pointer; transition: background .15s; }
+  .foot-signup button:hover { background: #ff7130; }
   .foot-social { margin-top: 32px; }
   .foot-social-links { display: flex; flex-wrap: wrap; gap: 10px; }
-  .foot-social-links a { display: inline-flex; align-items: center; min-height: 40px; padding: 0 16px; border-radius: var(--r-pill); background: rgb(255 255 255 / .62); color: var(--ink); font-size: 13px; font-weight: 650; text-decoration: none; transition: background .15s, color .15s; }
-  .foot-social-links a:hover { background: var(--ink); color: #fff; }
+  .foot-social-links a { display: inline-flex; align-items: center; min-height: 40px; padding: 0 16px; border-radius: var(--r-pill); background: var(--orange); color: #0d0d0f; font-size: 13px; font-weight: 650; text-decoration: none; transition: background .15s, color .15s; }
+  .foot-social-links a:hover { background: #ff7130; color: #0d0d0f; }
   .foot-base { margin-top: 18px; color: var(--ink-3); font-size: 13px; }
 
   /*
@@ -712,8 +712,8 @@
   .faq summary::-webkit-details-marker { display: none; }
   .faq-icon { grid-row: 1; width: 22px; text-align: center; color: var(--orange); font-size: 18px; line-height: 1.2; }
   .faq summary small { grid-column: 1 / -1; margin-top: 9px; color: var(--ink-2); font-family: var(--font-inter); font-size: 14px; font-weight: 400; line-height: 1.45; letter-spacing: 0; }
-  .faq summary::after { content: "View answer"; grid-column: 1 / -1; align-self: end; justify-self: start; display: inline-flex; align-items: center; min-height: 40px; margin-top: 20px; padding: 0 18px; border-radius: var(--r-pill); background: var(--ink); color: #fff; font-size: 12px; font-weight: 700; letter-spacing: .02em; text-transform: uppercase; transition: transform .15s var(--ease), background .15s; }
-  .faq summary:hover::after { background: var(--orange); color: var(--ink); }
+  .faq summary::after { content: "View answer"; grid-column: 1 / -1; align-self: end; justify-self: start; display: inline-flex; align-items: center; min-height: 40px; margin-top: 20px; padding: 0 18px; border-radius: var(--r-pill); background: var(--orange); color: #0d0d0f; font-size: 12px; font-weight: 700; letter-spacing: .02em; text-transform: uppercase; transition: transform .15s var(--ease), background .15s; }
+  .faq summary:hover::after { background: #ff7130; color: #0d0d0f; }
   .faq summary:active::after { transform: scale(.96); }
   .faq summary:focus-visible { outline: none; }
   .faq summary:focus-visible::after { outline: 2px solid var(--purple); outline-offset: 3px; }

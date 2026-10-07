@@ -159,11 +159,11 @@
   .top .meta { font-size: 13px; color: var(--ink-2); }
 
   /* ---------- Hero ---------- */
-  .hero { position: relative; isolation: isolate; overflow: hidden; padding: 56px 0 28px; border-radius: 0 0 var(--r-xl) var(--r-xl); text-align: center; }
+  .hero { position: relative; isolation: isolate; overflow: hidden; padding: 56px 0 28px; border-radius: 0 0 var(--r-xl) var(--r-xl); background: #0e0f14; text-align: center; }
   .hero::before, .hero::after { content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none; }
   .hero > * { position: relative; z-index: 1; }
-  .hero::before { background: url("assets/earth-hero.jpg") center 52% / cover no-repeat; filter: saturate(.78) contrast(.94) brightness(.82); transform: scale(1.01); }
-  .hero::after { background: radial-gradient(circle at 72% 45%, rgb(124 92 255 / .2), transparent 38%), radial-gradient(circle at 18% 18%, rgb(255 88 10 / .1), transparent 30%), linear-gradient(rgb(14 15 20 / .7), rgb(14 15 20 / .82)); }
+  .hero::before { background: url("assets/atlantic-earth-globe.png") 52% 50% / min(82vw, 1040px) auto no-repeat; filter: saturate(.76) contrast(.96) brightness(.76); opacity: .62; }
+  .hero::after { background: radial-gradient(circle at 62% 45%, rgb(124 92 255 / .25), transparent 40%), radial-gradient(circle at 18% 18%, rgb(255 88 10 / .12), transparent 31%), linear-gradient(rgb(14 15 20 / .34), rgb(14 15 20 / .7)); }
   .hero h1 { font-family: var(--font-manrope); font-weight: 800; color: #f8f7ff; font-size: clamp(52.5px, 9.5vw, 115px); line-height: 1; letter-spacing: -.04em; margin: 0 auto 22px; text-shadow: 0 2px 28px rgb(0 0 0 / .4); }
   /* Two weights of one face: a light set-up line, a bold payoff. */
   .hero h1 .ln { display: block; }

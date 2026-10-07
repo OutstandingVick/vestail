@@ -916,7 +916,7 @@
             <span>Research articles <small>Later</small></span>
           </div>
         </details>
-        <button class="btn solid" type="button" data-focus-search>Try App</button>
+        <a class="btn solid" href="http://localhost:8081/?signin" data-app-link>Try App</a>
       </div>
     </nav>
   </div>
@@ -1542,6 +1542,10 @@ const withRef = url => url ? url + (url.includes("?") ? "&" : "?") + REF : null;
    page runs entirely on the inline data above, as before.
    ============================================================ */
 const API = typeof window.VESTAIL_API === "string" && window.VESTAIL_API ? window.VESTAIL_API.replace(/\/+$/, "") : null;
+/* Try App opens the product app (v2/web). Locally that is :8081 beside this
+   page on :8080; set window.VESTAIL_APP to its deployed url elsewhere. */
+if (typeof window.VESTAIL_APP === "string" && window.VESTAIL_APP)
+  document.querySelectorAll("[data-app-link]").forEach(a => { a.href = window.VESTAIL_APP.replace(/\/+$/, "") + "/?signin"; });
 const API_KEY = typeof window.VESTAIL_API_KEY === "string" && window.VESTAIL_API_KEY ? window.VESTAIL_API_KEY : null;
 const STATUS_NUM = { can_own: 2, conditional: 1, cannot_own: 0 };
 const SESSION = (crypto.randomUUID && crypto.randomUUID()) || String(Math.random()).slice(2);

@@ -1,7 +1,8 @@
-/** Cache-Control per docs/api/API.md: reference 24h, matrix and rules 1h, activity never. */
+/** Cache-Control per docs/api/API.md: reference and the token list 24h, matrix, rules and token verdicts 1h, activity never. */
 const POLICIES = [
   [/^\/v1\/(assets|categories|countries|entities|venues)(\/|$)/, "public, max-age=86400"],
-  [/^\/v1\/(matrix|rules)(\/|$)/, "public, max-age=3600"],
+  [/^\/v1\/tokens$/, "public, max-age=86400"],
+  [/^\/v1\/(matrix|rules|tokens)(\/|$)/, "public, max-age=3600"],
   [/^\/v1\/activity$/, "no-store"],
 ];
 

@@ -20,6 +20,7 @@ tags:
   - { name: rules,   description: Individual rule lookups }
   - { name: venues,  description: Where to buy }
   - { name: reference, description: Static lists }
+  - { name: tokens,  description: Tokenised versions of an asset onchain (Solana) and their verdicts }
   - { name: activity, description: Traction feed for the HUD }
   - { name: orders,  description: Outbound click / order-flow attribution }
 
@@ -116,6 +117,31 @@ paths:
       parameters: [{ name: q, in: query, schema: { type: string } }, { name: kind, in: query, schema: { type: string } }]
       responses: { "200": { description: Matches, content: { application/json: { schema: { type: array, items: { $ref: "#/components/schemas/Entity" } } } } } }
 
+  /tokens:
+    get:
+      tags: [tokens]
+      summary: Symbols that have tokenised versions
+      responses: { "200": { description: List, content: { application/json: { schema: { type: array, items: { $ref: "#/components/schemas/TokenSymbol" } } } } } }
+
+  /tokens/{symbol}:
+    get:
+      tags: [tokens]
+      summary: Every tokenised version of a symbol, judged for one country and buyer type
+      description: |
+        Each token is judged by its issuer's own policy (sourced), then capped by the asset-class rule for the
+        country and buyer type: the stricter decides. A token whose issuer has no rule for the country is
+        `assessed: false` with `status: null` — not assessed, never eligible, and not buyable. A cannot_own class
+        rule makes every token cannot_own, assessed or not.
+      parameters:
+        - { name: symbol, in: path, required: true, schema: { type: string }, example: NVDA }
+        - { name: country, in: query, required: true, schema: { type: string, pattern: "^[A-Z]{2}$" } }
+        - { name: who, in: query, schema: { $ref: "#/components/schemas/BuyerType" } }
+      responses:
+        "200":
+          description: Token board
+          content: { application/json: { schema: { $ref: "#/components/schemas/TokenBoard" } } }
+        "404": { description: Unknown symbol }
+
   /activity:
     get:
       tags: [activity]
@@ -185,6 +211,46 @@ components:
         venues: { type: array, items: { $ref: "#/components/schemas/Venue" } }
         sources: { type: array, items: { $ref: "#/components/schemas/Source" }, description: Empty until the rule has been sourced. }
         verified_at: { type: [string, "null"], format: date, description: When the rule was last checked against its sources; null if never. }
+    TokenSymbol: { type: object, properties: { symbol: { type: string }, name: { type: string }, entity: { type: [string, "null"], description: Matching name in /entities, when there is one }, home: { type: string }, providers: { type: array, items: { type: string } } } }
+    IssuerEvidence: { type: object, properties: { rule: { type: string }, kind: { type: string, enum: [gate, note] }, reason: { type: string }, source_url: { type: string, format: uri }, source_quality: { type: string, enum: [primary, secondary] } } }
+    IssuerVerdict:
+      type: object
+      properties:
+        status: { $ref: "#/components/schemas/Status" }
+        summary: { type: [string, "null"] }
+        acknowledgement: { type: [object, "null"], properties: { limit: { type: string }, requires: { type: string } }, description: What the buyer must acknowledge; set when the issuer verdict is conditional }
+        policy_version: { type: string }
+        evidence: { type: array, items: { $ref: "#/components/schemas/IssuerEvidence" } }
+    Token:
+      type: object
+      required: [mint, provider, assessed, status]
+      properties:
+        mint: { type: string }
+        provider: { type: string }
+        token_symbol: { type: string }
+        name: { type: string }
+        structure: { type: string }
+        redeemable: { type: boolean }
+        custodian: { type: [string, "null"] }
+        decimals: { type: integer }
+        token_program: { type: string }
+        issuer_source: { type: string, format: uri }
+        assessed: { type: boolean, description: False when the issuer has no rule for this country. Such a token is not buyable. }
+        status: { oneOf: [{ $ref: "#/components/schemas/Status" }, { type: "null" }], description: Final verdict, the stricter of issuer and class; null when not assessed }
+        decided_by: { type: [string, "null"], enum: [issuer, class, both, null] }
+        issuer: { oneOf: [{ $ref: "#/components/schemas/IssuerVerdict" }, { type: "null" }] }
+    TokenBoard:
+      type: object
+      properties:
+        symbol: { type: string }
+        name: { type: string }
+        country: { type: string }
+        who: { $ref: "#/components/schemas/BuyerType" }
+        asset: { type: string, description: The asset class id that governs this symbol in this country }
+        class_status: { $ref: "#/components/schemas/Status" }
+        class_sources: { type: array, items: { $ref: "#/components/schemas/Source" } }
+        class_verified_at: { type: [string, "null"], format: date }
+        tokens: { type: array, items: { $ref: "#/components/schemas/Token" } }
     Activity:
       type: object
       properties:

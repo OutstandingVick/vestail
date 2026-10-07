@@ -1,0 +1,58 @@
+{
+  "$comment": "Issuer-level facts about each provider's tokens. Hand-maintained: every claim carries a sourceUrl, and anything read only from a secondary source is listed under `unverified` until a primary document confirms it. Per-token data (mints, decimals, authorities) is generated into representations.json by scripts/sync-registry.mjs.",
+  "xstocks": {
+    "issuer": "Backed Finance",
+    "structure": "custody_backed",
+    "redeemable": true,
+    "custodian": "InCore Bank AG",
+    "sourceUrl": "https://assets.backed.fi/legal-documentation",
+    "notes": "Legally a tracker certificate under Swiss law, 1:1 collateralised by the underlying share. Issuance and redemption through Backed are limited to professional investors; retail holders buy and sell on the secondary market. Not offered to US persons.",
+    "unverified": [
+      "custodian (InCore Bank AG): secondary sources only",
+      "redemption minimum of USD 5,000: secondary sources only"
+    ],
+    "mintAuthority": "7pt9tkctJPK7PPNQJ77GKg8ZffSF6QxoMiCFYHxrtaCj"
+  },
+  "ondo": {
+    "issuer": "Ondo Global Markets (BVI) Limited",
+    "structure": "total_return_note",
+    "redeemable": true,
+    "custodian": null,
+    "sourceUrl": "https://docs.ondo.finance/ondo-stocks/legal-and-regulatory",
+    "notes": "Debt notes issued by a bankruptcy-remote BVI SPV, backed 1:1 by underlying securities held at one or more unnamed U.S.-registered broker-dealers, with Ankura Trust Company as verification agent. No shareholder voting rights. Offered under Regulation S; not available to US users.",
+    "unverified": [],
+    "mintAuthority": "9foMHsSDq7nMg4WPusSz9eY7tyxyukqborA8GyU5cUxD"
+  },
+  "backpack": {
+    "issuer": "Backpack Securities",
+    "structure": "security_entitlement",
+    "redeemable": true,
+    "custodian": "Backpack Securities",
+    "sourceUrl": "https://support.backpack.exchange/backpack-securities",
+    "notes": "A UCC Article 8 security entitlement under New York law, held through Backpack Securities. Verified Backpack users in supported regions can redeem into the underlying entitlement. Not available in the US, UK, UAE or Japan, or on Backpack EU.",
+    "unverified": [
+      "custodian: Backpack's pages describe brokerage, clearing and custody infrastructure without naming the custodian"
+    ],
+    "mintAuthority": null
+  },
+  "prestocks": {
+    "issuer": "PreStocks",
+    "structure": "spv_exposure",
+    "redeemable": true,
+    "custodian": null,
+    "sourceUrl": "https://prestocks.notion.site/terms-of-service",
+    "notes": "Bearer tokens referencing economic exposure to private companies through SPVs; they confer no ownership, voting, dividend or information rights. Holders may request redemption for USDC, but fulfilment is at PreStocks' discretion and may be partial or fail. Prohibited Jurisdictions include the US and Singapore, not the EU. OpenAI and Anthropic have warned that SPV exposure to their shares may be void or worthless.",
+    "unverified": [],
+    "mintAuthority": null
+  },
+  "tessera": {
+    "issuer": "Tessera (per-token Panamanian issuer, e.g. OPAI Tessera Issuer Inc.)",
+    "structure": "loan_participation",
+    "redeemable": true,
+    "custodian": null,
+    "sourceUrl": "https://terms.tessera.pe/",
+    "notes": "Terms 1.4: a participation in a loan to a dedicated Panamanian issuer that holds the investment. Terms 2.2: redemption opens only after the issuer receives liquidity-event proceeds, runs for 90 days, and the claim lapses afterwards. Terms 3.1(c) excludes US persons. KYC applies at the lending (mint) step (2.1(d)).",
+    "unverified": [],
+    "mintAuthority": null
+  }
+}

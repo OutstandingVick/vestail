@@ -55,6 +55,21 @@ GET /matrix?q=farmland&who=foreigner&sort=status
 GET /venues/cryptocurrency?country=IN&ref=ref=partner_xyz
 ```
 
+## Tokenised versions (Solana)
+One ticker exists onchain as several legal claims. `GET /tokens` lists the symbols; `GET /tokens/{symbol}?country=&who=` judges each token:
+
+1. The issuer's own policy for the country (carried over from Vestail v1, every gate sourced).
+2. Capped by the asset-class rule (NVDA is foreign equities outside the US). The stricter decides; `decided_by` says which.
+3. No issuer rule for the country → `assessed: false`, `status: null`. **Not assessed is not eligible** and must not be bought.
+
+```
+GET /tokens/NVDA?country=NG&who=foreigner
+→ { "asset": "foreign_equities", "class_status": "can_own",
+    "tokens": [{ "token_symbol": "NVDAx", "status": "conditional", "decided_by": "issuer", "issuer": { "acknowledgement": {…}, "evidence": [ … ] } }, …] }
+```
+
+Data lives in `data/tokens/` (registry, issuer policies, and `symbols.json`, which maps each symbol to its asset class).
+
 ## Attribution
 Every Buy press should `POST /orders/click` before redirecting. The response returns the final redirect url so the tag logic lives server-side. This is the hook for referral revenue and payment-for-order-flow accounting; it also feeds the live ticker.
 

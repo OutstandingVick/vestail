@@ -1,5 +1,6 @@
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import { createVestail } from "@vestail/core";
+import { createTokens } from "@vestail/core/tokens";
 
 const DATA_DIR = new URL("../../../data/", import.meta.url);
 const load = f => JSON.parse(readFileSync(new URL(f, DATA_DIR)));
@@ -22,5 +23,10 @@ export function loadData() {
   const idByName = Object.fromEntries(raw.assets.map(a => [a.name, a.id]));
   const nameById = Object.fromEntries(raw.assets.map(a => [a.id, a.name]));
   const countryByCode = Object.fromEntries(core.COUNTRIES.map(c => [c.code, c]));
-  return { raw, core, idByName, nameById, countryByCode };
+  const tokens = createTokens({
+    representations: load("tokens/representations.json"),
+    policies: readdirSync(new URL("tokens/policies/", DATA_DIR)).filter(f => f.endsWith(".json")).map(f => load(`tokens/policies/${f}`)),
+    symbols: load("tokens/symbols.json"),
+  });
+  return { raw, core, tokens, idByName, nameById, countryByCode };
 }

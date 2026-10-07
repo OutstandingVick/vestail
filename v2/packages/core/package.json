@@ -1,3 +1,15 @@
-{ "name": "@vestail/core", "version": "0.1.0", "type": "module", "main": "index.js", "exports": "./index.js", "license": "UNLICENSED",
+{
+  "name": "@vestail/core",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./tokens": "./tokens.js"
+  },
+  "license": "UNLICENSED",
   "description": "Query resolution pipeline + ownership rule matrix for Vestail. No dependencies; data is injected.",
-  "scripts": { "test": "node test.js" } }
+  "scripts": {
+    "test": "node test.js && node tokens.test.js"
+  }
+}

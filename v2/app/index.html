@@ -159,14 +159,18 @@
   .top .meta { font-size: 13px; color: var(--ink-2); }
 
   /* ---------- Hero ---------- */
-  .hero { padding: 56px 0 28px; text-align: center; }
-  .hero h1 { font-family: var(--font-manrope); font-weight: 800; color: var(--ink); font-size: clamp(52.5px, 9.5vw, 115px); line-height: 1; letter-spacing: -.04em; margin: 0 auto 22px; }
+  .hero { position: relative; isolation: isolate; overflow: hidden; padding: 56px 0 28px; border-radius: 0 0 var(--r-xl) var(--r-xl); text-align: center; }
+  .hero::before, .hero::after { content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+  .hero > * { position: relative; z-index: 1; }
+  .hero::before { background: url("assets/earth-hero.jpg") center 52% / cover no-repeat; filter: saturate(.78) contrast(.94) brightness(.82); transform: scale(1.01); }
+  .hero::after { background: radial-gradient(circle at 72% 45%, rgb(124 92 255 / .2), transparent 38%), radial-gradient(circle at 18% 18%, rgb(255 88 10 / .1), transparent 30%), linear-gradient(rgb(14 15 20 / .7), rgb(14 15 20 / .82)); }
+  .hero h1 { font-family: var(--font-manrope); font-weight: 800; color: #f8f7ff; font-size: clamp(52.5px, 9.5vw, 115px); line-height: 1; letter-spacing: -.04em; margin: 0 auto 22px; text-shadow: 0 2px 28px rgb(0 0 0 / .4); }
   /* Two weights of one face: a light set-up line, a bold payoff. */
   .hero h1 .ln { display: block; }
   .hero h1 .ln.light { font-family: var(--font-syne); font-weight: 700; letter-spacing: -.03em; }
   .hero h1 .w { display: inline-block; animation: rise .7s var(--ease) both; }
   .hero h1 .w:nth-child(2) { animation-delay: .06s } .hero h1 .w:nth-child(3) { animation-delay: .12s } .hero h1 .w:nth-child(4) { animation-delay: .18s } .hero h1 .w:nth-child(5) { animation-delay: .24s } .hero h1 .w:nth-child(6) { animation-delay: .30s }
-  .hero > p { margin: 0 auto; max-width: 54ch; color: var(--ink-3); font-family: var(--font-inter); font-size: 22.5px; line-height: 1.55; animation: rise .7s .3s var(--ease) both; }
+  .hero > p { margin: 0 auto; max-width: 54ch; color: rgb(248 247 255 / .78); font-family: var(--font-inter); font-size: 22.5px; line-height: 1.55; animation: rise .7s .3s var(--ease) both; }
 
   /* The search is the hero's call to action: one pill holding the field, Clear, and the orange action. */
   .searchbar { display: flex; align-items: center; gap: 8px; max-width: 700px; margin: 34px auto 0; padding: 8px 8px 8px 22px;
@@ -191,11 +195,11 @@
   .hud { max-width: 820px; margin: 64px auto 0; animation: rise .7s .5s var(--ease) both; }
   .stats { display: grid; grid-template-columns: repeat(3, 1fr); }
   .stat { padding: 4px 18px; text-align: center; }
-  .stat + .stat { box-shadow: -1px 0 0 var(--line); }
-  .stat .v { font-family: var(--font-manrope); font-weight: 600; color: var(--ink); font-size: clamp(42.5px, 6.75vw, 75px); letter-spacing: -.035em; line-height: 1; font-variant-numeric: tabular-nums; }
-  .stat .l { font-size: 18.75px; color: var(--ink-3); margin-top: 10px; }
-  .stat .d { display: inline-block; margin-top: 10px; font-size: 15.625px; font-weight: 600; color: var(--purple-ink); font-variant-numeric: tabular-nums;
-    background: color-mix(in srgb, var(--purple) 14%, transparent); box-shadow: 0 0 0 1px color-mix(in srgb, var(--purple) 32%, transparent); border-radius: var(--r-pill); padding: 3px 9px; }
+  .stat + .stat { box-shadow: -1px 0 0 rgb(248 247 255 / .18); }
+  .stat .v { font-family: var(--font-manrope); font-weight: 600; color: #f8f7ff; font-size: clamp(42.5px, 6.75vw, 75px); letter-spacing: -.035em; line-height: 1; font-variant-numeric: tabular-nums; text-shadow: 0 2px 20px rgb(0 0 0 / .35); }
+  .stat .l { font-size: 18.75px; color: rgb(248 247 255 / .72); margin-top: 10px; }
+  .stat .d { display: inline-block; margin-top: 10px; font-size: 15.625px; font-weight: 600; color: #ddd6ff; font-variant-numeric: tabular-nums;
+    background: rgb(124 92 255 / .22); box-shadow: 0 0 0 1px rgb(221 214 255 / .28); border-radius: var(--r-pill); padding: 3px 9px; }
   .stat .d:empty { display: none; }
   .ticker { margin: 40px auto 0; max-width: 700px; height: 50px; overflow: hidden; position: relative; background: var(--surface); border: 0; border-radius: var(--r-pill); box-shadow: var(--ring); }
   .ticker .live { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); display: inline-flex; align-items: center; gap: 6px; font-size: 14.375px; font-weight: 700; color: var(--ink-2); z-index: 1; }
@@ -209,9 +213,9 @@
   @media (max-width: 480px) { .stat { padding: 2px 6px; } .stat .v { font-size: 37.5px; } .stat .l { font-size: 15.625px; margin-top: 8px; } .stat .d { font-size: 14.375px; padding: 2px 7px; } .ticker li .t { display: none; } .long { display: none; } .ticker li { font-size: 16.25px; } }
 
   .chips { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 8px; margin: 18px auto 0; animation: rise .7s .42s var(--ease) both; }
-  .chips .try { font-size: 16.875px; color: var(--ink-3); margin-right: 4px; }
-  .chip { border: 0; box-shadow: var(--ring); background: transparent; color: var(--ink-2); border-radius: var(--r-pill); padding: 7px 14px; font-size: 16.875px; font-weight: 400; cursor: pointer; transition: transform .15s var(--ease), background .2s, color .2s, box-shadow .2s; }
-  .chip:hover { color: var(--ink); background: var(--surface); box-shadow: 0 0 0 1px color-mix(in srgb, var(--purple) 55%, transparent); }
+  .chips .try { font-size: 16.875px; color: rgb(248 247 255 / .68); margin-right: 4px; }
+  .chip { border: 0; box-shadow: 0 0 0 1px rgb(248 247 255 / .24); background: rgb(14 15 20 / .34); color: rgb(248 247 255 / .86); border-radius: var(--r-pill); padding: 7px 14px; font-size: 16.875px; font-weight: 400; cursor: pointer; transition: transform .15s var(--ease), background .2s, color .2s, box-shadow .2s; backdrop-filter: blur(8px); }
+  .chip:hover { color: #fff; background: rgb(14 15 20 / .58); box-shadow: 0 0 0 1px rgb(173 156 255 / .72); }
   .chip:active { transform: translateY(0) scale(.98); }
 
   /* ---------- Controls ---------- */

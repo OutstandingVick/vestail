@@ -174,7 +174,7 @@
     transition: box-shadow .25s var(--ease); animation: rise .7s .38s var(--ease) both; }
   .searchbar:hover { box-shadow: 0 0 0 1px color-mix(in srgb, var(--paper) 18%, transparent), 0 24px 48px -24px rgba(13,13,15,.22); }
   .searchbar:focus-within { box-shadow: 0 0 0 2px var(--purple), 0 0 0 7px color-mix(in srgb, var(--purple) 18%, transparent), 0 24px 48px -24px rgba(13,13,15,.18); }
-  .searchbar > svg { flex: none; width: 20px; height: 20px; stroke: var(--ink-3); fill: none; stroke-width: 2.2; stroke-linecap: round; pointer-events: none; }
+  .searchbar > svg { flex: none; width: 20px; height: 20px; color: var(--ink-3); fill: currentColor; pointer-events: none; }
   .searchbar input { flex: 1; min-width: 0; font-family: var(--font-inter); font-size: 21.25px; color: var(--ink); background: transparent; border: 0; padding: 12px 4px; outline: 0; }
   .searchbar input::-webkit-search-cancel-button, .searchbar input::-webkit-search-decoration { -webkit-appearance: none; display: none; }
   .searchbar input::placeholder { color: var(--ink-3); }
@@ -615,9 +615,10 @@
   #verdicts > .cols-3 { gap: 18px; }
   #verdicts .verdict { display: flex; min-height: 310px; flex-direction: column; padding: 32px; border-radius: 24px; background: var(--lavender-surface); box-shadow: none; }
   #verdicts .verdict:hover { transform: none; box-shadow: none; }
-  .verdict .sw-big { width: 32px; height: 32px; flex: none; border-radius: 50%; margin: 0 0 auto; }
-  .verdict.yes .sw-big { background: var(--yes); } .verdict.cond .sw-big { background: var(--cond); }
-  .verdict.no .sw-big { background: var(--no); background-image: repeating-linear-gradient(135deg, var(--no-hatch) 0 3px, transparent 3px 7px); }
+  .verdict .sw-big { width: 32px; height: 32px; flex: none; margin: 0 0 auto; }
+  .verdict .sw-big svg { display: block; width: 100%; height: 100%; fill: currentColor; }
+  .verdict.yes .sw-big { color: var(--yes); } .verdict.cond .sw-big { color: var(--cond); }
+  .verdict.no .sw-big { color: var(--no); }
   #verdicts .verdict h3 { margin: 64px 0 10px; font-family: var(--font-manrope); font-size: 23px; font-weight: 700; letter-spacing: -.025em; }
   #verdicts .verdict p { font-size: 16px; line-height: 1.5; }
   .verdict dl { margin: 18px 0 0; display: grid; gap: 12px; }
@@ -710,7 +711,8 @@
   .faq details { min-width: 0; color: var(--ink); }
   .faq summary { min-height: 142px; list-style: none; display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto 1fr; align-content: start; column-gap: 9px; cursor: pointer; font-family: var(--font-manrope); font-size: 20px; line-height: 1.2; font-weight: 700; letter-spacing: -.025em; color: var(--ink); }
   .faq summary::-webkit-details-marker { display: none; }
-  .faq-icon { grid-row: 1; width: 22px; text-align: center; color: var(--orange); font-size: 18px; line-height: 1.2; }
+  .faq-icon { grid-row: 1; width: 22px; color: var(--orange); line-height: 1; }
+  .faq-icon svg { display: block; width: 20px; height: 20px; fill: currentColor; }
   .faq summary small { grid-column: 1 / -1; margin-top: 9px; color: var(--ink-2); font-family: var(--font-inter); font-size: 14px; font-weight: 400; line-height: 1.45; letter-spacing: 0; }
   .faq summary::after { content: "View answer"; grid-column: 1 / -1; align-self: end; justify-self: start; display: inline-flex; align-items: center; min-height: 40px; margin-top: 20px; padding: 0 18px; border-radius: var(--r-pill); background: var(--orange); color: #0d0d0f; font-size: 12px; font-weight: 700; letter-spacing: .02em; text-transform: uppercase; transition: transform .15s var(--ease), background .15s; }
   .faq summary:hover::after { background: #ff7130; color: #0d0d0f; }
@@ -925,7 +927,7 @@
     <h1 id="hero-title"><span class="ln light"><span class="w">What</span> <span class="w">can</span> <span class="w">you</span></span> <span class="ln"><span class="w">actually</span> <span class="w">own</span> <span class="w">here?</span></span></h1>
     <p>Type a thing you'd like to buy. See where it's allowed, where it needs a licence, where it's off the table, and where to go to buy it.</p>
     <div class="searchbar">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"/></svg>
       <input id="q" type="search" placeholder="Google, bitcoin, a house, farmland, a Gulfstream…" aria-label="Search assets" autocomplete="off">
       <button id="clear" type="button">Clear</button>
       <button class="go" type="button" id="seeWhere">See where</button>
@@ -1048,19 +1050,19 @@
     </div>
     <div class="cols-3">
       <div class="panel verdict yes">
-        <div class="sw-big" aria-hidden="true"></div>
+        <div class="sw-big" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" focusable="false"><path d="M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"/></svg></div>
         <h3>Can own</h3>
         <p>The rules permit someone like you to hold it, with no further gate.</p>
         <dl><dt>What Vestail does</dt><dd>Shows you where to buy it.</dd></dl>
       </div>
       <div class="panel verdict cond">
-        <div class="sw-big" aria-hidden="true"></div>
+        <div class="sw-big" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" focusable="false"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm-8-80V80a8,8,0,0,1,16,0v56a8,8,0,0,1-16,0Zm20,36a12,12,0,1,1-12-12A12,12,0,0,1,140,172Z"/></svg></div>
         <h3>Conditional</h3>
         <p>Allowed, but behind a licence, cap, approval or KYC check, often one you only meet at exit.</p>
         <dl><dt>What Vestail does</dt><dd>Names the condition, and asks you to acknowledge it before you buy.</dd></dl>
       </div>
       <div class="panel verdict no">
-        <div class="sw-big" aria-hidden="true"></div>
+        <div class="sw-big" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" focusable="false"><path d="M165.66,101.66,139.31,128l26.35,26.34a8,8,0,0,1-11.32,11.32L128,139.31l-26.34,26.35a8,8,0,0,1-11.32-11.32L116.69,128,90.34,101.66a8,8,0,0,1,11.32-11.32L128,116.69l26.34-26.35a8,8,0,0,1,11.32,11.32ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"/></svg></div>
         <h3>Cannot own</h3>
         <p>The rules exclude someone like you from holding it.</p>
         <dl><dt>What Vestail does</dt><dd>Never routes it. Not even a quote.</dd></dl>
@@ -1129,12 +1131,12 @@
       <button class="faq-options" type="button" aria-expanded="false">Open all answers ▾</button>
     </div>
     <div class="faq">
-      <details><summary><span class="faq-icon" aria-hidden="true">§</span><span>Legal guidance</span><small>Understand what Vestail’s answers do—and do not—replace.</small></summary><p>No. Vestail shows what the rules say for the country and buyer type you declare, with sources, so you can decide. For a big or unusual purchase, check with a professional in that country.</p></details>
-      <details><summary><span class="faq-icon" aria-hidden="true">⌕</span><span>Rule sources</span><small>See where verdicts come from and how freshness is shown.</small></summary><p>From statutes, regulator guidance and issuer terms. Each rule lists its sources and the date it was last verified. During this preview the rules are illustrative and not yet sourced; don't rely on them.</p></details>
-      <details><summary><span class="faq-icon" aria-hidden="true">◇</span><span>Custody and money</span><small>Learn when assets stay in your wallet or with a licensed partner.</small></summary><p>Not for onchain purchases: you buy from your own wallet and the asset settles there. Offchain purchases will go through licensed partners, who hold your assets under their own regulation.</p></details>
-      <details><summary><span class="faq-icon" aria-hidden="true">⊘</span><span>Restricted assets</span><small>Why Vestail stops routes for assets you cannot own.</small></summary><p>Because the rules exclude someone in your position from holding it, and selling it to you anyway is exactly what Vestail exists to prevent. Change your country or buyer type only if it's genuinely true for you.</p></details>
-      <details><summary><span class="faq-icon" aria-hidden="true">¤</span><span>Pricing and incentives</span><small>How Vestail earns money without changing a verdict.</small></summary><p>A small fee on purchases made in Vestail, and referral fees from some venues. Neither ever changes a verdict or which venue we show first.</p></details>
-      <details><summary><span class="faq-icon" aria-hidden="true">◎</span><span>Coverage</span><small>Review supported countries, buyer types and asset classes.</small></summary><p>Twelve countries and twenty asset classes today, for citizens and foreigners, with residents planned. More countries come as their rules are sourced.</p></details>
+      <details><summary><span class="faq-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" focusable="false"><path d="M213.66,82.34l-56-56A8,8,0,0,0,152,24H56A16,16,0,0,0,40,40V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V88A8,8,0,0,0,213.66,82.34ZM160,51.31,188.69,80H160ZM200,216H56V40h88V88a8,8,0,0,0,8,8h48V216Zm-32-80a8,8,0,0,1-8,8H96a8,8,0,0,1,0-16h64A8,8,0,0,1,168,136Zm0,32a8,8,0,0,1-8,8H96a8,8,0,0,1,0-16h64A8,8,0,0,1,168,168Z"/></svg></span><span>Legal guidance</span><small>Understand what Vestail’s answers do—and do not—replace.</small></summary><p>No. Vestail shows what the rules say for the country and buyer type you declare, with sources, so you can decide. For a big or unusual purchase, check with a professional in that country.</p></details>
+      <details><summary><span class="faq-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" focusable="false"><path d="M231.65,194.55,198.46,36.75a16,16,0,0,0-19-12.39L132.65,34.42a16.08,16.08,0,0,0-12.3,19l33.19,157.8A16,16,0,0,0,169.16,224a16.25,16.25,0,0,0,3.38-.36l46.81-10.06A16.09,16.09,0,0,0,231.65,194.55ZM136,50.15c0-.06,0-.09,0-.09l46.8-10,3.33,15.87L139.33,66Zm6.62,31.47,46.82-10.05,3.34,15.9L146,97.53Zm6.64,31.57,46.82-10.06,13.3,63.24-46.82,10.06ZM216,197.94l-46.8,10-3.33-15.87L212.67,182,216,197.85C216,197.91,216,197.94,216,197.94ZM104,32H56A16,16,0,0,0,40,48V208a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V48A16,16,0,0,0,104,32ZM56,48h48V64H56Zm0,32h48v96H56Zm48,128H56V192h48v16Z"/></svg></span><span>Rule sources</span><small>See where verdicts come from and how freshness is shown.</small></summary><p>From statutes, regulator guidance and issuer terms. Each rule lists its sources and the date it was last verified. During this preview the rules are illustrative and not yet sourced; don't rely on them.</p></details>
+      <details><summary><span class="faq-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" focusable="false"><path d="M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"/></svg></span><span>Custody and money</span><small>Learn when assets stay in your wallet or with a licensed partner.</small></summary><p>Not for onchain purchases: you buy from your own wallet and the asset settles there. Offchain purchases will go through licensed partners, who hold your assets under their own regulation.</p></details>
+      <details><summary><span class="faq-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" focusable="false"><path d="M165.66,101.66,139.31,128l26.35,26.34a8,8,0,0,1-11.32,11.32L128,139.31l-26.34,26.35a8,8,0,0,1-11.32-11.32L116.69,128,90.34,101.66a8,8,0,0,1,11.32-11.32L128,116.69l26.34-26.35a8,8,0,0,1,11.32,11.32ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"/></svg></span><span>Restricted assets</span><small>Why Vestail stops routes for assets you cannot own.</small></summary><p>Because the rules exclude someone in your position from holding it, and selling it to you anyway is exactly what Vestail exists to prevent. Change your country or buyer type only if it's genuinely true for you.</p></details>
+      <details><summary><span class="faq-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" focusable="false"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm-8-80V80a8,8,0,0,1,16,0v56a8,8,0,0,1-16,0Zm20,36a12,12,0,1,1-12-12A12,12,0,0,1,140,172Z"/></svg></span><span>Pricing and incentives</span><small>How Vestail earns money without changing a verdict.</small></summary><p>A small fee on purchases made in Vestail, and referral fees from some venues. Neither ever changes a verdict or which venue we show first.</p></details>
+      <details><summary><span class="faq-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" focusable="false"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm88,104a87.62,87.62,0,0,1-6.4,32.94l-44.7-27.49a15.92,15.92,0,0,0-6.24-2.23l-22.82-3.08a16.11,16.11,0,0,0-16,7.86h-8.72l-3.8-7.86a15.91,15.91,0,0,0-11-8.67l-8-1.73L96.14,104h16.71a16.06,16.06,0,0,0,7.73-2l12.25-6.76a16.62,16.62,0,0,0,3-2.14l26.91-24.34A15.93,15.93,0,0,0,166,49.1l-.36-.65A88.11,88.11,0,0,1,216,128ZM143.31,41.34,152,56.9,125.09,81.24,112.85,88H96.14a16,16,0,0,0-13.88,8l-8.73,15.23L63.38,84.19,74.32,58.32a87.87,87.87,0,0,1,69-17ZM40,128a87.53,87.53,0,0,1,8.54-37.8l11.34,30.27a16,16,0,0,0,11.62,10l21.43,4.61L96.74,143a16.09,16.09,0,0,0,14.4,9h1.48l-7.23,16.23a16,16,0,0,0,2.86,17.37l.14.14L128,205.94l-1.94,10A88.11,88.11,0,0,1,40,128Zm102.58,86.78,1.13-5.81a16.09,16.09,0,0,0-4-13.9,1.85,1.85,0,0,1-.14-.14L120,174.74,133.7,144l22.82,3.08,45.72,28.12A88.18,88.18,0,0,1,142.58,214.78Z"/></svg></span><span>Coverage</span><small>Review supported countries, buyer types and asset classes.</small></summary><p>Twelve countries and twenty asset classes today, for citizens and foreigners, with residents planned. More countries come as their rules are sourced.</p></details>
     </div>
   </section>
 

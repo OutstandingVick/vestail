@@ -668,7 +668,8 @@
   @media (max-width: 480px) {
     .buy-copy, .buy-visual { border-radius: 24px; }
     .buy-copy { padding: 30px 24px; }
-    #buy .buy-copy h2 { font-size: 44px; }
+    #buy .buy-copy h2 { width: 100%; max-width: none; font-size: 44px; text-align: left; }
+    #buy .buy-copy h2 span { display: block; }
     #buy .buy-copy .lead { font-size: 16px; }
     .buy-fact { grid-template-columns: 1fr; gap: 6px; }
     .buy-fact span { text-align: start; }
@@ -1072,7 +1073,7 @@
   <section class="sec" id="buy" aria-labelledby="h-buy">
     <div class="buy-showcase">
       <div class="buy-copy">
-        <h2 id="h-buy">Find it, check it, buy it, without leaving Vestail.</h2>
+        <h2 id="h-buy"><span>Find it,</span> <span>check it,</span> <span>buy it,</span> <span>without leaving</span> <span>Vestail.</span></h2>
         <p class="lead">Vestail is becoming the place you buy what you're allowed to own: from onchain assets in your own wallet to carefully selected offchain partners.</p>
         <div class="buy-facts">
           <div class="buy-fact"><strong>Onchain, from your wallet</strong><span>Tokenized stocks live; crypto, gold and treasuries next</span></div>

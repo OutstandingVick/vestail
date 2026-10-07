@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 3000",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"
@@ -11,9 +11,16 @@
   "dependencies": {
     "@privy-io/node": "^0.35.0",
     "@privy-io/react-auth": "^3.48.0",
+    "@solana-program/memo": "^0.15.0",
+    "@solana-program/system": "^0.10.0",
+    "@solana-program/token": "^0.9.0",
+    "@solana/kit": "^8.4.0",
+    "@solana/web3.js": "^1.99.0",
     "next": "15.5.25",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "server-only": "^0.0.1",
+    "zod": "^3.25.76"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

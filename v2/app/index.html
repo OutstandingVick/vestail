@@ -653,16 +653,16 @@
   /* 06 · FAQ: a clean help directory that keeps every answer native and expandable. */
   #faq { margin-top: 104px; padding: 0; overflow: hidden; border-radius: 34px; background: var(--surface); box-shadow: var(--card-raised); }
   #faq .sec-head { margin: 0; padding: clamp(48px, 6vw, 76px) clamp(24px, 5vw, 64px) 36px; text-align: center; background: #EBEBFF; }
-  #faq h2 { max-width: none; color: var(--ink); font-weight: 750; font-size: clamp(42px, 5vw, 64px); line-height: 1; letter-spacing: -.04em; }
+  #faq h2 { max-width: none; color: var(--ink); font-family: var(--font-manrope); font-weight: 800; font-size: clamp(42px, 5vw, 64px); line-height: 1; letter-spacing: -.04em; }
   #faq .lead { margin: 18px auto 0; max-width: 62ch; }
   .faq-options { display: inline-flex; align-items: center; min-height: 40px; margin-top: 26px; padding: 0 16px; border: 0; border-radius: var(--r-pill); background: rgb(13 13 15 / .07); color: var(--ink); font: inherit; font-size: 13px; font-weight: 650; cursor: pointer; }
   .faq-options:focus-visible { outline: 2px solid var(--purple); outline-offset: 3px; }
   .faq { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(34px, 5vw, 72px) clamp(28px, 5vw, 64px); padding: clamp(52px, 7vw, 86px) clamp(28px, 6vw, 84px); }
   .faq details { min-width: 0; color: var(--ink); }
-  .faq summary { min-height: 142px; list-style: none; display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto 1fr; align-content: start; column-gap: 9px; cursor: pointer; font-size: 20px; line-height: 1.2; font-weight: 650; letter-spacing: -.02em; color: var(--ink); }
+  .faq summary { min-height: 142px; list-style: none; display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto 1fr; align-content: start; column-gap: 9px; cursor: pointer; font-family: var(--font-manrope); font-size: 20px; line-height: 1.2; font-weight: 700; letter-spacing: -.025em; color: var(--ink); }
   .faq summary::-webkit-details-marker { display: none; }
   .faq-icon { grid-row: 1; width: 22px; text-align: center; color: var(--orange); font-size: 18px; line-height: 1.2; }
-  .faq summary small { grid-column: 1 / -1; margin-top: 9px; color: var(--ink-2); font-size: 14px; font-weight: 400; line-height: 1.45; letter-spacing: 0; }
+  .faq summary small { grid-column: 1 / -1; margin-top: 9px; color: var(--ink-2); font-family: var(--font-inter); font-size: 14px; font-weight: 400; line-height: 1.45; letter-spacing: 0; }
   .faq summary::after { content: "View answer"; grid-column: 1 / -1; align-self: end; justify-self: start; display: inline-flex; align-items: center; min-height: 40px; margin-top: 20px; padding: 0 18px; border-radius: var(--r-pill); background: var(--ink); color: #fff; font-size: 12px; font-weight: 700; letter-spacing: .02em; text-transform: uppercase; transition: transform .15s var(--ease), background .15s; }
   .faq summary:hover::after { background: var(--orange); color: var(--ink); }
   .faq summary:active::after { transform: scale(.96); }

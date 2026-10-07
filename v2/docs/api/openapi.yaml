@@ -266,4 +266,5 @@ components:
         venue: { type: string }
         query: { type: string, description: The text the user typed, for resolver analytics }
         session: { type: string }
+        mint: { type: string, description: "Set when buying a tokenised version onchain (venue Jupiter). The token's own verdict then decides — not assessed and cannot_own are refused, conditional needs acknowledged — and asset must be the class that governs the token in that country." }
         acknowledged: { type: boolean, description: "Required as true when the rule is conditional: the buyer has acknowledged the condition (licence, cap, approval or KYC) before buying. Without it a conditional click is refused with acknowledgement_required." }

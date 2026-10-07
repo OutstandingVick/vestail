@@ -3,7 +3,7 @@
 import { useLogin, usePrivy } from "@privy-io/react-auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 import { Logo } from "@/components/Logo";
 
@@ -16,10 +16,17 @@ export default function Landing() {
   const router = useRouter();
   const { ready, authenticated } = usePrivy();
   const { login } = useLogin({ onComplete: () => router.push("/app") });
+  const prompted = useRef(false);
 
   useEffect(() => {
-    if (ready && authenticated) router.replace("/app");
-  }, [ready, authenticated, router]);
+    if (!ready) return;
+    if (authenticated) router.replace("/app");
+    // The marketing site's Try App links here with ?signin, so the popup opens straight away.
+    else if (!prompted.current && new URLSearchParams(window.location.search).has("signin")) {
+      prompted.current = true;
+      login();
+    }
+  }, [ready, authenticated, router, login]);
 
   return (
     <div className="min-h-screen">

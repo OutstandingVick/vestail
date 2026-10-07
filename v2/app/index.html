@@ -175,11 +175,11 @@
   .controls { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin: 34px 0 12px; }
   .controls .left { display: flex; flex-wrap: wrap; gap: 10px; }
   .seg { position: relative; display: inline-grid; grid-auto-flow: column; grid-auto-columns: 1fr; background: var(--surface); border: 0; border-radius: var(--r-pill); padding: 4px; box-shadow: var(--shadow-1); }
-  .seg button { position: relative; z-index: 1; border: 0; background: transparent; color: var(--ink-2); font-weight: 600; font-size: 14px; padding: 9px 18px; border-radius: var(--r-pill); cursor: pointer; white-space: nowrap; transition: color .25s; }
+  .seg button { position: relative; z-index: 1; border: 0; background: transparent; color: var(--ink-2); font-family: var(--font-inter); font-weight: 600; font-size: 14px; padding: 9px 18px; border-radius: var(--r-pill); cursor: pointer; white-space: nowrap; transition: color .25s; }
   .seg button[aria-selected="true"] { color: var(--ink); }
   .seg::before { content: ""; position: absolute; z-index: 0; top: 4px; bottom: 4px; left: 4px; width: calc(50% - 4px); border-radius: var(--r-pill); background: var(--surface-3); transition: transform .3s var(--ease); }
   .seg[data-pos="1"]::before { transform: translateX(100%); }
-  .legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 13px; color: var(--ink-2); }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-family: var(--font-inter); font-size: 13px; color: var(--ink-2); }
   .legend span { display: inline-flex; align-items: center; gap: 7px; }
   .sw { width: 12px; height: 12px; border-radius: var(--r-tile); display: inline-block; }
   .sw.yes { background: var(--yes); } .sw.cond { background: var(--cond); }

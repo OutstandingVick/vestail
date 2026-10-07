@@ -11,7 +11,7 @@ Next 15.5, React 19.2, Tailwind 4, TypeScript. A client of the v2 API (`services
 cd v2 && npm ci
 VESTAIL_API_KEYS=local-dev-key npm start -w @vestail/api   # API on :8787
 cp web/.env.example web/.env.local                         # then fill in the Privy keys
-npm run dev -w @vestail/web -- -p 3000                     # app on :3000
+npm run dev -w @vestail/web                                # app on :8081 (the site is :8080)
 ```
 
 The port must be one of the allowed origins in the Privy dashboard.

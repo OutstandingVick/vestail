@@ -1,26 +1,32 @@
 import Link from "next/link";
 
-import { AssetBoard } from "@/components/AssetBoard";
+import { CountryBoard } from "@/components/CountryBoard";
 import { GiantSearch } from "@/components/GiantSearch";
 import { ProfileBar } from "@/components/ProfileBar";
 import { Trail } from "@/components/Trail";
 import { VerdictBadge } from "@/components/VerdictBadge";
 import { api } from "@/lib/server/api";
 import { readProfile } from "@/lib/server/profile";
+import { BUYER_TYPES, type BuyerType } from "@/lib/types";
 import { ONCHAIN_CLASSES, symbolsFor } from "@/lib/tokens";
 
-export default async function SearchPage({ searchParams }: { searchParams: Promise<{ q?: string }> }) {
-  const q = ((await searchParams).q ?? "").trim();
-  const [profile, countries, assets, categories, tokenSymbols] = await Promise.all([
-    readProfile(), api.countries(), api.assets(), api.categories(), api.tokenSymbols(),
+export default async function SearchPage({ searchParams }: { searchParams: Promise<{ q?: string; who?: string; sort?: string }> }) {
+  const sp = await searchParams;
+  const q = (sp.q ?? "").trim();
+  const [profile, countries, assets, tokenSymbols] = await Promise.all([
+    readProfile(), api.countries(), api.assets(), api.tokenSymbols(),
   ]);
   const country = profile && countries.find(c => c.code === profile.country);
   const nameOf = new Map(assets.map(a => [a.id, a.name]));
+  const boardWho: BuyerType = BUYER_TYPES.includes(sp.who as BuyerType) ? (sp.who as BuyerType) : profile?.who ?? "citizen";
+  const boardSort = sp.sort === "asset" ? "asset" : "status";
 
-  const [board, hit] = country
+  // Nothing but the search until the buyer searches; then the answer for their
+  // own country, and the board of every country for the same query.
+  const [hit, board] = country && q
     ? await Promise.all([
-        api.matrix({ who: profile.who, countries: profile.country, sort: "asset" }),
-        q ? api.matrix({ q, who: profile.who, countries: profile.country }) : Promise.resolve(null),
+        api.matrix({ q, who: profile.who, countries: profile.country }),
+        api.matrix({ q, who: boardWho, sort: boardSort }),
       ])
     : [null, null];
   const matches = hit ? symbolsFor(q, hit.resolution, tokenSymbols) : [];
@@ -111,8 +117,8 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
         </section>
       )}
 
-      {board && (
-        <AssetBoard cells={board.rows[0].cells} assets={assets} categories={categories} onchain={ONCHAIN_CLASSES} />
+      {country && board && board.resolution.stage !== "none" && (
+        <CountryBoard q={q} rows={board.rows} nameOf={Object.fromEntries(nameOf)} who={boardWho} sort={boardSort} mine={country.code} />
       )}
     </>
   );

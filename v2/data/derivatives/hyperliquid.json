@@ -1,0 +1,17 @@
+{
+  "$comment": "Commodity perpetuals on Hyperliquid, deployed under HIP-3 by trade.xyz (perp dex 'xyz'). Market names were read from Hyperliquid's info API (metaAndAssetCtxs, dex xyz) on 2026-10-08. A perpetual gives price exposure only: nothing physical is owned or delivered.",
+  "venue": {
+    "name": "Hyperliquid",
+    "chain": "hyperliquid",
+    "deployer": "trade.xyz",
+    "dex": "xyz",
+    "collateral": "USDC",
+    "info_api": "https://api.hyperliquid.xyz/info",
+    "trade_url": "https://app.trade.xyz/trade/"
+  },
+  "markets": [
+    { "id": "xyz:GOLD", "coin": "GOLD", "name": "Gold", "commodity": "gold", "related_asset": "gold_bullion", "aliases": ["gold", "xau", "gold bullion"] },
+    { "id": "xyz:CL", "coin": "CL", "name": "WTI crude oil", "commodity": "crude_oil", "related_asset": null, "aliases": ["oil", "crude", "crude oil", "wti", "petroleum"] },
+    { "id": "xyz:COPPER", "coin": "COPPER", "name": "Copper", "commodity": "copper", "related_asset": null, "aliases": ["copper", "hg"] }
+  ]
+}

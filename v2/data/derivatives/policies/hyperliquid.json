@@ -1,0 +1,39 @@
+{
+  "provider": "hyperliquid",
+  "version": "2026-10-08.1",
+  "reviewedAt": "2026-10-08",
+  "rules": [
+    {
+      "id": "us-restricted-persons",
+      "kind": "gate",
+      "status": "restricted",
+      "regions": ["US"],
+      "reason": "Hyperliquid's terms of use treat people located in or resident in the United States as Restricted Persons and bar them from the interface (also Ontario and sanctioned territories). Read from secondary reporting of section 1.5; the terms themselves could not be fetched.",
+      "short": "Hyperliquid bars US persons.",
+      "source_url": "https://www.datawallet.com/crypto/hyperliquid-supported-and-restricted-countries",
+      "source_quality": "secondary"
+    },
+    {
+      "id": "exposure-not-ownership",
+      "kind": "gate",
+      "status": "conditional",
+      "regions": ["NG", "DE"],
+      "reason": "A perpetual future pays out on the price only: you own no commodity and nothing is delivered. Positions are margined in USDC and are liquidated when account equity falls below the maintenance margin. The market is deployed and priced by trade.xyz, a third party, not Hyperliquid.",
+      "short": "You can trade the price, but you own nothing and can be liquidated.",
+      "acknowledgement": {
+        "limit": "owning or taking delivery of the commodity",
+        "requires": "accepting that this is price exposure only, with liquidation risk"
+      },
+      "source_url": "https://hyperliquid.gitbook.io/hyperliquid-docs/trading/liquidations",
+      "source_quality": "primary"
+    },
+    {
+      "id": "third-party-deployer",
+      "kind": "note",
+      "regions": ["NG", "US", "DE"],
+      "reason": "Under HIP-3 the deployer, here trade.xyz, defines the market and sets its oracle price, leverage limits and settlement.",
+      "source_url": "https://hyperliquid.gitbook.io/hyperliquid-docs/hyperliquid-improvement-proposals-hips/hip-3-builder-deployed-perpetuals",
+      "source_quality": "primary"
+    }
+  ]
+}

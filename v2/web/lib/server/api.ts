@@ -6,7 +6,7 @@ import type { Asset, BuyerType, Order, Category, Country, Matrix, Resolution, Ru
  * The v2 API, read from the server. Rules are fetched uncached: a compliance
  * answer should change the moment its rule does, not an hour later. Reference
  * lists (countries, assets, categories, token symbols) change only with a
- * deploy and are cached for a day.
+ * deploy and are cached for five minutes.
  */
 
 const BASE = (process.env.VESTAIL_API_URL || "http://localhost:8787/v1").replace(/\/$/, "");
@@ -16,7 +16,9 @@ export class ApiError extends Error {
 }
 
 async function get<T>(path: string, reference = false): Promise<T> {
-  const res = await fetch(BASE + path, reference ? { next: { revalidate: 86400 } } : { cache: "no-store" });
+  // Reference lists are cached briefly, not for a day: a cached copy from an
+  // older API (say, before the token list carried mints) must not outlive it.
+  const res = await fetch(BASE + path, reference ? { next: { revalidate: 300 } } : { cache: "no-store" });
   const body = await res.json().catch(() => null);
   if (!res.ok) throw new ApiError(res.status, body?.error?.code ?? "unavailable", body?.error?.message ?? `API returned ${res.status}`);
   return body as T;

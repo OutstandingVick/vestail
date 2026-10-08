@@ -39,14 +39,32 @@ export function Dashboard({ assets, countryName, who }: { assets: Asset[]; count
   const nameOf = new Map(assets.map(a => [a.id, a.name]));
 
   useEffect(() => {
-    authedFetch("/api/portfolio").then(async res => {
-      if (!res.ok) return setError(await errorOf(res, "Couldn't load your portfolio."));
-      setData(await res.json());
-    });
+    authedFetch("/api/portfolio")
+      .then(async res => (res.ok ? setData(await res.json()) : setError(await errorOf(res, "Couldn't load your portfolio."))))
+      .catch(() => setError("Couldn't reach Vestail. Check your connection and reload."));
   }, []);
 
-  if (error) return <p role="alert" className="rounded-panel bg-surface p-6 text-cannot">{error}</p>;
-  if (!data) return <p role="status" className="rounded-panel bg-surface p-6 text-muted">Reading your wallets…</p>;
+  // The portfolio always renders: while loading it shows placeholders, and if
+  // loading fails it shows the same layout, empty, with the reason on top.
+  if (!data) {
+    return (
+      <>
+        <header className="pt-4">
+          <h1 className="text-[32px] font-extrabold tracking-[-0.02em]">Portfolio</h1>
+          <p className="text-muted">What you hold, and what it&apos;s allowed to be in {countryName}, as a {who}.</p>
+        </header>
+        {error && <p role="alert" className="rounded-field bg-cond-wash px-4 py-3 text-sm text-cond-ink">{error}</p>}
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-3" aria-busy={!error}>
+          {["Total value", "Cash", "Your holdings, judged"].map(t => (
+            <Card key={t} title={t}>
+              <div className={`h-10 w-2/3 rounded-xl bg-wash ${error ? "" : "animate-pulse"}`} />
+            </Card>
+          ))}
+        </div>
+        {!error && <span role="status" className="sr-only">Reading your wallets…</span>}
+      </>
+    );
+  }
 
   const byStatus = (s: Status | null) => data.holdings.filter(h => h.status === s).length;
   const flagged = data.holdings.filter(h => h.status === "cannot_own");

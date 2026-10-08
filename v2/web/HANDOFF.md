@@ -49,7 +49,7 @@ Checks: `npm test` from `v2/` (78 API tests + core token tests), and in `web/`: 
 | `/` | Front door; Try App opens Privy popup. `/?signin` opens it automatically (the marketing site links here). | `app/page.tsx` |
 | `/app/start` | **First visit only**: giant search + choose country. Redirects to `/app` once a profile exists. | `app/app/(onboarding)/start` |
 | `/app` | Portfolio dashboard (balance card, cash, tokenised stocks, verdict counts, value chart, buys, holdings, watchlist) | `components/Dashboard.tsx`, `app/api/portfolio` |
-| `/app/search?q=` | Giant search, resolver trail, all 20 classes with verdicts | `app/app/(dash)/search` |
+| `/app/search?q=&who=&sort=` | Giant search; after a search: resolver trail, your result, then the country board (a card per country, a verdict circle per asset, Citizens/Foreigners, By status/By asset). Nothing below the search until the user searches. | `app/app/(dash)/search`, `components/CountryBoard.tsx`, `CountryCard.tsx`, `VerdictDot.tsx` |
 | `/app/asset/[id]?symbol=` | Class verdict + provenance, onchain versions (tokens), action panel, Watch button | `app/app/(dash)/asset/[id]` |
 | `/app/compare?asset=&who=` | One class across 12 countries | `app/app/(dash)/compare` |
 | `/app/settings` | Profile (name, avatar colour), wallet + deposit (address, QR, export key), country, theme | `components/AccountSettings.tsx`, `ProfileSettings.tsx` |

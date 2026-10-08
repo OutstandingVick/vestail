@@ -1,6 +1,9 @@
 "use client";
 
 import { usePrivy } from "@privy-io/react-auth";
+
+import { Avatar } from "@/components/Avatar";
+import { accountOf } from "@/lib/account";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 
@@ -31,7 +34,7 @@ export function Sidebar({ profile, country }: { profile: Profile; country: Count
   const path = usePathname();
   const router = useRouter();
   const { user, logout } = usePrivy();
-  const who = user?.email?.address ?? (user?.wallet?.address ? `${user.wallet.address.slice(0, 4)}…${user.wallet.address.slice(-4)}` : "Signed in");
+  const account = accountOf(user);
   const active = (href: string) => (href === "/app" ? path === "/app" : path.startsWith(href));
 
   async function signOut() {
@@ -69,8 +72,11 @@ export function Sidebar({ profile, country }: { profile: Profile; country: Count
           className={`flex min-h-11 items-center gap-3 rounded-xl px-3 text-[15px] ${path === "/app/settings" ? "bg-tint font-semibold" : "text-muted hover:bg-wash hover:text-ink"}`}>
           <Icon d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-2.9 1.2V21a2 2 0 1 1-4 0v-.1A1.7 1.7 0 0 0 7 19.4l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.7 1.7 0 0 0 3 13.7H3a2 2 0 1 1 0-4h.1A1.7 1.7 0 0 0 4.6 7l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.7 1.7 0 0 0 10.3 3V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 2.9 1.2l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z" />Settings
         </Link>
-        <div className="flex items-center justify-between gap-2 rounded-xl bg-wash py-1.5 pr-1.5 pl-3 text-sm">
-          <span className="truncate">{who}</span>
+        <div className="flex items-center justify-between gap-2 rounded-xl bg-wash py-1.5 pr-1.5 pl-1.5 text-sm">
+          <Link href="/app/settings" className="flex min-w-0 items-center gap-2">
+            <Avatar label={account.label} color={account.avatar} size={30} />
+            <span className="truncate font-semibold">{account.label}</span>
+          </Link>
           <button type="button" onClick={signOut} className="min-h-8 shrink-0 rounded-full bg-surface px-3 text-[13px]">Sign out</button>
         </div>
       </div>

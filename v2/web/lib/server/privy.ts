@@ -30,7 +30,18 @@ export async function userFrom(request: Request): Promise<string | null> {
   }
 }
 
+/**
+ * Merge fields into the Privy user's custom metadata. Privy replaces the whole
+ * object on every save, so read it first: changing country must not erase the
+ * user's name, and the reverse.
+ */
+export async function updateMetadata(userId: string, patch: Record<string, string>) {
+  const user = await privy().users()._get(userId);
+  const current = (user.custom_metadata ?? {}) as Record<string, string | number | boolean>;
+  await privy().users().setCustomMetadata(userId, { custom_metadata: { ...current, ...patch } });
+}
+
 /** Store the self-declared profile on the Privy user, so it follows them across devices. */
 export async function saveProfileFor(userId: string, profile: { country: string; who: string }) {
-  await privy().users().setCustomMetadata(userId, { custom_metadata: { country: profile.country, who: profile.who } });
+  await updateMetadata(userId, { country: profile.country, who: profile.who });
 }

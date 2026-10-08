@@ -1,3 +1,4 @@
+import { AccountSettings } from "@/components/AccountSettings";
 import { ProfileBar } from "@/components/ProfileBar";
 import { ProfileSettings } from "@/components/ProfileSettings";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -9,6 +10,7 @@ export default async function SettingsPage() {
   return (
     <div className="flex flex-col gap-6 pt-6">
       <h1 className="text-[32px] font-extrabold tracking-[-0.02em]">Settings</h1>
+      <AccountSettings />
       <ProfileSettings />
       <section className="flex flex-col items-start gap-3 rounded-panel bg-surface p-6">
         <h2 className="text-lg font-bold">Where you&apos;re buying from</h2>

@@ -69,9 +69,9 @@ export function ProfileSettings() {
   );
 
   return (
-    <section aria-labelledby="profile-title" className="flex flex-col gap-4 rounded-panel bg-surface p-6">
+    <section id="wallet" aria-labelledby="profile-title" className="scroll-mt-4 flex flex-col gap-4 rounded-panel bg-surface p-6">
       <div>
-        <h2 id="profile-title" className="text-lg font-bold">Profile and wallet</h2>
+        <h2 id="profile-title" className="text-lg font-bold">Wallet and deposits</h2>
         <p className="text-sm text-muted">
           Signed in as <strong className="text-ink">{user?.email?.address ?? "your wallet"}</strong>.
           {" "}Deposit to the address below to fund buys; the funds stay in your own wallet.

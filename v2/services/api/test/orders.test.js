@@ -124,3 +124,16 @@ test("GET /orders returns one buyer's presses, newest first, for the same key on
   assert.ok(body[0].mint && body[0].acknowledged);
   assert.equal((await app.request("/v1/orders?session=hist")).status, 401);
 });
+
+test("an EVM token buy routes through KyberSwap and keeps the gates", async () => {
+  const board = await (await app.request("/v1/tokens/NVDA?country=NG")).json();
+  const cb = board.tokens.find(t => t.provider === "coinbase");
+  const body = { country: "NG", asset: "foreign_equities", who: "citizen", venue: "KyberSwap", mint: cb.address };
+  assert.equal((await click(body)).body.error.code, "acknowledgement_required");
+  assert.equal((await click({ ...body, venue: "Jupiter", acknowledged: true })).body.error.code, "validation");
+  const ok = await click({ ...body, acknowledged: true });
+  assert.equal(ok.res.status, 201);
+  assert.match(ok.body.redirect, /^https:\/\/kyberswap\.com\/swap\/base\?outputCurrency=0x.*&ref=vestail$/);
+  const us = await click({ ...body, country: "US", asset: "domestic_equities", acknowledged: true });
+  assert.equal(us.body.error.code, "validation");
+});

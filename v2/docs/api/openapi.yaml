@@ -224,8 +224,10 @@ components:
         venues: { type: array, items: { $ref: "#/components/schemas/Venue" } }
         sources: { type: array, items: { $ref: "#/components/schemas/Source" }, description: Empty until the rule has been sourced. }
         verified_at: { type: [string, "null"], format: date, description: When the rule was last checked against its sources; null if never. }
-    TokenSymbol: { type: object, properties: { symbol: { type: string }, name: { type: string }, entity: { type: [string, "null"], description: Matching name in /entities, when there is one }, home: { type: string }, providers: { type: array, items: { type: string } }, mints: { type: array, items: { type: string } } } }
-    Order: { type: object, properties: { id: { type: string }, at: { type: string, format: date-time }, country: { type: string }, asset: { type: string }, who: { $ref: "#/components/schemas/BuyerType" }, venue: { type: string }, mint: { type: string }, acknowledged: { type: boolean } } }
+    TokenSymbol: { type: object, properties: { symbol: { type: string }, name: { type: string }, entity: { type: [string, "null"], description: Matching name in /entities, when there is one }, home: { type: string }, providers: { type: array, items: { type: string } }, chains: { type: array, items: { $ref: "#/components/schemas/Chain" } }, mints: { type: array, items: { type: string }, description: Token addresses on every chain } } }
+    Chain: { type: string, enum: [solana, robinhood, base] }
+    Instrument: { type: string, enum: [tokenized_equity, tokenized_debt, broker_entitlement, contractual_exposure], description: "What the token legally is. tokenized_equity = a 1:1 claim on custodied shares; tokenized_debt = a note tracking the price; broker_entitlement = a share held through a broker; contractual_exposure = an SPV or loan participation." }
+    Order: { type: object, properties: { id: { type: string }, at: { type: string, format: date-time }, country: { type: string }, asset: { type: string }, who: { $ref: "#/components/schemas/BuyerType" }, venue: { type: string }, mint: { type: string }, chain: { $ref: "#/components/schemas/Chain" }, acknowledged: { type: boolean } } }
     IssuerEvidence: { type: object, properties: { rule: { type: string }, kind: { type: string, enum: [gate, note] }, reason: { type: string }, source_url: { type: string, format: uri }, source_quality: { type: string, enum: [primary, secondary] } } }
     IssuerVerdict:
       type: object
@@ -239,7 +241,11 @@ components:
       type: object
       required: [mint, provider, assessed, status]
       properties:
-        mint: { type: string }
+        mint: { type: string, description: Alias of address, kept for Solana-era clients }
+        address: { type: string, description: The token's address on its chain }
+        chain: { $ref: "#/components/schemas/Chain" }
+        chain_name: { type: string }
+        instrument: { $ref: "#/components/schemas/Instrument" }
         provider: { type: string }
         token_symbol: { type: string }
         name: { type: string }
@@ -247,7 +253,7 @@ components:
         redeemable: { type: boolean }
         custodian: { type: [string, "null"] }
         decimals: { type: integer }
-        token_program: { type: string }
+        token_program: { type: [string, "null"] }
         issuer_source: { type: string, format: uri }
         assessed: { type: boolean, description: False when the issuer has no rule for this country. Such a token is not buyable. }
         status: { oneOf: [{ $ref: "#/components/schemas/Status" }, { type: "null" }], description: Final verdict, the stricter of issuer and class; null when not assessed }
@@ -280,5 +286,5 @@ components:
         venue: { type: string }
         query: { type: string, description: The text the user typed, for resolver analytics }
         session: { type: string }
-        mint: { type: string, description: "Set when buying a tokenised version onchain (venue Jupiter). The token's own verdict then decides — not assessed and cannot_own are refused, conditional needs acknowledged — and asset must be the class that governs the token in that country." }
+        mint: { type: string, description: "The token's address, set when buying a tokenised version onchain (venue Jupiter on Solana, KyberSwap on Robinhood Chain and Base). The token's own verdict then decides — not assessed and cannot_own are refused, conditional needs acknowledged — and asset must be the class that governs the token in that country." }
         acknowledged: { type: boolean, description: "Required as true when the rule is conditional: the buyer has acknowledged the condition (licence, cap, approval or KYC) before buying. Without it a conditional click is refused with acknowledgement_required." }

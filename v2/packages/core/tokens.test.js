@@ -7,14 +7,19 @@ const load = f => JSON.parse(readFileSync(new URL(f, D)));
 const core = createVestail({ assets: load("assets.json").assets, categories: load("categories.json"), aliases: load("aliases.json"),
   entities: load("entities.json"), countries: load("countries.json"), venues: load("venues.json") });
 const policies = readdirSync(new URL("tokens/policies/", D)).filter(f => f.endsWith(".json")).map(f => load(`tokens/policies/${f}`));
-const tokens = createTokens({ representations: load("tokens/representations.json"), policies, symbols: load("tokens/symbols.json") });
+const tokens = createTokens({ representations: load("tokens/representations.json"), policies, symbols: load("tokens/symbols.json"), evm: load("tokens/evm.json") });
 
 let fail = 0;
 const check = (ok, label) => { if (!ok) fail++; console.log(ok ? "ok  " : "FAIL", label); };
 
 const ng = tokens.board("NVDA", "NG", "citizen", core);
 check(ng.asset === "Foreign equities", "NVDA is foreign equities in NG");
-check(ng.tokens.length === 2 && ng.tokens.every(t => t.status === "conditional"), "both NVDA tokens conditional in NG");
+check(ng.tokens.length === 4 && ng.tokens.every(t => t.status === "conditional"), "all four NVDA versions conditional in NG");
+check(ng.tokens.map(t => t.chain).sort().join() === "base,robinhood,solana,solana", "NVDA versions span Solana, Robinhood Chain and Base");
+const rh = ng.tokens.find(t => t.chain === "robinhood"), cb = ng.tokens.find(t => t.provider === "coinbase");
+check(rh.instrument === "tokenized_debt" && cb.instrument === "tokenized_equity", "instrument named per issuer: Robinhood debt, Coinbase share claim");
+check(ng.tokens.filter(t => t.provider === "ondo")[0].instrument === "tokenized_debt", "Ondo is a debt note too");
+check(tokens.token(cb.address.toLowerCase(), "NG", "citizen", core)?.token.address === cb.address, "EVM addresses match case-insensitively");
 check(ng.tokens.every(t => t.issuer.evidence.every(e => e.source_url)), "issuer evidence carries its sources");
 
 const us = tokens.board("NVDA", "US", "citizen", core);
@@ -38,6 +43,7 @@ check(tokens.board("NVDA", "GB", "citizen", core2).tokens.every(t => t.status ==
 check(tokens.board("SPCX", "NG", "citizen", core).asset === "Private company shares", "SpaceX tokens fall under private company shares");
 check(tokens.board("NOPE", "NG", "citizen", core) === null, "unknown symbol is null");
 check(tokens.forEntity("Nvidia")[0]?.symbol === "NVDA", "entity joins to its symbol");
+check(tokens.list().find(s => s.symbol === "TSLA").chains.join() === "solana,robinhood", "TSLA lists its chains");
 const mint = ng.tokens[0].mint;
 check(tokens.token(mint, "NG", "citizen", core).token.mint === mint, "token by mint");
 

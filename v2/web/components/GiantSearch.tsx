@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-const EXAMPLES = ["NVIDIA", "Tesla", "Crude oil", "Copper", "Gold", "A house"];
+const EXAMPLES = ["NVIDIA", "Tesla", "SpaceX", "Gold", "Crude oil", "Copper", "Farmland"];
 
 /**
  * The app's first thing: one very large search box. A plain GET form, so a
@@ -12,6 +12,11 @@ export function GiantSearch({ q, action = "/app/search" }: { q: string; action?:
       <h1 className="text-[clamp(36px,5.5vw,72px)] leading-[1.02] font-extrabold tracking-[-0.04em] text-ink-strong">
         What do you want to own?
       </h1>
+      <p className="max-w-[720px] text-[17px] text-muted">
+        Buy tokenized stocks on <strong className="text-ink">Solana</strong>, <strong className="text-ink">Base</strong> and{" "}
+        <strong className="text-ink">Robinhood Chain</strong>, trade gold, oil and copper price exposure on{" "}
+        <strong className="text-ink">Hyperliquid</strong>, and check who can own 20 kinds of assets in 12 countries.
+      </p>
       <form action={action} method="get" role="search" className="flex w-full max-w-[960px] items-center gap-2.5 rounded-full border-2 border-line bg-surface py-2.5 pr-2.5 pl-7 shadow-[0_18px_50px_rgba(124,92,255,0.14)]">
         <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#636069" strokeWidth="2" strokeLinecap="round" aria-hidden="true" className="shrink-0">
           <circle cx="11" cy="11" r="7" />
@@ -24,7 +29,7 @@ export function GiantSearch({ q, action = "/app/search" }: { q: string; action?:
           defaultValue={q}
           autoFocus={!q}
           autoComplete="off"
-          placeholder="NVIDIA, a house, gold, bitcoin…"
+          placeholder="NVIDIA, Tesla, gold, crude oil, farmland…"
           className="min-w-0 flex-1 bg-transparent px-1 py-4 text-[clamp(20px,2.6vw,30px)] outline-none placeholder:text-muted/70"
         />
         <button type="submit" className="flex min-h-16 shrink-0 items-center rounded-full bg-action px-7 text-lg font-bold text-on-action">

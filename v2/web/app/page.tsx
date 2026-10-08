@@ -48,8 +48,8 @@ export default function Landing() {
           What can you actually own here?
         </h1>
         <p className="max-w-[620px] text-lg text-muted">
-          Type a thing you&apos;d like to buy. See where it&apos;s allowed, where it needs a licence, where it&apos;s off the table, and
-          where to go to buy it.
+          Tokenized stocks on Solana, Base and Robinhood Chain, gold, oil and copper exposure on Hyperliquid, and who can own
+          20 kinds of assets in 12 countries. See what each one legally is, whether you can own it, and buy where you&apos;re allowed.
         </p>
         <button
           type="button"

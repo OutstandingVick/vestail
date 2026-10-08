@@ -51,6 +51,12 @@ function WalletCard({ wallet }: { wallet: WalletWithMetadata }) {
               className="min-h-10 rounded-full border-[1.5px] border-field px-4 text-sm font-semibold">Export private key</button>
           )}
         </div>
+        {embedded && (
+          <p className="text-xs text-muted">
+            Only you can see this key: it opens in Privy&apos;s secure window, which Vestail can&apos;t read. Anyone who can get
+            into your email can sign in and use this wallet, so keep your email account secure.
+          </p>
+        )}
         <span role="status" className="sr-only">{copied ? "Address copied" : ""}</span>
       </div>
     </div>

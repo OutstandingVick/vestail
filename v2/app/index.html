@@ -1847,6 +1847,8 @@ const RECENT = [
 const tickerEl = document.getElementById("ticker");
 function renderTicker(items) {
   tickerEl.textContent = "";
+  tickI = 0;
+  tickerEl.style.transform = "translate3d(0, 0, 0)";
   items.forEach(([f, a, v, t]) => {
     const li = document.createElement("li");
     li.innerHTML = `<span>${esc(f)}</span><span><span class="long">Someone bought </span><b>${esc(a)}</b> via <b>${esc(v)}</b></span><span class="t">${esc(t)}</span>`;
@@ -1855,7 +1857,18 @@ function renderTicker(items) {
 }
 let tickI = 0;
 const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-if (!reduce) setInterval(() => { const n = tickerEl.children.length; if (!n) return; tickI = (tickI + 1) % n; tickerEl.style.transform = `translateY(${-tickI * 40}px)`; }, 3200);
+function positionTicker() {
+  const row = tickerEl.firstElementChild;
+  if (!row) return;
+  tickerEl.style.transform = `translate3d(0, ${-tickI * row.getBoundingClientRect().height}px, 0)`;
+}
+if (!reduce) setInterval(() => {
+  const n = tickerEl.children.length;
+  if (!n) return;
+  tickI = (tickI + 1) % n;
+  positionTicker();
+}, 3200);
+window.addEventListener("resize", positionTicker, { passive: true });
 
 const fmt = (n, f, pre) => pre + (f === "compact" ? (n >= 1e6 ? (n / 1e6).toFixed(1) + "M" : n >= 1e3 ? Math.round(n / 1e3) + "k" : n) : Math.round(n).toLocaleString());
 // Counts up once on first paint; later updates set the number without replaying the motion.

@@ -6,7 +6,8 @@
     "dev": "next dev -p 8081",
     "build": "next build",
     "start": "next start -p 8081",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test": "node --test \"lib/**/*.test.ts\""
   },
   "dependencies": {
     "@privy-io/node": "^0.35.0",
@@ -22,6 +23,7 @@
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "server-only": "^0.0.1",
+    "viem": "^2.56.5",
     "zod": "^3.25.76"
   },
   "devDependencies": {

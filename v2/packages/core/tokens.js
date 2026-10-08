@@ -72,6 +72,7 @@ export function createTokens({ representations, policies, symbols }) {
     return Object.keys(REPS).map(symbol => ({
       symbol, name: SYMBOLS[symbol].name, entity: SYMBOLS[symbol].entity, home: SYMBOLS[symbol].home,
       providers: REPS[symbol].representations.map(r => r.provider),
+      mints: REPS[symbol].representations.map(r => r.mint),
     }));
   }
 

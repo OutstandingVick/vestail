@@ -148,6 +148,19 @@ paths:
       summary: Traction stats and recent buys for the HUD
       responses: { "200": { description: Feed, content: { application/json: { schema: { $ref: "#/components/schemas/Activity" } } } } }
 
+  /orders:
+    get:
+      tags: [orders]
+      summary: One buyer's recorded Buy presses
+      description: Requires the same API key the clicks were recorded with; only that key's clicks are returned.
+      parameters:
+        - { name: session, in: query, required: true, schema: { type: string, minLength: 1 } }
+        - { name: limit, in: query, schema: { type: integer, minimum: 1, maximum: 200, default: 50 } }
+      responses:
+        "200":
+          description: Newest first
+          content: { application/json: { schema: { type: array, items: { $ref: "#/components/schemas/Order" } } } }
+
   /orders/click:
     post:
       tags: [orders]
@@ -211,7 +224,8 @@ components:
         venues: { type: array, items: { $ref: "#/components/schemas/Venue" } }
         sources: { type: array, items: { $ref: "#/components/schemas/Source" }, description: Empty until the rule has been sourced. }
         verified_at: { type: [string, "null"], format: date, description: When the rule was last checked against its sources; null if never. }
-    TokenSymbol: { type: object, properties: { symbol: { type: string }, name: { type: string }, entity: { type: [string, "null"], description: Matching name in /entities, when there is one }, home: { type: string }, providers: { type: array, items: { type: string } } } }
+    TokenSymbol: { type: object, properties: { symbol: { type: string }, name: { type: string }, entity: { type: [string, "null"], description: Matching name in /entities, when there is one }, home: { type: string }, providers: { type: array, items: { type: string } }, mints: { type: array, items: { type: string } } } }
+    Order: { type: object, properties: { id: { type: string }, at: { type: string, format: date-time }, country: { type: string }, asset: { type: string }, who: { $ref: "#/components/schemas/BuyerType" }, venue: { type: string }, mint: { type: string }, acknowledged: { type: boolean } } }
     IssuerEvidence: { type: object, properties: { rule: { type: string }, kind: { type: string, enum: [gate, note] }, reason: { type: string }, source_url: { type: string, format: uri }, source_quality: { type: string, enum: [primary, secondary] } } }
     IssuerVerdict:
       type: object

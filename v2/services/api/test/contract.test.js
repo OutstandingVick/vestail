@@ -19,7 +19,7 @@ const rebase = n => Array.isArray(n) ? n.map(rebase) : n && typeof n === "object
   ? Object.fromEntries(Object.entries(n).map(([k, v]) => [k, k === "$ref" ? "spec" + v : rebase(v)])) : n;
 
 const SAMPLE_PATH = { country: "NG", asset: "cryptocurrency", symbol: "NVDA" };
-const SAMPLE_QUERY = { "/resolve": "?q=tesla%20shares", "/matrix": "?q=Google", "/venues/{asset}": "?country=NG", "/tokens/{symbol}": "?country=NG" };
+const SAMPLE_QUERY = { "/resolve": "?q=tesla%20shares", "/matrix": "?q=Google", "/venues/{asset}": "?country=NG", "/tokens/{symbol}": "?country=NG", "/orders": "?session=s1" };
 const CLICK = { country: "NG", asset: "cryptocurrency", who: "citizen", venue: "Luno", acknowledged: true };
 
 for (const [path, ops] of Object.entries(spec.paths)) {
@@ -28,7 +28,7 @@ for (const [path, ops] of Object.entries(spec.paths)) {
       const url = "/v1" + path.replace(/\{(\w+)\}/g, (_, k) => SAMPLE_PATH[k]) + (SAMPLE_QUERY[path] || "");
       const init = method === "post"
         ? { method: "POST", headers: { Authorization: "Bearer k", "Content-Type": "application/json" }, body: JSON.stringify(CLICK) }
-        : {};
+        : path.startsWith("/orders") ? { headers: { Authorization: "Bearer k" } } : {};
       const res = await app.request(url, init);
       const body = await res.json();
 

@@ -7,7 +7,8 @@ test("GET /tokens lists the tokenised symbols", async () => {
   assert.equal(res.status, 200);
   const nvda = body.find(s => s.symbol === "NVDA");
   assert.equal(nvda.entity, "Nvidia");
-  assert.deepEqual(nvda.providers.sort(), ["ondo", "xstocks"]);
+  assert.deepEqual(nvda.providers.sort(), ["coinbase", "ondo", "robinhood", "xstocks"]);
+  assert.deepEqual(nvda.chains.sort(), ["base", "robinhood", "solana"]);
 });
 
 test("GET /tokens/{symbol} judges each token, stricter of issuer and class", async () => {
@@ -20,6 +21,17 @@ test("GET /tokens/{symbol} judges each token, stricter of issuer and class", asy
     assert.equal(t.decided_by, "issuer");
     assert.ok(t.issuer.evidence.every(e => e.source_url));
   }
+});
+
+test("each version names its chain and what it legally is", async () => {
+  const { body } = await json("/tokens/NVDA?country=NG");
+  const by = p => body.tokens.find(t => t.provider === p);
+  assert.equal(by("robinhood").chain, "robinhood");
+  assert.equal(by("robinhood").instrument, "tokenized_debt");
+  assert.equal(by("coinbase").chain, "base");
+  assert.equal(by("coinbase").instrument, "tokenized_equity");
+  assert.equal(by("xstocks").instrument, "tokenized_equity");
+  assert.equal(by("coinbase").issuer.acknowledgement.requires.includes("Coinbase permits"), true);
 });
 
 test("a token with no issuer rule for the country is not assessed, never eligible", async () => {

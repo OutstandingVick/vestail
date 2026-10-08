@@ -44,14 +44,43 @@ export function evaluateIssuer(rep, region, policy) {
   };
 }
 
-export function createTokens({ representations, policies, symbols }) {
-  const REPS = representations.symbols || representations;
+/**
+ * What a token legally is, from its issuer's structure. Vestail names the
+ * instrument before it says anything about owning it: a debt note that tracks
+ * NVIDIA is not NVIDIA stock.
+ */
+export const INSTRUMENT = {
+  custody_backed: "tokenized_equity",
+  share_claim: "tokenized_equity",
+  total_return_note: "tokenized_debt",
+  tokenized_debt: "tokenized_debt",
+  security_entitlement: "broker_entitlement",
+  spv_exposure: "contractual_exposure",
+  loan_participation: "contractual_exposure",
+};
+
+export function createTokens({ representations, policies, symbols, evm = null }) {
   const SYMBOLS = symbols.symbols || symbols;
+  const CHAINS = { solana: { name: "Solana", gas: "SOL", explorer: "https://solscan.io" }, ...(evm?.chains || {}) };
+
+  // One shape for every chain: `address` is the token's address on its chain,
+  // `mint` stays as its alias so Solana-era callers keep working.
+  const REPS = {};
+  for (const [sym, v] of Object.entries(representations.symbols || representations))
+    REPS[sym] = { representations: v.representations.map(r => ({ ...r, chain: "solana", address: r.mint })) };
+  for (const r of evm?.representations || []) {
+    if (!CHAINS[r.chain]) throw new Error(`tokens: unknown chain ${r.chain} for ${r.address}`);
+    (REPS[r.symbol] ??= { representations: [] }).representations.push({ ...r, mint: r.address });
+  }
+  const sameAddress = (a, b) => a === b || (a.startsWith("0x") && a.toLowerCase() === String(b).toLowerCase());
   const POLICY = Object.fromEntries((Array.isArray(policies) ? policies : Object.values(policies)).map(p => [p.provider, p]));
 
   for (const sym of Object.keys(REPS)) {
     if (!SYMBOLS[sym]) throw new Error(`tokens: no asset class mapping for ${sym}`);
-    for (const r of REPS[sym].representations) if (!POLICY[r.provider]) throw new Error(`tokens: no policy for provider ${r.provider}`);
+    for (const r of REPS[sym].representations) {
+      if (!POLICY[r.provider]) throw new Error(`tokens: no policy for provider ${r.provider}`);
+      if (!INSTRUMENT[r.structure]) throw new Error(`tokens: unknown structure ${r.structure} for ${r.address}`);
+    }
   }
 
   /** The v2 asset class name that governs a symbol in one country. */
@@ -71,8 +100,9 @@ export function createTokens({ representations, policies, symbols }) {
   function list() {
     return Object.keys(REPS).map(symbol => ({
       symbol, name: SYMBOLS[symbol].name, entity: SYMBOLS[symbol].entity, home: SYMBOLS[symbol].home,
-      providers: REPS[symbol].representations.map(r => r.provider),
-      mints: REPS[symbol].representations.map(r => r.mint),
+      providers: [...new Set(REPS[symbol].representations.map(r => r.provider))],
+      chains: [...new Set(REPS[symbol].representations.map(r => r.chain))],
+      mints: REPS[symbol].representations.map(r => r.address),
     }));
   }
 
@@ -97,9 +127,10 @@ export function createTokens({ representations, policies, symbols }) {
       else if (!issuer) status = null;
       else status = Math.min(issuer.status, classRule.status);
       return {
-        mint: rep.mint, provider: rep.provider, token_symbol: rep.tokenSymbol, name: rep.name,
-        structure: rep.structure, redeemable: rep.redeemable, custodian: rep.custodian, decimals: rep.decimals,
-        token_program: rep.tokenProgram, issuer_source: rep.source,
+        mint: rep.address, address: rep.address, chain: rep.chain, chain_name: CHAINS[rep.chain].name,
+        provider: rep.provider, token_symbol: rep.tokenSymbol, name: rep.name,
+        instrument: INSTRUMENT[rep.structure], structure: rep.structure, redeemable: rep.redeemable, custodian: rep.custodian, decimals: rep.decimals,
+        token_program: rep.tokenProgram ?? null, issuer_source: rep.source,
         assessed: status !== null,
         status: status === null ? null : STATUS[status],
         decided_by: decidedBy(issuer, classRule.status, status),
@@ -110,16 +141,16 @@ export function createTokens({ representations, policies, symbols }) {
       class_sources: classRule.sources, class_verified_at: classRule.verified_at, tokens };
   }
 
-  /** One token by mint, judged as in board(). */
-  function token(mint, code, who, core) {
+  /** One token by its address on any chain (EVM addresses match case-insensitively), judged as in board(). */
+  function token(address, code, who, core) {
     for (const symbol of Object.keys(REPS)) {
-      if (REPS[symbol].representations.some(r => r.mint === mint)) {
+      if (REPS[symbol].representations.some(r => sameAddress(r.address, address))) {
         const b = board(symbol, code, who, core);
-        return b && { ...b, tokens: undefined, token: b.tokens.find(t => t.mint === mint) };
+        return b && { ...b, tokens: undefined, token: b.tokens.find(t => sameAddress(t.address, address)) };
       }
     }
     return null;
   }
 
-  return { list, forEntity, board, token, classOf };
+  return { list, forEntity, board, token, classOf, chains: CHAINS };
 }

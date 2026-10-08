@@ -23,7 +23,7 @@ export function registerOrders(v1, { v, data, clicks, auth }) {
     const rows = clicks.bySession(session, c.get("partner"), limit ?? 50);
     return c.json(rows.map(x => ({
       id: x.id, at: new Date(x.at).toISOString(), country: x.country, asset: x.asset, who: x.who, venue: x.venue,
-      ...(x.mint ? { mint: x.mint } : {}), acknowledged: !!x.acknowledged,
+      ...(x.mint ? { mint: x.mint, chain: x.chain ?? "solana" } : {}), acknowledged: !!x.acknowledged,
     })));
   });
 
@@ -48,7 +48,8 @@ export function registerOrders(v1, { v, data, clicks, auth }) {
   });
 
   /**
-   * A tokenised version bought onchain through Jupiter. Judged by the token
+   * A tokenised version bought onchain: through Jupiter on Solana, KyberSwap on
+   * the EVM chains. Judged by the token
    * verdict (issuer capped by class), never by the class rule alone: not
    * assessed and cannot_own are refused, conditional needs the acknowledgement.
    * The asset sent must be the class that governs the token in that country.
@@ -58,14 +59,17 @@ export function registerOrders(v1, { v, data, clicks, auth }) {
     if (!found) throw new ApiError(400, "unknown_mint", `Vestail does not know the token ${mint}.`);
     if (idByName[found.asset] !== asset)
       throw new ApiError(400, "validation", `${mint} is governed by ${idByName[found.asset]} in ${country}, not ${asset}.`);
-    if (venue !== "Jupiter") throw new ApiError(400, "validation", "Tokens are routed through Jupiter.");
     const t = found.token;
+    const route = t.chain === "solana" ? "Jupiter" : "KyberSwap";
+    if (venue !== route) throw new ApiError(400, "validation", `${t.chain_name} tokens are routed through ${route}.`);
     if (!t.assessed) throw new ApiError(400, "not_assessed", `${t.token_symbol} has not been assessed for ${country}; it is not routed.`);
     if (t.status === "cannot_own") throw new ApiError(400, "validation", `${t.token_symbol} cannot be owned in ${country} by a ${who}.`);
     if (t.status === "conditional" && acknowledged !== true)
       throw new ApiError(400, "acknowledgement_required", `${t.token_symbol} is conditional in ${country} for a ${who}; the buyer must acknowledge the condition first.`);
-    const click = clicks.record({ country, asset, who, venue, query, session, partner, mint, acknowledged: t.status === "conditional" });
-    const redirect = `https://jup.ag/swap/USDC-${mint}?ref=vestail`;
+    const click = clicks.record({ country, asset, who, venue, query, session, partner, mint: t.address, chain: t.chain, acknowledged: t.status === "conditional" });
+    const redirect = t.chain === "solana"
+      ? `https://jup.ag/swap/USDC-${t.address}?ref=vestail`
+      : `https://kyberswap.com/swap/${t.chain}?outputCurrency=${t.address}&ref=vestail`;
     return c.json({ id: click.id, redirect }, 201);
   }
 }

@@ -27,6 +27,7 @@ export function loadData() {
     representations: load("tokens/representations.json"),
     policies: readdirSync(new URL("tokens/policies/", DATA_DIR)).filter(f => f.endsWith(".json")).map(f => load(`tokens/policies/${f}`)),
     symbols: load("tokens/symbols.json"),
+    evm: load("tokens/evm.json"),
   });
   return { raw, core, tokens, idByName, nameById, countryByCode };
 }

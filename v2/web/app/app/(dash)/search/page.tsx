@@ -36,7 +36,23 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
       {country && hit && (
         <section aria-labelledby="results-title" className="flex flex-col gap-5 rounded-panel bg-surface p-6 sm:p-8">
           <h2 id="results-title" className="sr-only">Results</h2>
-          {hit.resolution.stage === "none" ? (
+          {hit.resolution.stage === "none" && matches.length > 0 ? (
+            <ul className="flex flex-col gap-3">
+              {matches.map(m => (
+                <li key={m.symbol}>
+                  {/* The asset page sends a ticker to the class that governs it in this country. */}
+                  <Link href={`/app/asset/${m.entity ? "foreign_equities" : "private_company_shares"}?symbol=${m.symbol}`}
+                    className="flex flex-wrap items-center justify-between gap-4 rounded-card bg-tint px-5 py-4 hover:ring-2 hover:ring-field">
+                    <span className="flex flex-col gap-1">
+                      <strong className="text-lg">{m.name} <span className="font-normal text-muted">{m.symbol}</span></strong>
+                      <span className="text-sm text-muted">{m.providers.length} tokenized version{m.providers.length > 1 ? "s" : ""} · {m.chains.length > 1 ? `${m.chains.length} chains` : "Solana"}</span>
+                    </span>
+                    <span className="rounded-full bg-surface px-3 py-1.5 text-[13px] font-semibold">See versions →</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          ) : hit.resolution.stage === "none" ? (
             <p className="text-muted">
               {exposures.length
                 ? `“${q}” isn't an asset class you can own directly, but there's price exposure to it below.`

@@ -16,6 +16,7 @@
   --color-ink-strong: #0D0D0F;
   --color-muted: #636069;
   --color-action: #FF580A;
+  --color-on-action: #0D0D0F;
   --color-action-ink: #B83D00;
   --color-action-wash: #FFF0E8;
   --color-emphasis: #5A3DF0;
@@ -29,6 +30,29 @@
   --radius-panel: 28px;
   --radius-card: 20px;
   --radius-field: 16px;
+}
+
+/*
+ * Dark mode, matched to the marketing site's own dark theme. Tailwind reads
+ * the theme through these variables, so overriding them here re-colours every
+ * utility. Verdict and action colours stay put: their meaning must not change.
+ */
+html[data-theme="dark"] {
+  --color-page: #0E0F14;
+  --color-surface: #171821;
+  --color-tint: #212233;
+  --color-wash: #20212b;
+  --color-line: rgb(247 245 255 / 0.13);
+  --color-field: #3a3b4a;
+  --color-ink: #f7f5ff;
+  --color-ink-strong: #f7f5ff;
+  --color-muted: #aaa7b4;
+  --color-emphasis: #ad9cff;
+  --color-action-wash: #2a1a12;
+  --color-action-ink: #ffad84;
+  --color-cond-wash: #2b2214;
+  --color-cond-ink: #f2dfb8;
+  color-scheme: dark;
 }
 
 body {

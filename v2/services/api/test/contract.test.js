@@ -18,8 +18,8 @@ ajv.addSchema({ $id: "spec", components: spec.components });
 const rebase = n => Array.isArray(n) ? n.map(rebase) : n && typeof n === "object"
   ? Object.fromEntries(Object.entries(n).map(([k, v]) => [k, k === "$ref" ? "spec" + v : rebase(v)])) : n;
 
-const SAMPLE_PATH = { country: "NG", asset: "cryptocurrency", symbol: "NVDA" };
-const SAMPLE_QUERY = { "/resolve": "?q=tesla%20shares", "/matrix": "?q=Google", "/venues/{asset}": "?country=NG", "/tokens/{symbol}": "?country=NG", "/orders": "?session=s1" };
+const SAMPLE_PATH = { country: "NG", asset: "cryptocurrency", symbol: "NVDA", id: "xyz:GOLD" };
+const SAMPLE_QUERY = { "/resolve": "?q=tesla%20shares", "/matrix": "?q=Google", "/venues/{asset}": "?country=NG", "/tokens/{symbol}": "?country=NG", "/orders": "?session=s1", "/derivatives/{id}": "?country=NG" };
 const CLICK = { country: "NG", asset: "cryptocurrency", who: "citizen", venue: "Luno", acknowledged: true };
 
 for (const [path, ops] of Object.entries(spec.paths)) {

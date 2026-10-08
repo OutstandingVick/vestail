@@ -54,6 +54,11 @@ export function CountryCard({ row, nameOf, mine }: { row: MatrixRow; nameOf: Rec
             selected={picked === c.asset} onSelect={() => setPicked(picked === c.asset ? null : c.asset)} />
         ))}
       </div>
+      {row.cells.length > 1 && (
+        <p className="text-xs text-muted">
+          {row.summary.can_own} can own · {row.summary.conditional} conditional · {row.summary.cannot_own} cannot own
+        </p>
+      )}
     </article>
   );
 }

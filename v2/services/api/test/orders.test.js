@@ -112,3 +112,15 @@ test("a swap click must name the governing class, Jupiter, and a known mint", as
   assert.equal((await click({ ...swap(mint), venue: "Bamboo", acknowledged: true })).body.error.code, "validation");
   assert.equal((await click({ ...swap("NotAMint111"), acknowledged: true })).body.error.code, "unknown_mint");
 });
+
+test("GET /orders returns one buyer's presses, newest first, for the same key only", async () => {
+  await click({ ...luno, session: "hist" });
+  await click({ ...swap(await nvdaNG()), session: "hist", acknowledged: true });
+  const res = await app.request("/v1/orders?session=hist", { headers: { Authorization: `Bearer ${KEY}` } });
+  const body = await res.json();
+  assert.equal(res.status, 200);
+  assert.equal(body.length, 2);
+  assert.equal(body[0].venue, "Jupiter");
+  assert.ok(body[0].mint && body[0].acknowledged);
+  assert.equal((await app.request("/v1/orders?session=hist")).status, 401);
+});

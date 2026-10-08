@@ -18,6 +18,15 @@ export function registerOrders(v1, { v, data, clicks, auth }) {
     await next();
   });
 
+  /** GET /orders?session= — one buyer's recorded Buy presses, for their own history. */
+  v.route(v1, "get", "/orders", (c, { params: { session, limit } }) => {
+    const rows = clicks.bySession(session, c.get("partner"), limit ?? 50);
+    return c.json(rows.map(x => ({
+      id: x.id, at: new Date(x.at).toISOString(), country: x.country, asset: x.asset, who: x.who, venue: x.venue,
+      ...(x.mint ? { mint: x.mint } : {}), acknowledged: !!x.acknowledged,
+    })));
+  });
+
   v.route(v1, "post", "/orders/click", (c, { body }) => {
     const partner = c.get("partner");
     const { country, asset, who, venue, query, session, acknowledged, mint } = body;

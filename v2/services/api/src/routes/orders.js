@@ -23,16 +23,19 @@ export function registerOrders(v1, { v, data, clicks, auth }) {
     const rows = clicks.bySession(session, c.get("partner"), limit ?? 50);
     return c.json(rows.map(x => ({
       id: x.id, at: new Date(x.at).toISOString(), country: x.country, asset: x.asset, who: x.who, venue: x.venue,
-      ...(x.mint ? { mint: x.mint, chain: x.chain ?? "solana" } : {}), acknowledged: !!x.acknowledged,
+      ...(x.mint ? { mint: x.mint, chain: x.chain ?? "solana" } : {}),
+      ...(x.market ? { market: x.market, chain: "hyperliquid" } : {}),
+      acknowledged: !!x.acknowledged,
     })));
   });
 
   v.route(v1, "post", "/orders/click", (c, { body }) => {
     const partner = c.get("partner");
-    const { country, asset, who, venue, query, session, acknowledged, mint } = body;
+    const { country, asset, who, venue, query, session, acknowledged, mint, market } = body;
 
     const row = countryByCode[country];
     if (!row) throw new ApiError(400, "unknown_country", `Unknown country: ${country}.`);
+    if (market) return marketClick(c, { partner, country, asset, who, venue, query, session, acknowledged, market });
     if (mint) return swapClick(c, { partner, country, asset, who, venue, query, session, acknowledged, mint });
     const name = nameById[asset];
     if (!name) throw new ApiError(400, "unknown_asset", `No asset class with id ${asset}.`);
@@ -46,6 +49,23 @@ export function registerOrders(v1, { v, data, clicks, auth }) {
     const click = clicks.record({ country, asset, who, venue, query, session, partner, acknowledged: status === 1 });
     return c.json({ id: click.id, redirect: match.url }, 201);
   });
+
+  /**
+   * A Hyperliquid perpetual: price exposure, judged by the venue's own rule.
+   * Not assessed and cannot_own are refused; conditional needs the
+   * acknowledgement that nothing is owned. `asset` must repeat the market id.
+   */
+  function marketClick(c, { partner, country, asset, who, venue, query, session, acknowledged, market }) {
+    const m = data.derivatives.judge(market, country);
+    if (!m) throw new ApiError(400, "unknown_market", `No market ${market}.`);
+    if (asset !== market || venue !== "Hyperliquid") throw new ApiError(400, "validation", "Derivative clicks name the market as asset and Hyperliquid as venue.");
+    if (!m.assessed) throw new ApiError(400, "not_assessed", `${m.name} exposure has not been assessed for ${country}; it is not routed.`);
+    if (m.status === "cannot_own") throw new ApiError(400, "validation", `${m.name} exposure is not available in ${country}.`);
+    if (m.status === "conditional" && acknowledged !== true)
+      throw new ApiError(400, "acknowledgement_required", `${m.name} is price exposure only; the buyer must acknowledge that first.`);
+    const click = clicks.record({ country, asset, who, venue, query, session, partner, market, chain: "hyperliquid", acknowledged: m.status === "conditional" });
+    return c.json({ id: click.id, redirect: `${data.derivatives.venue.trade_url}${m.coin}?ref=vestail` }, 201);
+  }
 
   /**
    * A tokenised version bought onchain: through Jupiter on Solana, KyberSwap on

@@ -209,7 +209,7 @@
   .searchbar #clear { flex: none; border: 0; background: var(--surface-2); color: var(--ink-2); font-size: 16.25px; font-weight: 600; cursor: pointer; padding: 8px 14px; border-radius: var(--r-pill); display: none; }
   .searchbar #clear.on { display: inline-block; }
   .searchbar #clear:hover { background: var(--surface-3); color: var(--ink); }
-  .searchbar .go { flex: none; border: 0; cursor: pointer; background: var(--orange); color: var(--navy); font-family: var(--font-inter); font-weight: 700; font-size: 18.75px; padding: 13px 22px; border-radius: var(--r-pill);
+  .searchbar .go { flex: none; border: 0; cursor: pointer; background: var(--orange); color: var(--navy); font-family: var(--font-inter); font-weight: 700; font-size: 18.75px; padding: 13px 22px; border-radius: var(--r-pill); text-decoration: none;
     box-shadow: 0 10px 26px -10px rgb(255 88 10 / .75); transition: transform .15s var(--ease), box-shadow .2s var(--ease); }
   .searchbar .go:hover { transform: translateY(-1px); box-shadow: 0 14px 30px -10px rgb(255 88 10 / .85); }
   .searchbar .go:active { transform: scale(.97); }
@@ -944,7 +944,7 @@
             <span>Research articles <small>Later</small></span>
           </div>
         </details>
-        <a class="btn solid" href="http://localhost:8081/?signin" data-app-link>Try App</a>
+        <a class="btn solid" href="http://localhost:8081/?signin" data-app-link>Open App</a>
       </div>
     </nav>
   </div>
@@ -959,7 +959,7 @@
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"/></svg>
       <input id="q" type="search" placeholder="Google, bitcoin, a house, farmland, a Gulfstream…" aria-label="Search assets" autocomplete="off">
       <button id="clear" type="button">Clear</button>
-      <button class="go" type="button" id="seeWhere">See where</button>
+      <a class="go" id="seeWhere" href="http://localhost:8081/?signin" data-app-link>Open App</a>
     </div>
     <div class="chips" aria-label="Try one">
       <span class="try" aria-hidden="true">Try</span>
@@ -1897,10 +1897,6 @@ async function loadActivity() {
 }
 
 
-// "See where" takes the eye from the search to the answer.
-$("seeWhere").addEventListener("click", () => {
-  document.querySelector(".controls").scrollIntoView({ behavior: reduce || document.hidden ? "auto" : "smooth", block: "start" });
-});
 document.querySelectorAll("[data-focus-search]").forEach(b => b.addEventListener("click", e => {
   e.preventDefault();
   // Smooth scrolling only animates on a visible page; jump otherwise (and under reduced motion).

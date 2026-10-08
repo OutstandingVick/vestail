@@ -1,6 +1,6 @@
 import "server-only";
 
-import type { Asset, BuyerType, Category, Country, Matrix, Resolution, Rule, TokenBoard, TokenSymbol } from "@/lib/types";
+import type { Asset, BuyerType, Order, Category, Country, Matrix, Resolution, Rule, TokenBoard, TokenSymbol } from "@/lib/types";
 
 /**
  * The v2 API, read from the server. Rules are fetched uncached: a compliance
@@ -35,6 +35,14 @@ export const api = {
   rule: (country: string, asset: string, who: BuyerType) => get<Rule>(`/rules/${country}/${asset}` + qs({ who })),
   tokens: (symbol: string, country: string, who: BuyerType) =>
     get<TokenBoard>(`/tokens/${encodeURIComponent(symbol)}` + qs({ country, who })),
+
+  /** One user's recorded Buy presses (GET /orders), with the server's key. */
+  async orders(session: string): Promise<Order[]> {
+    const key = process.env.VESTAIL_API_KEY;
+    if (!key) return [];
+    const res = await fetch(BASE + "/orders" + qs({ session, limit: "20" }), { cache: "no-store", headers: { Authorization: `Bearer ${key}` } });
+    return res.ok ? res.json() : [];
+  },
 
   /** POST /orders/click with the server's key; the key never reaches the browser. */
   async click(body: {

@@ -1,6 +1,6 @@
 import "server-only";
 
-import type { Asset, BuyerType, Order, Category, Country, Matrix, Resolution, Rule, TokenBoard, TokenSymbol } from "@/lib/types";
+import type { Asset, BuyerType, Market, Order, Category, Country, Matrix, Resolution, Rule, TokenBoard, TokenSymbol } from "@/lib/types";
 
 /**
  * The v2 API, read from the server. Rules are fetched uncached: a compliance
@@ -38,6 +38,9 @@ export const api = {
   tokens: (symbol: string, country: string, who: BuyerType) =>
     get<TokenBoard>(`/tokens/${encodeURIComponent(symbol)}` + qs({ country, who })),
 
+  derivatives: (q?: string) => get<Market[]>("/derivatives" + (q ? qs({ q }) : ""), !q),
+  derivative: (id: string, country: string) => get<Market>(`/derivatives/${encodeURIComponent(id)}` + qs({ country })),
+
   /** One user's recorded Buy presses (GET /orders), with the server's key. */
   async orders(session: string): Promise<Order[]> {
     const key = process.env.VESTAIL_API_KEY;
@@ -49,7 +52,7 @@ export const api = {
   /** POST /orders/click with the server's key; the key never reaches the browser. */
   async click(body: {
     country: string; asset: string; who: BuyerType; venue: string;
-    acknowledged?: boolean; mint?: string; query?: string; session?: string;
+    acknowledged?: boolean; mint?: string; market?: string; query?: string; session?: string;
   }): Promise<{ id: string; redirect: string }> {
     const key = process.env.VESTAIL_API_KEY;
     if (!key) throw new ApiError(503, "not_configured", "VESTAIL_API_KEY is not set on this server.");

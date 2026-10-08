@@ -1,6 +1,7 @@
 import Image from "next/image";
 
 import { NotAssessedBadge, VerdictBadge } from "@/components/VerdictBadge";
+import { CHAIN_LABEL, INSTRUMENT_LABEL } from "@/lib/instrument";
 import type { Token } from "@/lib/types";
 
 const STRUCTURE: Record<string, string> = {
@@ -10,7 +11,7 @@ const STRUCTURE: Record<string, string> = {
 };
 const ISSUER: Record<string, string> = {
   xstocks: "xStocks (Backed Finance)", ondo: "Ondo Global Markets", backpack: "Backpack Securities",
-  tessera: "Tessera", prestocks: "PreStocks",
+  tessera: "Tessera", prestocks: "PreStocks", robinhood: "Robinhood (Jersey)", coinbase: "Coinbase",
 };
 
 /** One onchain version: its issuer's claim, its own verdict, and the sources behind it. */
@@ -20,10 +21,18 @@ export function TokenCard({ token }: { token: Token }) {
     <article className="flex flex-col gap-2.5 rounded-card bg-wash p-[18px]">
       <div className="flex flex-wrap items-center justify-between gap-2.5">
         <span className="flex items-center gap-3">
-          <Image src={`/issuers/${token.provider}.svg`} alt="" width={32} height={32} className="rounded-lg" />
+          {["robinhood", "coinbase"].includes(token.provider)
+            ? <span aria-hidden="true" className="flex size-8 items-center justify-center rounded-lg bg-tint text-sm font-bold">{token.provider[0].toUpperCase()}</span>
+            : <Image src={`/issuers/${token.provider}.svg`} alt="" width={32} height={32} className="rounded-lg" />}
           <span className="flex flex-col">
             <strong className="text-[17px]">{token.token_symbol} · {ISSUER[token.provider] ?? token.provider}</strong>
-            <span className="text-[13px] text-muted">{STRUCTURE[token.structure] ?? token.structure}</span>
+            <span className="flex flex-wrap items-center gap-1.5 text-[13px] text-muted">
+              <span className="rounded-full bg-tint px-2 py-0.5 text-xs font-semibold text-ink">{CHAIN_LABEL[token.chain] ?? token.chain}</span>
+              <span className="rounded-full border border-field px-2 py-0.5 text-xs font-semibold text-ink" title={INSTRUMENT_LABEL[token.instrument]?.explain}>
+                {INSTRUMENT_LABEL[token.instrument]?.label ?? token.instrument}
+              </span>
+              {STRUCTURE[token.structure] ?? INSTRUMENT_LABEL[token.instrument]?.explain}
+            </span>
           </span>
         </span>
         {token.status ? <VerdictBadge status={token.status} /> : <NotAssessedBadge />}

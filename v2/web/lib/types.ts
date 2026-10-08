@@ -37,12 +37,22 @@ export interface Rule {
   verified_at: string | null;
 }
 
-export interface TokenSymbol { symbol: string; name: string; entity: string | null; home: string; providers: string[]; mints: string[] }
-export interface Order { id: string; at: string; country: string; asset: string; who: BuyerType; venue: string; mint?: string; acknowledged: boolean }
+export interface TokenSymbol { symbol: string; name: string; entity: string | null; home: string; providers: string[]; chains: Chain[]; mints: string[] }
+export interface Order { id: string; at: string; country: string; asset: string; who: BuyerType; venue: string; mint?: string; market?: string; chain?: Chain; acknowledged: boolean }
+
+/** A Hyperliquid perpetual judged for a country: price exposure, never ownership. */
+export interface Market {
+  id: string; coin: string; name: string; commodity: string; related_asset: string | null;
+  venue: string; chain: "hyperliquid"; deployer: string; instrument: "commodity_derivative";
+  country?: string; assessed?: boolean; status?: Status | null;
+  issuer?: Token["issuer"];
+}
 
 export interface IssuerEvidence { rule: string; kind: "gate" | "note"; reason: string; source_url: string; source_quality: "primary" | "secondary" }
+export type Chain = "solana" | "robinhood" | "base" | "hyperliquid";
+export type Instrument = "tokenized_equity" | "tokenized_debt" | "broker_entitlement" | "contractual_exposure" | "commodity_derivative";
 export interface Token {
-  mint: string; provider: string; token_symbol: string; name: string; structure: string;
+  mint: string; address: string; chain: Chain; chain_name: string; instrument: Instrument; provider: string; token_symbol: string; name: string; structure: string;
   redeemable: boolean; custodian: string | null; decimals: number; token_program: string; issuer_source: string;
   /** False when the issuer has no rule for the country. Not assessed is never buyable. */
   assessed: boolean;

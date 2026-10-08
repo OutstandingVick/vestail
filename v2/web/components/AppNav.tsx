@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 
 import { Logo } from "@/components/Logo";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 /** Who is signed in, shortened: their email, else their wallet. */
 function who(user: ReturnType<typeof usePrivy>["user"]): string {
@@ -34,9 +35,9 @@ export function AppNav() {
       <div className="mx-auto flex max-w-[1180px] flex-wrap items-center gap-x-6 gap-y-3 px-4 py-3">
         <Link href="/app" aria-label="Vestail home"><Logo /></Link>
         <nav className="flex grow gap-5 text-[15px]">
-          {link("/app", "Search")}
-          {link("/app/compare", "Compare")}
+
         </nav>
+        <ThemeToggle />
         <span className="flex items-center gap-2 rounded-full border border-line bg-surface py-1.5 pr-1.5 pl-3.5 text-sm">
           <span className="max-w-[180px] truncate">{who(user)}</span>
           <button type="button" onClick={signOut} className="min-h-8 rounded-full bg-tint px-3 text-[13px]">Sign out</button>

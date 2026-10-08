@@ -55,7 +55,7 @@ export function ActionPanel({ assetName, classStatus, venues, symbol, tokens }: 
 
       {conditions.length > 0 && (
         <div className="flex flex-col gap-3 rounded-field bg-cond-wash p-4">
-          <strong className="text-[15px] text-[#6B4A0E]">Conditional: read before you buy</strong>
+          <strong className="text-[15px] text-cond-ink">Conditional: read before you buy</strong>
           <ul className="flex flex-col gap-1 text-sm text-cond-ink">
             {conditions.map(c => <li key={c}>{c}</li>)}
           </ul>
@@ -85,7 +85,7 @@ export function ActionPanel({ assetName, classStatus, venues, symbol, tokens }: 
               type="button"
               disabled={venueLocked}
               onClick={() => go(v.name)}
-              className="flex min-h-11 items-center justify-between rounded-xl bg-action-wash px-4 font-semibold text-action-ink disabled:cursor-not-allowed disabled:bg-[#EDEDE8] disabled:text-[#8A8790]"
+              className="flex min-h-11 items-center justify-between rounded-xl bg-action-wash px-4 font-semibold text-action-ink disabled:cursor-not-allowed disabled:bg-wash disabled:text-muted"
             >
               <span>{v.name}</span><span aria-hidden="true">↗</span>
             </button>

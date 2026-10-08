@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 
 import { Logo } from "@/components/Logo";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 /**
  * The marketing site lives at v2/app/index.html. This is the app's front door:
@@ -32,11 +33,12 @@ export default function Landing() {
     <div className="min-h-screen">
       <header className="mx-auto flex max-w-[1180px] items-center gap-4 px-4 py-4">
         <Link href="/" aria-label="Vestail" className="grow"><Logo /></Link>
+        <ThemeToggle />
         <button
           type="button"
           onClick={() => login()}
           disabled={!ready}
-          className="min-h-11 rounded-full bg-action px-5 font-semibold text-ink-strong disabled:opacity-60"
+          className="min-h-11 rounded-full bg-action px-5 font-semibold text-on-action disabled:opacity-60"
         >
           Try App
         </button>
@@ -53,7 +55,7 @@ export default function Landing() {
           type="button"
           onClick={() => login()}
           disabled={!ready}
-          className="min-h-14 rounded-full bg-action px-8 text-lg font-bold text-ink-strong disabled:opacity-60"
+          className="min-h-14 rounded-full bg-action px-8 text-lg font-bold text-on-action disabled:opacity-60"
         >
           Try App
         </button>

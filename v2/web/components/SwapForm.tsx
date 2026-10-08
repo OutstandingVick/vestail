@@ -89,7 +89,7 @@ export function SwapForm({ symbol, tokens, acknowledged, locked }: {
         <button type="button" onClick={getQuote} disabled={!!busy} className="min-h-12 flex-1 rounded-full border-[1.5px] border-field bg-surface px-4 font-semibold disabled:opacity-60">
           {busy === "quote" ? "Pricing…" : "Get price"}
         </button>
-        <button type="button" onClick={buy} disabled={locked || !!busy || !ready || !wallet} className="min-h-12 flex-1 rounded-full bg-action px-4 font-semibold text-ink-strong disabled:cursor-not-allowed disabled:bg-[#D9D7E0]">
+        <button type="button" onClick={buy} disabled={locked || !!busy || !ready || !wallet} className="min-h-12 flex-1 rounded-full bg-action px-4 font-semibold text-on-action disabled:cursor-not-allowed disabled:bg-field disabled:text-muted">
           {busy === "buy" ? "Confirm in wallet…" : `Buy ${token?.token_symbol ?? ""}`}
         </button>
       </div>

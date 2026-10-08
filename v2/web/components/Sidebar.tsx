@@ -6,6 +6,7 @@ import { Avatar } from "@/components/Avatar";
 import { accountOf } from "@/lib/account";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 import { Logo } from "@/components/Logo";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -37,6 +38,17 @@ export function Sidebar({ profile, country }: { profile: Profile; country: Count
   const account = accountOf(user);
   const active = (href: string) => (href === "/app" ? path === "/app" : path.startsWith(href));
 
+  // On a phone the sidebar folds into a menu button; it closes again when
+  // the page changes or Escape is pressed.
+  const [open, setOpen] = useState(false);
+  useEffect(() => setOpen(false), [path]);
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
+
   async function signOut() {
     await fetch("/api/profile", { method: "DELETE" });
     await logout();
@@ -45,10 +57,26 @@ export function Sidebar({ profile, country }: { profile: Profile; country: Count
 
   return (
     <aside className="flex w-full flex-col gap-4 rounded-panel bg-surface p-4 md:sticky md:top-4 md:h-[calc(100vh-2rem)] md:w-[248px] md:shrink-0">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-2">
         <Link href="/app" aria-label="Vestail home"><Logo className="h-6 w-auto" /></Link>
-        <ThemeToggle />
+        <div className="flex items-center gap-1">
+          <ThemeToggle />
+          <button
+            type="button"
+            onClick={() => setOpen(o => !o)}
+            aria-expanded={open}
+            aria-controls="app-menu"
+            aria-label={open ? "Close menu" : "Open menu"}
+            className="flex size-10 items-center justify-center rounded-full hover:bg-tint md:hidden"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+              <path d={open ? "M6 6l12 12M18 6L6 18" : "M4 7h16M4 12h16M4 17h16"} />
+            </svg>
+          </button>
+        </div>
       </div>
+
+      <div id="app-menu" className={`${open ? "flex" : "hidden"} flex-col gap-4 md:flex md:flex-1`}>
 
       <Link href="/app/settings" className="flex items-center gap-3 rounded-card bg-wash px-3 py-2.5 hover:bg-tint">
         <span className="text-2xl" aria-hidden="true">{country?.flag}</span>
@@ -58,7 +86,7 @@ export function Sidebar({ profile, country }: { profile: Profile; country: Count
         </span>
       </Link>
 
-      <nav aria-label="App" className="flex flex-row flex-wrap gap-1 md:flex-col">
+      <nav aria-label="App" className="flex flex-col gap-1">
         {NAV.map(n => (
           <Link key={n.href} href={n.href} aria-current={active(n.href) ? "page" : undefined}
             className={`flex min-h-11 items-center gap-3 rounded-xl px-3 text-[15px] ${active(n.href) ? "bg-tint font-semibold" : "text-muted hover:bg-wash hover:text-ink"}`}>
@@ -79,6 +107,7 @@ export function Sidebar({ profile, country }: { profile: Profile; country: Count
           </Link>
           <button type="button" onClick={signOut} className="min-h-8 shrink-0 rounded-full bg-surface px-3 text-[13px]">Sign out</button>
         </div>
+      </div>
       </div>
     </aside>
   );

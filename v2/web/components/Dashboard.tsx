@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { ValueChart } from "@/components/ValueChart";
 import { NotAssessedBadge, VerdictBadge } from "@/components/VerdictBadge";
 import { accountOf } from "@/lib/account";
+import { CHAIN_LABEL } from "@/lib/instrument";
 import { authedFetch, errorOf } from "@/lib/client";
 import type { Asset, Portfolio, Status } from "@/lib/types";
 
@@ -113,6 +114,8 @@ export function Dashboard({ assets, countryName, who }: { assets: Asset[]; count
           <dl className="grid grid-cols-2 gap-2 text-sm">
             <dt className="text-muted">USDC</dt><dd className="text-right">{data.cash.usdc.toLocaleString(undefined, { maximumFractionDigits: 2 })}</dd>
             <dt className="text-muted">SOL</dt><dd className="text-right">{data.cash.sol.toLocaleString(undefined, { maximumFractionDigits: 4 })}{data.cash.sol_usd !== null && <span className="text-muted"> · {usd(data.cash.sol_usd)}</span>}</dd>
+            <dt className="text-muted">ETH on Base</dt><dd className="text-right">{data.cash.eth.base.toLocaleString(undefined, { maximumFractionDigits: 5 })}</dd>
+            <dt className="text-muted">ETH on Robinhood</dt><dd className="text-right">{data.cash.eth.robinhood.toLocaleString(undefined, { maximumFractionDigits: 5 })}</dd>
           </dl>
         </Card>
         <Card title="Tokenised stocks" aside={<span className="text-xs text-muted">Live prices</span>}>
@@ -151,12 +154,12 @@ export function Dashboard({ assets, countryName, who }: { assets: Asset[]; count
       </div>
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-        <Card title="Holdings" className="lg:col-span-2" aside={<span className="text-xs text-muted">Tokenised stocks on Solana</span>}>
+        <Card title="Holdings" className="lg:col-span-2" aside={<span className="text-xs text-muted">Solana, Base and Robinhood Chain</span>}>
           {data.holdings.length ? (
             <div className="overflow-x-auto">
               <table className="w-full min-w-[520px] text-left text-sm">
                 <thead className="text-xs text-muted">
-                  <tr><th className="py-2 font-medium">Version</th><th className="py-2 font-medium">Amount</th><th className="py-2 font-medium">Value</th><th className="py-2 text-right font-medium">Verdict here</th></tr>
+                  <tr><th className="py-2 font-medium">Version</th><th className="py-2 font-medium">Chain</th><th className="py-2 font-medium">Amount</th><th className="py-2 font-medium">Value</th><th className="py-2 text-right font-medium">Verdict here</th></tr>
                 </thead>
                 <tbody>
                   {data.holdings.map(h => (
@@ -165,6 +168,7 @@ export function Dashboard({ assets, countryName, who }: { assets: Asset[]; count
                         <Link href={`/app/asset/${h.asset}?symbol=${h.symbol}`} className="font-semibold hover:text-emphasis">{h.token_symbol}</Link>
                         <div className="text-xs text-muted">{h.name} · {h.provider}</div>
                       </td>
+                      <td className="py-3">{CHAIN_LABEL[h.chain] ?? h.chain}</td>
                       <td className="py-3">{h.amount.toLocaleString(undefined, { maximumFractionDigits: 4 })}</td>
                       <td className="py-3">{h.usd === null ? <span className="text-muted">unpriced</span> : usd(h.usd)}</td>
                       <td className="py-3 text-right">{h.status ? <VerdictBadge status={h.status} /> : <NotAssessedBadge />}</td>
@@ -190,6 +194,28 @@ export function Dashboard({ assets, countryName, who }: { assets: Asset[]; count
           ) : <Empty>Nothing watched yet. Use “Watch” on any asset page.</Empty>}
         </Card>
       </div>
+      <Card title="Price exposure on Hyperliquid" aside={<span className="text-xs text-muted">Positions, not holdings: you own no commodity</span>}>
+        {data.positions.length ? (
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[520px] text-left text-sm">
+              <thead className="text-xs text-muted">
+                <tr><th className="py-2 font-medium">Market</th><th className="py-2 font-medium">Size</th><th className="py-2 font-medium">Notional</th><th className="py-2 font-medium">Unrealised P&amp;L</th><th className="py-2 text-right font-medium">Verdict here</th></tr>
+              </thead>
+              <tbody>
+                {data.positions.map(p => (
+                  <tr key={p.market} className="border-t border-line">
+                    <td className="py-3"><Link href={`/app/exposure/${p.coin.toLowerCase()}`} className="font-semibold hover:text-emphasis">{p.name}</Link><div className="text-xs text-muted">{p.market} · {p.size > 0 ? "long" : "short"}</div></td>
+                    <td className="py-3">{Math.abs(p.size).toLocaleString(undefined, { maximumFractionDigits: 4 })}</td>
+                    <td className="py-3">{usd(p.valueUsd)}</td>
+                    <td className={`py-3 font-semibold ${p.pnlUsd >= 0 ? "text-can" : "text-cannot"}`}>{p.pnlUsd >= 0 ? "+" : ""}{usd(p.pnlUsd)}</td>
+                    <td className="py-3 text-right">{p.status ? <VerdictBadge status={p.status} /> : <NotAssessedBadge />}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : <Empty>No open positions. Gold, crude oil and copper exposure is under <Link href="/app/search?q=crude%20oil" className="text-emphasis underline">Search</Link>.</Empty>}
+      </Card>
     </>
   );
 }

@@ -75,15 +75,17 @@ export interface Profile { country: string; who: BuyerType }
 
 /** A tokenised stock the user holds, with its value and its verdict for their declared country. */
 export interface Holding {
-  mint: string; symbol: string; token_symbol: string; name: string; provider: string;
+  mint: string; symbol: string; token_symbol: string; name: string; provider: string; chain: Chain;
   amount: number; usd: number | null; status: Status | null; asset: string;
 }
 export interface WatchItem { asset: string; symbol?: string; added: string }
 export interface Portfolio {
   wallets: string[];
-  totals: { usd: number; holdings_usd: number; cash_usd: number; unpriced: number };
-  cash: { sol: number; sol_usd: number | null; usdc: number };
+  evm_wallets: string[];
+  totals: { usd: number; holdings_usd: number; cash_usd: number; unpriced: number; positions_pnl_usd: number };
+  cash: { sol: number; sol_usd: number | null; usdc: number; eth: { base: number; robinhood: number }; eth_usd: number };
   holdings: Holding[];
+  positions: { market: string; coin: string; name: string; size: number; valueUsd: number; pnlUsd: number; entryPx: number; status: Status | null }[];
   orders: Order[];
   watchlist: (WatchItem & { name: string; status: Status })[];
   history: { day: string; usd: number }[];

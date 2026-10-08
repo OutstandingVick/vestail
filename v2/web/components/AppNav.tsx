@@ -2,7 +2,7 @@
 
 import { usePrivy } from "@privy-io/react-auth";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 import { Logo } from "@/components/Logo";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -17,12 +17,6 @@ function who(user: ReturnType<typeof usePrivy>["user"]): string {
 export function AppNav() {
   const { user, logout } = usePrivy();
   const router = useRouter();
-  const path = usePathname();
-  const link = (href: string, label: string) => (
-    <Link href={href} className={path === href ? "font-semibold text-ink" : "text-muted hover:text-ink"} aria-current={path === href ? "page" : undefined}>
-      {label}
-    </Link>
-  );
 
   async function signOut() {
     await fetch("/api/profile", { method: "DELETE" });
@@ -34,9 +28,7 @@ export function AppNav() {
     <header className="sticky top-0 z-10 border-b border-line bg-page/90 backdrop-blur">
       <div className="mx-auto flex max-w-[1180px] flex-wrap items-center gap-x-6 gap-y-3 px-4 py-3">
         <Link href="/app" aria-label="Vestail home"><Logo /></Link>
-        <nav className="flex grow gap-5 text-[15px]">
-
-        </nav>
+        <span className="grow" />
         <ThemeToggle />
         <span className="flex items-center gap-2 rounded-full border border-line bg-surface py-1.5 pr-1.5 pl-3.5 text-sm">
           <span className="max-w-[180px] truncate">{who(user)}</span>

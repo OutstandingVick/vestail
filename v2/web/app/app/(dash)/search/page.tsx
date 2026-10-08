@@ -24,6 +24,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
       ])
     : [null, null];
   const matches = hit ? symbolsFor(q, hit.resolution, tokenSymbols) : [];
+  const exposures = q ? await api.derivatives(q).catch(() => []) : [];
 
   return (
     <>
@@ -37,7 +38,9 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
           <h2 id="results-title" className="sr-only">Results</h2>
           {hit.resolution.stage === "none" ? (
             <p className="text-muted">
-              Nothing matched “{q}”. Try a company, an everyday word like “house”, or pick from the asset classes below.
+              {exposures.length
+                ? `“${q}” isn't an asset class you can own directly, but there's price exposure to it below.`
+                : `Nothing matched “${q}”. Try a company, an everyday word like “house”, or pick from the asset classes below.`}
             </p>
           ) : (
             <>
@@ -67,6 +70,28 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
               </ul>
             </>
           )}
+        </section>
+      )}
+
+      {country && exposures.length > 0 && (
+        <section aria-labelledby="exposure-title" className="flex flex-col gap-3 rounded-panel bg-surface p-6 sm:p-8">
+          <div>
+            <h2 id="exposure-title" className="text-lg font-bold">Price exposure on Hyperliquid</h2>
+            <p className="text-sm text-muted">Not ownership: perpetual futures that track the price. You never hold the commodity.</p>
+          </div>
+          <ul className="flex flex-col gap-2">
+            {exposures.map(m => (
+              <li key={m.id}>
+                <Link href={`/app/exposure/${m.coin.toLowerCase()}`} className="flex flex-wrap items-center justify-between gap-3 rounded-card bg-wash px-5 py-4 hover:ring-2 hover:ring-field">
+                  <span className="flex flex-col gap-0.5">
+                    <strong>{m.name} perpetual</strong>
+                    <span className="text-sm text-muted">{m.id} · deployed by {m.deployer}</span>
+                  </span>
+                  <span className="rounded-full border-[1.5px] border-cond px-3 py-1.5 text-[13px] font-semibold">Price exposure only</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
         </section>
       )}
 

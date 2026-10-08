@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-const EXAMPLES = ["NVIDIA", "Bitcoin", "A house", "Gold", "Farmland", "Tesla"];
+const EXAMPLES = ["NVIDIA", "Tesla", "Crude oil", "Copper", "Gold", "A house"];
 
 /**
  * The app's first thing: one very large search box. A plain GET form, so a

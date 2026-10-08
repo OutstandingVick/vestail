@@ -1,0 +1,31 @@
+{
+  "provider": "coinbase",
+  "version": "2026-10-08.1",
+  "reviewedAt": "2026-10-08",
+  "rules": [
+    {
+      "id": "us-persons-excluded",
+      "kind": "gate",
+      "status": "restricted",
+      "regions": ["US"],
+      "reason": "Coinbase's tokenized stocks are offered under Regulation S, only in eligible jurisdictions outside the United States.",
+      "short": "Coinbase's tokenized stocks aren't offered in the US.",
+      "source_url": "https://www.base.org/stocks",
+      "source_quality": "primary"
+    },
+    {
+      "id": "permitted-jurisdiction-unpublished",
+      "kind": "gate",
+      "status": "conditional",
+      "regions": ["NG", "DE"],
+      "reason": "Each token is a 1:1 claim on a real share held at Alpaca, issued by Coinbase Onchain SPV Ltd (ADGM). Coinbase offers them only to non-US persons in 'eligible jurisdictions' but does not publish which countries are eligible, so whether this country is one could not be confirmed.",
+      "short": "You can buy it onchain, but Coinbase only offers it in jurisdictions it doesn't name.",
+      "acknowledgement": {
+        "limit": "holding it lawfully and dealing with Coinbase as issuer",
+        "requires": "being in a jurisdiction Coinbase permits (its list is not published)"
+      },
+      "source_url": "https://www.base.org/stocks",
+      "source_quality": "primary"
+    }
+  ]
+}

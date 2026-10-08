@@ -34,7 +34,21 @@ export function CountryCard({ row, nameOf, mine }: { row: MatrixRow; nameOf: Rec
           {mine && cell.status !== "cannot_own" ? "See where to buy →" : `Compare ${nameOf[cell.asset] ?? cell.asset} across countries →`}
         </Link>
       )}
-      <div className="flex flex-wrap gap-2">
+      <div
+        className="flex flex-wrap gap-2"
+        role="group"
+        aria-label={`${row.name}: assets`}
+        onKeyDown={e => {
+          // Left/right (and up/down) move between circles instead of tabbing through all of them.
+          const keys: Record<string, number> = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 };
+          if (!(e.key in keys)) return;
+          const dots = [...e.currentTarget.querySelectorAll("button")];
+          const i = dots.indexOf(document.activeElement as HTMLButtonElement);
+          if (i < 0) return;
+          e.preventDefault();
+          dots[(i + keys[e.key] + dots.length) % dots.length].focus();
+        }}
+      >
         {row.cells.map(c => (
           <VerdictDot key={c.asset} status={c.status} asset={nameOf[c.asset] ?? c.asset}
             selected={picked === c.asset} onSelect={() => setPicked(picked === c.asset ? null : c.asset)} />

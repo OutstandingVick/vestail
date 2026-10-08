@@ -82,6 +82,31 @@ Checks: `npm test` from `v2/` (78 API tests + core token tests), and in `web/`: 
   acknowledgement gate in the browser, and a real Jupiter swap. Sign in at `http://localhost:8081` and walk them first.
 - The owner's account has Nigeria / citizen saved.
 
+## Multichain (added 2026-10-08)
+
+Scope agreed with the owner for the hackathon: Solana (v1's catalog), Robinhood Chain, Base, Hyperliquid. Arbitrum was
+dropped (USDY has no usable DEX liquidity there).
+
+| Chain | Assets | Instrument | How it's bought |
+|---|---|---|---|
+| Solana | v1's 11 | per issuer | Jupiter, USDC (`SwapForm`, `/api/swap/*`) |
+| Robinhood Chain (4663) | NVDA `0xd060…9EEC`, TSLA `0x322F…3b2d` | tokenized_debt (Robinhood Assets Jersey) | KyberSwap, ETH (`EvmSwapForm`, `/api/evm/order`) |
+| Base (8453) | Coinbase NVDAc `0xb200…108C` (8 decimals) | tokenized_equity (1:1 share at Alpaca) | KyberSwap, ETH |
+| Hyperliquid | `xyz:GOLD`, `xyz:CL`, `xyz:COPPER` (trade.xyz HIP-3) | commodity_derivative | Route-out to trade.xyz (`ExposurePanel`, `/api/order/market`); no in-app orders |
+
+- Data: `data/tokens/evm.json` (+ `policies/robinhood.json`, `coinbase.json`), `data/derivatives/` (+ policy). Core:
+  `packages/core/tokens.js` (merges chains, names `instrument`), `derivatives.js` (judged by the venue rule, never the
+  commodity class). API: `/tokens` carries `chain`, `address`, `instrument`; `/derivatives`; `orders/click` takes `mint`
+  (any chain) or `market`.
+- Wallets: everyone gets an embedded EVM wallet (`createOnLogin: "all-users"`); Solana embedded only for users without one.
+  Settings lists all wallets with their chains, can create an EVM wallet or link another.
+- EVM safety: `lib/swap/inspectEvm.ts` (tested, `npm test` in web/) allows only KyberSwap's router swap, the exact ETH
+  amount, output to the buyer. The order route only builds for the user's own Privy-linked EVM wallet.
+- Portfolio reads ETH and stock tokens on both EVM chains (KyberSwap prices) and open Hyperliquid positions (shown apart).
+- Sourcing caveats: Coinbase doesn't publish its eligible countries, so NG/DE are conditional on that; Hyperliquid's US
+  restriction comes from a secondary source (marked so). Policies only cover NG, US, DE; elsewhere = not assessed.
+- Not verified signed in: an EVM buy, an embedded EVM wallet being created, Hyperliquid positions with a real account.
+
 ## Known issues and next steps (suggested order)
 
 1. **Walk the signed-in flows** above and fix anything visual; check phone width (375px) and dark mode on each page.

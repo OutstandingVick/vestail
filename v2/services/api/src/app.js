@@ -21,7 +21,7 @@ import { rateLimit } from "./ratelimit.js";
 export function createApp({
   data = loadData(),
   spec = loadSpec(),
-  clicks = createClickLog(),
+  clicks = createClickLog({ file: process.env.VESTAIL_CLICKS_FILE || null }),
   useSample = process.env.NODE_ENV !== "production",
   apiKeys = keysFromEnv(),
   limiter = rateLimit({ limit: Number(process.env.VESTAIL_RATE_LIMIT) || 120 }),

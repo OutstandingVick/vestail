@@ -11,7 +11,7 @@ import type { BuyerType, Country, Profile } from "@/lib/types";
  * Nothing here is detected. With no profile yet, the country starts blank and
  * the app shows no verdicts until one is chosen.
  */
-export function ProfileBar({ countries, profile }: { countries: Country[]; profile: Profile | null }) {
+export function ProfileBar({ countries, profile, onSaved }: { countries: Country[]; profile: Profile | null; onSaved?: string }) {
   const router = useRouter();
   const [pending, start] = useTransition();
   const [error, setError] = useState<string | null>(null);
@@ -21,12 +21,14 @@ export function ProfileBar({ countries, profile }: { countries: Country[]; profi
   function save(next: { country: string; who: BuyerType }) {
     setCountry(next.country);
     setWho(next.who);
+    // During onboarding nothing is saved until a country is chosen; the buyer type alone is not a profile.
     if (!next.country) return;
     setError(null);
     start(async () => {
       const res = await authedFetch("/api/profile", { method: "POST", body: JSON.stringify(next) });
       if (!res.ok) return setError(await errorOf(res, "Couldn't save that."));
-      router.refresh();
+      if (onSaved) router.push(onSaved);
+      else router.refresh();
     });
   }
 

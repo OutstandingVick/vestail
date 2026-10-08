@@ -27,16 +27,10 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
 
   return (
     <>
-      <section className={`flex flex-col items-center justify-center gap-6 py-12 text-center ${q ? "" : "min-h-[72vh]"}`}>
+      <section className={`flex flex-col items-center justify-center gap-6 pt-8 text-center ${q ? "" : "min-h-[50vh]"}`}>
         <GiantSearch q={q} />
         <ProfileBar countries={countries} profile={profile} />
       </section>
-
-      {!country && (
-        <p className="rounded-panel bg-surface p-8 text-center text-muted">
-          Choose your country above to see what you can own there. We show nothing until you do.
-        </p>
-      )}
 
       {country && hit && (
         <section aria-labelledby="results-title" className="flex flex-col gap-5 rounded-panel bg-surface p-6 sm:p-8">

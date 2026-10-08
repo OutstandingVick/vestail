@@ -5,6 +5,7 @@ import { ActionPanel } from "@/components/ActionPanel";
 import { Provenance } from "@/components/Provenance";
 import { TokenCard } from "@/components/TokenCard";
 import { VerdictBadge } from "@/components/VerdictBadge";
+import { WatchButton } from "@/components/WatchButton";
 import { api } from "@/lib/server/api";
 import { readProfile } from "@/lib/server/profile";
 import { ONCHAIN_CLASSES } from "@/lib/tokens";
@@ -19,7 +20,7 @@ export default async function AssetPage({ params, searchParams }: {
   const asset = assets.find(a => a.id === id);
   if (!asset) notFound();
   if (!profile) {
-    return <p className="mt-12 rounded-panel bg-surface p-8 text-center text-muted">Choose your country on the <Link href="/app" className="text-emphasis underline">search page</Link> first.</p>;
+    return <p className="mt-12 rounded-panel bg-surface p-8 text-center text-muted">Choose your country on the <Link href="/app/start" className="text-emphasis underline">search page</Link> first.</p>;
   }
   const country = countries.find(c => c.code === profile.country)!;
   const rule = await api.rule(profile.country, id, profile.who);
@@ -37,14 +38,17 @@ export default async function AssetPage({ params, searchParams }: {
   return (
     <div className="mt-8 flex flex-col gap-4">
       <p className="text-[13px] font-semibold tracking-[0.08em] text-muted uppercase">
-        <Link href="/app" className="hover:text-ink">Search</Link> / {asset.name}{board && ` / ${board.name}`}
+        <Link href="/app/search" className="hover:text-ink">Search</Link> / {asset.name}{board && ` / ${board.name}`}
       </p>
       <div className="flex flex-wrap items-start gap-4">
         <div className="flex min-w-0 flex-[999_1_560px] flex-col gap-4">
           <section className="flex flex-col gap-4 rounded-panel bg-surface p-7">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <h1 className="text-[28px] font-bold">{asset.name} in {country.name}</h1>
-              <VerdictBadge status={rule.status} size="lg" />
+              <div className="flex items-center gap-2">
+                <WatchButton asset={id} symbol={board?.symbol} />
+                <VerdictBadge status={rule.status} size="lg" />
+              </div>
             </div>
             <p className="text-muted">The asset-class rule for a {profile.who} of {country.flag} {country.name}. It applies to every {asset.name.toLowerCase()} holding, however it&apos;s held.</p>
             <Provenance sources={rule.sources} verifiedAt={rule.verified_at} />

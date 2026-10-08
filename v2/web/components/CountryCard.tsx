@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 
 import { VerdictDot } from "@/components/VerdictDot";
@@ -23,6 +24,16 @@ export function CountryCard({ row, nameOf, mine }: { row: MatrixRow; nameOf: Rec
           {cell ? <><strong className="text-ink">{nameOf[cell.asset] ?? cell.asset}</strong> · {VERDICT[cell.status].label}</> : "Pick a circle to see what you can own"}
         </p>
       </div>
+      {cell && (
+        // Where to go next. Only the buyer's own country can be bought from; a
+        // cannot-own cell is never routed, so it gets the comparison instead.
+        <Link
+          href={mine && cell.status !== "cannot_own" ? `/app/asset/${cell.asset}` : `/app/compare?asset=${cell.asset}&who=${row.who}`}
+          className="-mt-2 text-xs font-semibold text-emphasis"
+        >
+          {mine && cell.status !== "cannot_own" ? "See where to buy →" : `Compare ${nameOf[cell.asset] ?? cell.asset} across countries →`}
+        </Link>
+      )}
       <div className="flex flex-wrap gap-2">
         {row.cells.map(c => (
           <VerdictDot key={c.asset} status={c.status} asset={nameOf[c.asset] ?? c.asset}

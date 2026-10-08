@@ -37,7 +37,8 @@ export interface Rule {
   verified_at: string | null;
 }
 
-export interface TokenSymbol { symbol: string; name: string; entity: string | null; home: string; providers: string[] }
+export interface TokenSymbol { symbol: string; name: string; entity: string | null; home: string; providers: string[]; mints: string[] }
+export interface Order { id: string; at: string; country: string; asset: string; who: BuyerType; venue: string; mint?: string; acknowledged: boolean }
 
 export interface IssuerEvidence { rule: string; kind: "gate" | "note"; reason: string; source_url: string; source_quality: "primary" | "secondary" }
 export interface Token {
@@ -61,3 +62,20 @@ export interface TokenBoard {
 }
 
 export interface Profile { country: string; who: BuyerType }
+
+/** A tokenised stock the user holds, with its value and its verdict for their declared country. */
+export interface Holding {
+  mint: string; symbol: string; token_symbol: string; name: string; provider: string;
+  amount: number; usd: number | null; status: Status | null; asset: string;
+}
+export interface WatchItem { asset: string; symbol?: string; added: string }
+export interface Portfolio {
+  wallets: string[];
+  totals: { usd: number; holdings_usd: number; cash_usd: number; unpriced: number };
+  cash: { sol: number; sol_usd: number | null; usdc: number };
+  holdings: Holding[];
+  orders: Order[];
+  watchlist: (WatchItem & { name: string; status: Status })[];
+  history: { day: string; usd: number }[];
+  errors: string[];
+}

@@ -1,10 +1,12 @@
 "use client";
 
+import { useUser } from "@privy-io/react-auth";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import { ValueChart } from "@/components/ValueChart";
 import { NotAssessedBadge, VerdictBadge } from "@/components/VerdictBadge";
+import { accountOf } from "@/lib/account";
 import { authedFetch, errorOf } from "@/lib/client";
 import type { Asset, Portfolio, Status } from "@/lib/types";
 
@@ -34,6 +36,8 @@ function Empty({ children }: { children: React.ReactNode }) {
  * number comes from /api/portfolio; while it loads, nothing is invented.
  */
 export function Dashboard({ assets, countryName, who }: { assets: Asset[]; countryName: string; who: string }) {
+  const { user } = useUser();
+  const account = accountOf(user);
   const [data, setData] = useState<Portfolio | null>(null);
   const [error, setError] = useState<string | null>(null);
   const nameOf = new Map(assets.map(a => [a.id, a.name]));
@@ -71,15 +75,9 @@ export function Dashboard({ assets, countryName, who }: { assets: Asset[]; count
 
   return (
     <>
-      <header className="flex flex-wrap items-end justify-between gap-4 pt-4">
-        <div>
-          <h1 className="text-[32px] font-extrabold tracking-[-0.02em]">Portfolio</h1>
-          <p className="text-muted">What you hold, and what it&apos;s allowed to be in {countryName}, as a {who}.</p>
-        </div>
-        <div className="flex gap-2">
-          <Link href="/app/compare" className="flex min-h-11 items-center rounded-full border-[1.5px] border-field px-5 font-semibold">Compare</Link>
-          <Link href="/app/search" className="flex min-h-11 items-center rounded-full bg-action px-5 font-semibold text-on-action">Find something to own</Link>
-        </div>
+      <header className="pt-4">
+        <h1 className="text-[32px] font-extrabold tracking-[-0.02em]">Portfolio</h1>
+        <p className="text-muted">What you hold, and what it&apos;s allowed to be in {countryName}, as a {who}.</p>
       </header>
 
       {data.errors.map(e => <p key={e} role="alert" className="rounded-field bg-cond-wash px-4 py-3 text-sm text-cond-ink">{e}</p>)}
@@ -90,23 +88,38 @@ export function Dashboard({ assets, countryName, who }: { assets: Asset[]; count
         </p>
       )}
 
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-        <Card title="Total value" className="lg:col-span-1">
-          <p className="font-display text-5xl font-extrabold tracking-tight">{usd(data.totals.usd)}</p>
+      <section aria-labelledby="balance-title" className="flex flex-wrap items-end justify-between gap-6 rounded-panel bg-surface p-7 shadow-[0_18px_50px_rgba(124,92,255,0.10)]">
+        <div className="flex flex-col gap-2">
+          <p className="text-sm text-muted">Hi, {account.label}</p>
+          <h2 id="balance-title" className="text-sm font-semibold">Total balance</h2>
+          <p className="font-display text-[clamp(44px,6vw,72px)] leading-none font-extrabold tracking-[-0.03em]">{usd(data.totals.usd)}</p>
           <p className="text-sm text-muted">
             {data.wallets.length ? `Across ${data.wallets.length === 1 ? "your wallet" : `${data.wallets.length} wallets`}: ${data.wallets.map(short).join(", ")}` : "No Solana wallet is linked yet."}
           </p>
           {data.totals.unpriced > 0 && <p className="text-xs text-muted">{data.totals.unpriced} holding{data.totals.unpriced > 1 ? "s" : ""} couldn&apos;t be priced and {data.totals.unpriced > 1 ? "are" : "is"} left out.</p>}
-        </Card>
-        <Card title="Cash">
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <Link href="/app/settings#wallet" className="flex min-h-12 items-center gap-2 rounded-full bg-ink px-5 font-semibold text-page">
+            <span aria-hidden="true">+</span> Deposit
+          </Link>
+          <Link href="/app/search" className="flex min-h-12 items-center gap-2 rounded-full bg-action px-5 font-semibold text-on-action">Buy</Link>
+          <Link href="/app/compare" className="flex min-h-12 items-center rounded-full border-[1.5px] border-field px-5 font-semibold">Compare</Link>
+        </div>
+      </section>
+
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+        <Card title="Cash" aside={<span className="text-xs text-muted">Ready to buy with</span>}>
           <p className="font-display text-3xl font-bold">{usd(data.totals.cash_usd)}</p>
           <dl className="grid grid-cols-2 gap-2 text-sm">
             <dt className="text-muted">USDC</dt><dd className="text-right">{data.cash.usdc.toLocaleString(undefined, { maximumFractionDigits: 2 })}</dd>
             <dt className="text-muted">SOL</dt><dd className="text-right">{data.cash.sol.toLocaleString(undefined, { maximumFractionDigits: 4 })}{data.cash.sol_usd !== null && <span className="text-muted"> · {usd(data.cash.sol_usd)}</span>}</dd>
           </dl>
         </Card>
-        <Card title="Your holdings, judged">
+        <Card title="Tokenised stocks" aside={<span className="text-xs text-muted">Live prices</span>}>
           <p className="font-display text-3xl font-bold">{usd(data.totals.holdings_usd)}</p>
+          <p className="text-sm text-muted">{data.holdings.length ? `${data.holdings.length} version${data.holdings.length > 1 ? "s" : ""} held` : "None held yet"}</p>
+        </Card>
+        <Card title="Your holdings, judged" aside={<span className="text-xs text-muted">In {countryName}</span>}>
           <ul className="flex flex-wrap gap-2 text-sm">
             {(["can_own", "conditional", "cannot_own"] as const).map(s => (
               <li key={s} className="flex items-center gap-1.5"><VerdictBadge status={s} /> <span className="font-semibold">{byStatus(s)}</span></li>

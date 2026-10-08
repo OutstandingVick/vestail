@@ -21,10 +21,16 @@ export async function GET(request: Request) {
   const profile = await readProfile();
   if (!profile) return NextResponse.json({ error: "Choose your country first." }, { status: 400 });
 
+  // Each source fails on its own: the dashboard still renders, with a note
+  // saying which part is missing, rather than nothing at all.
   const errors: string[] = [];
+  const soft = <T,>(p: Promise<T>, fallback: T, message: string) => p.catch(() => (errors.push(message), fallback));
   const [wallets, symbols, assets, orders, stored] = await Promise.all([
-    solanaWalletsOf(userId).catch(() => (errors.push("Couldn't read your linked wallets from Privy."), [] as string[])),
-    api.tokenSymbols(), api.assets(), api.orders(userId), readUser(userId),
+    soft(solanaWalletsOf(userId), [] as string[], "Couldn't read your linked wallets from Privy."),
+    soft(api.tokenSymbols(), [], "Couldn't load the list of tokenised stocks."),
+    soft(api.assets(), [], "Couldn't load the asset classes."),
+    soft(api.orders(userId), [], "Couldn't load your buys."),
+    readUser(userId),
   ]);
   const nameOf = new Map(assets.map(a => [a.id, a.name]));
 
@@ -32,12 +38,13 @@ export async function GET(request: Request) {
     errors.push("Couldn't read balances from the Solana network.");
     return { sol: 0, tokens: new Map<string, number>() };
   });
-  const held = symbols.filter(s => s.mints.some(m => balances.tokens.has(m)));
-  const prices = await pricesOf([SOL_MINT, ...held.flatMap(s => s.mints.filter(m => balances.tokens.has(m)))]);
+  const held = symbols.filter(s => (s.mints ?? []).some(m => balances.tokens.has(m)));
+  const prices = await soft(pricesOf([SOL_MINT, ...held.flatMap(s => s.mints.filter(m => balances.tokens.has(m)))]), new Map<string, number>(), "Couldn't get prices from Jupiter.");
 
   const holdings: Holding[] = [];
   for (const s of held) {
-    const board = await api.tokens(s.symbol, profile.country, profile.who);
+    const board = await soft(api.tokens(s.symbol, profile.country, profile.who), null, `Couldn't judge your ${s.symbol} holdings.`);
+    if (!board) continue;
     for (const t of board.tokens) {
       const amount = balances.tokens.get(t.mint);
       if (!amount) continue;
@@ -61,10 +68,10 @@ export async function GET(request: Request) {
     await writeUser(userId, data);
   }
 
-  const watchlist = await Promise.all(data.watchlist.map(async w => ({
-    ...w, name: nameOf.get(w.asset) ?? w.asset,
-    status: (await api.rule(profile.country, w.asset, profile.who)).status,
-  })));
+  const watchlist = (await Promise.all(data.watchlist.map(async w => {
+    const rule = await soft(api.rule(profile.country, w.asset, profile.who), null, "Couldn't judge part of your watchlist.");
+    return rule && { ...w, name: nameOf.get(w.asset) ?? w.asset, status: rule.status };
+  }))).filter(w => w !== null);
 
   const body: Portfolio = {
     wallets,

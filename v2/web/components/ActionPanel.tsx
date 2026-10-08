@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+import { EvmSwapForm } from "@/components/EvmSwapForm";
 import { SwapForm } from "@/components/SwapForm";
 import { authedFetch, errorOf } from "@/lib/client";
 import type { Status, Token, Venue } from "@/lib/types";
@@ -66,10 +67,16 @@ export function ActionPanel({ assetName, classStatus, venues, symbol, tokens }: 
         </div>
       )}
 
-      {symbol && buyable.length > 0 && (
+      {symbol && buyable.some(t => t.chain === "solana") && (
         <section className="flex flex-col gap-2">
-          <h3 className="text-[13px] font-semibold tracking-wide text-muted uppercase">Onchain · via Jupiter</h3>
-          <SwapForm symbol={symbol} tokens={buyable} acknowledged={ack} locked={swapLocked} />
+          <h3 className="text-[13px] font-semibold tracking-wide text-muted uppercase">Solana · via Jupiter</h3>
+          <SwapForm symbol={symbol} tokens={buyable.filter(t => t.chain === "solana")} acknowledged={ack} locked={swapLocked} />
+        </section>
+      )}
+      {symbol && buyable.some(t => t.chain === "base" || t.chain === "robinhood") && (
+        <section className="flex flex-col gap-2 border-t border-line pt-3.5">
+          <h3 className="text-[13px] font-semibold tracking-wide text-muted uppercase">Base and Robinhood Chain · via KyberSwap</h3>
+          <EvmSwapForm symbol={symbol} tokens={buyable.filter(t => t.chain === "base" || t.chain === "robinhood")} acknowledged={ack} locked={swapLocked} />
         </section>
       )}
       {symbol && buyable.length === 0 && (

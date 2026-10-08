@@ -1,0 +1,39 @@
+{
+  "provider": "robinhood",
+  "version": "2026-10-08.1",
+  "reviewedAt": "2026-10-08",
+  "rules": [
+    {
+      "id": "us-persons-excluded",
+      "kind": "gate",
+      "status": "restricted",
+      "regions": ["US"],
+      "reason": "Robinhood Stock Tokens are not registered under US securities laws and may not be offered, sold or delivered within the United States to, or for the account or benefit of, US Persons.",
+      "short": "Robinhood Stock Tokens aren't offered to US persons.",
+      "source_url": "https://docs.robinhood.com/rhj",
+      "source_quality": "primary"
+    },
+    {
+      "id": "debt-exposure-no-share-rights",
+      "kind": "gate",
+      "status": "conditional",
+      "regions": ["NG", "DE"],
+      "reason": "Stock Tokens are tokenised debt securities issued by Robinhood Assets (Jersey) Limited. They give economic exposure to the share but no legal or beneficial rights in it, and only Authorised Participants subscribe or redeem with the issuer. You can buy and hold them onchain; you cannot claim the share.",
+      "short": "You can buy it, but it's a debt token: no rights in the share, and you can't redeem with Robinhood.",
+      "acknowledgement": {
+        "limit": "claiming the underlying share or redeeming with the issuer",
+        "requires": "Authorised Participant status (retail holders only sell onchain)"
+      },
+      "source_url": "https://docs.robinhood.com/chain/stock-tokens",
+      "source_quality": "primary"
+    },
+    {
+      "id": "not-checked-against-restricted-list",
+      "kind": "note",
+      "regions": ["NG", "DE"],
+      "reason": "Robinhood also restricts offers in Canada, the United Kingdom, Switzerland and other jurisdictions on its restricted-jurisdictions page, which was not read for this review. Nigeria and Germany were not on the jurisdictions named in the Stock Tokens overview.",
+      "source_url": "https://docs.robinhood.com/chain/stock-tokens",
+      "source_quality": "primary"
+    }
+  ]
+}

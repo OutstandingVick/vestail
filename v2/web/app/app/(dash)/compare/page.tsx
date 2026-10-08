@@ -27,7 +27,7 @@ export default async function ComparePage({ searchParams }: { searchParams: Prom
             {assets.map(a => <option key={a.id} value={a.id}>{a.name}</option>)}
           </select>
           <input type="hidden" name="who" value={who} />
-          <button type="submit" className="min-h-11 rounded-full bg-action px-5 font-semibold text-ink-strong">Compare</button>
+          <button type="submit" className="min-h-11 rounded-full bg-action px-5 font-semibold text-on-action">Compare</button>
           <div role="group" aria-label="Buyer type" className="flex gap-1 rounded-full bg-tint p-1">
             {BUYER_TYPES.map(w => (
               <Link key={w} href={href({ who: w })} aria-current={w === who ? "true" : undefined}

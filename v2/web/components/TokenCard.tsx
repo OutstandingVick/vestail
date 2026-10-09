@@ -9,6 +9,7 @@ const STRUCTURE: Record<string, string> = {
   total_return_note: "Debt note tracking the price; no shareholder rights",
   security_entitlement: "Entitlement to a share held through a broker",
 };
+const LOGO = new Set(["xstocks", "ondo", "backpack", "tessera", "prestocks"]);
 const ISSUER: Record<string, string> = {
   xstocks: "xStocks (Backed Finance)", ondo: "Ondo Global Markets", backpack: "Backpack Securities",
   tessera: "Tessera", prestocks: "PreStocks", robinhood: "Robinhood (Jersey)", coinbase: "Coinbase",
@@ -21,9 +22,12 @@ export function TokenCard({ token }: { token: Token }) {
     <article className="flex flex-col gap-2.5 rounded-card bg-wash p-[18px]">
       <div className="flex flex-wrap items-center justify-between gap-2.5">
         <span className="flex items-center gap-3">
-          {["robinhood", "coinbase"].includes(token.provider)
-            ? <span aria-hidden="true" className="flex size-8 items-center justify-center rounded-lg bg-tint text-sm font-bold">{token.provider[0].toUpperCase()}</span>
-            : <Image src={`/issuers/${token.provider}.svg`} alt="" width={32} height={32} className="rounded-lg" />}
+          {/* Issuer logos are wide wordmarks: these files are white (drawn for dark sites), so they sit on a wide dark slot in both themes. */}
+          {LOGO.has(token.provider)
+            ? <span className="flex h-9 w-[84px] shrink-0 items-center justify-center rounded-lg bg-[#141414] px-2 ring-1 ring-line">
+                <Image src={`/issuers/${token.provider}.svg`} alt={`${ISSUER[token.provider] ?? token.provider} logo`} width={72} height={24} className="h-5 w-auto max-w-full object-contain" />
+              </span>
+            : <span aria-hidden="true" className="flex h-9 w-[84px] shrink-0 items-center justify-center rounded-lg bg-tint text-sm font-bold">{ISSUER[token.provider]?.split(" ")[0] ?? token.provider}</span>}
           <span className="flex flex-col">
             <strong className="text-[17px]">{token.token_symbol} · {ISSUER[token.provider] ?? token.provider}</strong>
             <span className="flex flex-wrap items-center gap-1.5 text-[13px] text-muted">

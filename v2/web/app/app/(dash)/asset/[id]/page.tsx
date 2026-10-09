@@ -59,8 +59,8 @@ export default async function AssetPage({ params, searchParams }: {
           {board && (
             <section aria-labelledby="tokens-title" className="flex flex-col gap-3.5 rounded-panel bg-surface p-7">
               <div>
-                <h2 id="tokens-title" className="text-[22px] font-bold">{board.name} onchain, on Solana</h2>
-                <p className="text-[15px] text-muted">Same ticker, different legal claims. Each is judged by its issuer&apos;s own terms; the stricter of the issuer rule and the class rule decides.</p>
+                <h2 id="tokens-title" className="text-[22px] font-bold">{board.name} onchain</h2>
+                <p className="text-[15px] text-muted">Same ticker, different legal claims, on {[...new Set(board.tokens.map(t => t.chain_name))].join(", ")}. Each is judged by its issuer&apos;s own terms; the stricter of the issuer rule and the class rule decides.</p>
               </div>
               {board.tokens.map(t => <TokenCard key={t.mint} token={t} />)}
             </section>

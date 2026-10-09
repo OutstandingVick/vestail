@@ -1,6 +1,4 @@
-import { AppGate } from "@/components/AppGate";
-import { readProfile } from "@/lib/server/profile";
-
-export default async function AppLayout({ children }: { children: React.ReactNode }) {
-  return <AppGate profile={await readProfile()}>{children}</AppGate>;
+/** /app is the public sign-in page; the signed-in routes add their own gate in (dash) and (onboarding). */
+export default function AppLayout({ children }: { children: React.ReactNode }) {
+  return children;
 }

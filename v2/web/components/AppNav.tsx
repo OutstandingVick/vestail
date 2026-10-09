@@ -21,13 +21,13 @@ export function AppNav() {
   async function signOut() {
     await fetch("/api/profile", { method: "DELETE" });
     await logout();
-    router.replace("/");
+    router.replace("/app");
   }
 
   return (
     <header className="sticky top-0 z-10 border-b border-line bg-page/90 backdrop-blur">
       <div className="mx-auto flex max-w-[1180px] flex-wrap items-center gap-x-6 gap-y-3 px-4 py-3">
-        <Link href="/app" aria-label="Vestail home"><Logo /></Link>
+        <Link href="/app/portfolio" aria-label="Vestail home"><Logo /></Link>
         <span className="grow" />
         <ThemeToggle />
         <span className="flex items-center gap-2 rounded-full border border-line bg-surface py-1.5 pr-1.5 pl-3.5 text-sm">

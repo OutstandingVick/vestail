@@ -8,7 +8,7 @@ import { authedFetch } from "@/lib/client";
 import type { Profile } from "@/lib/types";
 
 /**
- * The app is for signed-in users: anyone else goes back to the front door.
+ * The app is for signed-in users: anyone else goes to the sign-in page (/app).
  * (The real guarantees live in the API routes, which verify the Privy token;
  * this only keeps the screens tidy.)
  *
@@ -22,7 +22,7 @@ export function AppGate({ profile, children }: { profile: Profile | null; childr
   const restored = useRef(false);
 
   useEffect(() => {
-    if (ready && !authenticated) router.replace("/");
+    if (ready && !authenticated) router.replace("/app");
   }, [ready, authenticated, router]);
 
   useEffect(() => {

@@ -14,7 +14,7 @@ import type { Country, Profile } from "@/lib/types";
 
 const NAV = [
   { href: "/app/search", label: "Search", icon: "M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-3.5-3.5" },
-  { href: "/app", label: "Portfolio", icon: "M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z" },
+  { href: "/app/portfolio", label: "Portfolio", icon: "M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z" },
   { href: "/app/compare", label: "Compare", icon: "M4 19V9M10 19V5M16 19v-7M22 19H2" },
 ];
 
@@ -36,7 +36,7 @@ export function Sidebar({ profile, country }: { profile: Profile; country: Count
   const router = useRouter();
   const { user, logout } = usePrivy();
   const account = accountOf(user);
-  const active = (href: string) => (href === "/app" ? path === "/app" : path.startsWith(href));
+  const active = (href: string) => path.startsWith(href);
 
   // On a phone the sidebar folds into a menu button; it closes again when
   // the page changes or Escape is pressed.
@@ -52,13 +52,13 @@ export function Sidebar({ profile, country }: { profile: Profile; country: Count
   async function signOut() {
     await fetch("/api/profile", { method: "DELETE" });
     await logout();
-    router.replace("/");
+    router.replace("/app");
   }
 
   return (
     <aside className="flex w-full flex-col gap-4 rounded-panel bg-surface p-4 md:sticky md:top-4 md:h-[calc(100vh-2rem)] md:w-[248px] md:shrink-0">
       <div className="flex items-center justify-between gap-2">
-        <Link href="/app" aria-label="Vestail home"><Logo className="h-6 w-auto" /></Link>
+        <Link href="/app/portfolio" aria-label="Vestail home"><Logo className="h-6 w-auto" /></Link>
         <div className="flex items-center gap-1">
           <ThemeToggle />
           <button

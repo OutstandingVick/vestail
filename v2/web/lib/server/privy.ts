@@ -39,6 +39,7 @@ export async function updateMetadata(userId: string, patch: Record<string, strin
   const user = await privy().users()._get(userId);
   const current = (user.custom_metadata ?? {}) as Record<string, string | number | boolean>;
   await privy().users().setCustomMetadata(userId, { custom_metadata: { ...current, ...patch } });
+  return current;
 }
 
 /** Store the self-declared profile on the Privy user, so it follows them across devices. */

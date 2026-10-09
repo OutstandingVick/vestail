@@ -37,7 +37,7 @@ export function ProfileBar({ countries, profile, onSaved }: { countries: Country
       type="button"
       aria-pressed={who === value}
       onClick={() => save({ country, who: value })}
-      className={`min-h-10 rounded-full px-4 text-[15px] font-semibold ${who === value ? "bg-ink text-white" : "text-ink"}`}
+      className={`min-h-10 rounded-full px-4 text-[15px] font-semibold ${who === value ? "bg-ink text-on-ink" : "text-ink"}`}
     >
       {label}
     </button>

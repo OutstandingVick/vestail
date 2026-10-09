@@ -52,7 +52,7 @@ export default async function MarketsPage({ searchParams }: { searchParams: Prom
 
   return (
     <div className="flex flex-col gap-7 pt-4">
-      <header><p className="mb-2 text-xs font-bold uppercase tracking-[0.13em] text-action-ink">Available through Vestail</p><h1 className="text-[clamp(36px,5vw,64px)] font-extrabold leading-[1.02] tracking-[-0.05em]">Markets</h1><p className="mt-3 max-w-3xl leading-7 text-muted">Everything you can buy or trade through Vestail, judged for your declared country and buyer type.</p></header>
+      <header><p className="mb-2 font-accent text-xs font-bold uppercase tracking-[0.13em] text-action-ink">Available through Vestail</p><h1 className="text-[clamp(36px,5vw,64px)] font-extrabold leading-[1.02] tracking-[-0.05em]">Markets</h1><p className="mt-3 max-w-3xl leading-7 text-muted">Everything you can buy or trade through Vestail, judged for your declared country and buyer type.</p></header>
       <p className="rounded-card bg-tint px-5 py-4 text-sm leading-6 text-muted"><strong className="text-ink">Commodity markets are price exposure, not ownership.</strong> Hyperliquid rows are perpetual futures; you never own the underlying gold, oil, or copper.</p>
 
       <section aria-label="Market filters" className="flex flex-col gap-5 rounded-panel bg-surface p-5 sm:p-6">

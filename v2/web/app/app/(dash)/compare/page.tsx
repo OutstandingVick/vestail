@@ -31,7 +31,7 @@ export default async function ComparePage({ searchParams }: { searchParams: Prom
           <div role="group" aria-label="Buyer type" className="flex gap-1 rounded-full bg-tint p-1">
             {BUYER_TYPES.map(w => (
               <Link key={w} href={href({ who: w })} aria-current={w === who ? "true" : undefined}
-                className={`flex min-h-10 items-center rounded-full px-4 text-[15px] font-semibold capitalize ${w === who ? "bg-ink text-white" : ""}`}>
+                className={`flex min-h-10 items-center rounded-full px-4 text-[15px] font-semibold capitalize ${w === who ? "bg-ink text-on-ink" : ""}`}>
                 {w}s
               </Link>
             ))}

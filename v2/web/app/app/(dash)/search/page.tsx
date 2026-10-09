@@ -1,11 +1,13 @@
 import Link from "next/link";
 
 import { CountryBoard } from "@/components/CountryBoard";
+import { DiscoverExplorer } from "@/components/DiscoverExplorer";
 import { GiantSearch } from "@/components/GiantSearch";
 import { ProfileBar } from "@/components/ProfileBar";
 import { Trail } from "@/components/Trail";
 import { VerdictBadge } from "@/components/VerdictBadge";
 import { api } from "@/lib/server/api";
+import { loadDiscovery } from "@/lib/server/discovery";
 import { readProfile } from "@/lib/server/profile";
 import { BUYER_TYPES, type BuyerType } from "@/lib/types";
 import { ONCHAIN_CLASSES, symbolsFor } from "@/lib/tokens";
@@ -31,6 +33,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
     : [null, null];
   const matches = hit ? symbolsFor(q, hit.resolution, tokenSymbols) : [];
   const exposures = q ? await api.derivatives(q).catch(() => []) : [];
+  const discovery = profile ? await loadDiscovery(profile) : null;
 
   return (
     <>
@@ -119,6 +122,15 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
 
       {country && board && board.resolution.stage !== "none" && (
         <CountryBoard q={q} rows={board.rows} nameOf={Object.fromEntries(nameOf)} who={boardWho} sort={boardSort} mine={country.code} />
+      )}
+
+      {discovery && (
+        <DiscoverExplorer
+          rows={discovery.rows}
+          country={`${discovery.country.flag} ${discovery.country.name}`}
+          buyer={profile!.who}
+          countryCode={discovery.country.code}
+        />
       )}
     </>
   );

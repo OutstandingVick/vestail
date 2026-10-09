@@ -1,12 +1,10 @@
 "use client";
 
 import { useLogin, useLoginWithEmail, usePrivy } from "@privy-io/react-auth";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { Logo } from "@/components/Logo";
-import { ThemeToggle } from "@/components/ThemeToggle";
 
 type Mode = "signup" | "login";
 
@@ -61,17 +59,18 @@ export default function SignInPage() {
         <div className="absolute top-1/2 left-1/2 size-[min(92vw,880px)] -translate-x-1/2 -translate-y-1/2 bg-[url('/assets/atlantic-earth-globe.png')] bg-contain bg-center bg-no-repeat opacity-[0.13] saturate-[0.7]" />
       </div>
 
-      <header className="mx-auto flex w-full max-w-[1180px] items-center justify-between px-4 py-4">
-        <Link href="/" aria-label="Vestail home"><Logo /></Link>
-        <ThemeToggle />
-      </header>
+      <main className="flex flex-1 flex-col items-center justify-center gap-6 px-4 py-12 sm:py-16">
+        <div className="flex flex-col items-center text-center">
+          <Logo className="h-11 w-auto sm:h-13" />
+          <p className="mt-4 max-w-[560px] text-muted">
+            See what you can own where you are, and buy it where you&apos;re allowed.
+          </p>
+        </div>
 
-      <main className="flex flex-1 flex-col items-center justify-center gap-6 px-4 pb-16">
         <div className="text-center">
           <h1 className="text-[clamp(32px,4.5vw,48px)] leading-tight font-extrabold tracking-[-0.03em] text-ink-strong">
             {mode === "signup" ? "Start owning, the right way" : "Welcome back"}
           </h1>
-          <p className="mt-2 text-muted">See what you can own where you are, and buy it where you&apos;re allowed.</p>
         </div>
 
         <section aria-label={mode === "signup" ? "Sign up" : "Log in"}

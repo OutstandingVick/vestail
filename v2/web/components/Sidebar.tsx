@@ -1,5 +1,15 @@
 "use client";
 
+import {
+  ArrowsLeftRight,
+  ChartLineUp,
+  ClockCounterClockwise,
+  Compass,
+  Gear,
+  List,
+  Wallet,
+  X,
+} from "@phosphor-icons/react";
 import { usePrivy } from "@privy-io/react-auth";
 
 import { Avatar } from "@/components/Avatar";
@@ -13,21 +23,12 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import type { Country, Profile } from "@/lib/types";
 
 const NAV = [
-  { href: "/app/search", label: "Search", icon: "M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-3.5-3.5" },
-  { href: "/app/portfolio", label: "Portfolio", icon: "M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z" },
-  { href: "/app/discover", label: "Discover", icon: "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM15.5 8.5l-2 5-5 2 2-5z" },
-  { href: "/app/markets", label: "Markets", icon: "M4 20V10M4 7V4M10 20v-4M10 13V5M16 20v-7M16 10V4M22 20V9M22 6V4" },
-  { href: "/app/activity", label: "Activity", icon: "M12 8v5l3 2M3.5 12a8.5 8.5 0 1 0 2.5-6M3 4v5h5" },
-  { href: "/app/compare", label: "Compare", icon: "M4 19V9M10 19V5M16 19v-7M22 19H2" },
+  { href: "/app/search", label: "Discover", icon: Compass },
+  { href: "/app/portfolio", label: "Portfolio", icon: Wallet },
+  { href: "/app/markets", label: "Markets", icon: ChartLineUp },
+  { href: "/app/activity", label: "Activity", icon: ClockCounterClockwise },
+  { href: "/app/compare", label: "Compare", icon: ArrowsLeftRight },
 ];
-
-function Icon({ d }: { d: string }) {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d={d} />
-    </svg>
-  );
-}
 
 /**
  * The dashboard's frame: navigation, the buyer's declared country (always
@@ -72,9 +73,7 @@ export function Sidebar({ profile, country }: { profile: Profile; country: Count
             aria-label={open ? "Close menu" : "Open menu"}
             className="flex size-10 items-center justify-center rounded-full hover:bg-tint md:hidden"
           >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
-              <path d={open ? "M6 6l12 12M18 6L6 18" : "M4 7h16M4 12h16M4 17h16"} />
-            </svg>
+            {open ? <X size={20} weight="regular" aria-hidden="true" /> : <List size={20} weight="regular" aria-hidden="true" />}
           </button>
         </div>
       </div>
@@ -90,18 +89,22 @@ export function Sidebar({ profile, country }: { profile: Profile; country: Count
       </Link>
 
       <nav aria-label="App" className="flex flex-col gap-1">
-        {NAV.map(n => (
-          <Link key={n.href} href={n.href} aria-current={active(n.href) ? "page" : undefined}
-            className={`flex min-h-11 items-center gap-3 rounded-xl px-3 text-[15px] ${active(n.href) ? "bg-tint font-semibold" : "text-muted hover:bg-wash hover:text-ink"}`}>
-            <Icon d={n.icon} />{n.label}
-          </Link>
-        ))}
+        {NAV.map(n => {
+          const selected = active(n.href);
+          const NavIcon = n.icon;
+          return (
+            <Link key={n.href} href={n.href} aria-current={selected ? "page" : undefined}
+              className={`flex min-h-11 items-center gap-3 rounded-xl px-3 text-[15px] ${selected ? "bg-tint font-semibold" : "text-muted hover:bg-wash hover:text-ink"}`}>
+              <NavIcon size={18} weight={selected ? "fill" : "regular"} aria-hidden="true" />{n.label}
+            </Link>
+          );
+        })}
       </nav>
 
       <div className="mt-auto flex flex-col gap-2 border-t border-line pt-3">
         <Link href="/app/settings" aria-current={path === "/app/settings" ? "page" : undefined}
           className={`flex min-h-11 items-center gap-3 rounded-xl px-3 text-[15px] ${path === "/app/settings" ? "bg-tint font-semibold" : "text-muted hover:bg-wash hover:text-ink"}`}>
-          <Icon d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-2.9 1.2V21a2 2 0 1 1-4 0v-.1A1.7 1.7 0 0 0 7 19.4l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.7 1.7 0 0 0 3 13.7H3a2 2 0 1 1 0-4h.1A1.7 1.7 0 0 0 4.6 7l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.7 1.7 0 0 0 10.3 3V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 2.9 1.2l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z" />Settings
+          <Gear size={18} weight={path === "/app/settings" ? "fill" : "regular"} aria-hidden="true" />Settings
         </Link>
         <div className="flex items-center justify-between gap-2 rounded-xl bg-wash py-1.5 pr-1.5 pl-1.5 text-sm">
           <Link href="/app/settings" className="flex min-w-0 items-center gap-2">

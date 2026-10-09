@@ -1,3 +1,4 @@
+import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 
 import { CountryBoard } from "@/components/CountryBoard";
@@ -34,7 +35,6 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
   const matches = hit ? symbolsFor(q, hit.resolution, tokenSymbols) : [];
   const exposures = q ? await api.derivatives(q).catch(() => []) : [];
   const discovery = profile ? await loadDiscovery(profile) : null;
-
   return (
     <>
       <section className={`flex flex-col items-center justify-center gap-6 pt-8 text-center ${q ? "" : "min-h-[50vh]"}`}>
@@ -56,7 +56,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
                       <strong className="text-lg">{m.name} <span className="font-normal text-muted">{m.symbol}</span></strong>
                       <span className="text-sm text-muted">{m.providers.length} tokenized version{m.providers.length > 1 ? "s" : ""} · {m.chains.length > 1 ? `${m.chains.length} chains` : "Solana"}</span>
                     </span>
-                    <span className="rounded-full bg-surface px-3 py-1.5 text-[13px] font-semibold">See versions →</span>
+                    <span className="inline-flex items-center gap-1 rounded-full bg-surface px-3 py-1.5 text-[13px] font-semibold">See versions <ArrowRight size={14} weight="regular" aria-hidden="true" /></span>
                   </Link>
                 </li>
               ))}
@@ -132,6 +132,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
           countryCode={discovery.country.code}
         />
       )}
+
     </>
   );
 }

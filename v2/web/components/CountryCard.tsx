@@ -1,5 +1,6 @@
 "use client";
 
+import { ArrowRight } from "@phosphor-icons/react";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -29,9 +30,10 @@ export function CountryCard({ row, nameOf, mine }: { row: MatrixRow; nameOf: Rec
         // cannot-own cell is never routed, so it gets the comparison instead.
         <Link
           href={mine && cell.status !== "cannot_own" ? `/app/asset/${cell.asset}` : `/app/compare?asset=${cell.asset}&who=${row.who}`}
-          className="-mt-2 text-xs font-semibold text-emphasis"
+          className="-mt-2 inline-flex items-center gap-1 text-xs font-semibold text-emphasis"
         >
-          {mine && cell.status !== "cannot_own" ? "See where to buy →" : `Compare ${nameOf[cell.asset] ?? cell.asset} across countries →`}
+          {mine && cell.status !== "cannot_own" ? "See where to buy" : `Compare ${nameOf[cell.asset] ?? cell.asset} across countries`}
+          <ArrowRight size={14} weight="regular" aria-hidden="true" />
         </Link>
       )}
       <div

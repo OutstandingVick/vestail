@@ -1,3 +1,4 @@
+import { MagnifyingGlass } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 
 const EXAMPLES = ["NVIDIA", "Tesla", "SpaceX", "Gold", "Crude oil", "Copper", "Farmland"];
@@ -18,10 +19,7 @@ export function GiantSearch({ q, action = "/app/search" }: { q: string; action?:
         <strong className="text-ink">Hyperliquid</strong>, and check who can own 20 kinds of assets in 12 countries.
       </p>
       <form action={action} method="get" role="search" className="flex w-full max-w-[960px] items-center gap-2.5 rounded-full border-2 border-line bg-surface py-2.5 pr-2.5 pl-7 shadow-[0_18px_50px_rgba(124,92,255,0.14)]">
-        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#636069" strokeWidth="2" strokeLinecap="round" aria-hidden="true" className="shrink-0">
-          <circle cx="11" cy="11" r="7" />
-          <path d="M20 20l-3.5-3.5" />
-        </svg>
+        <MagnifyingGlass size={30} weight="regular" className="shrink-0 text-muted" aria-hidden="true" />
         <label htmlFor="q" className="sr-only">Search an asset, company or token</label>
         <input
           id="q"

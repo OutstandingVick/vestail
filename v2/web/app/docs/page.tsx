@@ -1,3 +1,4 @@
+import { CheckCircle, WarningCircle, XCircle } from "@phosphor-icons/react/dist/ssr";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -180,9 +181,9 @@ export default function DocsPage() {
               <h2>Three states. Never a misleading boolean.</h2>
             </div>
             <div className={styles.verdictGrid}>
-              <article className={styles.can}><span className={styles.verdictIcon} aria-hidden="true">✓</span><h3>Can own</h3><code>can_own · 2</code><p>Ownership is permitted outright for this buyer context.</p></article>
-              <article className={styles.conditional}><span className={styles.verdictIcon} aria-hidden="true">!</span><h3>Conditional</h3><code>conditional · 1</code><p>A licence, cap, approval, residency rule, or other condition applies.</p></article>
-              <article className={styles.cannot}><span className={styles.verdictIcon} aria-hidden="true">×</span><h3>Cannot own</h3><code>cannot_own · 0</code><p>Vestail does not provide a buy route for this buyer context.</p></article>
+              <article className={styles.can}><span className={styles.verdictIcon}><CheckCircle size={22} weight="duotone" aria-hidden="true" /></span><h3>Can own</h3><code>can_own · 2</code><p>Ownership is permitted outright for this buyer context.</p></article>
+              <article className={styles.conditional}><span className={styles.verdictIcon}><WarningCircle size={22} weight="duotone" aria-hidden="true" /></span><h3>Conditional</h3><code>conditional · 1</code><p>A licence, cap, approval, residency rule, or other condition applies.</p></article>
+              <article className={styles.cannot}><span className={styles.verdictIcon}><XCircle size={22} weight="duotone" aria-hidden="true" /></span><h3>Cannot own</h3><code>cannot_own · 0</code><p>Vestail does not provide a buy route for this buyer context.</p></article>
             </div>
             <div className={styles.ruleBox}><strong>Routing invariant</strong><p>Conditional routes require <code>acknowledged: true</code>. Cannot-own routes are always refused.</p></div>
           </section>

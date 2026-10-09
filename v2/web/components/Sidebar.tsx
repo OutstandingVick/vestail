@@ -102,7 +102,7 @@ export function Sidebar({ profile, country }: { profile: Profile; country: Count
         </Link>
         <div className="flex items-center justify-between gap-2 rounded-xl bg-wash py-1.5 pr-1.5 pl-1.5 text-sm">
           <Link href="/app/settings" className="flex min-w-0 items-center gap-2">
-            <Avatar label={account.label} color={account.avatar} size={30} />
+            <Avatar label={account.label} color={account.avatar} imageUrl={account.avatarUrl} size={30} />
             <span className="truncate font-semibold">{account.label}</span>
           </Link>
           <button type="button" onClick={signOut} className="min-h-8 shrink-0 rounded-full bg-surface px-3 text-[13px]">Sign out</button>

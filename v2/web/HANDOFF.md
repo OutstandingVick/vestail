@@ -49,6 +49,7 @@ Checks: `npm test` from `v2/` (78 API tests + core token tests), and in `web/`: 
 | `/app` | Sign up / Log in page (email code via Privy's headless flow, Log in uses `disableSignup`; or a wallet) | `app/app/page.tsx` |
 | `/app/start` | **First visit only**: giant search + choose country. Redirects to `/app` once a profile exists. | `app/app/(onboarding)/start` |
 | `/app/portfolio` | Portfolio dashboard (balance card, cash, tokenised stocks, verdict counts, value chart, buys, holdings, watchlist) | `components/Dashboard.tsx`, `app/api/portfolio` |
+| `/app/discover` | Discovery for the declared country and buyer type: least-common things they can own, onchain versions buyable today, conditional ones (within reach), commodity exposure, and what they could own elsewhere. Built only from existing verdicts (`lib/discover.ts`). | `app/app/(dash)/discover` |
 | `/app/search?q=&who=&sort=` | Giant search; after a search: resolver trail, your result, then the country board (a card per country, a verdict circle per asset, Citizens/Foreigners, By status/By asset). Nothing below the search until the user searches. | `app/app/(dash)/search`, `components/CountryBoard.tsx`, `CountryCard.tsx`, `VerdictDot.tsx` |
 | `/app/asset/[id]?symbol=` | Class verdict + provenance, onchain versions (tokens), action panel, Watch button | `app/app/(dash)/asset/[id]` |
 | `/app/compare?asset=&who=` | One class across 12 countries | `app/app/(dash)/compare` |

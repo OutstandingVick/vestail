@@ -33,12 +33,12 @@ export function DiscoverExplorer({ rows, country, buyer, countryCode }: { rows: 
   }, [kind, query, rows, verdict]);
 
   return (
-    <div className="flex flex-col gap-7 pb-2 pt-4 sm:gap-9">
+    <section id="discover" aria-labelledby="discover-title" className="flex scroll-mt-6 flex-col gap-7 border-t border-line pb-2 pt-10 sm:gap-9 sm:pt-14">
       <header className="flex flex-col gap-5 border-b border-line pb-8 sm:pb-10">
         <div className="flex flex-wrap items-end justify-between gap-5">
           <div className="max-w-[760px]">
-            <p className="mb-2 text-xs font-bold uppercase tracking-[0.13em] text-action-ink">Ownership opportunities</p>
-            <h1 className="text-[clamp(36px,5vw,68px)] font-extrabold leading-[1.02] tracking-[-0.055em] text-balance">Discover what&apos;s open to you.</h1>
+            <p className="mb-2 text-xs font-bold uppercase tracking-[0.13em] text-action-ink">Discover</p>
+            <h2 id="discover-title" className="text-[clamp(32px,4vw,54px)] font-extrabold leading-[1.05] tracking-[-0.05em] text-balance">Explore what&apos;s open to you.</h2>
             <p className="mt-4 max-w-[680px] text-base leading-7 text-muted sm:text-lg">Browse assets, onchain versions, and price exposure assessed for a <span className="font-semibold text-ink">{buyer}</span> in <span className="font-semibold text-ink">{country}</span>.</p>
           </div>
           <Link href="/app/settings" className="inline-flex min-h-11 items-center rounded-full border border-line bg-surface px-4 text-sm font-semibold hover:bg-tint">Change buyer profile</Link>
@@ -77,7 +77,7 @@ export function DiscoverExplorer({ rows, country, buyer, countryCode }: { rows: 
         )}
       </section>
       <p className="rounded-card bg-tint px-5 py-4 text-sm leading-6 text-muted"><strong className="text-ink">Check before you act.</strong> Asset-class rules are not sourced yet and should be treated as guidance. Onchain versions are assessed against their issuers&apos; published terms.</p>
-    </div>
+    </section>
   );
 }
 

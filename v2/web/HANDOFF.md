@@ -15,14 +15,13 @@ whole project; this file covers only the product app and what is left to do.
 ```bash
 cd ~/vestail/v2
 VESTAIL_API_KEYS=local-dev-key VESTAIL_CLICKS_FILE=.data/clicks.jsonl npm start -w @vestail/api   # :8787
-npm run dev -w @vestail/web                                                                     # :8081
-cd app && python3 -m http.server 8080                                                           # marketing site :8080
+npm run dev -w @vestail/web                                                                     # :8080 (site at /, app at /app)
 ```
 
 `web/.env.local` (git-ignored, already filled on this machine; template in `web/.env.example`):
 `NEXT_PUBLIC_PRIVY_APP_ID`, `PRIVY_APP_SECRET`, `VESTAIL_API_URL`, `VESTAIL_API_KEY=local-dev-key`, `JUPITER_API_KEY`,
 `SOLANA_RPC_URL` (server-only Helius URL), optional `VESTAIL_ORDER_SECRET` (required in production), `VESTAIL_DATA_DIR`.
-Privy dashboard must list `http://localhost:8081` as an allowed origin. Port 3000 is taken by Docker on this machine.
+Privy dashboard must list `http://localhost:8080` as an allowed origin. The Next app serves the marketing site (`v2/app/index.html`, read from disk at `/`, images at `/assets/*`) and the app under `/app`, so the old Python static server is not needed. Port 3000 is taken by Docker on this machine.
 
 Checks: `npm test` from `v2/` (78 API tests + core token tests), and in `web/`: `npx tsc --noEmit` and `npx next lint`.
 `next build` works but don't run it while `next dev` is running (they share `.next`).
@@ -46,9 +45,10 @@ Checks: `npm test` from `v2/` (78 API tests + core token tests), and in `web/`: 
 
 | Route | What | Key files |
 |---|---|---|
-| `/` | Front door; Try App opens Privy popup. `/?signin` opens it automatically (the marketing site links here). | `app/page.tsx` |
+| `/` | The marketing site, served from `v2/app/index.html`; its Open App buttons go to `/app` | `app/route.ts`, `app/assets/[...path]/route.ts` |
+| `/app` | Sign up / Log in page (email code via Privy's headless flow, Log in uses `disableSignup`; or a wallet) | `app/app/page.tsx` |
 | `/app/start` | **First visit only**: giant search + choose country. Redirects to `/app` once a profile exists. | `app/app/(onboarding)/start` |
-| `/app` | Portfolio dashboard (balance card, cash, tokenised stocks, verdict counts, value chart, buys, holdings, watchlist) | `components/Dashboard.tsx`, `app/api/portfolio` |
+| `/app/portfolio` | Portfolio dashboard (balance card, cash, tokenised stocks, verdict counts, value chart, buys, holdings, watchlist) | `components/Dashboard.tsx`, `app/api/portfolio` |
 | `/app/search?q=&who=&sort=` | Giant search; after a search: resolver trail, your result, then the country board (a card per country, a verdict circle per asset, Citizens/Foreigners, By status/By asset). Nothing below the search until the user searches. | `app/app/(dash)/search`, `components/CountryBoard.tsx`, `CountryCard.tsx`, `VerdictDot.tsx` |
 | `/app/asset/[id]?symbol=` | Class verdict + provenance, onchain versions (tokens), action panel, Watch button | `app/app/(dash)/asset/[id]` |
 | `/app/compare?asset=&who=` | One class across 12 countries | `app/app/(dash)/compare` |

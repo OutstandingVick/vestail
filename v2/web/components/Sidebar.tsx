@@ -15,6 +15,7 @@ import type { Country, Profile } from "@/lib/types";
 const NAV = [
   { href: "/app/search", label: "Search", icon: "M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-3.5-3.5" },
   { href: "/app/portfolio", label: "Portfolio", icon: "M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z" },
+  { href: "/app/discover", label: "Discover", icon: "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM15.5 8.5l-2 5-5 2 2-5z" },
   { href: "/app/compare", label: "Compare", icon: "M4 19V9M10 19V5M16 19v-7M22 19H2" },
 ];
 

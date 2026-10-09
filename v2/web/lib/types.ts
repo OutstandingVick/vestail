@@ -39,6 +39,12 @@ export interface Rule {
 
 export interface TokenSymbol { symbol: string; name: string; entity: string | null; home: string; providers: string[]; chains: Chain[]; mints: string[] }
 export interface Order { id: string; at: string; country: string; asset: string; who: BuyerType; venue: string; mint?: string; market?: string; chain?: Chain; acknowledged: boolean }
+export interface ActivityItem extends Order {
+  name: string;
+  symbol?: string;
+  chain_label?: string;
+  country_label?: string;
+}
 
 /** A Hyperliquid perpetual judged for a country: price exposure, never ownership. */
 export interface Market {

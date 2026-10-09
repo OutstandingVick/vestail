@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 
+import { AppFooter } from "@/components/AppFooter";
 import { Logo } from "@/components/Logo";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
@@ -30,7 +31,7 @@ export default function Landing() {
   }, [ready, authenticated, router, login]);
 
   return (
-    <div className="min-h-screen">
+    <div className="mx-auto flex min-h-screen max-w-[1180px] flex-col px-4">
       <header className="mx-auto flex max-w-[1180px] items-center gap-4 px-4 py-4">
         <Link href="/" aria-label="Vestail" className="grow"><Logo /></Link>
         <ThemeToggle />
@@ -43,7 +44,7 @@ export default function Landing() {
           Try App
         </button>
       </header>
-      <main className="mx-auto flex max-w-[1000px] flex-col items-center gap-6 px-4 pt-20 pb-32 text-center">
+      <main id="methodology" className="mx-auto flex max-w-[1000px] grow flex-col items-center gap-6 px-4 pt-20 pb-32 text-center">
         <h1 className="text-[clamp(44px,7vw,96px)] leading-none font-extrabold tracking-[-0.04em] text-ink-strong">
           What can you actually own here?
         </h1>
@@ -60,6 +61,7 @@ export default function Landing() {
           Try App
         </button>
       </main>
+      <AppFooter />
     </div>
   );
 }

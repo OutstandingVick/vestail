@@ -1,3 +1,4 @@
+import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 
@@ -52,7 +53,7 @@ export default async function AssetPage({ params, searchParams }: {
             </div>
             <p className="text-muted">The asset-class rule for a {profile.who} of {country.flag} {country.name}. It applies to every {asset.name.toLowerCase()} holding, however it&apos;s held.</p>
             <Provenance sources={rule.sources} verifiedAt={rule.verified_at} />
-            <Link href={`/app/compare?asset=${id}`} className="text-[15px] font-semibold text-emphasis">Compare {asset.name.toLowerCase()} across all countries →</Link>
+            <Link href={`/app/compare?asset=${id}`} className="inline-flex items-center gap-1 text-[15px] font-semibold text-emphasis">Compare {asset.name.toLowerCase()} across all countries <ArrowRight size={16} weight="regular" aria-hidden="true" /></Link>
           </section>
 
           {board && (

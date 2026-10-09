@@ -1,3 +1,4 @@
+import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -45,7 +46,7 @@ export default async function ExposurePage({ params }: { params: Promise<{ coin:
             {market.related_asset && (
               <p className="text-sm text-muted">
                 Want to own {market.name.toLowerCase()} itself? That&apos;s a different question:{" "}
-                <Link href={`/app/asset/${market.related_asset}`} className="font-semibold text-emphasis">see the ownership rule in {country.name} →</Link>
+                <Link href={`/app/asset/${market.related_asset}`} className="inline-flex items-center gap-1 font-semibold text-emphasis">see the ownership rule in {country.name} <ArrowRight size={16} weight="regular" aria-hidden="true" /></Link>
               </p>
             )}
           </section>

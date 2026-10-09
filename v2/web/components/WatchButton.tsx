@@ -1,5 +1,6 @@
 "use client";
 
+import { Star } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 
 import { authedFetch } from "@/lib/client";
@@ -25,8 +26,9 @@ export function WatchButton({ asset, symbol }: { asset: string; symbol?: string 
   }
   return (
     <button type="button" onClick={toggle} disabled={busy} aria-pressed={watching}
-      className={`min-h-10 rounded-full px-4 text-sm font-semibold ${watching ? "bg-tint text-emphasis" : "border-[1.5px] border-field"}`}>
-      {watching ? "★ Watching" : "☆ Watch"}
+      className={`inline-flex min-h-10 items-center gap-2 rounded-full px-4 text-sm font-semibold ${watching ? "bg-tint text-emphasis" : "border-[1.5px] border-field"}`}>
+      <Star size={16} weight={watching ? "fill" : "regular"} aria-hidden="true" />
+      {watching ? "Watching" : "Watch"}
     </button>
   );
 }

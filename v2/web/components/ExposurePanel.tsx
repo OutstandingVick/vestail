@@ -1,5 +1,6 @@
 "use client";
 
+import { ArrowSquareOut } from "@phosphor-icons/react";
 import { useState } from "react";
 
 import { authedFetch, errorOf } from "@/lib/client";
@@ -51,7 +52,7 @@ export function ExposurePanel({ market }: { market: Market }) {
       )}
       <button type="button" onClick={go} disabled={locked}
         className="flex min-h-12 items-center justify-between rounded-full bg-action px-5 font-semibold text-on-action disabled:cursor-not-allowed disabled:bg-field disabled:text-muted">
-        <span>Trade on trade.xyz</span><span aria-hidden="true">↗</span>
+        <span>Trade on trade.xyz</span><ArrowSquareOut size={18} weight="regular" aria-hidden="true" />
       </button>
       <p className="text-xs text-muted">
         Opens trade.xyz, which runs this market on Hyperliquid. You deposit USDC there; Vestail never holds funds or places orders.

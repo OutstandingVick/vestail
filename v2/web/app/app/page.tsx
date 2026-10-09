@@ -1,5 +1,6 @@
 "use client";
 
+import { Wallet } from "@phosphor-icons/react";
 import { useLogin, useLoginWithEmail, usePrivy } from "@privy-io/react-auth";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -107,9 +108,7 @@ export default function SignInPage() {
           </div>
           <button type="button" disabled={!ready} onClick={() => login({ loginMethods: ["wallet"] })}
             className="flex min-h-12 w-full items-center justify-center gap-2 rounded-full border-[1.5px] border-field bg-surface font-semibold hover:bg-wash disabled:opacity-60">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <path d="M3 7h15a3 3 0 0 1 3 3v7a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V7zM3 7l2-3h11l2 3M16 14h2" />
-            </svg>
+            <Wallet size={18} weight="regular" aria-hidden="true" />
             Continue with a wallet
           </button>
           <p className="mt-3 text-center text-xs text-muted">Phantom, Solflare, MetaMask, Rabby or Coinbase Wallet.</p>

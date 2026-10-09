@@ -1,5 +1,6 @@
 "use client";
 
+import { ArrowSquareOut } from "@phosphor-icons/react";
 import { useState } from "react";
 
 import { EvmSwapForm } from "@/components/EvmSwapForm";
@@ -94,7 +95,7 @@ export function ActionPanel({ assetName, classStatus, venues, symbol, tokens }: 
               onClick={() => go(v.name)}
               className="flex min-h-11 items-center justify-between rounded-xl bg-action-wash px-4 font-semibold text-action-ink disabled:cursor-not-allowed disabled:bg-wash disabled:text-muted"
             >
-              <span>{v.name}</span><span aria-hidden="true">↗</span>
+              <span>{v.name}</span><ArrowSquareOut size={18} weight="regular" aria-hidden="true" />
             </button>
           ))}
         </section>

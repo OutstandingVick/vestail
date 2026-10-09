@@ -1,5 +1,6 @@
 "use client";
 
+import { ArrowSquareOut, Check, Copy, Export } from "@phosphor-icons/react";
 import { useCreateWallet, useExportWallet as useExportEvmWallet, usePrivy, type WalletWithMetadata } from "@privy-io/react-auth";
 import { useExportWallet as useExportSolanaWallet } from "@privy-io/react-auth/solana";
 import QRCode from "qrcode";
@@ -45,23 +46,24 @@ function WalletCard({ wallet }: { wallet: WalletWithMetadata }) {
         <input id={`addr-${wallet.address}`} readOnly value={wallet.address} onFocus={e => e.currentTarget.select()}
           className="min-h-11 w-full rounded-field border-[1.5px] border-field bg-surface px-3 font-mono text-sm" />
         <div className="flex flex-wrap gap-2">
-          <button type="button" onClick={copy} className="min-h-10 rounded-full bg-action px-4 text-sm font-semibold text-on-action">
+          <button type="button" onClick={copy} className="inline-flex min-h-10 items-center gap-2 rounded-full bg-action px-4 text-sm font-semibold text-on-action">
+            {copied ? <Check size={16} weight="regular" aria-hidden="true" /> : <Copy size={16} weight="regular" aria-hidden="true" />}
             {copied ? "Copied" : "Copy address"}
           </button>
           {evm ? (
             <>
               <a href={`https://basescan.org/address/${wallet.address}`} target="_blank" rel="noreferrer"
-                className="flex min-h-10 items-center rounded-full border-[1.5px] border-field px-4 text-sm font-semibold">Basescan ↗</a>
+                className="flex min-h-10 items-center gap-2 rounded-full border-[1.5px] border-field px-4 text-sm font-semibold">Basescan <ArrowSquareOut size={16} weight="regular" aria-hidden="true" /></a>
               <a href={`https://robinhoodchain.blockscout.com/address/${wallet.address}`} target="_blank" rel="noreferrer"
-                className="flex min-h-10 items-center rounded-full border-[1.5px] border-field px-4 text-sm font-semibold">Robinhood explorer ↗</a>
+                className="flex min-h-10 items-center gap-2 rounded-full border-[1.5px] border-field px-4 text-sm font-semibold">Robinhood explorer <ArrowSquareOut size={16} weight="regular" aria-hidden="true" /></a>
             </>
           ) : (
             <a href={`https://solscan.io/account/${wallet.address}`} target="_blank" rel="noreferrer"
-              className="flex min-h-10 items-center rounded-full border-[1.5px] border-field px-4 text-sm font-semibold">View on Solscan ↗</a>
+              className="flex min-h-10 items-center gap-2 rounded-full border-[1.5px] border-field px-4 text-sm font-semibold">View on Solscan <ArrowSquareOut size={16} weight="regular" aria-hidden="true" /></a>
           )}
           {embedded && (
             <button type="button" onClick={() => (evm ? exportEvm({ address: wallet.address }) : exportSolana({ address: wallet.address }))}
-              className="min-h-10 rounded-full border-[1.5px] border-field px-4 text-sm font-semibold">Export private key</button>
+              className="inline-flex min-h-10 items-center gap-2 rounded-full border-[1.5px] border-field px-4 text-sm font-semibold"><Export size={16} weight="regular" aria-hidden="true" />Export private key</button>
           )}
         </div>
         <p className="text-xs text-muted">

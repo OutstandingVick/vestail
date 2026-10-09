@@ -944,7 +944,7 @@
             <span>Research articles <small>Later</small></span>
           </div>
         </details>
-        <a class="btn solid" href="http://localhost:8081/?signin" data-app-link>Open App</a>
+        <a class="btn solid" href="/app" data-app-link>Open App</a>
       </div>
     </nav>
   </div>
@@ -959,7 +959,7 @@
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"/></svg>
       <input id="q" type="search" placeholder="Google, bitcoin, a house, farmland, a Gulfstream…" aria-label="Search assets" autocomplete="off">
       <button id="clear" type="button">Clear</button>
-      <a class="go" id="seeWhere" href="http://localhost:8081/?signin" data-app-link>Open App</a>
+      <a class="go" id="seeWhere" href="/app" data-app-link>Open App</a>
     </div>
     <div class="chips" aria-label="Try one">
       <span class="try" aria-hidden="true">Try</span>
@@ -1570,10 +1570,11 @@ const withRef = url => url ? url + (url.includes("?") ? "&" : "?") + REF : null;
    page runs entirely on the inline data above, as before.
    ============================================================ */
 const API = typeof window.VESTAIL_API === "string" && window.VESTAIL_API ? window.VESTAIL_API.replace(/\/+$/, "") : null;
-/* Try App opens the product app (v2/web). Locally that is :8081 beside this
-   page on :8080; set window.VESTAIL_APP to its deployed url elsewhere. */
+/* Open App goes to the product app's sign-in page, /app on the same origin
+   (v2/web serves this page at / and the app under /app). Set window.VESTAIL_APP
+   only if the app is ever hosted on a different origin. */
 if (typeof window.VESTAIL_APP === "string" && window.VESTAIL_APP)
-  document.querySelectorAll("[data-app-link]").forEach(a => { a.href = window.VESTAIL_APP.replace(/\/+$/, "") + "/?signin"; });
+  document.querySelectorAll("[data-app-link]").forEach(a => { a.href = window.VESTAIL_APP.replace(/\/+$/, "") + "/app"; });
 const API_KEY = typeof window.VESTAIL_API_KEY === "string" && window.VESTAIL_API_KEY ? window.VESTAIL_API_KEY : null;
 const STATUS_NUM = { can_own: 2, conditional: 1, cannot_own: 0 };
 const SESSION = (crypto.randomUUID && crypto.randomUUID()) || String(Math.random()).slice(2);

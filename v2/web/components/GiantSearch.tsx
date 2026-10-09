@@ -5,9 +5,9 @@ const EXAMPLES = ["NVIDIA", "Tesla", "SpaceX", "Gold", "Crude oil", "Copper", "F
 
 /**
  * The app's first thing: one very large search box. A plain GET form, so a
- * search is a URL (/app/search?q=…) that can be shared, reloaded and gone back to.
+ * search is a URL (/app/discover?q=…) that can be shared, reloaded and gone back to.
  */
-export function GiantSearch({ q, action = "/app/search" }: { q: string; action?: string }) {
+export function GiantSearch({ q, action = "/app/discover" }: { q: string; action?: string }) {
   return (
     <div className="flex w-full flex-col items-center gap-5">
       <h1 className="text-[clamp(36px,5.5vw,72px)] leading-[1.02] font-extrabold tracking-[-0.04em] text-ink-strong">

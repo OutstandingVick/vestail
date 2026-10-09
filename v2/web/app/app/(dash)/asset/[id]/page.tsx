@@ -39,7 +39,7 @@ export default async function AssetPage({ params, searchParams }: {
   return (
     <div className="mt-8 flex flex-col gap-4">
       <p className="text-[13px] font-semibold tracking-[0.08em] text-muted uppercase">
-        <Link href="/app/search" className="hover:text-ink">Search</Link> / {asset.name}{board && ` / ${board.name}`}
+        <Link href="/app/discover" className="hover:text-ink">Discover</Link> / {asset.name}{board && ` / ${board.name}`}
       </p>
       <div className="flex flex-wrap items-start gap-4">
         <div className="flex min-w-0 flex-[999_1_560px] flex-col gap-4">

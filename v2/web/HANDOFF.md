@@ -50,7 +50,8 @@ Checks: `npm test` from `v2/` (78 API tests + core token tests), and in `web/`: 
 | `/app/start` | **First visit only**: giant search + choose country. Redirects to `/app` once a profile exists. | `app/app/(onboarding)/start` |
 | `/app/portfolio` | Portfolio dashboard (balance card, cash, tokenised stocks, verdict counts, value chart, buys, holdings, watchlist) | `components/Dashboard.tsx`, `app/api/portfolio` |
 | `/app/discover` | Legacy shortcut to the combined Discover experience. | `app/app/(dash)/discover` |
-| `/app/search?q=&who=&sort=` | Combined Discover search and opportunity directory; after a search: resolver trail, the buyer's result, then the country board. | `app/app/(dash)/search`, `components/DiscoverExplorer.tsx`, `components/CountryBoard.tsx` |
+| `/app/discover?q=&who=&sort=` | Combined Discover search and opportunity directory; after a search: resolver trail, the buyer's result, then the country board. | `app/app/(dash)/discover`, `components/DiscoverExplorer.tsx`, `components/CountryBoard.tsx` |
+| `/app/search` | Legacy redirect that preserves query parameters and forwards to Discover. | `app/app/(dash)/search` |
 | `/app/markets?chain=&instrument=&show=` | Every token and commodity market judged for the declared buyer, with shareable chain, instrument, and availability filters. | `app/app/(dash)/markets` |
 | `/app/activity?chain=` | Authenticated buy-press history with shareable chain filters. The browser never supplies the API session id. | `components/ActivityHistory.tsx`, `app/api/activity` |
 | `/app/asset/[id]?symbol=` | Class verdict + provenance, onchain versions (tokens), action panel, Watch button | `app/app/(dash)/asset/[id]` |

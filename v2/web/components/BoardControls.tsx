@@ -9,7 +9,7 @@ import type { BuyerType } from "@/lib/types";
  */
 export function BoardControls({ q, who, sort }: { q: string; who: BuyerType; sort: "status" | "asset" }) {
   const href = (p: { who?: BuyerType; sort?: string }) =>
-    `/app/search?${new URLSearchParams({ q, who: p.who ?? who, sort: p.sort ?? sort })}`;
+    `/app/discover?${new URLSearchParams({ q, who: p.who ?? who, sort: p.sort ?? sort })}`;
   const pill = (active: boolean) =>
     `flex min-h-9 items-center rounded-full px-4 text-[13px] font-semibold ${active ? "bg-surface shadow-sm" : "text-muted hover:text-ink"}`;
   return (

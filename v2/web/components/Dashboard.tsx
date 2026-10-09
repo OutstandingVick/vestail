@@ -103,7 +103,7 @@ export function Dashboard({ assets, countryName, who }: { assets: Asset[]; count
           <Link href="/app/settings#wallet" className="flex min-h-12 items-center gap-2 rounded-full bg-ink px-5 font-semibold text-page">
             <span aria-hidden="true">+</span> Deposit
           </Link>
-          <Link href="/app/search" className="flex min-h-12 items-center gap-2 rounded-full bg-action px-5 font-semibold text-on-action">Buy</Link>
+          <Link href="/app/discover" className="flex min-h-12 items-center gap-2 rounded-full bg-action px-5 font-semibold text-on-action">Buy</Link>
           <Link href="/app/compare" className="flex min-h-12 items-center rounded-full border-[1.5px] border-field px-5 font-semibold">Compare</Link>
         </div>
       </section>
@@ -177,7 +177,7 @@ export function Dashboard({ assets, countryName, who }: { assets: Asset[]; count
                 </tbody>
               </table>
             </div>
-          ) : <Empty>You don&apos;t hold any tokenised stocks Vestail tracks yet. <Link href="/app/search?q=NVIDIA" className="text-emphasis underline">See what you can buy</Link>.</Empty>}
+          ) : <Empty>You don&apos;t hold any tokenised stocks Vestail tracks yet. <Link href="/app/discover?q=NVIDIA" className="text-emphasis underline">See what you can buy</Link>.</Empty>}
         </Card>
         <Card title="Watchlist">
           {data.watchlist.length ? (
@@ -214,7 +214,7 @@ export function Dashboard({ assets, countryName, who }: { assets: Asset[]; count
               </tbody>
             </table>
           </div>
-        ) : <Empty>No open positions. Gold, crude oil and copper exposure is under <Link href="/app/search?q=crude%20oil" className="text-emphasis underline">Search</Link>.</Empty>}
+        ) : <Empty>No open positions. Gold, crude oil and copper exposure is under <Link href="/app/discover?q=crude%20oil" className="text-emphasis underline">Discover</Link>.</Empty>}
       </Card>
     </>
   );

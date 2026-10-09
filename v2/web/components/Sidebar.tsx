@@ -23,7 +23,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import type { Country, Profile } from "@/lib/types";
 
 const NAV = [
-  { href: "/app/search", label: "Discover", icon: Compass },
+  { href: "/app/discover", label: "Discover", icon: Compass },
   { href: "/app/portfolio", label: "Portfolio", icon: Wallet },
   { href: "/app/markets", label: "Markets", icon: ChartLineUp },
   { href: "/app/activity", label: "Activity", icon: ClockCounterClockwise },

@@ -25,7 +25,7 @@ export default async function ExposurePage({ params }: { params: Promise<{ coin:
   return (
     <div className="mt-8 flex flex-col gap-4">
       <p className="text-[13px] font-semibold tracking-[0.08em] text-muted uppercase">
-        <Link href="/app/search" className="hover:text-ink">Search</Link> / Price exposure / {market.name}
+        <Link href="/app/discover" className="hover:text-ink">Discover</Link> / Price exposure / {market.name}
       </p>
       <div className="flex flex-wrap items-start gap-4">
         <div className="flex min-w-0 flex-[999_1_560px] flex-col gap-4">

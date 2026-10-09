@@ -42,10 +42,11 @@ export const api = {
   derivative: (id: string, country: string) => get<Market>(`/derivatives/${encodeURIComponent(id)}` + qs({ country })),
 
   /** One user's recorded Buy presses (GET /orders), with the server's key. */
-  async orders(session: string): Promise<Order[]> {
+  async orders(session: string, limit = 20): Promise<Order[]> {
     const key = process.env.VESTAIL_API_KEY;
     if (!key) return [];
-    const res = await fetch(BASE + "/orders" + qs({ session, limit: "20" }), { cache: "no-store", headers: { Authorization: `Bearer ${key}` } });
+    const safeLimit = Math.min(200, Math.max(1, Math.trunc(limit)));
+    const res = await fetch(BASE + "/orders" + qs({ session, limit: String(safeLimit) }), { cache: "no-store", headers: { Authorization: `Bearer ${key}` } });
     return res.ok ? res.json() : [];
   },
 

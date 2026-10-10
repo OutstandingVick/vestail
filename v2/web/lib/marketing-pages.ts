@@ -132,6 +132,15 @@ export const MARKETING_PAGES: Record<string, MarketingPage> = {
       { title: "Commercial incentives do not change the verdict", body: "Routing can happen only after the rule allows it, and cannot-own results stop before a venue." },
     ],
   },
+  "company/partners": {
+    section: "Company",
+    title: "Partners",
+    summary: "Vestail connects eligible users to external venues while keeping the ownership decision independent from the route.",
+    sections: [
+      { title: "What a partner route means", body: "The venue provides the transaction or product. Vestail provides the ownership context and sends a user onward only when the verdict permits it." },
+      { title: "What it does not mean", body: "A listed route is not legal, tax or investment advice and does not guarantee that a venue will accept or complete a transaction.", items: ["No custody by Vestail", "No paid change to a verdict", "No route for cannot-own assets"] },
+    ],
+  },
 };
 
 export const marketingPageKey = (section: string, slug: string) => `${section}/${slug}`;

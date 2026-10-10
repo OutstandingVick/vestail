@@ -141,6 +141,16 @@ export const MARKETING_PAGES: Record<string, MarketingPage> = {
       { title: "What it does not mean", body: "A listed route is not legal, tax or investment advice and does not guarantee that a venue will accept or complete a transaction.", items: ["No custody by Vestail", "No paid change to a verdict", "No route for cannot-own assets"] },
     ],
   },
+  "company/contact": {
+    section: "Company",
+    title: "Contact Vestail",
+    summary: "Reach the team about coverage, rule corrections, partnerships or product feedback.",
+    sections: [
+      { title: "Rule and source feedback", body: "When reporting a rule, include the country, buyer type, asset class and the source you believe should be reviewed." },
+      { title: "Product and partnership enquiries", body: "Explain the user problem, market and route you want Vestail to evaluate." },
+      { title: "Contact channel", body: "Open a public issue in the Vestail GitHub repository for product feedback and reproducible technical reports.", items: ["github.com/OutstandingVick/vestail"] },
+    ],
+  },
 };
 
 export const marketingPageKey = (section: string, slug: string) => `${section}/${slug}`;

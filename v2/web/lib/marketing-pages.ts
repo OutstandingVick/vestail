@@ -86,6 +86,15 @@ export const MARKETING_PAGES: Record<string, MarketingPage> = {
       { title: "How Vestail presents the answer", body: "Every asset stays inside the same three verdicts.", items: ["Can own: no further ownership gate found", "Conditional: a named requirement applies", "Cannot own: the rule excludes this buyer type"] },
     ],
   },
+  "countries/foreigner-rules": {
+    section: "Countries",
+    title: "Foreigner rules",
+    summary: "See where non-citizens can own an asset, where limits apply and where the route stops.",
+    sections: [
+      { title: "Foreign access varies by asset", body: "Property, strategic sectors, licences and locally issued products often treat foreign buyers differently from citizens." },
+      { title: "The condition is part of the answer", body: "Vestail names the restriction instead of presenting a misleading buy button.", items: ["Ownership caps", "Approval requirements", "Local entities or accounts", "Issuer-specific exclusions"] },
+    ],
+  },
 };
 
 export const marketingPageKey = (section: string, slug: string) => `${section}/${slug}`;

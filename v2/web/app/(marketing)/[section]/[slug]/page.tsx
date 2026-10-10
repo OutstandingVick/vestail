@@ -8,6 +8,13 @@ type PageProps = {
   params: Promise<{ section: string; slug: string }>;
 };
 
+export function generateStaticParams() {
+  return Object.keys(MARKETING_PAGES).map(key => {
+    const [section, slug] = key.split("/");
+    return { section, slug };
+  });
+}
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { section, slug } = await params;
   const page = MARKETING_PAGES[marketingPageKey(section, slug)];

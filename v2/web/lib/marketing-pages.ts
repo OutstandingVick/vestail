@@ -104,6 +104,15 @@ export const MARKETING_PAGES: Record<string, MarketingPage> = {
       { title: "Read beyond the colour", body: "Open a cell for the text of the condition and its evidence.", items: ["Country and buyer type", "Ownership verdict", "Rule explanation", "Source and verification date"] },
     ],
   },
+  "company/about": {
+    section: "Company",
+    title: "About Vestail",
+    summary: "Vestail makes ownership rules legible before a person commits money to an asset or financial product.",
+    sections: [
+      { title: "The problem", body: "Most platforms show price and availability first. The ownership rule, product structure and exit conditions are scattered elsewhere." },
+      { title: "The Vestail approach", body: "Resolve the asset, check the declared buyer profile, show one of three verdicts and reveal the evidence behind it." },
+    ],
+  },
 };
 
 export const marketingPageKey = (section: string, slug: string) => `${section}/${slug}`;

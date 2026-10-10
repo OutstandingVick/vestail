@@ -777,7 +777,10 @@
 
   /* Three charted cards need room; below this the fan becomes one column, upright. */
   @media (max-width: 1040px) {
-    .problem .deck { grid-template-columns: 1fr; max-width: 540px; margin-inline: auto; gap: 16px; }
+    .problem .deck { grid-template-columns: 1fr; max-width: 460px; margin-inline: auto; gap: 26px; }
+    /* One card at a time: hold the picture to a portrait crop rather than letting
+       it stretch to a letterbox, and keep the gutter wide enough for the shadows. */
+    .qmedia { aspect-ratio: 1 / 1.02; }
     .qcard.tilt-l, .qcard.tilt-r, .qcard.lead-card { transform: none; }
     .qcard:hover, .qcard.lead-card:hover { transform: translateY(-4px); }
   }

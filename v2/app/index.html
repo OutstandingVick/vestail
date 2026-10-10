@@ -572,7 +572,7 @@
   .qcard.lead-card { position: relative; z-index: 1; transform: none; background: var(--surface); --card-muted: var(--ink-3); }
 
   /* Each card ends in a small chart: a caption row, then the figure itself. */
-  .viz { margin: auto 0 0; }  /* the chart sits at the foot of the card, whatever the headline's length */
+  .qbody { padding: 0 10px; }
   .viz-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 0 10px 14px; font-size: 11.5px; color: var(--card-muted, var(--ink-3)); }
   .viz-head b { font-weight: 600; color: var(--ink); font-size: 12.5px; }
   .qmedia { position: relative; width: 100%; aspect-ratio: 1 / 1; overflow: hidden; border-radius: calc(var(--r-xl) - 14px); outline: 1px solid rgb(0 0 0 / .1); outline-offset: -1px; }
@@ -1016,29 +1016,22 @@
 
     <div class="deck">
       <article class="qcard tilt-l">
-        <figure class="viz">
-          <div class="qmedia qmedia-human"><img src="assets/problem/trading-app.jpg" alt="A man holding a phone with a trading application open"></div>
+        <div class="qmedia qmedia-human"><img src="assets/problem/trading-app.jpg" alt="A man holding a phone with a trading application open"></div>
+        <div class="qbody">
           <h3>Apps that show you a price, but never the rule</h3>
-          <div class="viz-head"><b>On a typical listing</b><span>Every app</span></div>
-          <div class="media-labels"><span>Price</span><span>Ticker</span><span>Your rule</span></div>
-        </figure>
+        </div>
       </article>
       <article class="qcard lead-card">
-        <figure class="viz">
-          <div class="qmedia qmedia-portfolio"><img src="assets/problem/crypto-portfolio.jpg" alt="A close-up phone interface showing a detailed cryptocurrency portfolio"></div>
+        <div class="qmedia qmedia-portfolio"><img src="assets/problem/crypto-portfolio.jpg" alt="A close-up phone interface showing a detailed cryptocurrency portfolio"></div>
+        <div class="qbody">
           <h3>Tokens that look identical in your wallet</h3>
-          <div class="viz-head"><b>In your wallet</b><span>One ticker, 12 versions</span></div>
-          <div class="viz-head gap"><b>In law</b><span>What you may actually hold</span></div>
-        </figure>
+        </div>
       </article>
       <article class="qcard tilt-r">
-        <figure class="viz">
-          <div class="qmedia qmedia-risk"><img src="assets/problem/market-risk.jpg" alt="A red financial market chart showing a sharp decline and risk area"></div>
+        <div class="qmedia qmedia-risk"><img src="assets/problem/market-risk.jpg" alt="A red financial market chart showing a sharp decline and risk area"></div>
+        <div class="qbody">
           <h3>Finding out at redemption, not at purchase</h3>
-          <div class="viz-head"><b>What you can do with it</b><span>Purchase to exit</span></div>
-          <div class="legend2"><span class="a">What you assumed</span><span class="b">What you can do</span></div>
-          <div class="xaxis"><span>Buy</span><span>Hold</span><span>Dividend</span><span>Exit</span></div>
-        </figure>
+        </div>
       </article>
     </div>
 

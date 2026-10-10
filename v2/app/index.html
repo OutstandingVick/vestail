@@ -562,8 +562,10 @@
     box-shadow: 0 2px 4px rgba(13,13,15,.03), 0 18px 40px -18px rgba(13,13,15,.14), 0 44px 80px -40px rgba(13,13,15,.16);
     transition: transform .25s var(--ease), box-shadow .25s var(--ease); }
   /* Pointing at a card pulls it straight out of the fan. */
-  .qcard:hover { transform: translateY(-3px); box-shadow: var(--card-hover); }
-  .qcard.lead-card:hover { transform: translateY(-3px); }
+  /* Hover deepens the same three-layer drop rather than swapping in the page's
+     generic hover ring, which would put a purple edge on a white photo card. */
+  .qcard:hover, .qcard.lead-card:hover { transform: translateY(-4px);
+    box-shadow: 0 2px 4px rgba(13,13,15,.04), 0 24px 50px -20px rgba(13,13,15,.18), 0 56px 96px -44px rgba(13,13,15,.2); }
 
   .qcard h3 { margin: 24px 0 0; font-family: var(--font-manrope); font-size: 27px; line-height: 1.14; font-weight: 700; letter-spacing: -.028em; color: var(--ink); }
 

@@ -68,6 +68,15 @@ export const MARKETING_PAGES: Record<string, MarketingPage> = {
       { title: "What supported means", body: "A supported country has structured rules, sources and verification dates. It does not mean every asset or product is available there." },
     ],
   },
+  "countries/overview": {
+    section: "Countries",
+    title: "Country overview pages",
+    summary: "Understand a market before opening an individual asset rule.",
+    sections: [
+      { title: "One country, one consistent view", body: "Country overviews group the current buyer profiles, asset verdicts and common conditions in one place." },
+      { title: "From overview to evidence", body: "Open any asset to move from the summary verdict to the specific rule, source and last-verified date.", items: ["Citizen view", "Foreigner view", "Asset-by-asset matrix", "Source provenance"] },
+    ],
+  },
 };
 
 export const marketingPageKey = (section: string, slug: string) => `${section}/${slug}`;

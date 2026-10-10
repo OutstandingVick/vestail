@@ -49,6 +49,16 @@ export const MARKETING_PAGES: Record<string, MarketingPage> = {
       { title: "Read the middle carefully", body: "Conditional access carries the detail that simple comparison tools usually lose.", items: ["Foreign ownership caps", "Licences and approvals", "Product or issuer restrictions", "Exit and redemption gates"] },
     ],
   },
+  "explore/all": {
+    section: "Explore",
+    title: "Explore Vestail",
+    summary: "Browse the full ownership map: countries, asset classes, onchain versions and price-exposure markets.",
+    sections: [
+      { title: "Ownership rules", body: "Check twenty asset classes for citizens and foreigners across the countries Vestail currently covers." },
+      { title: "Onchain versions", body: "Compare tokenized versions by chain, issuer and legal instrument rather than ticker alone." },
+      { title: "Price exposure", body: "Commodity perpetuals are labelled as exposure, not ownership, so the product is never confused with holding the underlying asset." },
+    ],
+  },
 };
 
 export const marketingPageKey = (section: string, slug: string) => `${section}/${slug}`;

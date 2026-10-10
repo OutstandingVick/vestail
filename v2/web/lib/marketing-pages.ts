@@ -122,6 +122,16 @@ export const MARKETING_PAGES: Record<string, MarketingPage> = {
       { title: "Clarity over false certainty", body: "Vestail preserves the conditional middle instead of forcing complex rules into a convenient yes or no.", items: ["Make the buyer profile explicit", "Name the condition", "Show the source", "Stop restricted routes"] },
     ],
   },
+  "company/difference": {
+    section: "Company",
+    title: "How Vestail is different",
+    summary: "Vestail starts with ownership eligibility, not a catalogue, price chart or sponsored venue.",
+    sections: [
+      { title: "Three verdicts, not a loose boolean", body: "Can own, conditional and cannot own are distinct outcomes. Not assessed is never presented as buyable." },
+      { title: "Evidence stays visible", body: "Rules carry provenance and verification dates so users can judge how an answer was formed." },
+      { title: "Commercial incentives do not change the verdict", body: "Routing can happen only after the rule allows it, and cannot-own results stop before a venue." },
+    ],
+  },
 };
 
 export const marketingPageKey = (section: string, slug: string) => `${section}/${slug}`;

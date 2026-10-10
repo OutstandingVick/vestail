@@ -77,6 +77,15 @@ export const MARKETING_PAGES: Record<string, MarketingPage> = {
       { title: "From overview to evidence", body: "Open any asset to move from the summary verdict to the specific rule, source and last-verified date.", items: ["Citizen view", "Foreigner view", "Asset-by-asset matrix", "Source provenance"] },
     ],
   },
+  "countries/citizen-rules": {
+    section: "Countries",
+    title: "Citizen rules",
+    summary: "Check what a citizen can own in their own country and which conditions still apply.",
+    sections: [
+      { title: "Citizenship does not remove every gate", body: "Licences, sector rules, product eligibility and account requirements can still make an asset conditional." },
+      { title: "How Vestail presents the answer", body: "Every asset stays inside the same three verdicts.", items: ["Can own: no further ownership gate found", "Conditional: a named requirement applies", "Cannot own: the rule excludes this buyer type"] },
+    ],
+  },
 };
 
 export const marketingPageKey = (section: string, slug: string) => `${section}/${slug}`;

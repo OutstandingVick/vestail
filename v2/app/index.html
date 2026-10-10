@@ -826,7 +826,9 @@
     .qbody { padding: 0 8px; }
     .qcard h3 { font-size: 23px; margin-top: 20px; }
     .qsub { font-size: 16px; }
-    .qbody .qmeta { padding-top: 22px; }
+    /* Two of the three pairs wrap at this width; stack all of them so every card
+       reads the same instead of one sitting on one line and two on two. */
+    .qbody .qmeta { flex-direction: column; align-items: flex-start; gap: 10px; padding-top: 22px; }
     .hud { margin-top: 44px; }
     .row { padding: 20px; gap: 18px; border-radius: var(--r-card); }
     .row .flag { font-size: 32px; }

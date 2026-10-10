@@ -12,9 +12,16 @@ export function MarketingContentPage({ page }: { page: MarketingPage }) {
           <Link href="/" aria-label="Vestail home" className="inline-flex min-h-11 items-center">
             <Logo className="h-7 w-auto" />
           </Link>
-          <Link href="/app" className="inline-flex min-h-11 items-center rounded-full bg-action px-5 font-semibold text-on-action">
-            Open App
-          </Link>
+          <div className="flex items-center gap-2 sm:gap-5">
+            <nav aria-label="Public pages" className="hidden items-center gap-5 text-sm font-semibold text-muted md:flex">
+              <Link href="/explore/all" className="hover:text-ink">Explore</Link>
+              <Link href="/countries/supported" className="hover:text-ink">Countries</Link>
+              <Link href="/company/about" className="hover:text-ink">Company</Link>
+            </nav>
+            <Link href="/app" className="inline-flex min-h-11 items-center rounded-full bg-action px-5 font-semibold text-on-action">
+              Open App
+            </Link>
+          </div>
         </div>
       </header>
 

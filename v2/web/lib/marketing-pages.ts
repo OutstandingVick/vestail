@@ -59,6 +59,15 @@ export const MARKETING_PAGES: Record<string, MarketingPage> = {
       { title: "Price exposure", body: "Commodity perpetuals are labelled as exposure, not ownership, so the product is never confused with holding the underlying asset." },
     ],
   },
+  "countries/supported": {
+    section: "Countries",
+    title: "All supported countries",
+    summary: "Vestail currently maps ownership rules across twelve countries, with the same three-verdict model in every market.",
+    sections: [
+      { title: "Current coverage", body: "Each country includes citizen and foreigner views across the same twenty asset classes.", items: ["Brazil", "China", "Germany", "India", "Japan", "Nigeria", "Saudi Arabia", "South Africa", "South Korea", "United Arab Emirates", "United Kingdom", "United States"] },
+      { title: "What supported means", body: "A supported country has structured rules, sources and verification dates. It does not mean every asset or product is available there." },
+    ],
+  },
 };
 
 export const marketingPageKey = (section: string, slug: string) => `${section}/${slug}`;

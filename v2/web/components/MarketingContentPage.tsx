@@ -47,9 +47,15 @@ export function MarketingContentPage({ page }: { page: MarketingPage }) {
               {section.items && (
                 <ul className="mt-6 space-y-3 border-t border-line pt-5">
                   {section.items.map(item => (
-                    <li key={item} className="flex gap-3 leading-6 text-ink">
+                    <li key={typeof item === "string" ? item : item.label} className="flex gap-3 leading-6 text-ink">
                       <ArrowRight className="mt-1 shrink-0 text-action" size={17} weight="regular" aria-hidden="true" />
-                      <span>{item}</span>
+                      {typeof item === "string" ? (
+                        <span>{item}</span>
+                      ) : (
+                        <a href={item.href} target="_blank" rel="noopener noreferrer" className="font-semibold underline decoration-line underline-offset-4 hover:text-emphasis">
+                          {item.label}
+                        </a>
+                      )}
                     </li>
                   ))}
                 </ul>

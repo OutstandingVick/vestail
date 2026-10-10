@@ -113,6 +113,15 @@ export const MARKETING_PAGES: Record<string, MarketingPage> = {
       { title: "The Vestail approach", body: "Resolve the asset, check the declared buyer profile, show one of three verdicts and reveal the evidence behind it." },
     ],
   },
+  "company/mission": {
+    section: "Company",
+    title: "Our mission",
+    summary: "Help people understand what they can own, under which conditions and through which legitimate route.",
+    sections: [
+      { title: "Rules before routing", body: "A purchase path should follow the ownership verdict, never replace it." },
+      { title: "Clarity over false certainty", body: "Vestail preserves the conditional middle instead of forcing complex rules into a convenient yes or no.", items: ["Make the buyer profile explicit", "Name the condition", "Show the source", "Stop restricted routes"] },
+    ],
+  },
 };
 
 export const marketingPageKey = (section: string, slug: string) => `${section}/${slug}`;

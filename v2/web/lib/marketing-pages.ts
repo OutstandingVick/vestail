@@ -30,6 +30,16 @@ export const MARKETING_PAGES: Record<string, MarketingPage> = {
       { title: "How to use this view", body: "Use trends to discover questions worth checking, then confirm the rule for your declared country and buyer type before taking action.", items: ["Compare asset classes", "Open the country rule", "Review the source and verification date"] },
     ],
   },
+  "explore/questions": {
+    section: "Explore",
+    title: "Popular ownership questions",
+    summary: "Clear answers to the questions that usually appear after a price screen has already made an asset look available.",
+    sections: [
+      { title: "Can I buy it and can I own it?", body: "Those are different questions. A venue may display a product even when the underlying ownership, redemption or transfer rule places conditions on you." },
+      { title: "Why can two versions differ?", body: "Tokens and wrappers with the same ticker can represent different legal claims, issuers and redemption rights.", items: ["Check the issuer", "Check the instrument type", "Check what happens at exit"] },
+      { title: "What does conditional mean?", body: "The asset is not simply open or closed. A licence, cap, approval, account type or identity check may apply." },
+    ],
+  },
 };
 
 export const marketingPageKey = (section: string, slug: string) => `${section}/${slug}`;

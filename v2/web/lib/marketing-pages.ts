@@ -40,6 +40,15 @@ export const MARKETING_PAGES: Record<string, MarketingPage> = {
       { title: "What does conditional mean?", body: "The asset is not simply open or closed. A licence, cap, approval, account type or identity check may apply." },
     ],
   },
+  "explore/compare": {
+    section: "Explore",
+    title: "Compare ownership access",
+    summary: "Compare the same asset across countries and buyer types without collapsing conditional rules into a yes-or-no answer.",
+    sections: [
+      { title: "Compare like with like", body: "Choose one asset and keep the buyer type explicit. Vestail then shows where the rule is open, conditional or restrictive." },
+      { title: "Read the middle carefully", body: "Conditional access carries the detail that simple comparison tools usually lose.", items: ["Foreign ownership caps", "Licences and approvals", "Product or issuer restrictions", "Exit and redemption gates"] },
+    ],
+  },
 };
 
 export const marketingPageKey = (section: string, slug: string) => `${section}/${slug}`;

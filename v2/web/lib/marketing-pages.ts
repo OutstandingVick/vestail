@@ -95,6 +95,15 @@ export const MARKETING_PAGES: Record<string, MarketingPage> = {
       { title: "The condition is part of the answer", body: "Vestail names the restriction instead of presenting a misleading buy button.", items: ["Ownership caps", "Approval requirements", "Local entities or accounts", "Issuer-specific exclusions"] },
     ],
   },
+  "countries/access-matrix": {
+    section: "Countries",
+    title: "Country-by-country access matrix",
+    summary: "Scan the same asset classes across countries while keeping buyer type and verdict meaning consistent.",
+    sections: [
+      { title: "Built for comparison", body: "The matrix holds the asset constant and changes the jurisdiction, making differences visible without hiding conditional access." },
+      { title: "Read beyond the colour", body: "Open a cell for the text of the condition and its evidence.", items: ["Country and buyer type", "Ownership verdict", "Rule explanation", "Source and verification date"] },
+    ],
+  },
 };
 
 export const marketingPageKey = (section: string, slug: string) => `${section}/${slug}`;

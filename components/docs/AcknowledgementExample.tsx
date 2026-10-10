@@ -25,7 +25,7 @@ export function AcknowledgementExample() {
           aria-hidden
           className="mt-0.5 flex size-4 shrink-0 items-center justify-center rounded-sm bg-brand-orange text-brand-navy"
         >
-          <Icon name="check" className="size-3" strokeWidth={3} />
+          <Icon name="check" weight="fill" className="size-3" />
         </span>
         <span>
           I understand I can buy and hold this, but {gate.acknowledgement.limit}{" "}

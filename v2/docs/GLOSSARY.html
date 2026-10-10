@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vestail — glossary and build log</title>
+<style>
+  :root { --bg:#F3F4F6; --surface:#fff; --ink:#111827; --ink2:#4B5563; --ink3:#9CA3AF; --line:#E5E7EB; --accent:#2F4BFF; --yes:#23A55A; --cond:#E0A421; --no:#DC4B3B; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#0F1217; --surface:#171B22; --ink:#F3F4F6; --ink2:#A5ADBA; --ink3:#6B7280; --line:#262C36; --accent:#6C83FF; } }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font: 15px/1.55 "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .wrap { max-width: 900px; margin: 0 auto; padding: 40px 20px 80px; }
+  h1 { font-size: 40px; letter-spacing: -.03em; line-height: 1.02; margin: 0 0 8px; }
+  .lead { color: var(--ink2); font-size: 17px; margin: 0 0 28px; max-width: 60ch; }
+  nav { display:flex; flex-wrap:wrap; gap:8px; margin-bottom: 36px; }
+  nav a { text-decoration:none; color:var(--ink2); border:1px solid var(--line); background:var(--surface); border-radius:999px; padding:6px 13px; font-size:13.5px; }
+  nav a:hover { color:var(--ink); border-color:var(--ink3); }
+  h2 { font-size: 24px; letter-spacing: -.02em; margin: 44px 0 14px; }
+  h3 { font-size: 16px; margin: 22px 0 6px; }
+  p { margin: 0 0 12px; }
+  .card { background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:18px 22px; margin: 10px 0; }
+  dl { margin:0; }
+  dt { font-weight: 700; margin-top: 14px; }
+  dt:first-child { margin-top: 0; }
+  dd { margin: 3px 0 0; color: var(--ink2); }
+  code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; background: color-mix(in srgb, var(--ink) 6%, transparent); padding: 1px 6px; border-radius: 6px; }
+  .tl { position:relative; padding-left: 28px; }
+  .tl::before { content:""; position:absolute; left:8px; top:8px; bottom:8px; width:2px; background:var(--line); }
+  .step { position:relative; margin: 0 0 18px; }
+  .step::before { content:""; position:absolute; left:-25px; top:7px; width:12px; height:12px; border-radius:50%; background:var(--accent); border: 3px solid var(--bg); }
+  .step b { display:block; }
+  .step span { color: var(--ink2); }
+  .sw { display:inline-block; width:12px; height:12px; border-radius:4px; vertical-align:-1px; margin-right:6px; }
+  table { width:100%; border-collapse:collapse; font-size: 14px; }
+  th, td { text-align:left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--ink3); font-size: 12.5px; }
+  img, object { max-width: 100%; border: 1px solid var(--line); border-radius: 12px; background: #fff; }
+  .kbd { font-size: 12px; color: var(--ink3); }
+  footer { margin-top: 48px; color: var(--ink3); font-size: 13px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Vestail — glossary and build log</h1>
+  <p class="lead">One page that explains every piece of the app: the words we use, how the pieces fit, and the order in which they were built. Read top to bottom the first time; use the chips to jump afterwards.</p>
+  <nav>
+    <a href="#what">What it is</a><a href="#vocab">Vocabulary</a><a href="#data">Data modules</a><a href="#pipeline">Search pipeline</a><a href="#ui">Interface</a><a href="#cta">Buy column</a><a href="#hud">Traction HUD</a><a href="#design">Design system</a><a href="#api">API</a><a href="#log">Build log</a><a href="#next">Open questions</a>
+  </nav>
+
+  <h2 id="what">What it is</h2>
+  <div class="card">
+    <p>Vestail answers one question for a person anywhere in the world: <em>can I own this, here, and where do I go to buy it?</em> It turns a typed phrase into an asset class, looks up the ownership rule for every country and buyer type, shows the answer as a grid of coloured tiles, and puts a buy button beside each permitted cell that routes to a partner venue. The routing is the business: every outbound click carries an attribution tag for referral revenue or payment for order flow.</p>
+  </div>
+
+  <h2 id="vocab">Vocabulary</h2>
+  <div class="card"><dl>
+    <dt>Asset class</dt><dd>One of the 20 things a person might own (residential property, gold bullion, foreign equities…). Each is a tile. Defined in <code>data/assets.json</code>.</dd>
+    <dt>Status</dt><dd>The rule for one (country, asset, buyer type). Three values: <span class="sw" style="background:var(--yes)"></span><b>can own</b> (2), <span class="sw" style="background:var(--cond)"></span><b>conditional</b> (1) — licence, cap or approval needed, <span class="sw" style="background:var(--no);background-image:repeating-linear-gradient(135deg,rgba(255,255,255,.55) 0 2px,transparent 2px 5px)"></span><b>cannot own</b> (0). Red is hatched so it reads without colour.</dd>
+    <dt>Buyer type</dt><dd>Who is buying. <b>Citizen</b> holds the country's passport; <b>foreigner</b> does not. Each country stores a full rule set for both. A <b>resident</b> type is planned.</dd>
+    <dt>Card</dt><dd>One country: flag tile, name, a plain-sentence summary ("Citizens can own 18 of 20 assets." then what needs a licence or approval and what is off-limits), the verdict chart, and the buy panel. Cards sit two to a row (one on phones).</dd>
+    <dt>Verdict chart</dt><dd>A segmented track in each card: equal segments in a white track on the brand-orange panel, one per asset, coloured by verdict; cannot own is hatched and conditional carries a centre dot, so the three differ without colour. With no search a card shows ten of its twenty assets, split so its groups all appear: restrictions first, at least three open assets whenever it has any, and at least one each for conditional and off-limits. Sorted by status, a small gap divides open from restricted. A selected asset always stays in view. <b>Show all 20</b> reveals everything in two rows; the summary always covers all twenty. When a search narrows to one to three assets the track becomes labelled chips.</dd>
+    <dt>Category</dt><dd>A group of asset classes a single word fans out to. "Stocks" → Equities → domestic, foreign, private company shares. <code>data/categories.json</code>.</dd>
+    <dt>Alias</dt><dd>An everyday word that maps to an asset class or a category: house, gilts, farmland, crypto. <code>data/aliases.json</code>.</dd>
+    <dt>Entity</dt><dd>A specific named thing: Google, Bitcoin, a Gulfstream, UK gilts. Each knows its asset class; listed companies also know their home country. <code>data/entities.json</code>.</dd>
+    <dt>Equity-by-home</dt><dd>The rule that a listed company counts as <em>domestic</em> equity in its home country and <em>foreign</em> equity everywhere else. This is why searching "Google" shows a different tile for the US row than for the Nigeria row.</dd>
+    <dt>Resolution</dt><dd>The output of the search pipeline: which asset classes a query means, which stage decided it, and a <b>trail</b> of labels explaining the hops.</dd>
+    <dt>Trail</dt><dd>The chips under the search bar (<em>Google → Listed company (US) → Equities → Domestic in US, foreign elsewhere</em>). Same data the API returns.</dd>
+    <dt>Venue</dt><dd>Where a permitted asset can be bought: a broker, exchange or listings site. Default per asset with per-country overrides. <code>data/venues.json</code>.</dd>
+    <dt>Ref tag</dt><dd>The query string appended to every venue link (<code>ref=vestail</code>) so clicks can be attributed. One constant; swap it for partner-specific tags.</dd>
+    <dt>Selection</dt><dd>The asset currently chosen for the buy column. Set by clicking a tile or automatically when a search resolves to one asset. Escape clears it.</dd>
+    <dt>HUD</dt><dd>The traction strip under the search: volume, orders routed, active buyers, and a live ticker of recent buys. Placeholder numbers until wired to the order log.</dd>
+  </dl></div>
+
+  <h2 id="data">Data modules</h2>
+  <div class="card">
+    <table>
+      <tr><th>File</th><th>Shape</th><th>Who edits it</th><th>Changes how often</th></tr>
+      <tr><td><code>assets.json</code></td><td>id, index, name</td><td>Product</td><td>Rarely; adding one means adding its rule in every country</td></tr>
+      <tr><td><code>categories.json</code></td><td>name → asset names</td><td>Product</td><td>Rarely</td></tr>
+      <tr><td><code>aliases.json</code></td><td>word → asset or category</td><td>Anyone; grows from search logs</td><td>Weekly</td></tr>
+      <tr><td><code>entities.json</code></td><td>name, kind, home?, asset</td><td>Seeded by hand; to be replaced by a securities master</td><td>Daily once automated</td></tr>
+      <tr><td><code>countries.json</code></td><td>code, name, flag, rules.{citizen,foreigner}.{asset_id: {status, sources, verified_at}}</td><td>Compliance / legal</td><td>When law changes; needs provenance</td></tr>
+      <tr><td><code>venues.json</code></td><td>asset → { default[], NG[], US[] … }</td><td>Partnerships</td><td>As deals land</td></tr>
+      <tr><td><code>activity.sample.json</code></td><td>stats{}, recent[]</td><td>Nobody; sample for development only</td><td>Replaced by recorded clicks in production</td></tr>
+    </table>
+    <p style="margin-top:12px">Full field definitions and a JSON Schema are in <code>data/schema/</code>. The modules are deliberately independent so any one can move to a database table without touching the others.</p>
+  </div>
+
+  <h2 id="pipeline">Search pipeline</h2>
+  <div class="card">
+    <p>The resolver is the reasoning layer. It does not do substring matching; it runs the query through ordered stages and stops at the first confident hit, recording why.</p>
+    <object data="diagrams/resolver-pipeline.svg" type="image/svg+xml" aria-label="Resolver pipeline diagram"></object>
+    <h3>Stages</h3>
+    <dl>
+      <dt>0 · Clean</dt><dd>Lower-case, strip punctuation, drop filler words (<em>can, I, buy, a, some, own…</em>).</dd>
+      <dt>1 · Entity</dt><dd>Match against the named-entity dictionary with exact › prefix › substring › small-typo scoring. Companies produce a per-country override (equity-by-home).</dd>
+      <dt>2 · Alias</dt><dd>Everyday words. If the alias points at a category, all of that category's classes are returned.</dd>
+      <dt>3 · Category</dt><dd>A category typed directly.</dd>
+      <dt>4 · Asset</dt><dd>An asset class name, prefix and typo tolerant.</dd>
+      <dt>Retry</dt><dd>If the whole phrase misses, retry per word — longest first, entities before everything else — so "tesla shares" resolves to Tesla, not the generic "shares" bucket.</dd>
+    </dl>
+    <p class="kbd" style="margin-top:12px">Code: <code>packages/core/index.js</code> (portable, no dependencies) and inline in <code>app/index.html</code> section 2. Tests: <code>packages/core/test.js</code>.</p>
+  </div>
+
+  <h2 id="ui">Interface</h2>
+  <div class="card">
+    <p>Reading order on the page, top to bottom:</p>
+    <dl>
+      <dt>Top bar</dt><dd>A sticky white bar across the full width: the Vestail wordmark on the left, five section links centred on the bar, and two buttons on the right — an outlined <b>See the board</b> and the orange <b>Search</b>. The links drop below 1040px and the outlined button below 480px, leaving the logo and Search.</dd>
+      <dt>Hero</dt><dd>Headline, one-sentence promise, the search field, the HUD, then suggestion chips that fill the search.</dd>
+      <dt>Controls</dt><dd>Two segmented toggles (Citizens/Foreigners, By status/By asset) and the legend.</dd>
+      <dt>Trail</dt><dd>Resolution chips plus one explanatory line; when nothing is searched it shows a hint about the buy column.</dd>
+      <dt>Board</dt><dd>A grid of country cards, two per row on wide screens and one below 900px. Each card's buy panel is an inset card with a verdict-coloured edge, the asset, a verdict pill and the action; empty, it is a dashed prompt.</dd>
+      <dt>Footer</dt><dd>A near-black field across the full width: the wordmark, one line of copy and a pill that focuses the search, then three link columns with dot-led items, the wordmark again huge and nearly invisible behind it all, and a hairline above the copyright. Modelled on a reference footer; no social links, since Vestail has no accounts to link to.</dd>
+      <dt>Key</dt><dd>The 20 asset classes in tile order for the By-asset view.</dd>
+      <dt>Story sections</dt><dd>Six numbered sections after the key (problem, how it works, verdicts, buy, trust, FAQ) and a closing call to action whose button returns to the search. The problem section is the one set piece: centred on faint graph paper, a two-tone upper-case headline, an &lsquo;Are you tired of&hellip;&rsquo; lead-in, and three cards &mdash; each a photograph inset in a soft-cornered white card, then a title, a grey subtitle and two icon-and-label facts stating that card&rsquo;s contrast.</dd>
+    </dl>
+    <h3>Interactions</h3>
+    <dl>
+      <dt>Type</dt><dd>Re-resolves on every keystroke; clears any manual selection.</dd>
+      <dt>Click a tile</dt><dd>Selects that asset for every row; siblings dim; the buy column fills. Click again or press Escape to clear.</dd>
+      <dt>Hover / focus a tile</dt><dd>Tooltip with asset name and status. Tiles are buttons, so the keyboard works.</dd>
+      <dt>Toggle buyer type</dt><dd>Swaps every row's rule set and re-ranks.</dd>
+    </dl>
+  </div>
+
+  <h2 id="cta">Buy column</h2>
+  <div class="card">
+    <p>For the selected asset in each row the column shows one of four things: <b>Buy on [venue]</b> (blue, green tile), <b>Buy on [venue]</b> in amber behind an acknowledgement checkbox (amber tile; the link stays locked until the buyer ticks it), <b>Not permitted</b> (red tile), or the name of the licensed route when there is no online venue (firearms, trusts, media, telecom, mining). A secondary venue appears as a text link. Venue choice is local override first, default second. Every link opens in a new tab with the ref tag.</p>
+    <p>With the API connected (<code>window.VESTAIL_API</code> and <code>window.VESTAIL_API_KEY</code>), a click goes to <code>POST /orders/click</code>, which records it and returns the tagged redirect; the page opens the tab during the click and then follows it, so popup blockers allow it. If recording fails the buyer still goes to the venue link, which is already tagged. The API only redirects to a venue listed for that rule, so a cannot-own cell can't be routed. Without the API every link opens directly, as before.</p>
+  </div>
+
+  <h2 id="hud">Traction HUD</h2>
+  <div class="card">
+    <p>Three numbers that count up once on load (cubic ease-out, 1.4s, skipped under reduced-motion) and a ticker that advances every 3.2s through recent buys. Numbers live in <code>data-count</code> attributes; the ticker reads a <code>RECENT</code> array. With the API connected both come from <code>GET /activity</code>. Outside production the API still mixes in the sample figures; with <code>NODE_ENV=production</code> it reports recorded clicks only, and volume stays 0 until real order data exists. Fabricated traction is the fastest way to lose trust in a finance product.</p>
+    <p>Placement rationale: under the search so the eye path is headline → search → proof. Not in the nav (too small to feel real) and not a two-column hero (the board needs full width and the search is the product).</p>
+  </div>
+
+  <h2 id="design">Design system</h2>
+  <div class="card">
+    <dl>
+      <dt>Brand</dt><dd>Vestail's orange wordmark and character (from v1's <code>public/brand/</code>), inlined in the page and used as the favicon.</dd>
+      <dt>Type</dt><dd><b>Outfit</b> at 300, 400, 600 and 700. The hero headline pairs a Light line with a Bold one; numbers that count use tabular figures.</dd>
+      <dt>Colour tokens</dt><dd>Light. Background <code>#E3E4DC</code> (warm sage), white cards, text <code>#0D0D0F</code>, muted <code>#636069</code> (dark enough to hold 4.5:1 on the page, on white cards and on the lavender ones); greys are mixed from the text colour so there is one family. Two accents with fixed jobs: <b>orange</b> <code>#FF580A</code> marks actions and nothing else (Search, See where, Buy); <b>purple</b> <code>#7C5CFF</code> carries brand emphasis (section numbers, change chips, icon tiles, the live dot, selection and focus rings, the hero glow), with <code>#5A3DF0</code> for small purple text. Verdicts keep v1's three hues, deepened to hold 3:1 against white, and nothing else uses them: can own <code>#5C9A4A</code>, conditional <code>#BF861C</code>, cannot own <code>#C9604F</code> (always hatched).</dd>
+      <dt>Cards</dt><dd>Country cards are light lavender (#E3DEEF) with muted text darkened to #5C5964 for 4.5:1; elsewhere one treatment: the surface with a hairline ring and a faint top highlight; raised cards add a soft drop; hover tints the ring purple and lifts the card.</dd>
+      <dt>Shape</dt><dd>One corner scale: panels 28px, cards 20px, fields 16px, buttons and small tiles 12px, verdict tiles and swatches 6px, pills for actions, chips and toggles.</dd>
+      <dt>Motion</dt><dd>Headline words rise in; tiles pop in with a stagger on first paint only; toggles slide a thumb; trail chips pop; selection scales and dims. Everything honours <code>prefers-reduced-motion</code>.</dd>
+      <dt>Why light</dt><dd>v2 moved from v1's dark ground to a warm off-white, after a Lightyear-style reference. Because v1's verdict colours were tuned for dark, v2 deepens them; contrast was measured for text, labels and verdict tiles. Orange buttons sit at 2.85:1 against the page, just under 3:1; their dark labels (6.2:1) carry them.</dd>
+      <dt>Responsive</dt><dd>Breakpoints at 900px (stack) and 480px (fluid tiles, full-width buttons, shortened copy). Safe-area insets declared for notched phones.</dd>
+    </dl>
+  </div>
+
+  <h2 id="api">API</h2>
+  <div class="card">
+    <p>Contract in <code>docs/api/openapi.yaml</code>, guide in <code>docs/api/API.md</code>. Core endpoints: <code>/resolve</code>, <code>/matrix</code>, <code>/rules/{country}/{asset}</code>, <code>/venues/{asset}</code>, <code>/activity</code>, <code>POST /orders/click</code>. The reusable logic behind them is <code>packages/core</code>; the server is <code>services/api</code> (Hono on Node), with its configuration and behaviour notes in <code>services/api/README.md</code> and running instructions in <code>DEPLOY.md</code>.</p>
+    <object data="diagrams/system-flow.svg" type="image/svg+xml" aria-label="System flow diagram"></object>
+  </div>
+
+  <h2 id="log">Build log</h2>
+  <div class="card tl">
+    <div class="step"><b>1 · First grid</b><span>Countries with flags down the left, a 20-tile grid per country on the right, one tile per asset class, three statuses, tooltips, a per-country count. Sample data for ten countries.</span></div>
+    <div class="step"><b>2 · Two views and search</b><span>Added the By-status view (tiles sorted green→amber→red, countries ranked most-open first) and By-asset view. First search: a plain substring filter on asset names.</span></div>
+    <div class="step"><b>3 · Buyer types and the resolver</b><span>Every country got a second rule set for foreigners. Search rebuilt as a staged pipeline (entity → alias → category → asset) with the equity-by-home rule so a company name shows the right tile per country. Trail chips added to expose the reasoning.</span></div>
+    <div class="step"><b>4 · Buy column and redesign</b><span>Venue map with per-country overrides, four CTA states, ref tag on every link. Page rebuilt from tokens up: hero search, cards instead of a table, segmented controls, entrance and selection motion, mobile layout.</span></div>
+    <div class="step"><b>5 · Traction HUD</b><span>Volume, orders and buyers with count-up, plus the live ticker. Placed under the search after weighing the nav and a two-column hero.</span></div>
+    <div class="step"><b>6 · Handoff</b><span>Data split into modular JSON with schema, resolver extracted into a dependency-free package with tests, OpenAPI spec and builder guide, pipeline and system diagrams, this glossary, and a Claude Code kickoff prompt.</span></div>
+    <div class="step"><b>7 · Repo</b><span>Brought into the Vestail repo under <code>v2/</code> on its own branch, as an npm workspace for <code>packages/*</code> and <code>services/*</code>; <code>npm test</code> runs every test. The judged Vestail app is untouched.</span></div>
+    <div class="step"><b>8 · API</b><span><code>services/api</code> implements the OpenAPI contract over the core and the JSON data. Parameters and bodies are validated against the spec, errors use one shape, cache headers follow the guide, public reads are rate-limited by IP, clicks need an API key. A contract test calls every operation and checks the response against its schema.</span></div>
+    <div class="step"><b>9 · Page on the API</b><span>With <code>window.VESTAIL_API</code> set the page loads assets, boards and the HUD from the API and sends Buy presses through <code>POST /orders/click</code>; without it, or when the API is down, it runs on its inline data as before. The API gained CORS so the page can call it from another origin.</span></div>
+    <div class="step"><b>10 · Vestail</b><span>Renamed from the example's working name, Own: <code>v2/</code>, <code>@vestail/core</code>, <code>@vestail/api</code>, <code>VESTAIL_*</code> settings, and the <code>ref=vestail</code> tag.</span></div>
+    <div class="step"><b>11 · Keyed rules and provenance</b><span>Rules moved from arrays indexed by asset position to objects keyed by asset id, each with <code>sources</code> and <code>verified_at</code> (empty until filled). Every board is identical before and after. The core refuses to load a missing, unknown or invalid rule; <code>/rules/{country}/{asset}</code> returns the provenance; the data schema validates it.</span></div>
+    <div class="step"><b>12 · Brand and story sections</b><span>The page took Vestail v1's identity (gradient, Outfit, logo, orange actions, v1's verdict colours). Six sections followed below the board, shaped by Awwwards startup sites (Abatable, Reckoner, Base Power, Moto): the problem (one asset, three answers, drawn from the page's own rules), how it works, the three verdicts, buy in one place (onchain from your wallet; offchain through licensed partners, marked planned), why trust Vestail, and a FAQ, then a closing call to action. The top bar gained section links and a Search pill.</span></div>
+    <div class="step"><b>13 · Conditional acknowledgement</b><span>A conditional cell now shows a checkbox ("I understand I can buy and hold … but a licence, cap, approval or KYC check may apply to me") and its buy links stay locked until it's ticked, as in v1. The API enforces it: <code>POST /orders/click</code> refuses a conditional click without <code>acknowledged: true</code>.</span></div>
+    <div class="step"><b>14 · Premium hero and cards</b><span>A new palette (#0D0D0F ground, #17171A surface, #F5F4F0 text, #99979F muted, purple #7C5CFF beside the orange) and a hero after a Lightyear reference: a true-claims trust row, a Light/Bold headline, one search pill with an orange "See where", chips beneath, and an open stat trio with purple change chips. Cards share one treatment and the corner scale is enforced. Built against the Appllama design skill's rules (one role per accent, one grey family, one corner scale, tabular figures); the Appllama MCP was not connected.</span></div>
+    <div class="step"><b>15 · Light ground</b><span>The page moved to a warm off-white (#F5F3EE) with white cards and near-black text. Muted grey, small purple text and the verdict colours were darkened to keep their contrast; focus rings turned purple (white vanished on light); shadows became soft and warm.</span></div>
+    <div class="step"><b>16 · Country cards</b><span>After a card-grid reference: the board became two columns of cards with a flag-tile header and a dotted verdict count; the 20-tile wall became a slim bar chart whose bar heights repeat the verdict (labelled chips for one to three assets); and the buy area became an inset panel with a verdict edge and pill, holding the acknowledgement for conditional cells. Panels settle in from 97% rather than popping; phone bars wrap to two rows for tap size.</span></div>
+    <div class="step"><b>17 · Twelve countries</b><span>Japan and South Africa joined the board, with their own keyed rules (illustrative, unsourced, like the other ten) and a few more named companies so Toyota and Naspers resolve to domestic equity at home. The scope line, FAQ and docs now say twelve; the core test asserts a row per country rather than a fixed ten.</span></div>
+    <div class="step"><b>18 · The problem, restaged</b><span>The two side-by-side panels became a replica of a reference layout: upper-case headline whose last line lands in near-black, a lead-in, then three fanned cards — a bar chart of what a listing actually shows, the lavender lead card contrasting twelve identical wallet squares with the same twelve in verdict colours, and a line chart of what you assumed against what you can do by the exit — over faint graph paper, closing on one line. Charts carry descriptions for screen readers; the deck stacks upright below 1040px.</span></div>
+    <div class="step"><b>19 · Top bar</b><span>The nav was rebuilt after a reference: a sticky, full-width white bar with a hairline under it, the wordmark left, section links centred on the bar itself, and a pair of buttons right — outlined 'See the board' beside the orange 'Search'. No chevrons: the reference's dropdowns would be empty here, and an affordance that opens nothing is worse than none.</span></div>
+    <div class="step"><b>20 · Footer</b><span>Rebuilt after a reference: the rounded dark card became a full-width near-black field, the kicker became the wordmark with a line of copy and a dotted pill, the columns gained dot-led links and sentence-case headings, and the solid wordmark at the foot became a 5% watermark cropped by the edge. The social row went — there are no accounts behind it.</span></div>
+    <div class="step"><b>21 · Problem cards, restyled</b><span>The three complaint cards were rebuilt on a travel-card reference: picture inset at the top with concentric corners, then a large title, a grey subtitle and two icon-and-label facts, with the charts, captions, legends and axes that used to hang off each card removed. One shared card treatment &mdash; 34px corners and a wide three-layer drop &mdash; which becomes a ring in dark mode, where a black shadow shows nothing.</span></div>
+  </div>
+
+  <h2 id="next">Open questions</h2>
+  <div class="card"><dl>
+    <dt>Rule provenance</dt><dd>Every rule now has <code>sources</code> and <code>verified_at</code>, but all are empty: every status is still illustrative until it is checked against a real document. The grid does not show provenance yet.</dd>
+    <dt>Partner keys</dt><dd>The page has to carry an API key to record clicks, and anything in a public page can be read. Decide how partner keys and per-partner ref tags work before relying on click attribution.</dd>
+    <dt>Click and rate-limit storage</dt><dd>Both live in the API process's memory, so they reset on restart and are not shared between instances. Move them to a store before running more than one.</dd>
+    <dt>Securities master</dt><dd>Replace the hand-seeded entity list with ticker/ISIN lookup so any listed company resolves.</dd>
+    <dt>Resident buyer type</dt><dd>Many rules differ for residents without citizenship; a third rule set is the obvious next axis.</dd>
+    <dt>Affiliate deep links</dt><dd>Venue urls are homepages. Partner agreements will bring specific landing urls and per-partner ref tags.</dd>
+  </dl></div>
+
+  <footer>Vestail v2 · docs/GLOSSARY.html</footer>
+</div>
+</body>
+</html>

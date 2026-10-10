@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 560" font-family="Helvetica Neue, Arial, sans-serif" font-size="14">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5 0 10z" fill="#4B5563"/></marker>
+    <style>
+      .box{fill:#fff;stroke:#D1D5DB;stroke-width:1.5;rx:12}
+      .stage{fill:#EEF2FF;stroke:#2F4BFF;stroke-width:1.5}
+      .t{fill:#111827;font-weight:700}
+      .s{fill:#4B5563;font-size:12.5px}
+      .l{stroke:#4B5563;stroke-width:1.5;fill:none;marker-end:url(#a)}
+      .miss{stroke:#DC4B3B;stroke-dasharray:4 4}
+      .tag{fill:#2F4BFF;font-size:11px;font-weight:700;letter-spacing:.04em}
+      .out{fill:#ECFDF3;stroke:#23A55A;stroke-width:1.5}
+    </style>
+  </defs>
+  <text x="40" y="44" font-size="22" class="t">Query resolution pipeline</text>
+  <text x="40" y="66" class="s">Free text in, asset classes out, with a trail explaining each hop. First confident stage wins.</text>
+
+  <!-- input -->
+  <rect x="40" y="110" width="170" height="70" class="box" rx="12"/>
+  <text x="56" y="138" class="t">Query</text>
+  <text x="56" y="160" class="s">"can I buy tesla shares"</text>
+
+  <!-- stage 0 -->
+  <rect x="260" y="110" width="200" height="70" class="box stage" rx="12"/>
+  <text x="276" y="128" class="tag">STAGE 0</text>
+  <text x="276" y="150" class="t">Clean</text>
+  <text x="276" y="170" class="s">drop filler → "tesla shares"</text>
+  <path d="M210 145H260" class="l"/>
+
+  <!-- stages 1-4 column -->
+  <g>
+    <rect x="530" y="110" width="230" height="70" class="box stage" rx="12"/>
+    <text x="546" y="128" class="tag">STAGE 1</text><text x="546" y="150" class="t">Named entity</text>
+    <text x="546" y="170" class="s">companies, coins, aircraft, bonds</text>
+
+    <rect x="530" y="210" width="230" height="70" class="box stage" rx="12"/>
+    <text x="546" y="228" class="tag">STAGE 2</text><text x="546" y="250" class="t">Alias</text>
+    <text x="546" y="270" class="s">house → Residential property</text>
+
+    <rect x="530" y="310" width="230" height="70" class="box stage" rx="12"/>
+    <text x="546" y="328" class="tag">STAGE 3</text><text x="546" y="350" class="t">Category</text>
+    <text x="546" y="370" class="s">commodities → 3 classes</text>
+
+    <rect x="530" y="410" width="230" height="70" class="box stage" rx="12"/>
+    <text x="546" y="428" class="tag">STAGE 4</text><text x="546" y="450" class="t">Asset name</text>
+    <text x="546" y="470" class="s">prefix + typo tolerant</text>
+  </g>
+  <path d="M460 145H530" class="l"/>
+  <path d="M645 180V210" class="l miss"/><text x="655" y="199" class="s" fill="#DC4B3B">miss</text>
+  <path d="M645 280V310" class="l miss"/><text x="655" y="299" class="s" fill="#DC4B3B">miss</text>
+  <path d="M645 380V410" class="l miss"/><text x="655" y="399" class="s" fill="#DC4B3B">miss</text>
+
+  <!-- retry loop -->
+  <path d="M530 460 H495 V180" class="l miss"/>
+  <text x="270" y="300" class="s">Whole phrase missed every stage?</text>
+  <text x="270" y="318" class="s">Retry per word — longest first,</text>
+  <text x="270" y="336" class="s">entities before aliases — so</text>
+  <text x="270" y="354" class="s">"tesla shares" lands on Tesla,</text>
+  <text x="270" y="372" class="s">not the generic "shares".</text>
+
+  <!-- hit output -->
+  <rect x="830" y="110" width="330" height="130" class="box out" rx="12"/>
+  <text x="846" y="128" class="tag" fill="#23A55A">HIT</text>
+  <text x="846" y="150" class="t">Resolution</text>
+  <text x="846" y="172" class="s">assets: [domestic_equities, foreign_equities]</text>
+  <text x="846" y="190" class="s">perCountry: domestic in US, foreign elsewhere</text>
+  <text x="846" y="208" class="s">trail: Tesla → Listed company (US) → Equities</text>
+  <text x="846" y="226" class="s">stage: entity</text>
+  <path d="M760 145H830" class="l"/>
+  <path d="M760 245 H800" stroke="#4B5563" stroke-width="1.5"/>
+  <path d="M760 345 H800" stroke="#4B5563" stroke-width="1.5"/>
+  <path d="M760 445 H800 V175 H830" class="l"/>
+  <text x="770" y="236" class="s" fill="#23A55A">hit</text><text x="770" y="336" class="s" fill="#23A55A">hit</text><text x="770" y="436" class="s" fill="#23A55A">hit</text>
+
+  <!-- none -->
+  <rect x="830" y="410" width="330" height="70" class="box" rx="12"/>
+  <text x="846" y="438" class="t">No match</text>
+  <text x="846" y="460" class="s">stage: none → show categories to the user</text>
+  <path d="M645 480 V520 H995 V480" class="l miss"/>
+
+  <text x="40" y="540" class="s">Every stage records the label it matched, so the UI can render the trail chips and the API can return it verbatim.</text>
+</svg>

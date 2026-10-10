@@ -168,7 +168,7 @@ export function Combobox<T extends string>({
               >
                 <span className="min-w-0 flex-1">{option.row}</span>
                 {option.value === value && (
-                  <Icon name="check" className="size-4 shrink-0 text-brand-orange" />
+                  <Icon name="check" weight="fill" className="size-4 shrink-0 text-brand-orange" />
                 )}
               </li>
             ))}

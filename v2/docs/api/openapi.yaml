@@ -1,0 +1,333 @@
+openapi: 3.1.0
+info:
+  title: Vestail API
+  version: 0.1.0
+  summary: Ownership rules, query resolution and buy routing for any asset, in any country, for any buyer type.
+  description: |
+    The same pipeline that powers the Vestail frontend, exposed for other builders.
+    Three ideas run through every endpoint:
+
+    * **Resolve** – free text ("Google", "a house", "gilts") becomes one or more asset classes, with a trail explaining how.
+    * **Rules** – each country holds a status (`can_own` / `conditional` / `cannot_own`) per asset class, per buyer type.
+    * **Route** – for a permitted (asset, country) pair, the venues where it can be bought, tagged for attribution.
+
+    All responses are JSON. Reference data endpoints are cacheable for 24h; `/activity` is live.
+servers:
+  - url: https://api.vestail.example/v1
+tags:
+  - { name: resolve, description: Turn text into asset classes }
+  - { name: matrix,  description: Status grid across countries }
+  - { name: rules,   description: Individual rule lookups }
+  - { name: venues,  description: Where to buy }
+  - { name: reference, description: Static lists }
+  - { name: tokens,  description: Tokenised versions of an asset onchain (Solana) and their verdicts }
+  - { name: derivatives, description: Price exposure that is not ownership }
+  - { name: activity, description: Traction feed for the HUD }
+  - { name: orders,  description: Outbound click / order-flow attribution }
+
+paths:
+  /resolve:
+    get:
+      tags: [resolve]
+      summary: Resolve a query to asset classes
+      parameters:
+        - { name: q, in: query, required: true, schema: { type: string }, example: "tesla shares" }
+      responses:
+        "200":
+          description: Resolution with trail
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Resolution" }
+              example:
+                stage: entity
+                assets: [domestic_equities, foreign_equities]
+                entity: { name: Tesla, kind: Listed company, home: US }
+                perCountry: { rule: equity-by-home, home: US }
+                trail: [Tesla, "Listed company (US)", Equities, "Domestic in US, foreign elsewhere"]
+                note: Tesla is a listed company from US, so it counts as domestic equity there and foreign equity everywhere else.
+
+  /matrix:
+    get:
+      tags: [matrix]
+      summary: Status grid for a query across all countries
+      description: The endpoint the board is built from. One row per country; `cells` holds one entry per resolved asset; `cta` is populated when exactly one asset applies to the row.
+      parameters:
+        - { name: q, in: query, schema: { type: string }, description: Free text. Empty returns all 20 assets. }
+        - { name: who, in: query, schema: { $ref: "#/components/schemas/BuyerType" }, description: Defaults to citizen }
+        - { name: sort, in: query, schema: { type: string, enum: [status, asset] }, description: "`status` ranks countries most-open first and orders tiles green→amber→red; `asset` keeps index order." }
+        - { name: countries, in: query, schema: { type: string }, description: Comma-separated ISO codes to restrict rows, e.g. NG,GB }
+      responses:
+        "200":
+          description: Matrix
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Matrix" }
+
+  /rules/{country}:
+    get:
+      tags: [rules]
+      summary: All rules for one country
+      parameters:
+        - { name: country, in: path, required: true, schema: { type: string, pattern: "^[A-Z]{2}$" } }
+        - { name: who, in: query, schema: { $ref: "#/components/schemas/BuyerType" } }
+      responses:
+        "200":
+          description: Rules
+          content: { application/json: { schema: { $ref: "#/components/schemas/CountryRules" } } }
+        "404": { description: Unknown country }
+
+  /rules/{country}/{asset}:
+    get:
+      tags: [rules]
+      summary: One rule
+      parameters:
+        - { name: country, in: path, required: true, schema: { type: string } }
+        - { name: asset, in: path, required: true, schema: { type: string }, description: Asset id, e.g. `gold_bullion` }
+        - { name: who, in: query, schema: { $ref: "#/components/schemas/BuyerType" } }
+      responses:
+        "200":
+          description: Rule with venues and provenance
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Rule" }
+              example: { country: NG, asset: cryptocurrency, who: citizen, status: conditional, venues: [{ name: Luno, url: "https://www.luno.com?ref=vestail" }], sources: [], verified_at: null }
+
+  /venues/{asset}:
+    get:
+      tags: [venues]
+      summary: Venues for an asset, optionally for one country
+      parameters:
+        - { name: asset, in: path, required: true, schema: { type: string } }
+        - { name: country, in: query, schema: { type: string } }
+        - { name: ref, in: query, schema: { type: string }, description: Override the attribution tag appended to urls }
+      responses:
+        "200":
+          description: Venue list
+          content: { application/json: { schema: { type: array, items: { $ref: "#/components/schemas/Venue" } } } }
+
+  /assets:
+    get: { tags: [reference], summary: The asset classes, responses: { "200": { description: List, content: { application/json: { schema: { type: array, items: { $ref: "#/components/schemas/Asset" } } } } } } }
+  /categories:
+    get: { tags: [reference], summary: Category fan-outs, responses: { "200": { description: List, content: { application/json: { schema: { type: array, items: { $ref: "#/components/schemas/Category" } } } } } } }
+  /countries:
+    get: { tags: [reference], summary: Countries covered, responses: { "200": { description: List, content: { application/json: { schema: { type: array, items: { $ref: "#/components/schemas/Country" } } } } } } }
+  /entities:
+    get:
+      tags: [reference]
+      summary: Search the named-entity dictionary
+      parameters: [{ name: q, in: query, schema: { type: string } }, { name: kind, in: query, schema: { type: string } }]
+      responses: { "200": { description: Matches, content: { application/json: { schema: { type: array, items: { $ref: "#/components/schemas/Entity" } } } } } }
+
+  /tokens:
+    get:
+      tags: [tokens]
+      summary: Symbols that have tokenised versions
+      responses: { "200": { description: List, content: { application/json: { schema: { type: array, items: { $ref: "#/components/schemas/TokenSymbol" } } } } } }
+
+  /tokens/{symbol}:
+    get:
+      tags: [tokens]
+      summary: Every tokenised version of a symbol, judged for one country and buyer type
+      description: |
+        Each token is judged by its issuer's own policy (sourced), then capped by the asset-class rule for the
+        country and buyer type: the stricter decides. A token whose issuer has no rule for the country is
+        `assessed: false` with `status: null` — not assessed, never eligible, and not buyable. A cannot_own class
+        rule makes every token cannot_own, assessed or not.
+      parameters:
+        - { name: symbol, in: path, required: true, schema: { type: string }, example: NVDA }
+        - { name: country, in: query, required: true, schema: { type: string, pattern: "^[A-Z]{2}$" } }
+        - { name: who, in: query, schema: { $ref: "#/components/schemas/BuyerType" } }
+      responses:
+        "200":
+          description: Token board
+          content: { application/json: { schema: { $ref: "#/components/schemas/TokenBoard" } } }
+        "404": { description: Unknown symbol }
+
+  /derivatives:
+    get:
+      tags: [derivatives]
+      summary: Commodity price exposure markets (Hyperliquid perpetuals)
+      parameters: [{ name: q, in: query, schema: { type: string }, description: "Free text: oil, copper, gold" }]
+      responses: { "200": { description: Markets, content: { application/json: { schema: { type: array, items: { $ref: "#/components/schemas/Market" } } } } } }
+
+  /derivatives/{id}:
+    get:
+      tags: [derivatives]
+      summary: One market judged for a country
+      description: Judged by the venue's own rule, never by the commodity's ownership class, because nothing is owned. No rule for the country means assessed false and status null.
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string }, example: "xyz:GOLD" }
+        - { name: country, in: query, required: true, schema: { type: string, pattern: "^[A-Z]{2}$" } }
+      responses:
+        "200": { description: Judged market, content: { application/json: { schema: { $ref: "#/components/schemas/JudgedMarket" } } } }
+        "404": { description: Unknown market }
+
+  /activity:
+    get:
+      tags: [activity]
+      summary: Traction stats and recent buys for the HUD
+      responses: { "200": { description: Feed, content: { application/json: { schema: { $ref: "#/components/schemas/Activity" } } } } }
+
+  /orders:
+    get:
+      tags: [orders]
+      summary: One buyer's recorded Buy presses
+      description: Requires the same API key the clicks were recorded with; only that key's clicks are returned.
+      parameters:
+        - { name: session, in: query, required: true, schema: { type: string, minLength: 1 } }
+        - { name: limit, in: query, schema: { type: integer, minimum: 1, maximum: 200, default: 50 } }
+      responses:
+        "200":
+          description: Newest first
+          content: { application/json: { schema: { type: array, items: { $ref: "#/components/schemas/Order" } } } }
+
+  /orders/click:
+    post:
+      tags: [orders]
+      summary: Record an outbound click to a venue
+      description: Called when a Buy button is pressed. Returns a redirect url carrying the partner tag. Feeds `/activity` and the attribution ledger.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ClickEvent" }
+      responses:
+        "201":
+          description: Recorded
+          content: { application/json: { schema: { type: object, properties: { id: { type: string }, redirect: { type: string, format: uri } } } } }
+
+components:
+  schemas:
+    BuyerType: { type: string, enum: [citizen, foreigner], default: citizen }
+    Status: { type: string, enum: [can_own, conditional, cannot_own] }
+    Asset: { type: object, properties: { id: { type: string }, index: { type: integer }, name: { type: string } } }
+    Category: { type: object, properties: { id: { type: string }, name: { type: string }, assets: { type: array, items: { type: string } } } }
+    Country: { type: object, properties: { code: { type: string }, name: { type: string }, flag: { type: string } } }
+    Entity: { type: object, properties: { name: { type: string }, kind: { type: string }, home: { type: string }, asset: { type: string } } }
+    Venue: { type: object, properties: { name: { type: string }, url: { type: [string, "null"], format: uri } } }
+    Resolution:
+      type: object
+      properties:
+        stage: { type: string, enum: [entity, alias, category, asset, all, none], description: Which pipeline stage produced the result }
+        assets: { type: array, items: { type: string }, description: Asset ids }
+        entity: { $ref: "#/components/schemas/Entity" }
+        perCountry: { type: object, description: Present when the applicable asset differs by country, properties: { rule: { type: string }, home: { type: string } } }
+        trail: { type: array, items: { type: string } }
+        note: { type: string }
+    Cell: { type: object, properties: { asset: { type: string }, index: { type: integer }, status: { $ref: "#/components/schemas/Status" } } }
+    MatrixRow:
+      type: object
+      properties:
+        code: { type: string }
+        name: { type: string }
+        flag: { type: string }
+        who: { $ref: "#/components/schemas/BuyerType" }
+        cells: { type: array, items: { $ref: "#/components/schemas/Cell" } }
+        summary: { type: object, properties: { can_own: { type: integer }, conditional: { type: integer }, cannot_own: { type: integer } } }
+        cta: { type: [object, "null"], properties: { asset: { type: string }, status: { $ref: "#/components/schemas/Status" }, venues: { type: array, items: { $ref: "#/components/schemas/Venue" } } } }
+    Matrix:
+      type: object
+      properties:
+        query: { type: string }
+        who: { $ref: "#/components/schemas/BuyerType" }
+        resolution: { $ref: "#/components/schemas/Resolution" }
+        rows: { type: array, items: { $ref: "#/components/schemas/MatrixRow" } }
+    CountryRules: { type: object, properties: { country: { type: string }, who: { $ref: "#/components/schemas/BuyerType" }, rules: { type: object, additionalProperties: { $ref: "#/components/schemas/Status" } } } }
+    Source: { type: object, required: [title, url], properties: { title: { type: string }, url: { type: string, format: uri } }, description: A document the rule is based on (statute, regulator guidance, issuer terms). }
+    Rule:
+      type: object
+      properties:
+        country: { type: string }
+        asset: { type: string }
+        who: { $ref: "#/components/schemas/BuyerType" }
+        status: { $ref: "#/components/schemas/Status" }
+        venues: { type: array, items: { $ref: "#/components/schemas/Venue" } }
+        sources: { type: array, items: { $ref: "#/components/schemas/Source" }, description: Empty until the rule has been sourced. }
+        verified_at: { type: [string, "null"], format: date, description: When the rule was last checked against its sources; null if never. }
+    TokenSymbol: { type: object, properties: { symbol: { type: string }, name: { type: string }, entity: { type: [string, "null"], description: Matching name in /entities, when there is one }, home: { type: string }, providers: { type: array, items: { type: string } }, chains: { type: array, items: { $ref: "#/components/schemas/Chain" } }, mints: { type: array, items: { type: string }, description: Token addresses on every chain } } }
+    Chain: { type: string, enum: [solana, robinhood, base, hyperliquid] }
+    Market:
+      type: object
+      properties:
+        id: { type: string }
+        coin: { type: string }
+        name: { type: string }
+        commodity: { type: string }
+        related_asset: { type: [string, "null"], description: The ownership class this tracks the price of, if any; its rule does not apply }
+        aliases: { type: array, items: { type: string } }
+        venue: { type: string }
+        chain: { $ref: "#/components/schemas/Chain" }
+        deployer: { type: string }
+        instrument: { type: string, enum: [commodity_derivative] }
+    JudgedMarket:
+      allOf:
+        - { $ref: "#/components/schemas/Market" }
+        - type: object
+          properties:
+            country: { type: string }
+            assessed: { type: boolean }
+            status: { oneOf: [{ $ref: "#/components/schemas/Status" }, { type: "null" }] }
+            issuer: { oneOf: [{ $ref: "#/components/schemas/IssuerVerdict" }, { type: "null" }] }
+    Instrument: { type: string, enum: [tokenized_equity, tokenized_debt, broker_entitlement, contractual_exposure], description: "What the token legally is. tokenized_equity = a 1:1 claim on custodied shares; tokenized_debt = a note tracking the price; broker_entitlement = a share held through a broker; contractual_exposure = an SPV or loan participation." }
+    Order: { type: object, properties: { id: { type: string }, at: { type: string, format: date-time }, country: { type: string }, asset: { type: string }, who: { $ref: "#/components/schemas/BuyerType" }, venue: { type: string }, mint: { type: string }, market: { type: string }, chain: { $ref: "#/components/schemas/Chain" }, acknowledged: { type: boolean } } }
+    IssuerEvidence: { type: object, properties: { rule: { type: string }, kind: { type: string, enum: [gate, note] }, reason: { type: string }, source_url: { type: string, format: uri }, source_quality: { type: string, enum: [primary, secondary] } } }
+    IssuerVerdict:
+      type: object
+      properties:
+        status: { $ref: "#/components/schemas/Status" }
+        summary: { type: [string, "null"] }
+        acknowledgement: { type: [object, "null"], properties: { limit: { type: string }, requires: { type: string } }, description: What the buyer must acknowledge; set when the issuer verdict is conditional }
+        policy_version: { type: string }
+        evidence: { type: array, items: { $ref: "#/components/schemas/IssuerEvidence" } }
+    Token:
+      type: object
+      required: [mint, provider, assessed, status]
+      properties:
+        mint: { type: string, description: Alias of address, kept for Solana-era clients }
+        address: { type: string, description: The token's address on its chain }
+        chain: { $ref: "#/components/schemas/Chain" }
+        chain_name: { type: string }
+        instrument: { $ref: "#/components/schemas/Instrument" }
+        provider: { type: string }
+        token_symbol: { type: string }
+        name: { type: string }
+        structure: { type: string }
+        redeemable: { type: boolean }
+        custodian: { type: [string, "null"] }
+        decimals: { type: integer }
+        token_program: { type: [string, "null"] }
+        issuer_source: { type: string, format: uri }
+        assessed: { type: boolean, description: False when the issuer has no rule for this country. Such a token is not buyable. }
+        status: { oneOf: [{ $ref: "#/components/schemas/Status" }, { type: "null" }], description: Final verdict, the stricter of issuer and class; null when not assessed }
+        decided_by: { type: [string, "null"], enum: [issuer, class, both, null] }
+        issuer: { oneOf: [{ $ref: "#/components/schemas/IssuerVerdict" }, { type: "null" }] }
+    TokenBoard:
+      type: object
+      properties:
+        symbol: { type: string }
+        name: { type: string }
+        country: { type: string }
+        who: { $ref: "#/components/schemas/BuyerType" }
+        asset: { type: string, description: The asset class id that governs this symbol in this country }
+        class_status: { $ref: "#/components/schemas/Status" }
+        class_sources: { type: array, items: { $ref: "#/components/schemas/Source" } }
+        class_verified_at: { type: [string, "null"], format: date }
+        tokens: { type: array, items: { $ref: "#/components/schemas/Token" } }
+    Activity:
+      type: object
+      properties:
+        stats: { type: object, properties: { volume_30d_usd: { type: number }, volume_30d_delta_pct: { type: number }, orders_routed: { type: integer }, orders_delta_pct: { type: number }, active_buyers_7d: { type: integer } } }
+        recent: { type: array, items: { type: object, properties: { flag: { type: string }, asset: { type: string }, venue: { type: string }, ago: { type: string } } } }
+    ClickEvent:
+      type: object
+      required: [country, asset, who, venue]
+      properties:
+        country: { type: string }
+        asset: { type: string }
+        who: { $ref: "#/components/schemas/BuyerType" }
+        venue: { type: string }
+        query: { type: string, description: The text the user typed, for resolver analytics }
+        session: { type: string }
+        market: { type: string, description: "A Hyperliquid market id (e.g. xyz:GOLD), set when routing commodity exposure; asset must repeat it and venue must be Hyperliquid. Judged by the venue's rule; conditional needs acknowledged." }
+        mint: { type: string, description: "The token's address, set when buying a tokenised version onchain (venue Jupiter on Solana, KyberSwap on Robinhood Chain and Base). The token's own verdict then decides — not assessed and cannot_own are refused, conditional needs acknowledged — and asset must be the class that governs the token in that country." }
+        acknowledged: { type: boolean, description: "Required as true when the rule is conditional: the buyer has acknowledged the condition (licence, cap, approval or KYC) before buying. Without it a conditional click is refused with acknowledgement_required." }

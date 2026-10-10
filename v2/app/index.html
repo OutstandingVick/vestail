@@ -1,0 +1,1968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Vestail — what you can buy, where</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&family=Syne:wght@600;700&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#F8F7FF">
+<script>
+  (() => {
+    let saved = null;
+    try { saved = localStorage.getItem("vestail-theme"); } catch (_) {}
+    const theme = saved === "light" || saved === "dark"
+      ? saved
+      : (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    document.documentElement.dataset.theme = theme;
+    document.querySelector('meta[name="theme-color"]').content = theme === "dark" ? "#0E0F14" : "#F8F7FF";
+  })();
+</script>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-2 6 102 93'%3E%3Cline x1='12' y1='42' x2='27' y2='65' stroke='%23FF580A' stroke-width='27' stroke-linecap='round'/%3E%3Cline x1='60' y1='82' x2='83' y2='23' stroke='%23FF580A' stroke-width='30' stroke-linecap='round'/%3E%3Cellipse cx='84.26' cy='39.59' rx='4.6' ry='6.6' fill='%23141414'/%3E%3Ccircle cx='85.66' cy='37.19' r='1.7' fill='%23FFFFFF'/%3E%3Cellipse cx='70.84' cy='34.36' rx='4.6' ry='6.6' fill='%23141414'/%3E%3Ccircle cx='72.24' cy='31.96' r='1.7' fill='%23FFFFFF'/%3E%3C/svg%3E">
+<style>
+  /* ---------- Design tokens ---------- */
+  :root {
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+
+    /*
+     * Vestail v2 brand. Light: a warm off-white ground, white cards, near-black
+     * text. One grey family (warm-neutral, mixed from the text colour), two
+     * accents with fixed jobs: vivid orange marks actions, soft orange marks
+     * country cards, and purple is the brand's emphasis (highlights, selection,
+     * focus). None is ever a verdict.
+     */
+    --ink-0: #0d0d0f;                    /* darkest ink: labels on amber, ticks */
+    --navy: #0d0d0f;                     /* label colour on orange */
+    --orange: #ff580a;                   /* actions */
+    --faq-card: color-mix(in srgb, var(--orange) 10%, #fff); /* pale orange surface */
+    --purple: #7c5cff;                   /* brand emphasis */
+    --purple-ink: #5a3df0;               /* purple for small text on light */
+    --country-card: #EBEBFF;              /* country-card surface */
+    --lavender-surface: #EBEBFF;
+    --lavender-strong: #e3deef;
+    --paper: #17171a;                    /* text */
+    --muted: #636069;                    /* labels; dark enough to hold 4.5:1 on the page and white */
+
+    --bg: #F8F7FF;
+    --surface: #ffffff;
+    --surface-2: color-mix(in srgb, #17171a 4%, #ffffff);
+    --surface-3: color-mix(in srgb, #17171a 8%, #ffffff);
+    --nav-bg: rgb(248 247 255 / .88);
+    --hero-bg: #F8F7FF;
+    --hero-heading: #17171a;
+    --hero-copy: rgb(23 23 26 / .72);
+    --hero-earth-opacity: .72;
+    --hero-earth-filter: saturate(.92) contrast(1.04) brightness(1.02);
+    --hero-overlay: radial-gradient(circle at 62% 45%, rgb(124 92 255 / .1), transparent 44%), radial-gradient(circle at 18% 18%, rgb(255 88 10 / .07), transparent 31%), linear-gradient(rgb(248 247 255 / .16), rgb(248 247 255 / .48));
+    --hero-divider: rgb(23 23 26 / .14);
+    --hero-chip-bg: rgb(255 255 255 / .62);
+    --hero-chip-border: rgb(23 23 26 / .18);
+    --hero-chip-text: rgb(23 23 26 / .82);
+    --hero-chip-hover-bg: rgb(255 255 255 / .88);
+    --hero-chip-hover-text: #17171a;
+    --ink: #0d0d0f;
+    --ink-2: color-mix(in srgb, #17171a 80%, #6f6c75);
+    --ink-3: var(--muted);
+    --line: color-mix(in srgb, #17171a 10%, transparent);
+    --accent: var(--orange);
+    --accent-ink: var(--navy);
+    /* Verdict colours: v1's three hues, deepened to hold their shape on white. Used for nothing else. */
+    --yes: #7C5CFF; --cond: #FFA770; --no: #FF580A;
+    --no-hatch: rgba(255,255,255,.55);
+    --tile-dim: .35;
+    --ring: 0 0 0 1px var(--line);
+    /* One card treatment: hairline ring, a faint top highlight for depth, a soft drop. */
+    --card: var(--ring), 0 1px 2px rgba(13,13,15,.04);
+    --card-raised: var(--card), 0 20px 40px -24px rgba(13,13,15,.18);
+    --card-hover: 0 0 0 1px color-mix(in srgb, var(--purple) 40%, transparent), 0 1px 2px rgba(13,13,15,.04), 0 26px 50px -24px rgba(13,13,15,.22);
+    --shadow-1: var(--card);
+    --shadow-2: var(--card-raised);
+    /* Corner scale, and only these: panels 28, cards 20, fields 16, buttons and small tiles 12, verdict tiles and swatches 6, pills. */
+    --r-tile: 6px; --r-xl: 28px; --r-lg: 28px; --r-card: 20px; --r-md: 16px; --r-sm: 12px; --r-pill: 999px;
+    --font-manrope: "Manrope", ui-sans-serif, system-ui, sans-serif;
+    --font-inter: "Inter", ui-sans-serif, system-ui, sans-serif;
+    --font-syne: "Syne", ui-sans-serif, system-ui, sans-serif;
+    --font-geist: "Geist", ui-sans-serif, system-ui, sans-serif;
+    --font-dm-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+    --font-satoshi: "Satoshi", ui-sans-serif, system-ui, sans-serif;
+    --font-display: var(--font-manrope);
+    --font-body: var(--font-inter);
+    --ease: cubic-bezier(.2,.8,.2,1);
+    --tip-bg: var(--paper); --tip-fg: var(--bg);
+    color-scheme: light;
+  }
+
+  html[data-theme="dark"] {
+    --bg: #0E0F14;
+    --surface: #171821;
+    --surface-2: #20212b;
+    --surface-3: #292a36;
+    --nav-bg: rgb(14 15 20 / .9);
+    --hero-bg: #0E0F14;
+    --hero-heading: #f8f7ff;
+    --hero-copy: rgb(248 247 255 / .78);
+    --hero-earth-opacity: .62;
+    --hero-earth-filter: saturate(.76) contrast(.96) brightness(.76);
+    --hero-overlay: radial-gradient(circle at 62% 45%, rgb(124 92 255 / .25), transparent 40%), radial-gradient(circle at 18% 18%, rgb(255 88 10 / .12), transparent 31%), linear-gradient(rgb(14 15 20 / .34), rgb(14 15 20 / .7));
+    --hero-divider: rgb(248 247 255 / .18);
+    --hero-chip-bg: rgb(14 15 20 / .34);
+    --hero-chip-border: rgb(248 247 255 / .24);
+    --hero-chip-text: rgb(248 247 255 / .86);
+    --hero-chip-hover-bg: rgb(14 15 20 / .58);
+    --hero-chip-hover-text: #fff;
+    --country-card: #1b1c29;
+    --lavender-surface: #181925;
+    --lavender-strong: #212233;
+    --paper: #f5f3fb;
+    --muted: #aaa7b4;
+    --ink: #f7f5ff;
+    --ink-2: #d8d5e0;
+    --ink-3: #aaa7b4;
+    --line: rgb(247 245 255 / .13);
+    --purple-ink: #ad9cff;
+    --faq-card: color-mix(in srgb, var(--orange) 12%, var(--surface));
+    --ring: 0 0 0 1px var(--line);
+    --card: var(--ring), 0 1px 2px rgb(0 0 0 / .28);
+    --card-raised: var(--card), 0 20px 40px -24px rgb(0 0 0 / .72);
+    --card-hover: 0 0 0 1px color-mix(in srgb, var(--purple) 55%, transparent), 0 1px 2px rgb(0 0 0 / .3), 0 26px 50px -24px rgb(0 0 0 / .82);
+    --tip-bg: #f7f5ff;
+    --tip-fg: #0E0F14;
+    color-scheme: dark;
+  }
+  /* A black drop is invisible on a dark page, so the card's lift becomes a ring. */
+  html[data-theme="dark"] .qcard { box-shadow: 0 0 0 1px rgb(255 255 255 / .07), 0 24px 48px -24px rgb(0 0 0 / .6); }
+  html[data-theme="dark"] .qcard:hover { box-shadow: 0 0 0 1px rgb(255 255 255 / .14), 0 30px 60px -26px rgb(0 0 0 / .7); }
+  html[data-theme="dark"] .problem h2 .ln { color: #a997ff; }
+  html[data-theme="dark"] .problem h2 .hit { color: #ffad84; }
+  html[data-theme="dark"] .row { --card-muted: var(--ink-3); }
+  html[data-theme="dark"] .faq-options { background: rgb(247 245 255 / .09); }
+
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  *, *::before, *::after { box-sizing: inherit; }
+  .font-manrope { font-family: var(--font-manrope); }
+  .font-inter { font-family: var(--font-inter); }
+  .font-syne { font-family: var(--font-syne); }
+  .font-geist { font-family: var(--font-geist); }
+  .font-dm-sans { font-family: var(--font-dm-sans); }
+  .font-satoshi { font-family: var(--font-satoshi); }
+  body { margin: 0; background: var(--bg); color: var(--paper); font-family: var(--font-inter); font-size: 15px; line-height: 1.5; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+  /*
+   * A near-black ground with one soft purple glow behind the hero. It scrolls
+   * with the page (absolute, not fixed) so the glow stays with the headline
+   * and the sections below sit on plain ground.
+   */
+  body { position: relative; }
+  body::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 1100px; z-index: -1; pointer-events: none;
+    background: radial-gradient(60% 55% at 50% 0%, color-mix(in srgb, var(--purple) 14%, transparent), transparent 70%); }
+  ::selection { background: var(--purple); color: #fff; }
+  a { color: inherit; }
+  button, input, select, textarea { font-family: var(--font-inter); }
+  button { font-size: inherit; line-height: inherit; }
+  :focus-visible { outline: 2px solid var(--purple); outline-offset: 2px; }
+  h1, h2, h3 { font-family: var(--font-manrope); }
+
+  /*
+   * Side margins are a fifth of what a 1120px column would leave (80% less), never
+   * under 20px: on a wide screen the content spreads out instead of floating in the
+   * middle. Hero copy and section text keep their own reading widths.
+   */
+  .wrap { margin: 0 auto; padding: 0 max(20px, calc((100vw - 1120px) / 2 * .2)); }
+
+  /* ---------- Top bar ---------- */
+  /* A page-coloured bar across the full width, the way the reference seats its nav, with a
+     hairline under it; the wrap inside keeps the content on the page's own margins. */
+  .topbar { position: sticky; top: 0; z-index: 20; background: var(--nav-bg); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); box-shadow: inset 0 -1px 0 var(--line); }
+  /* Three tracks with equal sides, so the links sit centred on the bar itself
+     rather than in whatever space the logo and buttons happen to leave. */
+  .top { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 24px; min-height: 80px; padding: 14px 0; }
+  .top .brand { justify-self: start; }
+  .top .nav { justify-self: center; }
+  .top .actions { justify-self: end; display: flex; align-items: center; gap: 10px; }
+  .brand { display: inline-flex; align-items: center; text-decoration: none; }
+  .brand svg { height: 32px; width: auto; display: block; }
+  .top .meta { font-size: 13px; color: var(--ink-2); }
+
+  /* ---------- Hero ---------- */
+  .hero { position: relative; isolation: isolate; overflow: hidden; padding: 56px 0 28px; border-radius: 0 0 var(--r-xl) var(--r-xl); background: var(--hero-bg); text-align: center; }
+  .hero::before, .hero::after { content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+  .hero > * { position: relative; z-index: 1; }
+  .hero::before { background: url("assets/atlantic-earth-globe.png") 52% 50% / min(82vw, 1040px) auto no-repeat; filter: var(--hero-earth-filter); opacity: var(--hero-earth-opacity); }
+  .hero::after { background: var(--hero-overlay); }
+  .hero h1 { font-family: var(--font-manrope); font-weight: 800; color: var(--hero-heading); font-size: clamp(52.5px, 9.5vw, 115px); line-height: 1; letter-spacing: -.04em; margin: 0 auto 22px; text-shadow: 0 2px 28px rgb(0 0 0 / .12); }
+  /* Two weights of one face: a light set-up line, a bold payoff. */
+  .hero h1 .ln { display: block; }
+  .hero h1 .ln.light { font-family: var(--font-syne); font-weight: 700; letter-spacing: -.03em; }
+  .hero h1 .w { display: inline-block; animation: rise .7s var(--ease) both; }
+  .hero h1 .w:nth-child(2) { animation-delay: .06s } .hero h1 .w:nth-child(3) { animation-delay: .12s } .hero h1 .w:nth-child(4) { animation-delay: .18s } .hero h1 .w:nth-child(5) { animation-delay: .24s } .hero h1 .w:nth-child(6) { animation-delay: .30s }
+  .hero > p { margin: 0 auto; max-width: 54ch; color: var(--hero-copy); font-family: var(--font-inter); font-size: 22.5px; line-height: 1.55; animation: rise .7s .3s var(--ease) both; }
+
+  /* The search is the hero's call to action: one pill holding the field, Clear, and the orange action. */
+  .searchbar { display: flex; align-items: center; gap: 8px; max-width: 700px; margin: 34px auto 0; padding: 8px 8px 8px 22px;
+    background: var(--surface); border-radius: var(--r-pill); box-shadow: var(--ring), 0 24px 48px -24px rgba(13,13,15,.18);
+    transition: box-shadow .25s var(--ease); animation: rise .7s .38s var(--ease) both; }
+  .searchbar:hover { box-shadow: 0 0 0 1px color-mix(in srgb, var(--paper) 18%, transparent), 0 24px 48px -24px rgba(13,13,15,.22); }
+  .searchbar:focus-within { box-shadow: 0 0 0 2px var(--purple), 0 0 0 7px color-mix(in srgb, var(--purple) 18%, transparent), 0 24px 48px -24px rgba(13,13,15,.18); }
+  .searchbar > svg { flex: none; width: 20px; height: 20px; color: var(--ink-3); fill: currentColor; pointer-events: none; }
+  .searchbar input { flex: 1; min-width: 0; font-family: var(--font-inter); font-size: 21.25px; color: var(--ink); background: transparent; border: 0; padding: 12px 4px; outline: 0; }
+  .searchbar input::-webkit-search-cancel-button, .searchbar input::-webkit-search-decoration { -webkit-appearance: none; display: none; }
+  .searchbar input::placeholder { color: var(--ink-3); }
+  .searchbar #clear { flex: none; border: 0; background: var(--surface-2); color: var(--ink-2); font-size: 16.25px; font-weight: 600; cursor: pointer; padding: 8px 14px; border-radius: var(--r-pill); display: none; }
+  .searchbar #clear.on { display: inline-block; }
+  .searchbar #clear:hover { background: var(--surface-3); color: var(--ink); }
+  .searchbar .go { flex: none; border: 0; cursor: pointer; background: var(--orange); color: var(--navy); font-family: var(--font-inter); font-weight: 700; font-size: 18.75px; padding: 13px 22px; border-radius: var(--r-pill); text-decoration: none;
+    box-shadow: 0 10px 26px -10px rgb(255 88 10 / .75); transition: transform .15s var(--ease), box-shadow .2s var(--ease); }
+  .searchbar .go:hover { transform: translateY(-1px); box-shadow: 0 14px 30px -10px rgb(255 88 10 / .85); }
+  .searchbar .go:active { transform: scale(.97); }
+
+  /* ---------- Traction HUD ---------- */
+  /* Stat trio, after the reference: open figures, no boxes, fine dividers between. */
+  .hud { max-width: 820px; margin: 64px auto 0; animation: rise .7s .5s var(--ease) both; }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); }
+  .stat { padding: 4px 18px; text-align: center; }
+  .stat + .stat { box-shadow: -1px 0 0 var(--hero-divider); }
+  .stat .v { font-family: var(--font-manrope); font-weight: 600; color: var(--hero-heading); font-size: clamp(42.5px, 6.75vw, 75px); letter-spacing: -.035em; line-height: 1; font-variant-numeric: tabular-nums; text-shadow: 0 2px 20px rgb(0 0 0 / .12); }
+  .stat .l { font-size: 18.75px; color: var(--hero-copy); margin-top: 10px; }
+  .stat .d { display: inline-block; margin-top: 10px; font-size: 15.625px; font-weight: 700; color: var(--navy); font-variant-numeric: tabular-nums;
+    background: var(--orange); box-shadow: 0 0 0 1px rgb(255 88 10 / .34), 0 8px 18px -12px rgb(255 88 10 / .8); border-radius: var(--r-pill); padding: 3px 9px; }
+  .stat .d:empty { display: none; }
+  .ticker { margin: 40px auto 0; max-width: 700px; height: 50px; overflow: hidden; position: relative; background: var(--surface); border: 0; border-radius: var(--r-pill); box-shadow: var(--ring); }
+  .ticker .live { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); display: inline-flex; align-items: center; gap: 6px; font-size: 14.375px; font-weight: 700; color: var(--ink-2); z-index: 1; }
+  .ticker .live i { width: 7px; height: 7px; border-radius: 50%; background: var(--purple); box-shadow: 0 0 0 0 color-mix(in srgb, var(--purple) 55%, transparent); animation: pulse 1.8s ease-out infinite; }
+  .ticker ul { list-style: none; margin: 0; padding: 0 16px 0 68px; }
+  .ticker li { height: 50px; display: flex; align-items: center; gap: 8px; font-size: 16.875px; color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ticker li b { color: var(--ink); font-weight: 600; }
+  .ticker li .t { margin-left: auto; color: var(--ink-3); font-size: 15px; flex: none; }
+  .ticker ul { transition: transform .5s var(--ease); }
+  @keyframes pulse { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--purple) 55%, transparent); } 100% { box-shadow: 0 0 0 8px transparent; } }
+  @media (max-width: 480px) { .stat { padding: 2px 6px; } .stat .v { font-size: 37.5px; } .stat .l { font-size: 15.625px; margin-top: 8px; } .stat .d { font-size: 14.375px; padding: 2px 7px; } .ticker li .t { display: none; } .long { display: none; } .ticker li { font-size: 16.25px; } }
+
+  .chips { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 8px; margin: 18px auto 0; animation: rise .7s .42s var(--ease) both; }
+  .chips .try { font-size: 16.875px; color: var(--hero-copy); margin-right: 4px; }
+  .chip { border: 0; box-shadow: 0 0 0 1px var(--hero-chip-border); background: var(--hero-chip-bg); color: var(--hero-chip-text); border-radius: var(--r-pill); padding: 7px 14px; font-size: 16.875px; font-weight: 400; cursor: pointer; transition: transform .15s var(--ease), background .2s, color .2s, box-shadow .2s; backdrop-filter: blur(8px); }
+  .chip:hover { color: var(--hero-chip-hover-text); background: var(--hero-chip-hover-bg); box-shadow: 0 0 0 1px rgb(124 92 255 / .58); }
+  .chip:active { transform: translateY(0) scale(.98); }
+
+  /* ---------- Controls ---------- */
+  #board { scroll-margin-top: 96px; }
+  .controls { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin: 34px 0 12px; }
+  .controls .left { display: flex; flex-wrap: wrap; gap: 10px; }
+  .seg { position: relative; display: inline-grid; grid-auto-flow: column; grid-auto-columns: 1fr; background: var(--surface); border: 0; border-radius: var(--r-pill); padding: 4px; box-shadow: var(--shadow-1); }
+  .seg button { position: relative; z-index: 1; border: 0; background: transparent; color: var(--ink-2); font-family: var(--font-inter); font-weight: 600; font-size: 14px; padding: 9px 18px; border-radius: var(--r-pill); cursor: pointer; white-space: nowrap; transition: color .25s; }
+  .seg button[aria-selected="true"] { color: var(--ink); }
+  .seg::before { content: ""; position: absolute; z-index: 0; top: 4px; bottom: 4px; left: 4px; width: calc(50% - 4px); border-radius: var(--r-pill); background: var(--surface-3); transition: transform .3s var(--ease); }
+  .seg[data-pos="1"]::before { transform: translateX(100%); }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-family: var(--font-inter); font-size: 13px; color: var(--ink-2); }
+  .legend span { display: inline-flex; align-items: center; gap: 7px; }
+  .sw { width: 12px; height: 12px; border-radius: var(--r-tile); display: inline-block; }
+  .sw.yes { background: var(--yes); } .sw.cond { background: var(--cond); }
+  .sw.no { background: var(--no); background-image: repeating-linear-gradient(135deg, var(--no-hatch) 0 2px, transparent 2px 5px); }
+
+  .trail { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: 13.5px; color: var(--ink-2); margin: 0 0 14px; min-height: 30px; }
+  .trail .step { background: var(--surface-2); box-shadow: var(--ring); border: 0; border-radius: var(--r-pill); padding: 4px 11px; color: var(--ink); font-weight: 400; animation: pop .35s var(--ease) both; }
+  .trail .arrow { color: var(--ink-3); }
+  .trail .why { width: 100%; padding-top: 2px; }
+  .trail .why b { color: var(--ink); font-weight: 600; }
+
+  /* ---------- Board: a responsive grid of country cards ---------- */
+  .board-head { display: flex; justify-content: space-between; padding: 0 4px 12px; font-size: 11.5px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); }
+  .board-head span:first-child { display: none; }
+  .board-head.hide { display: none; }
+  .board-head { align-items: center; }
+  .showall { margin-left: auto; margin-right: 18px; border: 0; background: none; padding: 4px 0; font: inherit; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; font-weight: 600; color: var(--purple-ink); cursor: pointer; }
+  .showall:hover { text-decoration: underline; }
+  .showall[hidden] { display: none; }
+  .board { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; align-items: start; }
+  /* Four cards a row on wide screens, two once their ten verdict circles would become cramped, and one on phones. */
+  @media (max-width: 1180px) { .board { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .row {
+    display: flex; flex-direction: column; gap: 22px;
+    background: var(--surface); border: 0; border-radius: var(--r-xl); padding: 26px;
+    box-shadow: var(--card-raised);
+    transition: transform .25s var(--ease), box-shadow .25s var(--ease);
+  }
+  .row:hover { transform: translateY(-2px); box-shadow: var(--card-hover); }
+  .row.has-sel { box-shadow: 0 0 0 1px color-mix(in srgb, var(--purple) 45%, transparent), 0 20px 40px -26px color-mix(in srgb, var(--purple) 40%, transparent); }
+  /*
+   * Country cards use a warm orange surface, set apart from the off-white page by
+   * the tint and a soft drop. Verdict circles sit directly on this surface
+   * so the board stays open rather than nesting two more cards inside each country.
+   */
+  .row { background: var(--country-card); --card-muted: #4d4a52; box-shadow: 0 20px 40px -26px rgba(13,13,15,.22); }
+  /* On the coloured card, muted text is a step darker so it keeps 4.5:1. */
+  .row .cta-empty, .row .cta-kicker { color: var(--card-muted); }
+  .row:hover { box-shadow: 0 26px 50px -24px rgba(13,13,15,.26); }
+  .row.has-sel { box-shadow: 0 20px 40px -26px rgba(13,13,15,.22); }
+  /* The flag stands on its own: no tile behind it. */
+  .row .flag { background: none; box-shadow: none; border-radius: 0; width: auto; height: auto; font-size: 38px; }
+  .row .grid.bars { background: none; box-shadow: none; }
+  .row .grid.labeled { background: var(--orange); box-shadow: none; }
+  .row .grid.labeled { padding: 12px; border-radius: var(--r-md); }
+  .row .grid.labeled .tile { background-color: var(--surface); box-shadow: none; }
+  .row .grid.labeled .tile.sel { box-shadow: 0 0 0 2px var(--ink-0); }
+  /* Header, like the reference's icon and title: the flag in a soft tile, the name, then a counted summary. */
+  .who { display: flex; flex-direction: column; align-items: flex-start; gap: 40px; min-width: 0; }
+  .flag { font-size: 26px; line-height: 1; width: 52px; height: 52px; display: grid; place-items: center; background: var(--surface-2); box-shadow: var(--ring); border-radius: var(--r-md); flex: none; }
+  .name { font-family: var(--font-manrope); font-weight: 700; color: var(--ink); font-size: 20px; letter-spacing: -.015em; margin: 0; }
+
+  /*
+   * Verdicts as circles: ten across (twenty in two rows when every asset is shown).
+   * Colour gives the verdict; cannot own is hatched and conditional carries a
+   * centre dot, so the three differ without colour.
+   */
+  .grid.bars { padding: 0; }
+  .track { display: grid; grid-template-columns: repeat(10, minmax(0, 34px)); justify-content: space-between; gap: 8px 4px; padding: 0; background: none; }
+  /* One row of up to ten: a gap divides the open group from the restricted one when sorted by status. */
+  .track.one { display: flex; justify-content: space-between; }
+  .track.one .tile { flex: 0 1 34px; min-width: 0; }
+  .track.one .tile.split { margin-left: 8px; }
+  .track .tile { position: relative; width: 100%; max-width: 34px; height: auto; aspect-ratio: 1; border: 1.5px solid rgba(13,13,15,.24); padding: 0; border-radius: 50%; cursor: pointer; transition: transform .15s var(--ease), opacity .25s, box-shadow .15s, filter .15s; }
+  .tile.yes { background: var(--yes); } .tile.cond { background: var(--cond); }
+  .tile.no { background: var(--no); background-image: repeating-linear-gradient(135deg, var(--no-hatch) 0 2px, transparent 2px 5px); }
+  .track .tile.cond::before { content: ""; position: absolute; left: 50%; top: 50%; width: 6px; height: 6px; margin: -3px 0 0 -3px; border-radius: 50%; background: #fff; }
+  .track .tile:hover, .track .tile:focus-visible { filter: brightness(1.08); outline: 0; z-index: 1; }
+  .track .tile:focus-visible { box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--purple); }
+  .track .tile.sel { box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--ink-0); z-index: 1; }
+  .row.has-sel .tile:not(.sel) { opacity: var(--tile-dim); }
+  .row.has-sel .tile:not(.sel):hover { opacity: 1; }
+
+  /* One to three assets: labelled chips, so each answer says what it is. */
+  .grid.labeled { display: flex; flex-wrap: wrap; gap: 8px; }
+  .grid.labeled .tile { display: inline-flex; align-items: center; gap: 9px; padding: 10px 15px 10px 12px; border: 0; border-radius: var(--r-pill); cursor: pointer;
+    font: inherit; font-size: 14px; font-weight: 600; color: var(--ink); background: var(--surface-2); box-shadow: var(--ring); transition: box-shadow .18s, opacity .25s; }
+  .grid.labeled .tile i { width: 12px; height: 12px; border-radius: var(--r-tile); flex: none; }
+  .grid.labeled .tile.yes i { background: var(--yes); } .grid.labeled .tile.cond i { background: var(--cond); }
+  .grid.labeled .tile.no i { background: var(--no); background-image: repeating-linear-gradient(135deg, var(--no-hatch) 0 1.5px, transparent 1.5px 3.5px); }
+  .grid.labeled .tile:hover, .grid.labeled .tile:focus-visible { box-shadow: 0 0 0 1px color-mix(in srgb, var(--purple) 55%, transparent); outline: 0; }
+  .grid.labeled .tile.sel { box-shadow: 0 0 0 2px var(--purple); }
+  .grid.labeled .tile.yes, .grid.labeled .tile.cond, .grid.labeled .tile.no { background-color: var(--surface-2); background-image: none; }
+
+  .row.in { animation: rise .55s var(--ease) both; }
+  .track .tile.in { animation: fade-in .4s var(--ease) both; }
+  .grid.labeled .tile.in { animation: pop .4s var(--ease) both; }
+  @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+  /*
+   * The buy panel, after the reference's session and payment rows: an inset
+   * card with a verdict-coloured edge, the asset and a verdict pill, then the
+   * action. Empty, it's a dashed prompt.
+   */
+  .buy { display: block; }
+  .cta { position: relative; display: flex; flex-direction: column; gap: 14px; padding: 16px 18px 16px 22px; border-radius: var(--r-md); background: var(--surface); box-shadow: var(--ring), 0 1px 2px rgba(13,13,15,.04); animation: panel-in .22s cubic-bezier(.23,1,.32,1) both; }
+  /* Panels enter from 95% with a fade, never from small: a quick settle, not a pop. */
+  @keyframes panel-in { from { opacity: 0; transform: translateY(4px) scale(.97); } to { opacity: 1; transform: none; } }
+  .cta::before { content: ""; position: absolute; left: 10px; top: 16px; bottom: 16px; width: 3px; border-radius: var(--r-pill); background: var(--ink-3); }
+  .cta.v-yes::before { background: var(--yes); } .cta.v-cond::before { background: var(--cond); }
+  .cta.v-no::before { background: var(--no); background-image: repeating-linear-gradient(180deg, var(--no-hatch) 0 2px, transparent 2px 5px); }
+  .cta-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .cta-asset { font-weight: 600; color: var(--ink); font-size: 15px; }
+  .cta-kicker { display: block; font-size: 12px; color: var(--ink-3); margin-bottom: 2px; }
+  .vpill { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600; padding: 4px 10px; border-radius: var(--r-pill); white-space: nowrap; }
+  .vpill::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  .vpill.yes { color: #3f7a30; background: color-mix(in srgb, var(--yes) 14%, transparent); }
+  .vpill.cond { color: #8a5f0c; background: color-mix(in srgb, var(--cond) 16%, transparent); }
+  .vpill.no { color: #a8463a; background: color-mix(in srgb, var(--no) 14%, transparent); }
+  .cta-act { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .cta-note { margin: 0; font-size: 13.5px; color: var(--ink-3); }
+  .cta-route { font-size: 14px; font-weight: 600; color: var(--ink-2); }
+  /* With nothing picked, a plain prompt sits just above the chart it refers to. */
+  .cta-empty { display: flex; align-items: center; gap: 8px; margin-bottom: -10px; color: var(--ink-3); font-size: 14px; }
+  .cta-empty svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+  .cta-btn { display: inline-flex; align-items: center; gap: 6px; background: var(--accent); color: var(--accent-ink); font-weight: 700; font-size: 14px; text-decoration: none; padding: 11px 18px; border-radius: var(--r-sm); white-space: nowrap; transition: transform .2s var(--ease), box-shadow .2s var(--ease), filter .2s; }
+  .cta-btn svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; transition: transform .2s var(--ease); }
+  .cta-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 24px -8px rgb(255 88 10 / .7); }
+  .cta-btn:hover svg { transform: translate(2px, -2px); }
+  .cta-btn:active { transform: translateY(0) scale(.98); }
+  .cta-btn.cond { background: var(--cond); color: var(--ink-0); }
+  .cta-btn.cond:hover { box-shadow: 0 8px 24px -8px color-mix(in srgb, var(--cond) 70%, transparent); }
+  .cta-btn.disabled { background: var(--surface-2); color: var(--ink-3); cursor: not-allowed; }
+  .cta-btn.muted { background: var(--surface-2); color: var(--ink-2); font-weight: 600; }
+  .cta-alt { font-size: 12.5px; color: var(--ink-2); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .2s, color .2s; }
+  .cta-alt:hover { color: var(--ink); border-color: var(--ink); }
+  .cta-sub { font-size: 12px; color: var(--ink-3); }
+  /* Conditional gate: the buy links stay locked until the condition is acknowledged (as in v1). */
+  .ack { display: flex; align-items: flex-start; gap: 9px; font-size: 12.5px; line-height: 1.4; color: var(--ink-2); text-align: left; cursor: pointer; }
+  .ack input { appearance: none; flex: none; width: 18px; height: 18px; margin: 1px 0 0; border-radius: var(--r-tile); background: var(--surface-2); box-shadow: inset 0 0 0 1.5px var(--cond); cursor: pointer; display: grid; place-items: center; transition: background .15s; }
+  .ack input::after { content: ""; width: 9px; height: 5px; border: solid var(--ink-0); border-width: 0 0 2px 2px; transform: rotate(-45deg) translate(1px, -1px); opacity: 0; }
+  .ack input:checked { background: var(--cond); }
+  .ack input:checked::after { opacity: 1; }
+  .ack input:focus-visible { outline: 2px solid var(--purple); outline-offset: 2px; }
+  .ack b { color: var(--ink); font-weight: 600; }
+  .cta a[aria-disabled="true"] { opacity: .4; cursor: not-allowed; pointer-events: none; box-shadow: none; }
+  .cta-hint { font-size: 13px; color: var(--ink-3); }
+
+  /* ---------- Key + footer ---------- */
+  footer { position: relative; isolation: isolate; overflow: hidden; min-height: 690px;
+    margin: clamp(60px, 8vw, 110px) clamp(16px, 3vw, 48px) 32px; border-radius: 220px 34px 34px 220px;
+    padding: clamp(64px, 7vw, 96px) clamp(28px, 6vw, 92px) 220px;
+    background: var(--lavender-surface); color: var(--ink); }
+  .foot-grid { display: grid; grid-template-columns: minmax(250px, 1.2fr) repeat(2, minmax(150px, .65fr)) minmax(300px, 1.25fr);
+    gap: clamp(32px, 4vw, 72px); align-items: start; }
+
+  .foot-logo { display: inline-flex; text-decoration: none; }
+  .foot-logo svg { display: block; height: 34px; width: auto; }
+  .foot-cta { display: inline-flex; align-items: center; gap: 10px; margin-top: 26px; font: inherit; font-size: 15px; font-weight: 500; color: #0d0d0f; text-decoration: none;
+    background: var(--orange); border: 0; box-shadow: none; border-radius: var(--r-pill);
+    padding: 11px 20px; cursor: pointer; transition: background .2s, box-shadow .2s; }
+  .foot-cta i { flex: none; width: 7px; height: 7px; border-radius: 50%; background: #0d0d0f; }
+  .foot-cta:hover { background: #ff7130; box-shadow: none; }
+
+  .foot-line { margin: 22px 0 0; max-width: 24ch; color: var(--ink); font-family: var(--font-manrope); font-size: 26px; font-weight: 700; line-height: 1.08; letter-spacing: -.025em; }
+
+  .foot-col h3, .foot-connect h3 { margin: 0 0 20px; font-family: var(--font-manrope); font-size: 14px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--ink); }
+
+  .foot-col ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+  .foot-col li { display: block; }
+  .foot-col a, .foot-col li span { color: var(--ink-2); font-family: var(--font-inter); font-size: 15px; line-height: 1.4; text-decoration: none; }
+
+  .foot-col a { transition: color .15s var(--ease); }
+  .foot-col a:hover { color: var(--ink); }
+  .foot-col a:focus-visible, .foot-cta:focus-visible, .foot-logo:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; border-radius: 2px; }
+  .foot-connect { grid-column: span 2; }
+
+  .foot-signup { display: flex; min-height: 54px; border: 1.5px solid var(--ink); border-radius: var(--r-pill); overflow: hidden; }
+  .foot-signup input { min-width: 0; flex: 1; border: 0; outline: 0; padding: 0 20px; background: transparent; color: var(--ink); font: inherit; font-size: 15px; }
+  .foot-signup input::placeholder { color: var(--ink-3); }
+  .foot-signup button { flex: none; border: 0; border-radius: var(--r-pill); padding: 0 25px; background: var(--orange); color: #0d0d0f; font: inherit; font-weight: 650; cursor: pointer; transition: background .15s; }
+  .foot-signup button:hover { background: #ff7130; }
+  .foot-social { margin-top: 32px; }
+  .foot-social-links { display: flex; flex-wrap: wrap; gap: 10px; }
+  .foot-social-links a { display: inline-flex; align-items: center; min-height: 40px; padding: 0 16px; border-radius: var(--r-pill); background: var(--orange); color: #0d0d0f; font-size: 13px; font-weight: 650; text-decoration: none; transition: background .15s, color .15s; }
+  .foot-social-links svg { display: block; width: 20px; height: 20px; fill: currentColor; }
+  .foot-social-links a:hover { background: #ff7130; color: #0d0d0f; }
+  .foot-base { margin-top: 18px; color: var(--ink-3); font-size: 13px; }
+
+  /*
+   * The globe, cropped by the right edge the way the reference crops its sphere.
+   * Baked by scripts/bake-globe.cjs from v1's land mask, so the dots are real
+   * continents — the right motif for a product about where you are. Drawn in
+   * currentColor so it holds up whatever the footer's field colour is.
+   */
+  .foot-globe { display: none; }
+  .foot-globe .land { fill: none; stroke: currentColor; stroke-width: 7; stroke-linecap: round; opacity: .2; }
+  .foot-globe .rim { fill: currentColor; fill-opacity: .03; stroke: currentColor; stroke-opacity: .09; stroke-width: 2; }
+
+  /*
+   * The reference sets its wordmark huge and nearly invisible behind the
+   * content, cropped by the footer's edge. The footer isolates its stacking
+   * context, so this sits above the background and below everything else.
+   */
+  .foot-mark { position: absolute; z-index: -1; inset-inline-end: clamp(24px, 4vw, 64px); bottom: 18px; width: min(72%, 980px); pointer-events: none; }
+  .foot-mark svg { display: block; width: 100%; height: auto; }
+
+
+  #tip { z-index: 30; position: fixed; pointer-events: none; opacity: 0; transform: translate(-50%, calc(-100% - 12px)) scale(.96); background: var(--tip-bg); color: var(--tip-fg); padding: 7px 11px; border-radius: var(--r-sm); font-size: 13px; white-space: nowrap; z-index: 10; transition: opacity .12s, transform .12s var(--ease); }
+  #tip.show { opacity: 1; transform: translate(-50%, calc(-100% - 12px)) scale(1); }
+  #tip b { font-weight: 700; }
+
+  @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+  @keyframes pop { from { opacity: 0; transform: scale(.6); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+
+  /* ---------- Responsive ---------- */
+  /* ---------- Top nav (v1 pattern: text links, then one orange pill) ---------- */
+  .nav { display: flex; align-items: center; gap: clamp(18px, 2vw, 30px); }
+  .nav > a, .nav-menu > summary { font-family: var(--font-inter); font-size: 20.8px; font-weight: 500; color: var(--ink); text-decoration: none; white-space: nowrap; transition: color .15s; }
+  .nav > a:hover, .nav-menu > summary:hover { color: var(--ink-3); }
+  .nav-menu { position: relative; }
+  .nav-menu > summary { display: flex; align-items: center; gap: 6px; min-height: 40px; cursor: pointer; list-style: none; }
+  .nav-menu > summary::-webkit-details-marker { display: none; }
+  .nav-menu > summary::after { content: "▾"; font-size: 13px; transition: transform .15s var(--ease); }
+  .nav-menu[open] > summary::after { transform: rotate(180deg); }
+  .theme-toggle { position: relative; display: grid; place-items: center; flex: none; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 50%; background: transparent; color: var(--ink); cursor: pointer; transition: background .15s; }
+  .theme-toggle:hover { background: var(--surface-2); }
+  .theme-toggle:active { transform: scale(.96); }
+  .theme-toggle svg { width: 22px; height: 22px; overflow: visible; }
+  .theme-toggle circle { fill: none; stroke: currentColor; stroke-width: 1.8; }
+  .theme-toggle path { fill: currentColor; transform-origin: center; transition: transform .25s var(--ease); }
+  html[data-theme="dark"] .theme-toggle path { transform: rotate(180deg); }
+  .actions .resources-menu > summary { min-height: 44px; padding-inline: 14px; border-radius: var(--r-pill); box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--ink) 18%, transparent); }
+  .actions .resources-menu > summary:hover { color: var(--ink); box-shadow: inset 0 0 0 1.5px var(--ink); }
+  .actions .resources-menu .nav-panel { inset-inline: auto 0; transform: none; }
+  .nav-panel { position: absolute; z-index: 80; inset-block-start: calc(100% + 10px); inset-inline-start: 50%; width: max-content; min-width: 250px; max-width: min(420px, calc(100vw - 32px));
+    display: grid; gap: 4px; padding: 10px; transform: translateX(-50%); border-radius: 18px; background: var(--surface);
+    box-shadow: 0 22px 56px rgb(30 24 70 / .16), inset 0 0 0 1px rgb(13 13 15 / .08); }
+  .nav-panel a, .nav-panel > span { display: flex; align-items: center; justify-content: space-between; gap: 18px; min-height: 40px; padding: 9px 12px; border-radius: 10px;
+    color: var(--ink); font-family: var(--font-inter); font-size: 14px; line-height: 1.3; text-decoration: none; white-space: normal; }
+  .nav-panel a:hover, .nav-panel a:focus-visible { background: var(--lavender-surface); color: var(--purple-ink); }
+  .nav-panel > span { color: var(--ink-3); }
+  .nav-panel small { flex: none; font-size: 10px; font-weight: 650; letter-spacing: .04em; text-transform: uppercase; }
+  .nav-panel p { grid-column: 1 / -1; margin: 6px 8px 2px; max-width: 34ch; color: var(--ink-3); font-size: 12px; line-height: 1.45; }
+  .nav-menu-wide .nav-panel { width: 390px; }
+  .nav-panel-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .nav-menu > summary:focus-visible, .nav-panel a:focus-visible { outline: 2px solid var(--purple); outline-offset: 2px; }
+  @media (prefers-reduced-motion: no-preference) {
+    .nav-menu[open] .nav-panel { animation: nav-in .15s cubic-bezier(.2, 0, 0, 1); }
+  }
+  @keyframes nav-in { from { opacity: 0; translate: 0 -6px; } to { opacity: 1; translate: 0 0; } }
+  /* The pair of buttons on the right. Solid is the page's one orange action. */
+  .btn { display: inline-flex; align-items: center; justify-content: center; font: inherit; font-size: 22.5px; font-weight: 600; white-space: nowrap;
+    border: 0; cursor: pointer; padding: 11px 20px; border-radius: var(--r-pill); text-decoration: none;
+    transition: transform .15s var(--ease), box-shadow .2s var(--ease), background .2s, color .2s; }
+  .btn.solid { background: var(--orange); color: var(--navy); box-shadow: 0 8px 24px -10px rgb(255 88 10 / .7); }
+  .btn.ghost { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--ink) 24%, transparent); }
+  .btn.solid:hover { transform: translateY(-1px); box-shadow: 0 12px 28px -10px rgb(255 88 10 / .85); }
+  .btn.ghost:hover { box-shadow: inset 0 0 0 1.5px var(--ink); }
+  .btn:active { transform: scale(.97); }
+
+  /* ---------- Story sections ---------- */
+  .sec { padding: 104px 0 0; scroll-margin-top: 96px; }  /* clears the sticky bar */
+  .eyebrow { display: inline-flex; gap: 10px; align-items: baseline; font-size: 12.5px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 14px; }
+  .eyebrow b { color: var(--purple-ink); font-weight: 600; letter-spacing: .06em; }
+  .sec h2 { font-family: var(--font-manrope); font-size: clamp(30px, 4.4vw, 50px); line-height: 1.08; font-weight: 800; color: var(--ink); letter-spacing: -.025em; margin: 0; max-width: 20ch; }
+  .sec .lead { font-size: 17px; color: var(--ink-2); max-width: 56ch; margin: 16px 0 0; }
+  .sec-head { margin-bottom: 40px; }
+  .panel { background: var(--surface); box-shadow: var(--card-raised); border-radius: var(--r-lg); padding: 28px; transition: box-shadow .25s var(--ease), transform .25s var(--ease); }
+  .panel h3 { font-family: var(--font-manrope); font-size: 19px; font-weight: 700; color: var(--ink); margin: 0 0 8px; }
+  .panel p { margin: 0; color: var(--ink-2); font-size: 15px; }
+  .cols-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .cols-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .cols-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  /* Icons sit in a purple-tinted tile: emphasis, not an action. */
+  .ico { box-sizing: content-box; width: 24px; height: 24px; padding: 11px; border-radius: var(--r-sm); stroke: var(--purple-ink); fill: none; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; margin-bottom: 22px;
+    background: color-mix(in srgb, var(--purple) 14%, transparent); box-shadow: 0 0 0 1px color-mix(in srgb, var(--purple) 30%, transparent); }
+  .cols-3 > .panel:hover, .cols-4 > .panel:hover, .cols-2 > .panel:hover { transform: translateY(-3px); box-shadow: var(--card-hover); }
+
+  /*
+   * 01 · The problem, after the reference: centred, with a three-line headline
+   * whose first lines sit back in grey and whose last line lands in near-black.
+   * Upper case here only — the other sections stay sentence case.
+   */
+  .problem { position: relative; isolation: isolate; overflow: hidden; margin-top: 104px; padding: clamp(56px, 7vw, 92px) clamp(24px, 5vw, 72px) clamp(48px, 6vw, 72px); background: var(--lavender-surface); border-radius: var(--r-xl); text-align: center; }
+  /*
+   * The reference's faint graph paper. It lives on its own layer, masked to fade
+   * out at the edges; the content sits above it, unmasked, so no text fades.
+   */
+  .problem::before {
+    content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+    background-image: linear-gradient(to right, color-mix(in srgb, var(--ink) 7%, transparent) 1px, transparent 1px),
+                      linear-gradient(to bottom, color-mix(in srgb, var(--ink) 7%, transparent) 1px, transparent 1px);
+    background-size: 112px 112px; background-position: center top;
+    -webkit-mask-image: radial-gradient(115% 78% at 50% 34%, #000 30%, transparent 76%);
+    mask-image: radial-gradient(115% 78% at 50% 34%, #000 30%, transparent 76%);
+  }
+  .problem > * { position: relative; z-index: 1; }
+  .problem > .eyebrow { justify-content: center; }
+  .problem h2 { max-width: 22ch; margin: 0 auto; font-family: var(--font-manrope); font-weight: 800; text-transform: uppercase; font-size: clamp(32px, 5.6vw, 66px); line-height: 1.02; letter-spacing: -.035em; }
+  .problem h2 .ln { display: block; color: #563ee7; }
+  .problem h2 .hit { color: #ffa770; }
+  /* The lead-in sits light and large, a beat between the headline and the deck. */
+  .problem .asking { margin: 30px 0 0; font-family: var(--font-syne); font-weight: 600; font-size: clamp(20px, 2.6vw, 34px); color: var(--ink-3); letter-spacing: -.015em; }
+
+  /* The line the deck lands on, centred under it like the reference's. */
+  .problem .aftermath { margin: 44px auto 0; max-width: 48ch; font-size: 17px; line-height: 1.5; color: var(--ink-3); }
+
+  /* Three complaint cards abreast; the middle one leads. */
+  /* Capped so the cards keep the reference's upright proportion on a wide screen
+     instead of stretching into letterboxes. */
+  .problem .deck { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 30px; align-items: stretch; max-width: 1180px; margin: 54px auto 0; text-align: left; }
+
+  /* A wide, soft drop rather than the page's tighter card shadow: the reference
+     card floats clear of its ground, which is what gives it its lift. */
+  .qcard { display: flex; flex-direction: column; overflow: hidden; background: var(--surface); border-radius: 34px; padding: 16px 16px 30px;
+    box-shadow: 0 2px 4px rgba(13,13,15,.03), 0 18px 40px -18px rgba(13,13,15,.14), 0 44px 80px -40px rgba(13,13,15,.16);
+    transition: transform .25s var(--ease), box-shadow .25s var(--ease); }
+  /* Pointing at a card pulls it straight out of the fan. */
+  /* Hover deepens the same three-layer drop rather than swapping in the page's
+     generic hover ring, which would put a purple edge on a white photo card. */
+  .qcard:hover, .qcard.lead-card:hover { transform: translateY(-4px);
+    box-shadow: 0 2px 4px rgba(13,13,15,.04), 0 24px 50px -20px rgba(13,13,15,.18), 0 56px 96px -44px rgba(13,13,15,.2); }
+
+  .qcard h3 { margin: 24px 0 0; font-family: var(--font-manrope); font-size: 27px; line-height: 1.14; font-weight: 700; letter-spacing: -.028em; color: var(--ink); }
+
+  /* Fanned like a hand of cards: the outer two lean away, the middle stands up and forward. */
+  .qcard.tilt-l { transform: rotate(-1.8deg); }
+  .qcard.tilt-r { transform: rotate(1.8deg); }
+  /* The middle card is tinted, as in the reference. It takes the lavender the country
+     cards already use, rather than a fourth colour: orange marks actions, never surfaces. */
+  .qcard.lead-card { position: relative; z-index: 1; transform: translateY(-16px); background: var(--surface); --card-muted: var(--ink-3); }
+
+  /* Each card ends in a small chart: a caption row, then the figure itself. */
+  /* The body fills the remaining height so the facts sit on the card's floor,
+     level across all three however long a title runs. */
+  .qbody { display: flex; flex-direction: column; flex: 1; padding: 0 12px; }
+  .qbody .qmeta { margin-top: auto; padding-top: 26px; }
+  .qsub { margin: 8px 0 0; font-size: 18px; line-height: 1.35; color: var(--ink-3); }
+  .qmeta { list-style: none; display: flex; flex-wrap: wrap; gap: 10px 18px; margin: 26px 0 0; padding: 0; }
+  .qmeta li { display: inline-flex; align-items: center; gap: 8px; font-size: 14.5px; font-weight: 600; color: var(--ink); white-space: nowrap; }
+  .qmeta svg { flex: none; width: 18px; height: 18px; fill: none; stroke: var(--ink-3); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+  .qmedia { position: relative; width: 100%; aspect-ratio: 1 / 1.04; overflow: hidden; border-radius: 22px; outline: 1px solid color-mix(in srgb, var(--ink) 8%, transparent); outline-offset: -1px; }
+  .qmedia img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .qmedia-human img { object-position: 43% 58%; }
+  .qmedia-portfolio img { object-position: 50% 46%; }
+  .qmedia-risk img { object-position: 62% 50%; }
+
+  /* The second caption keeps its original separation beneath the portfolio image. */
+
+  /* Card 3: the two lines start together at purchase and part by the exit. */
+  @media (max-width: 900px) { .qmedia { aspect-ratio: 4 / 3; } }
+  @media (max-width: 600px) {
+    .qmedia-human img { object-position: 42% 56%; }
+    .qmedia-portfolio img { object-position: 50% 43%; }
+    .qmedia-risk img { object-position: 64% 50%; }
+  }
+
+  /* Verdict chip, shared with the how-it-works mock. */
+  .vtag { display: inline-flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 600; color: var(--ink); white-space: nowrap; }
+  .vtag i { width: 16px; height: 16px; border-radius: var(--r-tile); flex: none; }
+  .vtag.yes i { background: var(--yes); } .vtag.cond i { background: var(--cond); }
+  .vtag.no i { background: var(--no); background-image: repeating-linear-gradient(135deg, var(--no-hatch) 0 2px, transparent 2px 5px); }
+
+  /* 02 · How it works */
+  .how-process { display: grid; grid-template-columns: minmax(240px, .72fr) minmax(0, 1.5fr); gap: clamp(56px, 9vw, 148px); align-items: start; }
+  .how-process .how-intro { margin: 0; position: sticky; top: 112px; }
+  .how-intro h2 { max-width: 8ch; font-family: var(--font-manrope); font-size: clamp(44px, 5.8vw, 76px); line-height: .94; font-weight: 800; letter-spacing: -.04em; }
+  .how-intro .lead { max-width: 31ch; margin-top: 24px; font-size: 16px; line-height: 1.55; }
+  .how-link { display: inline-flex; flex-direction: row-reverse; align-items: center; gap: 9px; margin-top: 28px; color: var(--ink); font-size: 14px; font-weight: 600; text-decoration: none; }
+  .how-link span { color: var(--orange); font-size: 18px; transition: transform .15s var(--ease); }
+  .how-link:hover span, .how-link:focus-visible span { transform: translate(2px, 2px); }
+  .process-list { border-top: 1px solid var(--line); }
+  .process-step { position: relative; display: grid; grid-template-columns: 48px minmax(0, 1fr); column-gap: 24px; row-gap: 8px; padding: 36px 48px 36px 0; border-bottom: 1px solid var(--line); }
+  .process-step h3 { grid-column: 2; margin: 0; font-family: var(--font-manrope); font-size: clamp(22px, 2.2vw, 30px); line-height: 1.1; font-weight: 700; color: var(--ink); }
+  .process-step p { grid-column: 2; margin: 0; max-width: 58ch; color: var(--ink-2); font-size: 15px; line-height: 1.55; }
+  .process-step .num { grid-row: 1 / span 2; width: 40px; height: 40px; display: grid; place-items: center; background: var(--surface-2); color: var(--ink-2); font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .process-corner { position: absolute; top: 15px; right: 3px; width: 16px; height: 16px; border-top: 3px solid var(--purple); border-right: 3px solid var(--purple); }
+  @media (max-width: 900px) {
+    .how-process { grid-template-columns: 1fr; gap: 44px; }
+    .how-process .how-intro { position: static; }
+    .how-intro h2 { max-width: none; }
+  }
+  @media (max-width: 480px) {
+    .how-process { gap: 34px; }
+    .how-intro h2 { font-size: 44px; }
+    .process-step { grid-template-columns: 40px minmax(0, 1fr); column-gap: 16px; padding: 28px 28px 28px 0; }
+    .process-step h3 { font-size: 21px; }
+    .process-step p { font-size: 14px; }
+    .process-step .num { width: 36px; height: 36px; }
+    .process-corner { top: 12px; width: 13px; height: 13px; }
+  }
+
+  /* 03 · Verdicts */
+  #verdicts .sec-head { margin-bottom: clamp(48px, 7vw, 76px); }
+  #verdicts h2 { max-width: 14ch; font-family: var(--font-manrope); font-size: clamp(46px, 6vw, 76px); line-height: 1.02; font-weight: 800; letter-spacing: -.04em; }
+  #verdicts .lead { max-width: 48ch; margin-top: 26px; font-size: 18px; line-height: 1.55; }
+  #verdicts > .cols-3 { gap: 18px; }
+  #verdicts .verdict { display: flex; min-height: 310px; flex-direction: column; padding: 32px; border-radius: 24px; background: var(--lavender-surface); box-shadow: none; }
+  #verdicts .verdict:hover { transform: none; box-shadow: none; }
+  .verdict .sw-big { width: 32px; height: 32px; flex: none; margin: 0 0 auto; }
+  .verdict .sw-big svg { display: block; width: 100%; height: 100%; fill: currentColor; }
+  .verdict.yes .sw-big { color: var(--yes); } .verdict.cond .sw-big { color: var(--cond); }
+  .verdict.no .sw-big { color: var(--no); }
+  #verdicts .verdict h3 { margin: 64px 0 10px; font-family: var(--font-manrope); font-size: 23px; font-weight: 700; letter-spacing: -.025em; }
+  #verdicts .verdict p { font-size: 16px; line-height: 1.5; }
+  .verdict dl { margin: 18px 0 0; display: grid; gap: 12px; }
+  .verdict dt { font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); }
+  .verdict dd { margin: 3px 0 0; color: var(--ink-2); font-size: 15px; line-height: 1.5; }
+
+  /* 04 · Buy in one place: explanation beside a contained routing preview. */
+  .buy-showcase { --buy-surface: color-mix(in srgb, var(--orange) 12%, var(--surface)); display: grid; grid-template-columns: minmax(0, .96fr) minmax(0, 1.04fr); gap: 14px; align-items: stretch; }
+  .buy-copy, .buy-visual { min-height: 620px; border-radius: 32px; }
+  .buy-copy { display: flex; flex-direction: column; padding: clamp(34px, 4vw, 58px); background: var(--buy-surface); }
+  #buy .buy-copy h2 { max-width: 10ch; font-family: var(--font-manrope); font-size: clamp(46px, 5vw, 70px); line-height: 1.01; font-weight: 800; letter-spacing: -.045em; }
+  #buy .buy-copy .lead { max-width: 37ch; margin-top: 24px; font-size: 18px; line-height: 1.55; }
+  .buy-facts { display: grid; margin-top: auto; }
+  .buy-fact { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 20px; padding: 18px 0; border-top: 1px solid var(--line); }
+  .buy-fact strong { font-size: 15px; font-weight: 600; color: var(--ink); }
+  .buy-fact span { max-width: 30ch; text-align: end; font-size: 14px; color: var(--ink-3); }
+  .buy-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 24px; margin-top: 30px; }
+  .buy-action { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 22px; border-radius: var(--r-pill); background: var(--orange); color: var(--navy); font-weight: 700; text-decoration: none; box-shadow: 0 8px 24px -10px rgb(255 88 10 / .7); transition: transform .15s var(--ease), box-shadow .15s var(--ease); }
+  .buy-action:hover { transform: translateY(-1px); box-shadow: 0 12px 28px -10px rgb(255 88 10 / .82); }
+  .buy-action:active { transform: scale(.96); }
+  .buy-text-link { color: var(--ink); font-weight: 600; text-decoration: none; }
+  .buy-text-link:hover { text-decoration: underline; }
+  .buy-visual { display: grid; place-items: center; padding: clamp(30px, 4vw, 58px); background: radial-gradient(circle at 100% 100%, color-mix(in srgb, var(--purple) 22%, transparent), transparent 55%), var(--lavender-surface); }
+  .route-demo { width: min(100%, 560px); padding: 14px; border-radius: 26px; background: rgb(255 255 255 / .68); box-shadow: 0 26px 60px -34px rgb(13 13 15 / .45); backdrop-filter: blur(12px); }
+  .route-screen { overflow: hidden; border-radius: 18px; background: var(--surface); box-shadow: 0 0 0 1px rgb(13 13 15 / .06), 0 18px 38px -30px rgb(13 13 15 / .35); }
+  .route-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; padding: 24px; }
+  .route-head small { display: block; margin-bottom: 6px; font-size: 11px; font-weight: 700; letter-spacing: .12em; color: var(--ink-3); }
+  .route-head h3 { margin: 0; font-size: 24px; font-weight: 600; letter-spacing: -.02em; }
+  .route-live { padding: 6px 10px; border-radius: var(--r-pill); background: color-mix(in srgb, var(--purple) 12%, transparent); color: var(--purple-ink); font-size: 12px; font-weight: 700; white-space: nowrap; }
+  .route-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin: 0 24px 8px; padding: 4px; border-radius: var(--r-pill); background: var(--surface-2); color: var(--ink-3); font-size: 13px; text-align: center; }
+  .route-tabs span { padding: 8px 10px; border-radius: var(--r-pill); }
+  .route-tabs .active { background: var(--surface); color: var(--ink); box-shadow: var(--shadow-1); }
+  .route-steps { padding: 8px 24px 4px; }
+  .route-step { display: grid; grid-template-columns: 38px minmax(0, 1fr) auto; align-items: center; gap: 14px; padding: 17px 0; border-bottom: 1px solid var(--line); }
+  .route-step:last-child { border-bottom: 0; }
+  .route-num { width: 38px; height: 38px; display: grid; place-items: center; border-radius: 50%; background: color-mix(in srgb, var(--purple) 13%, transparent); color: var(--purple-ink); font-size: 12px; font-weight: 700; }
+  .route-step strong, .route-step small { display: block; }
+  .route-step strong { font-size: 15px; font-weight: 600; }
+  .route-step small { margin-top: 3px; color: var(--ink-3); font-size: 12.5px; }
+  .route-state { color: var(--ink-2); font-size: 12px; font-weight: 600; white-space: nowrap; }
+  .route-note { display: flex; align-items: center; gap: 10px; margin: 12px; padding: 14px 16px; border-radius: 14px; background: var(--surface-2); color: var(--ink-2); font-size: 12.5px; }
+  .route-note i { width: 16px; height: 16px; flex: none; border-radius: 50%; background: var(--no); background-image: repeating-linear-gradient(135deg, var(--no-hatch) 0 2px, transparent 2px 5px); }
+  @media (max-width: 900px) {
+    .buy-showcase { grid-template-columns: 1fr; }
+    .buy-copy, .buy-visual { min-height: auto; }
+    .buy-facts { margin-top: 50px; }
+  }
+  @media (max-width: 480px) {
+    .buy-copy, .buy-visual { border-radius: 24px; }
+    .buy-copy { padding: 30px 24px; }
+    #buy .buy-copy h2 { width: 100%; max-width: none; font-size: 44px; text-align: left; }
+    #buy .buy-copy .lead { font-size: 16px; }
+    .buy-fact { grid-template-columns: 1fr; gap: 6px; }
+    .buy-fact span { text-align: start; }
+    .buy-visual { padding: 24px 14px; }
+    .route-demo { padding: 9px; border-radius: 22px; }
+    .route-head { padding: 20px 18px; }
+    .route-head h3 { font-size: 21px; }
+    .route-live { display: none; }
+    .route-tabs { margin-inline: 18px; }
+    .route-steps { padding-inline: 18px; }
+    .route-step { grid-template-columns: 34px minmax(0, 1fr); gap: 12px; }
+    .route-num { width: 34px; height: 34px; }
+    .route-state { grid-column: 2; }
+  }
+
+  /* 05 · Trust: editorial introduction beside a ruled feature list. */
+  .trust-layout { display: grid; grid-template-columns: minmax(260px, .72fr) minmax(0, 1.28fr); gap: clamp(64px, 9vw, 140px); align-items: start; }
+  .trust-intro { position: sticky; top: 112px; }
+  #trust .trust-intro h2 { max-width: 10ch; font-family: var(--font-manrope); font-size: clamp(48px, 5.8vw, 76px); line-height: .98; font-weight: 800; letter-spacing: -.045em; }
+  .trust-intro .lead { max-width: 32ch; margin-top: 26px; font-size: 17px; line-height: 1.55; }
+  .trust-link { display: inline-flex; align-items: center; gap: 8px; margin-top: 28px; color: var(--ink); font-size: 14px; font-weight: 600; text-decoration: none; }
+  .trust-link span { color: var(--orange); font-size: 18px; }
+  .trust-link:hover { text-decoration: underline; }
+  .trust-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .trust-item { min-height: 260px; padding: 32px 34px; border-bottom: 1px solid var(--line); }
+  .trust-item:nth-child(odd) { border-right: 1px solid var(--line); }
+  .trust-item .ico { margin-bottom: 52px; }
+  .trust-item h3 { margin: 0 0 10px; font-family: var(--font-manrope); font-size: 23px; font-weight: 700; letter-spacing: -.025em; }
+  .trust-item p { margin: 0; color: var(--ink-2); font-size: 15px; line-height: 1.55; }
+
+  /* 06 · FAQ: a clean help directory that keeps every answer native and expandable. */
+  #faq { margin-top: 104px; padding: 0; overflow: hidden; border-radius: 34px; background: var(--surface); box-shadow: var(--card-raised); }
+  #faq .sec-head { margin: 0; padding: clamp(48px, 6vw, 76px) clamp(24px, 5vw, 64px) 36px; text-align: center; background: var(--lavender-surface); }
+  #faq h2 { max-width: none; color: var(--ink); font-family: var(--font-manrope); font-weight: 800; font-size: clamp(42px, 5vw, 64px); line-height: 1; letter-spacing: -.04em; }
+  #faq .lead { margin: 18px auto 0; max-width: 62ch; }
+  .faq-options { display: inline-flex; align-items: center; min-height: 40px; margin-top: 26px; padding: 0 16px; border: 0; border-radius: var(--r-pill); background: rgb(13 13 15 / .07); color: var(--ink); font: inherit; font-size: 13px; font-weight: 650; cursor: pointer; }
+  .faq-options:focus-visible { outline: 2px solid var(--purple); outline-offset: 3px; }
+  .faq { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(34px, 5vw, 72px) clamp(28px, 5vw, 64px); padding: clamp(52px, 7vw, 86px) clamp(28px, 6vw, 84px); }
+  .faq details { min-width: 0; color: var(--ink); }
+  .faq summary { min-height: 142px; list-style: none; display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto 1fr; align-content: start; column-gap: 9px; cursor: pointer; font-family: var(--font-manrope); font-size: 20px; line-height: 1.2; font-weight: 700; letter-spacing: -.025em; color: var(--ink); }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq-icon { grid-row: 1; width: 22px; color: var(--orange); line-height: 1; }
+  .faq-icon svg { display: block; width: 20px; height: 20px; fill: currentColor; }
+  .faq summary small { grid-column: 1 / -1; margin-top: 9px; color: var(--ink-2); font-family: var(--font-inter); font-size: 14px; font-weight: 400; line-height: 1.45; letter-spacing: 0; }
+  .faq summary::after { content: "View answer"; grid-column: 1 / -1; align-self: end; justify-self: start; display: inline-flex; align-items: center; min-height: 40px; margin-top: 20px; padding: 0 18px; border-radius: var(--r-pill); background: var(--orange); color: #0d0d0f; font-size: 12px; font-weight: 700; letter-spacing: .02em; text-transform: uppercase; transition: transform .15s var(--ease), background .15s; }
+  .faq summary:hover::after { background: #ff7130; color: #0d0d0f; }
+  .faq summary:active::after { transform: scale(.96); }
+  .faq summary:focus-visible { outline: none; }
+  .faq summary:focus-visible::after { outline: 2px solid var(--purple); outline-offset: 3px; }
+  .faq details[open] summary { min-height: auto; }
+  .faq details[open] summary::after { content: "Close answer"; }
+  .faq details p { margin: 18px 0 0; padding-top: 18px; box-shadow: inset 0 1px 0 rgb(13 13 15 / .1); color: var(--ink-2); font-size: 14px; line-height: 1.55; }
+  @media (max-width: 900px) {
+    .trust-layout { grid-template-columns: 1fr; gap: 46px; }
+    .trust-intro { position: static; }
+    #trust .trust-intro h2 { max-width: 12ch; }
+    .faq { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 600px) {
+    .trust-list, .faq { grid-template-columns: 1fr; }
+    .trust-item { min-height: auto; padding: 28px 0; border-right: 0 !important; }
+    .trust-item .ico { margin-bottom: 30px; }
+    #faq { border-radius: 24px; }
+    #faq .sec-head { padding: 42px 20px 30px; }
+    .faq { padding: 36px 22px 44px; gap: 34px; }
+    .faq summary { min-height: 132px; }
+    .actions .resources-menu > summary { font-size: 16px; }
+    .actions .resources-menu > summary::after { font-size: 10px; }
+  }
+
+  /* Five links plus two buttons stop fitting here; the links go and the bar keeps
+     the logo and the actions. The sections stay reachable by scrolling. */
+  @media (max-width: 1240px) {
+    .top { grid-template-columns: 1fr auto; }
+    .top .nav { display: none; }
+  }
+
+  /* Three charted cards need room; below this the fan becomes one column, upright. */
+  @media (max-width: 1040px) {
+    .problem .deck { grid-template-columns: 1fr; max-width: 460px; margin-inline: auto; gap: 26px; }
+    /* One card at a time: hold the picture to a portrait crop rather than letting
+       it stretch to a letterbox, and keep the gutter wide enough for the shadows. */
+    .qmedia { aspect-ratio: 1 / 1.02; }
+    .qcard.tilt-l, .qcard.tilt-r, .qcard.lead-card { transform: none; }
+    .qcard:hover, .qcard.lead-card:hover { transform: translateY(-4px); }
+  }
+
+  @media (max-width: 900px) {
+    .cols-3, .cols-4, .cols-2 { grid-template-columns: 1fr; }
+    .sec { padding-top: 72px; }
+    .board { grid-template-columns: 1fr; }
+    #verdicts .verdict { min-height: 250px; }
+    .foot-grid { grid-template-columns: 1fr 1fr 1fr; }
+    .foot-brand { grid-column: 1 / -1; }
+    .foot-connect { grid-column: 1 / -1; }
+  }
+  @media (max-width: 480px) {
+    .hero { padding: 32px 0 20px; }
+    .hero > p { font-size: 20px; }
+    .searchbar { padding: 6px 6px 6px 16px; gap: 6px; margin-top: 26px; }
+    .searchbar > svg { width: 18px; height: 18px; }
+    .searchbar input { font-size: 20px; padding: 10px 2px; }
+    .searchbar .go { padding: 11px 15px; font-size: 17.5px; }
+    .chips .try { display: none; }
+    /* The logo and two pills overrun a phone bar, so the quieter button stands down —
+       the board is a scroll away — and the bar tightens around what is left. */
+    .top { min-height: 64px; gap: 10px; }
+    .top .brand svg { height: 22px; }
+    .top .actions { gap: 6px; }
+    .actions .resources-menu > summary { padding-inline: 10px; }
+    .theme-toggle { width: 40px; height: 40px; }
+    .btn.ghost { display: none; }
+    .btn { font-size: 14px; padding: 10px 12px; }
+    .sec, #board { scroll-margin-top: 76px; }
+    #verdicts h2 { font-size: 42px; }
+    #verdicts .lead { margin-top: 20px; font-size: 16px; }
+    #verdicts .sec-head { margin-bottom: 38px; }
+    #verdicts .verdict { min-height: 240px; padding: 26px; }
+    .problem { margin-top: 72px; padding: 48px 20px 40px; }
+    .problem::before { background-size: 72px 72px; }
+    .problem .asking { margin-top: 22px; }
+    .problem .deck { margin-top: 32px; }
+    .problem .aftermath { margin-top: 32px; font-size: 16px; }
+    .qcard { padding: 12px 12px 24px; border-radius: 28px; }
+    .qmedia { border-radius: 18px; }
+    .qbody { padding: 0 8px; }
+    .qcard h3 { font-size: 23px; margin-top: 20px; }
+    .qsub { font-size: 16px; }
+    /* Two of the three pairs wrap at this width; stack all of them so every card
+       reads the same instead of one sitting on one line and two on two. */
+    .qbody .qmeta { flex-direction: column; align-items: flex-start; gap: 10px; padding-top: 22px; }
+    .hud { margin-top: 44px; }
+    .row { padding: 20px; gap: 18px; border-radius: var(--r-card); }
+    .row .flag { font-size: 32px; }
+    .name { font-size: 18px; }
+    .track .tile { max-width: 30px; }
+    .track .tile::after { content: ""; position: absolute; inset: -4px; border-radius: 50%; }
+    .cta-act { flex-direction: column; align-items: stretch; gap: 10px; }
+    .cta-btn { justify-content: center; }
+    .cta-alt { align-self: center; }
+    .top .meta { display: none; }
+    footer { min-height: 0; margin-inline: 16px; padding: 190px 32px 190px; border-radius: 190px 190px 34px 34px; }
+    .foot-grid { grid-template-columns: 1fr 1fr; gap: 62px 24px; }
+    .foot-brand { grid-column: 1 / -1; }
+    .foot-logo, .foot-cta { display: none; }
+    .foot-line { margin-top: 0; max-width: 13ch; font-size: 32px; line-height: 1.08; }
+    .foot-base { margin-top: 22px; font-size: 14px; line-height: 1.5; }
+    .foot-col h3, .foot-connect h3 { margin-bottom: 22px; font-size: 13px; }
+    .foot-col ul { gap: 16px; }
+    .foot-col a, .foot-col li span { font-size: 15px; }
+    .foot-connect { grid-column: 1 / -1; }
+    .foot-signup { min-height: 58px; }
+    .foot-signup input { padding-inline: 18px 8px; }
+    .foot-signup button { padding-inline: 22px; }
+    .foot-social { margin-top: 46px; }
+    .foot-social-links { gap: 12px; }
+    .foot-social-links a { justify-content: center; width: 48px; min-height: 48px; padding: 0; border-radius: 50%; font-size: 13px; }
+    .foot-mark { inset-inline: 32px auto; bottom: 34px; width: calc(100% - 64px); }
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="wrap">
+    <nav class="top" aria-label="Main">
+      <a class="brand" href="#" aria-label="Vestail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="298.4 324.6 786.5 179.1" aria-hidden="true" focusable="false"> <g transform="translate(311.72 325.00) scale(1.7600)"> <line x1="12" y1="42" x2="27" y2="65" stroke="#FF580A" stroke-width="27" stroke-linecap="round"/> <line x1="60" y1="82" x2="83" y2="23" stroke="#FF580A" stroke-width="30" stroke-linecap="round"/> <ellipse cx="84.26" cy="39.59" rx="4.6" ry="6.6" fill="#141414"/> <circle cx="85.66" cy="37.19" r="1.7" fill="#FFFFFF"/> <ellipse cx="70.84" cy="34.36" rx="4.6" ry="6.6" fill="#141414"/> <circle cx="72.24" cy="31.96" r="1.7" fill="#FFFFFF"/> </g> <path d="M569.86 474.334 528.1120000000001 379.666H556.336L586.3240000000001 457.674H572.408L602.592 379.666H629.836L588.284 474.334ZM682.952 476.294Q668.056 476.294 656.492 469.924Q644.928 463.554 638.1659999999999 452.38199999999995Q631.404 441.21 631.404 426.902Q631.404 412.79 637.97 401.716Q644.536 390.642 655.904 384.076Q667.2719999999999 377.51 681.188 377.51Q694.908 377.51 705.394 383.68399999999997Q715.88 389.858 721.858 400.53999999999996Q727.836 411.222 727.836 424.746Q727.836 427.294 727.542 429.94Q727.248 432.586 726.4639999999999 435.918L646.888 436.11400000000003V416.906L714.508 416.71L704.12 424.746Q703.728 416.318 701.082 410.634Q698.436 404.95 693.4380000000001 401.91200000000003Q688.44 398.874 681.188 398.874Q673.544 398.874 667.86 402.304Q662.176 405.734 659.138 411.908Q656.1 418.082 656.1 426.51Q656.1 435.134 659.3340000000001 441.504Q662.568 447.874 668.644 451.304Q674.72 454.734 682.756 454.734Q690.008 454.734 695.888 452.284Q701.768 449.834 706.08 444.934L721.172 460.026Q714.312 468.062 704.414 472.178Q694.516 476.294 682.952 476.294ZM772.328 476.49Q764.292 476.49 756.55 474.334Q748.808 472.178 742.3399999999999 468.356Q735.872 464.534 731.168 459.046L746.456 443.562Q751.356 449.05 757.8240000000001 451.794Q764.292 454.538 772.132 454.538Q778.404 454.538 781.6379999999999 452.774Q784.872 451.01 784.872 447.482Q784.872 443.562 781.442 441.406Q778.012 439.25 772.5239999999999 437.78Q767.036 436.31 761.058 434.448Q755.0799999999999 432.586 749.5919999999999 429.548Q744.1039999999999 426.51 740.674 421.12Q737.244 415.73 737.244 407.106Q737.244 398.09000000000003 741.654 391.42600000000004Q746.064 384.762 754.296 381.038Q762.528 377.31399999999996 773.6999999999999 377.31399999999996Q785.46 377.31399999999996 794.966 381.42999999999995Q804.472 385.546 810.744 393.778L795.26 409.262Q790.948 403.97 785.558 401.61800000000005Q780.168 399.266 773.896 399.266Q768.212 399.266 765.174 401.03Q762.136 402.794 762.136 405.93Q762.136 409.45799999999997 765.566 411.418Q768.996 413.378 774.4839999999999 414.84799999999996Q779.972 416.318 785.95 418.18Q791.928 420.04200000000003 797.318 423.374Q802.708 426.706 806.1379999999999 432.194Q809.568 437.682 809.568 446.306Q809.568 460.222 799.572 468.356Q789.576 476.49 772.328 476.49ZM836.812 474.334V340.27H862.488V474.334ZM814.664 402.206V379.666H884.636V402.206ZM934.812 476.294Q921.876 476.294 911.488 469.826Q901.1 463.358 895.22 452.18600000000004Q889.34 441.014 889.34 427.098Q889.34 412.986 895.22 401.81399999999996Q901.1 390.642 911.488 384.174Q921.876 377.706 934.812 377.706Q945.004 377.706 953.04 381.822Q961.076 385.938 965.8779999999999 393.288Q970.68 400.63800000000003 971.072 409.85V443.954Q970.68 453.362 965.8779999999999 460.61400000000003Q961.076 467.866 953.04 472.08Q945.004 476.294 934.812 476.294ZM939.516 452.578Q950.2959999999999 452.578 956.96 445.424Q963.624 438.27 963.624 426.902Q963.624 419.454 960.586 413.672Q957.548 407.89 952.158 404.656Q946.768 401.422 939.516 401.422Q932.46 401.422 927.0699999999999 404.656Q921.68 407.89 918.6419999999999 413.672Q915.6039999999999 419.454 915.6039999999999 426.902Q915.6039999999999 434.546 918.6419999999999 440.328Q921.68 446.11 927.0699999999999 449.344Q932.46 452.578 939.516 452.578ZM962.252 474.334V448.854L966.3679999999999 425.726L962.252 402.99V379.666H987.732V474.334ZM1006.548 474.334V379.666H1032.4199999999998V474.334ZM1019.4839999999999 364.378Q1013.212 364.378 1009.096 360.164Q1004.9799999999999 355.95 1004.9799999999999 349.678Q1004.9799999999999 343.602 1009.096 339.28999999999996Q1013.212 334.978 1019.4839999999999 334.978Q1025.952 334.978 1029.97 339.28999999999996Q1033.988 343.602 1033.988 349.678Q1033.988 355.95 1029.97 360.164Q1025.952 364.378 1019.4839999999999 364.378ZM1051.2359999999999 474.334V332.626H1076.912V474.334Z" fill="#FF580A"/> </svg></a>
+      <div class="nav">
+        <details class="nav-menu">
+          <summary>Explore</summary>
+          <div class="nav-panel">
+            <a href="/explore/search">Search anything</a>
+            <a href="/explore/trending">Trending assets</a>
+            <a href="/explore/questions">Popular ownership questions</a>
+            <span>Recently viewed <small>Coming soon</small></span>
+            <a href="/explore/compare">Compare ownership access</a>
+            <a href="/explore/all">Explore all</a>
+          </div>
+        </details>
+        <details class="nav-menu">
+          <summary>Countries</summary>
+          <div class="nav-panel">
+            <a href="/countries/supported">All supported countries</a>
+            <a href="/countries/overview">Country overview pages</a>
+            <a href="/countries/citizen-rules">Citizen rules</a>
+            <a href="/countries/foreigner-rules">Foreigner rules</a>
+            <span>Resident rules <small>Coming later</small></span>
+            <a href="/countries/access-matrix">Country-by-country access matrix</a>
+          </div>
+        </details>
+        <details class="nav-menu nav-menu-wide">
+          <summary>Assets</summary>
+          <div class="nav-panel nav-panel-grid">
+            <a href="#board">All 20 asset classes</a>
+            <a href="#board">Equities</a>
+            <a href="#board">Property</a>
+            <a href="#board">Farmland</a>
+            <a href="#board">Bonds</a>
+            <a href="#board">Crypto</a>
+            <a href="#board">Gold</a>
+            <a href="#board">Private equity</a>
+            <a href="#board">Aircraft</a>
+            <a href="#board">More asset classes</a>
+            <p>Each asset page explains where ownership is open, conditional, or restricted.</p>
+          </div>
+        </details>
+        <details class="nav-menu">
+          <summary>Company</summary>
+          <div class="nav-panel">
+            <a href="/company/about">About Vestail</a>
+            <a href="/company/mission">Mission</a>
+            <a href="/company/difference">How Vestail is different</a>
+            <a href="/company/partners">Partners</a>
+            <a href="/company/contact">Contact</a>
+            <span>Careers <small>Later</small></span>
+          </div>
+        </details>
+        <details class="nav-menu nav-menu-wide">
+          <summary>Docs</summary>
+          <div class="nav-panel nav-panel-grid">
+            <a href="/docs#quickstart">Getting started</a>
+            <a href="/docs#api">API reference</a>
+            <a href="/docs#resolver">Resolver</a>
+            <a href="/docs#rules">Rule engine</a>
+            <a href="/docs#verdicts">Verdict model</a>
+            <a href="/docs#rules">Rule schema</a>
+            <a href="/docs#api">OpenAPI specification</a>
+            <a href="/docs#integration">Integration guide</a>
+            <a href="/docs#changelog">Changelog</a>
+            <p>Technical documentation for building with Vestail.</p>
+          </div>
+        </details>
+      </div>
+      <div class="actions">
+        <button class="theme-toggle" type="button" aria-label="Switch to dark theme" aria-pressed="false" title="Switch to dark theme">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <circle cx="12" cy="12" r="9"></circle>
+            <path d="M12 3a9 9 0 0 0 0 18Z"></path>
+          </svg>
+        </button>
+        <details class="nav-menu resources-menu">
+          <summary>Resources</summary>
+          <div class="nav-panel">
+            <a href="#how">How it works</a>
+            <a href="#trust">Methodology</a>
+            <a href="#trust">Sources and provenance</a>
+            <a href="#board">Ownership guides</a>
+            <a href="#faq">Glossary</a>
+            <a href="#faq">FAQ</a>
+            <a href="#faq">Legal and disclaimer</a>
+            <span>Research articles <small>Later</small></span>
+          </div>
+        </details>
+        <a class="btn solid" href="/app" data-app-link>Open App</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section class="hero" id="hero-search" aria-labelledby="hero-title">
+    <h1 id="hero-title"><span class="ln light"><span class="w">What</span> <span class="w">can</span> <span class="w">you</span></span> <span class="ln"><span class="w">actually</span> <span class="w">own</span> <span class="w">here?</span></span></h1>
+    <p>Type a thing you'd like to buy. See where it's allowed, where it needs a licence, where it's off the table, and where to go to buy it.</p>
+    <div class="searchbar">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"/></svg>
+      <input id="q" type="search" placeholder="Google, bitcoin, a house, farmland, a Gulfstream…" aria-label="Search assets" autocomplete="off">
+      <button id="clear" type="button">Clear</button>
+      <a class="go" id="seeWhere" href="/app" data-app-link>Open App</a>
+    </div>
+    <div class="chips" aria-label="Try one">
+      <span class="try" aria-hidden="true">Try</span>
+      <button class="chip" data-q="Google">Google</button>
+      <button class="chip" data-q="Bitcoin">Bitcoin</button>
+      <button class="chip" data-q="a house">A house</button>
+      <button class="chip" data-q="farmland">Farmland</button>
+      <button class="chip" data-q="gold">Gold</button>
+      <button class="chip" data-q="Dangote">Dangote</button>
+      <button class="chip" data-q="private jet">Private jet</button>
+    </div>
+    <div class="hud" aria-label="Activity on Vestail">
+      <div class="stats">
+        <div class="stat"><div class="v" data-count="48300000" data-prefix="$" data-fmt="compact">$0</div><div class="l">Bought<span class="long"> via Vestail</span>, 30 days</div><span class="d">+18%</span></div>
+        <div class="stat"><div class="v" data-count="12640" data-fmt="int">0</div><div class="l">Orders routed<span class="long"> to venues</span></div><span class="d">+9%</span></div>
+        <div class="stat"><div class="v" data-count="2310" data-fmt="int">0</div><div class="l">Active buyers<span class="long"> this week</span></div></div>
+      </div>
+      <div class="ticker" role="status" aria-live="off">
+        <span class="live"><i></i>LIVE</span>
+        <ul id="ticker"></ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="controls" id="board">
+    <div class="left">
+      <div class="seg" role="radiogroup" aria-label="Who is buying" data-pos="0">
+        <button role="radio" aria-selected="true" data-who="citizen">Citizens</button>
+        <button role="radio" aria-selected="false" data-who="foreigner">Foreigners</button>
+      </div>
+      <div class="seg" role="tablist" aria-label="Tile order" data-pos="0">
+        <button role="tab" aria-selected="true" data-view="status">By status</button>
+        <button role="tab" aria-selected="false" data-view="asset">By asset 1–20</button>
+      </div>
+    </div>
+    <div class="legend" aria-label="Legend">
+      <span><i class="sw yes"></i>Can own</span>
+      <span><i class="sw cond"></i>Licence or cap</span>
+      <span><i class="sw no"></i>Cannot own</span>
+    </div>
+  </div>
+  <div class="trail" id="trail" aria-live="polite"></div>
+
+  <div class="board-head" id="boardHead"><span>Country</span><span id="hAssets">Assets, most open first</span><button type="button" class="showall" id="showAll" aria-pressed="false">Show all 20</button><span style="text-align:right" id="hWho">Citizens</span></div>
+  <div class="board" id="rows"></div>
+
+  <!-- 01 · The problem -->
+  <section class="sec problem" id="problem" aria-labelledby="h-problem">
+    <h2 id="h-problem"><span class="ln">Buying an asset</span> <span class="ln">shouldn’t feel like</span> <span class="ln hit">a guess</span></h2>
+    <p class="asking">Are you tired of…</p>
+
+    <div class="deck">
+      <article class="qcard tilt-l">
+        <div class="qmedia qmedia-human"><img src="assets/problem/trading-app.jpg" alt="A man holding a phone with a trading application open"></div>
+        <div class="qbody">
+          <h3>Apps that show you a price, but never the rule</h3>
+          <p class="qsub">Every listing, every app</p>
+          <ul class="qmeta">
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 3H4.5a1.5 1.5 0 0 0-1.5 1.5V11l9 9 8-8z"/><circle cx="7.4" cy="7.4" r="1.3"/></svg>Price shown</li>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12S6 5.8 12 5.8 21.5 12 21.5 12 18 18.2 12 18.2 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.6"/><path d="M4.5 19.5 19.5 4.5"/></svg>Rule hidden</li>
+          </ul>
+        </div>
+      </article>
+      <article class="qcard lead-card">
+        <div class="qmedia qmedia-portfolio"><img src="assets/problem/crypto-portfolio.jpg" alt="A close-up phone interface showing a detailed cryptocurrency portfolio"></div>
+        <div class="qbody">
+          <h3>Tokens that look identical in your wallet</h3>
+          <p class="qsub">One ticker, twelve versions</p>
+          <ul class="qmeta">
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 8a2 2 0 0 1 2-2h13v3M3 8v9a2 2 0 0 0 2 2h14v-3"/><path d="M20 11h-4a2 2 0 0 0 0 4h4z"/></svg>Looks identical</li>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4.5v15M7.5 19.5h9M4 9h16M4 9l-2 5a3 3 0 0 0 4 0zM20 9l2 5a3 3 0 0 1-4 0z"/></svg>Different claims</li>
+          </ul>
+        </div>
+      </article>
+      <article class="qcard tilt-r">
+        <div class="qmedia qmedia-risk"><img src="assets/problem/market-risk.jpg" alt="A red financial market chart showing a sharp decline and risk area"></div>
+        <div class="qbody">
+          <h3>Finding out at redemption, not at purchase</h3>
+          <p class="qsub">From purchase to exit</p>
+          <ul class="qmeta">
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6"/><path d="M12 7.3V12l3 1.9"/></svg>Clear at purchase</li>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.4 10.2V7.6a4.6 4.6 0 0 1 9.2 0v2.6"/><path d="M5.4 10.2h13.2v9.4H5.4z"/></svg>Gated at exit</li>
+          </ul>
+        </div>
+      </article>
+    </div>
+
+    <p class="aftermath">So people buy the version they were never allowed to hold, and only find out when they try to get out.</p>
+  </section>
+
+  <!-- 02 · How it works -->
+  <section class="sec how-process" id="how" aria-labelledby="h-how">
+    <div class="sec-head how-intro">
+      <h2 id="h-how">The Vestail process</h2>
+      <p class="lead">Three clear steps take you from “can I own this?” to a place where you can buy it.</p>
+      <a class="how-link" href="#board">Explore the board <span aria-hidden="true">↳</span></a>
+    </div>
+    <div class="process-list">
+      <article class="process-step">
+        <span class="process-corner" aria-hidden="true"></span>
+        <div class="num">01</div>
+        <h3>Say who you are</h3>
+        <p>Pick your country and whether you're a citizen or a foreigner there. You declare it; Vestail never asks for ID.</p>
+      </article>
+      <article class="process-step">
+        <span class="process-corner" aria-hidden="true"></span>
+        <div class="num">02</div>
+        <h3>Search anything</h3>
+        <p>A company, a coin, “a house”, “farmland”, “gold”. Vestail works out what kind of asset it is and shows you how it got there.</p>
+      </article>
+      <article class="process-step">
+        <span class="process-corner" aria-hidden="true"></span>
+        <div class="num">03</div>
+        <h3>See the verdict, then buy</h3>
+        <p>Every country answers in one of three verdicts. Where you're allowed, Vestail takes you straight to a place to buy.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- 03 · Verdicts -->
+  <section class="sec" id="verdicts" aria-labelledby="h-verdicts">
+    <div class="sec-head">
+      <h2 id="h-verdicts">Not yes or no. The middle is where people get hurt.</h2>
+      <p class="lead">A two-state answer has to lie about the large middle: assets anyone can buy but can't redeem, collect on or sell without clearing a gate. Vestail gives it its own name.</p>
+    </div>
+    <div class="cols-3">
+      <div class="panel verdict yes">
+        <div class="sw-big" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" focusable="false"><path d="M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"/></svg></div>
+        <h3>Can own</h3>
+        <p>The rules permit someone like you to hold it, with no further gate.</p>
+        <dl><dt>What Vestail does</dt><dd>Shows you where to buy it.</dd></dl>
+      </div>
+      <div class="panel verdict cond">
+        <div class="sw-big" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" focusable="false"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm-8-80V80a8,8,0,0,1,16,0v56a8,8,0,0,1-16,0Zm20,36a12,12,0,1,1-12-12A12,12,0,0,1,140,172Z"/></svg></div>
+        <h3>Conditional</h3>
+        <p>Allowed, but behind a licence, cap, approval or KYC check, often one you only meet at exit.</p>
+        <dl><dt>What Vestail does</dt><dd>Names the condition, and asks you to acknowledge it before you buy.</dd></dl>
+      </div>
+      <div class="panel verdict no">
+        <div class="sw-big" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" focusable="false"><path d="M165.66,101.66,139.31,128l26.35,26.34a8,8,0,0,1-11.32,11.32L128,139.31l-26.34,26.35a8,8,0,0,1-11.32-11.32L116.69,128,90.34,101.66a8,8,0,0,1,11.32-11.32L128,116.69l26.34-26.35a8,8,0,0,1,11.32,11.32ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"/></svg></div>
+        <h3>Cannot own</h3>
+        <p>The rules exclude someone like you from holding it.</p>
+        <dl><dt>What Vestail does</dt><dd>Never routes it. Not even a quote.</dd></dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 · Buy in one place -->
+  <section class="sec" id="buy" aria-labelledby="h-buy">
+    <div class="buy-showcase">
+      <div class="buy-copy">
+        <h2 id="h-buy">Find it, check it, buy it, without leaving Vestail.</h2>
+        <p class="lead">Vestail is becoming the place you buy what you're allowed to own: from onchain assets in your own wallet to carefully selected offchain partners.</p>
+        <div class="buy-facts">
+          <div class="buy-fact"><strong>Onchain, from your wallet</strong><span>Tokenized stocks live; crypto, gold and treasuries next</span></div>
+          <div class="buy-fact"><strong>Offchain, through licensed partners</strong><span>Real estate, listed shares and government bonds</span></div>
+          <div class="buy-fact"><strong>Everything else</strong><span>The right specialist route, never a misleading buy button</span></div>
+        </div>
+        <div class="buy-actions">
+          <a class="buy-action" href="#board">See what you can own</a>
+          <a class="buy-text-link" href="#how">How routing works</a>
+        </div>
+      </div>
+      <div class="buy-visual" aria-label="Vestail's checked buying route">
+        <div class="route-demo">
+          <div class="route-screen">
+            <div class="route-head">
+              <div><small>VESTAIL BUY FLOW</small><h3>One checked route</h3></div>
+              <span class="route-live">Your rule first</span>
+            </div>
+            <div class="route-tabs" aria-hidden="true"><span class="active">You see</span><span>The venue sees</span></div>
+            <div class="route-steps">
+              <div class="route-step"><span class="route-num">01</span><div><strong>Check your rule</strong><small>Country, buyer type and asset</small></div><span class="route-state">Matched</span></div>
+              <div class="route-step"><span class="route-num">02</span><div><strong>Confirm conditions</strong><small>Acknowledgement required when conditional</small></div><span class="route-state">Before buying</span></div>
+              <div class="route-step"><span class="route-num">03</span><div><strong>Choose your route</strong><small>Your wallet or a licensed partner</small></div><span class="route-state">No custody</span></div>
+            </div>
+            <div class="route-note"><i aria-hidden="true"></i><span>Cannot-own assets stop before this screen. Vestail never routes them.</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 · Why trust Vestail -->
+  <section class="sec" id="trust" aria-labelledby="h-trust">
+    <div class="trust-layout">
+      <div class="trust-intro">
+        <h2 id="h-trust">An answer is only as good as where it comes from.</h2>
+        <p class="lead">Clear rules, visible sources and incentives that never change the answer.</p>
+        <a class="trust-link" href="#faq">Read common questions <span aria-hidden="true">↳</span></a>
+      </div>
+      <div class="trust-list">
+        <article class="trust-item"><svg class="ico" viewBox="0 0 32 32" aria-hidden="true"><path d="M9 4h10l6 6v18H9zM19 4v6h6M13 16h8M13 21h8"/></svg><h3>Sourced rules</h3><p>Every rule carries the documents it rests on and the date it was last checked.</p></article>
+        <article class="trust-item"><svg class="ico" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 5v22M7 27h18M6 11h20M6 11l-3 8a4 4 0 0 0 6 0zM26 11l-3 8a4 4 0 0 0 6 0z"/></svg><h3>Neutral by rule</h3><p>Money never changes a verdict or the order of venues. We say who pays us.</p></article>
+        <article class="trust-item"><svg class="ico" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 15a5 5 0 1 0 0-10 5 5 0 0 0 0 10zM7 27a9 9 0 0 1 18 0"/></svg><h3>You declare, we disclose</h3><p>No ID checks and no blocking. Vestail shows you the rules; the choice stays yours.</p></article>
+        <article class="trust-item"><svg class="ico" viewBox="0 0 32 32" aria-hidden="true"><path d="M10 22V14a6 6 0 0 1 12 0v8l2 3H8zM14 28h4"/></svg><h3>Rules change; so do we</h3><p>When a regulator moves, the rule is rechecked and its date updated, so you can see how fresh an answer is.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 · FAQ -->
+  <section class="sec" id="faq" aria-labelledby="h-faq">
+    <div class="sec-head">
+      <h2 id="h-faq">FAQs</h2>
+      <p class="lead">Check the most frequently asked ownership questions before you buy.</p>
+      <button class="faq-options" type="button" aria-expanded="false">Open all answers ▾</button>
+    </div>
+    <div class="faq">
+      <details><summary><span class="faq-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" focusable="false"><path d="M213.66,82.34l-56-56A8,8,0,0,0,152,24H56A16,16,0,0,0,40,40V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V88A8,8,0,0,0,213.66,82.34ZM160,51.31,188.69,80H160ZM200,216H56V40h88V88a8,8,0,0,0,8,8h48V216Zm-32-80a8,8,0,0,1-8,8H96a8,8,0,0,1,0-16h64A8,8,0,0,1,168,136Zm0,32a8,8,0,0,1-8,8H96a8,8,0,0,1,0-16h64A8,8,0,0,1,168,168Z"/></svg></span><span>Legal guidance</span><small>Understand what Vestail’s answers do—and do not—replace.</small></summary><p>No. Vestail shows what the rules say for the country and buyer type you declare, with sources, so you can decide. For a big or unusual purchase, check with a professional in that country.</p></details>
+      <details><summary><span class="faq-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" focusable="false"><path d="M231.65,194.55,198.46,36.75a16,16,0,0,0-19-12.39L132.65,34.42a16.08,16.08,0,0,0-12.3,19l33.19,157.8A16,16,0,0,0,169.16,224a16.25,16.25,0,0,0,3.38-.36l46.81-10.06A16.09,16.09,0,0,0,231.65,194.55ZM136,50.15c0-.06,0-.09,0-.09l46.8-10,3.33,15.87L139.33,66Zm6.62,31.47,46.82-10.05,3.34,15.9L146,97.53Zm6.64,31.57,46.82-10.06,13.3,63.24-46.82,10.06ZM216,197.94l-46.8,10-3.33-15.87L212.67,182,216,197.85C216,197.91,216,197.94,216,197.94ZM104,32H56A16,16,0,0,0,40,48V208a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V48A16,16,0,0,0,104,32ZM56,48h48V64H56Zm0,32h48v96H56Zm48,128H56V192h48v16Z"/></svg></span><span>Rule sources</span><small>See where verdicts come from and how freshness is shown.</small></summary><p>From statutes, regulator guidance and issuer terms. Each rule lists its sources and the date it was last verified. During this preview the rules are illustrative and not yet sourced; don't rely on them.</p></details>
+      <details><summary><span class="faq-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" focusable="false"><path d="M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"/></svg></span><span>Custody and money</span><small>Learn when assets stay in your wallet or with a licensed partner.</small></summary><p>Not for onchain purchases: you buy from your own wallet and the asset settles there. Offchain purchases will go through licensed partners, who hold your assets under their own regulation.</p></details>
+      <details><summary><span class="faq-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" focusable="false"><path d="M165.66,101.66,139.31,128l26.35,26.34a8,8,0,0,1-11.32,11.32L128,139.31l-26.34,26.35a8,8,0,0,1-11.32-11.32L116.69,128,90.34,101.66a8,8,0,0,1,11.32-11.32L128,116.69l26.34-26.35a8,8,0,0,1,11.32,11.32ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"/></svg></span><span>Restricted assets</span><small>Why Vestail stops routes for assets you cannot own.</small></summary><p>Because the rules exclude someone in your position from holding it, and selling it to you anyway is exactly what Vestail exists to prevent. Change your country or buyer type only if it's genuinely true for you.</p></details>
+      <details><summary><span class="faq-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" focusable="false"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm-8-80V80a8,8,0,0,1,16,0v56a8,8,0,0,1-16,0Zm20,36a12,12,0,1,1-12-12A12,12,0,0,1,140,172Z"/></svg></span><span>Pricing and incentives</span><small>How Vestail earns money without changing a verdict.</small></summary><p>A small fee on purchases made in Vestail, and referral fees from some venues. Neither ever changes a verdict or which venue we show first.</p></details>
+      <details><summary><span class="faq-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" focusable="false"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm88,104a87.62,87.62,0,0,1-6.4,32.94l-44.7-27.49a15.92,15.92,0,0,0-6.24-2.23l-22.82-3.08a16.11,16.11,0,0,0-16,7.86h-8.72l-3.8-7.86a15.91,15.91,0,0,0-11-8.67l-8-1.73L96.14,104h16.71a16.06,16.06,0,0,0,7.73-2l12.25-6.76a16.62,16.62,0,0,0,3-2.14l26.91-24.34A15.93,15.93,0,0,0,166,49.1l-.36-.65A88.11,88.11,0,0,1,216,128ZM143.31,41.34,152,56.9,125.09,81.24,112.85,88H96.14a16,16,0,0,0-13.88,8l-8.73,15.23L63.38,84.19,74.32,58.32a87.87,87.87,0,0,1,69-17ZM40,128a87.53,87.53,0,0,1,8.54-37.8l11.34,30.27a16,16,0,0,0,11.62,10l21.43,4.61L96.74,143a16.09,16.09,0,0,0,14.4,9h1.48l-7.23,16.23a16,16,0,0,0,2.86,17.37l.14.14L128,205.94l-1.94,10A88.11,88.11,0,0,1,40,128Zm102.58,86.78,1.13-5.81a16.09,16.09,0,0,0-4-13.9,1.85,1.85,0,0,1-.14-.14L120,174.74,133.7,144l22.82,3.08,45.72,28.12A88.18,88.18,0,0,1,142.58,214.78Z"/></svg></span><span>Coverage</span><small>Review supported countries, buyer types and asset classes.</small></summary><p>Twelve countries and twenty asset classes today, for citizens and foreigners, with residents planned. More countries come as their rules are sourced.</p></details>
+    </div>
+  </section>
+
+</div>
+
+  <footer aria-label="Vestail footer">
+  <div class="foot-grid">
+    <div class="foot-brand">
+      <a class="foot-logo" href="#" aria-label="Vestail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="298.4 324.6 786.5 179.1" aria-hidden="true" focusable="false"> <g transform="translate(311.72 325.00) scale(1.7600)"> <line x1="12" y1="42" x2="27" y2="65" stroke="#FF580A" stroke-width="27" stroke-linecap="round"/> <line x1="60" y1="82" x2="83" y2="23" stroke="#FF580A" stroke-width="30" stroke-linecap="round"/> <ellipse cx="84.26" cy="39.59" rx="4.6" ry="6.6" fill="#141414"/> <circle cx="85.66" cy="37.19" r="1.7" fill="#FFFFFF"/> <ellipse cx="70.84" cy="34.36" rx="4.6" ry="6.6" fill="#141414"/> <circle cx="72.24" cy="31.96" r="1.7" fill="#FFFFFF"/> </g> <path d="M569.86 474.334 528.1120000000001 379.666H556.336L586.3240000000001 457.674H572.408L602.592 379.666H629.836L588.284 474.334ZM682.952 476.294Q668.056 476.294 656.492 469.924Q644.928 463.554 638.1659999999999 452.38199999999995Q631.404 441.21 631.404 426.902Q631.404 412.79 637.97 401.716Q644.536 390.642 655.904 384.076Q667.2719999999999 377.51 681.188 377.51Q694.908 377.51 705.394 383.68399999999997Q715.88 389.858 721.858 400.53999999999996Q727.836 411.222 727.836 424.746Q727.836 427.294 727.542 429.94Q727.248 432.586 726.4639999999999 435.918L646.888 436.11400000000003V416.906L714.508 416.71L704.12 424.746Q703.728 416.318 701.082 410.634Q698.436 404.95 693.4380000000001 401.91200000000003Q688.44 398.874 681.188 398.874Q673.544 398.874 667.86 402.304Q662.176 405.734 659.138 411.908Q656.1 418.082 656.1 426.51Q656.1 435.134 659.3340000000001 441.504Q662.568 447.874 668.644 451.304Q674.72 454.734 682.756 454.734Q690.008 454.734 695.888 452.284Q701.768 449.834 706.08 444.934L721.172 460.026Q714.312 468.062 704.414 472.178Q694.516 476.294 682.952 476.294ZM772.328 476.49Q764.292 476.49 756.55 474.334Q748.808 472.178 742.3399999999999 468.356Q735.872 464.534 731.168 459.046L746.456 443.562Q751.356 449.05 757.8240000000001 451.794Q764.292 454.538 772.132 454.538Q778.404 454.538 781.6379999999999 452.774Q784.872 451.01 784.872 447.482Q784.872 443.562 781.442 441.406Q778.012 439.25 772.5239999999999 437.78Q767.036 436.31 761.058 434.448Q755.0799999999999 432.586 749.5919999999999 429.548Q744.1039999999999 426.51 740.674 421.12Q737.244 415.73 737.244 407.106Q737.244 398.09000000000003 741.654 391.42600000000004Q746.064 384.762 754.296 381.038Q762.528 377.31399999999996 773.6999999999999 377.31399999999996Q785.46 377.31399999999996 794.966 381.42999999999995Q804.472 385.546 810.744 393.778L795.26 409.262Q790.948 403.97 785.558 401.61800000000005Q780.168 399.266 773.896 399.266Q768.212 399.266 765.174 401.03Q762.136 402.794 762.136 405.93Q762.136 409.45799999999997 765.566 411.418Q768.996 413.378 774.4839999999999 414.84799999999996Q779.972 416.318 785.95 418.18Q791.928 420.04200000000003 797.318 423.374Q802.708 426.706 806.1379999999999 432.194Q809.568 437.682 809.568 446.306Q809.568 460.222 799.572 468.356Q789.576 476.49 772.328 476.49ZM836.812 474.334V340.27H862.488V474.334ZM814.664 402.206V379.666H884.636V402.206ZM934.812 476.294Q921.876 476.294 911.488 469.826Q901.1 463.358 895.22 452.18600000000004Q889.34 441.014 889.34 427.098Q889.34 412.986 895.22 401.81399999999996Q901.1 390.642 911.488 384.174Q921.876 377.706 934.812 377.706Q945.004 377.706 953.04 381.822Q961.076 385.938 965.8779999999999 393.288Q970.68 400.63800000000003 971.072 409.85V443.954Q970.68 453.362 965.8779999999999 460.61400000000003Q961.076 467.866 953.04 472.08Q945.004 476.294 934.812 476.294ZM939.516 452.578Q950.2959999999999 452.578 956.96 445.424Q963.624 438.27 963.624 426.902Q963.624 419.454 960.586 413.672Q957.548 407.89 952.158 404.656Q946.768 401.422 939.516 401.422Q932.46 401.422 927.0699999999999 404.656Q921.68 407.89 918.6419999999999 413.672Q915.6039999999999 419.454 915.6039999999999 426.902Q915.6039999999999 434.546 918.6419999999999 440.328Q921.68 446.11 927.0699999999999 449.344Q932.46 452.578 939.516 452.578ZM962.252 474.334V448.854L966.3679999999999 425.726L962.252 402.99V379.666H987.732V474.334ZM1006.548 474.334V379.666H1032.4199999999998V474.334ZM1019.4839999999999 364.378Q1013.212 364.378 1009.096 360.164Q1004.9799999999999 355.95 1004.9799999999999 349.678Q1004.9799999999999 343.602 1009.096 339.28999999999996Q1013.212 334.978 1019.4839999999999 334.978Q1025.952 334.978 1029.97 339.28999999999996Q1033.988 343.602 1033.988 349.678Q1033.988 355.95 1029.97 360.164Q1025.952 364.378 1019.4839999999999 364.378ZM1051.2359999999999 474.334V332.626H1076.912V474.334Z" fill="#FF580A"/> </svg></a>
+      <p class="foot-line">Ownership rules, made legible.</p>
+      <a class="foot-cta" href="/app" data-app-link><i aria-hidden="true"></i>Open App</a>
+      <div class="foot-base"><span>© 2026 Vestail. All rights reserved.</span></div>
+    </div>
+    <div class="foot-col">
+      <h3>Explore</h3>
+      <ul>
+        <li><a href="/explore/search">Search anything</a></li>
+        <li><a href="/explore/trending">Trending assets</a></li>
+        <li><a href="/explore/questions">Popular ownership questions</a></li>
+        <li><span>Recently viewed · Coming soon</span></li>
+        <li><a href="/explore/compare">Compare ownership access</a></li>
+        <li><a href="/explore/all">Explore all</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h3>Countries</h3>
+      <ul>
+        <li><a href="/countries/supported">All supported countries</a></li>
+        <li><a href="/countries/overview">Country overview pages</a></li>
+        <li><a href="/countries/citizen-rules">Citizen rules</a></li>
+        <li><a href="/countries/foreigner-rules">Foreigner rules</a></li>
+        <li><span>Resident rules · Coming later</span></li>
+        <li><a href="/countries/access-matrix">Country-by-country access matrix</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h3>Company</h3>
+      <ul>
+        <li><a href="/company/about">About Vestail</a></li>
+        <li><a href="/company/mission">Mission</a></li>
+        <li><a href="/company/difference">How Vestail is different</a></li>
+        <li><a href="/company/partners">Partners</a></li>
+        <li><a href="/company/contact">Contact</a></li>
+        <li><span>Careers · Later</span></li>
+      </ul>
+    </div>
+    <div class="foot-connect">
+      <h3>Get the latest from Vestail</h3>
+      <form class="foot-signup" aria-label="Vestail updates">
+        <input type="email" name="email" autocomplete="email" placeholder="Email address" aria-label="Email address">
+        <button type="button">Subscribe</button>
+      </form>
+      <div class="foot-social">
+        <h3>Follow us</h3>
+        <div class="foot-social-links" aria-label="Vestail social channels">
+          <a href="https://x.com/usevestail" target="_blank" rel="noopener noreferrer" aria-label="Vestail on X" title="Follow Vestail on X"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M214.75,211.71l-62.6-98.38,61.77-67.95a8,8,0,0,0-11.84-10.76L143.24,99.34,102.75,35.71A8,8,0,0,0,96,32H48a8,8,0,0,0-6.75,12.3l62.6,98.37-61.77,68a8,8,0,1,0,11.84,10.76l58.84-64.72,40.49,63.63A8,8,0,0,0,160,224h48a8,8,0,0,0,6.75-12.29ZM164.39,208,62.57,48h29L193.43,208Z"/></svg></a>
+          <a href="https://github.com/OutstandingVick/vestail" target="_blank" rel="noopener noreferrer" aria-label="Vestail on GitHub" title="View Vestail on GitHub"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M8 0C3.58 0 0 3.64 0 8.13c0 3.59 2.29 6.64 5.47 7.71.4.08.55-.18.55-.39 0-.19-.01-.84-.01-1.52-2.01.38-2.53-.5-2.69-.96-.09-.23-.48-.96-.82-1.15-.28-.15-.68-.53-.01-.54.63-.01 1.08.59 1.23.83.72 1.23 1.87.88 2.33.67.07-.53.28-.88.51-1.08-1.78-.21-3.64-.91-3.64-4.02 0-.89.31-1.62.82-2.19-.08-.21-.36-1.04.08-2.16 0 0 .67-.22 2.2.84A7.4 7.4 0 0 1 8 3.91c.68 0 1.36.09 2 .27 1.53-1.06 2.2-.84 2.2-.84.44 1.12.16 1.95.08 2.16.51.57.82 1.3.82 2.19 0 3.12-1.87 3.81-3.65 4.02.29.25.54.74.54 1.51 0 1.09-.01 1.97-.01 2.24 0 .22.15.47.55.39A8.15 8.15 0 0 0 16 8.13C16 3.64 12.42 0 8 0Z"/></svg></a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <svg class="foot-globe" viewBox="-520 -520 1040 1040" aria-hidden="true" focusable="false">
+    <circle class="rim" cx="0" cy="0" r="500"/>
+    <path class="land" d="M55 -474h0M63 -474h0M60 -468h0M53 -463h0M26 -457h0M33 -457h0M59 -462h0M65 -463h0M79 -471h0M65 -461h0M59 -458h0M36 -495h0M58 -456h0M49 -453h0M87 -469h0M70 -457h0M89 -467h0M86 -463h0M62 -453h0M95 -470h0M82 -458h0M75 -454h0M-54 -494h0M92 -461h0M13 -443h0M102 -468h0M87 -455h0M104 -466h0M106 -468h0M48 -443h0M108 -466h0M44 -441h0M97 -454h0M90 -450h0M49 -440h0M114 -464h0M44 -438h0M115 -461h0M-58 -495h0M107 -453h0M12 -499h0M120 -461h0M3 -432h0M-72 -493h0M-59 -496h0M25 -499h0M-114 -480h0M-10 -430h0M-39 -498h0M101 -443h0M28 -430h0M109 -445h0M129 -459h0M126 -454h0M121 -450h0M-38 -498h0M132 -459h0M-59 -496h0M-70 -495h0M-80 -493h0M-65 -496h0M-75 -494h0M-85 -492h0M121 -442h0M-95 -490h0M-80 -493h0M134 -447h0M23 -421h0M-100 -489h0M64 -424h0M-96 -490h0M-81 -493h0M-64 -496h0M21 -419h0M1 -418h0M-19 -418h0M-111 -486h0M149 -453h0M-27 -417h0M-107 -488h0M-143 -472h0M145 -444h0M-148 -469h0M63 -418h0M-97 -490h0M-121 -484h0M-108 -488h0M-18 -413h0M-117 -485h0M-103 -489h0M-126 -482h0M8 -412h0M-98 -490h0M153 -442h0M86 -418h0M-92 -491h0M-120 -425h0M161 -448h0M61 -413h0M150 -436h0M161 -446h0M-162 -461h0M-109 -488h0M-25 -409h0M-125 -423h0M121 -485h0M145 -431h0M-149 -474h0M-162 -464h0M-156 -470h0M-166 -460h0M85 -412h0M164 -440h0M-130 -422h0M-104 -415h0M147 -428h0M-151 -474h0M91 -411h0M-171 -454h0M-170 -444h0M161 -434h0M171 -444h0M-119 -416h0M4 -403h0M159 -431h0M171 -441h0M-131 -482h0M-153 -474h0M174 -445h0M33 -403h0M69 -405h0M-172 -460h0M-177 -449h0M154 -426h0M-37 -402h0M1 -400h0M161 -429h0M75 -405h0M-131 -482h0M53 -402h0M-147 -421h0M-142 -479h0M-162 -470h0M-175 -460h0M-180 -449h0M-78 -403h0M-179 -455h0M-181 -444h0M-174 -434h0M177 -436h0M-132 -482h0M51 -399h0M-173 -464h0M-182 -453h0M-182 -442h0M168 -426h0M-22 -397h0M-181 -437h0M174 -430h0M-151 -417h0M-148 -477h0M72 -399h0M-132 -482h0M-175 -428h0M-157 -418h0M-132 -410h0M-166 -470h0M-65 -397h0M144 -479h0M-185 -437h0M-50 -395h0M135 -482h0M-148 -477h0M182 -431h0M-147 -412h0M-158 -474h0M-177 -463h0M-137 -408h0M61 -395h0M99 -399h0M-154 -475h0M76 -396h0M-145 -409h0M52 -393h0M-181 -461h0M-134 -406h0M-172 -468h0M-65 -393h0M-193 -445h0M164 -415h0M-191 -452h0M-168 -470h0M-74 -393h0M131 -403h0M-98 -396h0M-60 -391h0M-195 -443h0M-191 -431h0M161 -473h0M-107 -397h0M177 -419h0M-196 -445h0M164 -412h0M168 -470h0M-116 -398h0M-192 -428h0M160 -474h0M-103 -395h0M181 -419h0M150 -477h0M21 -386h0M188 -423h0M-191 -457h0M-133 -400h0M-182 -463h0M116 -395h0M-170 -470h0M-84 -390h0M-142 -401h0M-179 -465h0M-195 -454h0M-130 -397h0M-94 -390h0M-199 -449h0M-175 -468h0M-79 -388h0M136 -398h0M-104 -391h0M-198 -452h0M-126 -395h0M175 -410h0M-202 -447h0M-113 -391h0M-74 -386h0M142 -397h0M171 -407h0M-202 -449h0M-176 -468h0M-84 -386h0M-144 -397h0M-185 -463h0M-200 -452h0M-131 -393h0M176 -407h0M-205 -447h0M-118 -390h0M185 -411h0M165 -472h0M9 -379h0M-63 -382h0M-19 -379h0M27 -379h0M-46 -380h0M-1 -378h0M-201 -419h0M-194 -459h0M-157 -397h0M-181 -465h0M-84 -382h0M-210 -442h0M5 -377h0M194 -412h0M-198 -456h0M-154 -395h0M68 -379h0M110 -384h0M-171 -470h0M-104 -383h0M-209 -447h0M-214 -434h0M-209 -421h0M175 -468h0M1 -375h0M47 -376h0M-199 -456h0M-159 -393h0M-187 -463h0M191 -406h0M-39 -375h0M217 -430h0M200 -410h0M-203 -454h0M-156 -391h0M-192 -461h0M196 -406h0M89 -377h0M219 -431h0M62 -374h0M-88 -377h0M-218 -439h0M219 -428h0M51 -373h0M-205 -454h0M-161 -390h0M-125 -381h0M-213 -415h0M86 -375h0M-169 -391h0M-134 -382h0M193 -400h0M182 -466h0M-177 -393h0M-144 -383h0M-220 -420h0M-59 -371h0M-213 -449h0M149 -384h0M-223 -422h0M55 -369h0M-99 -373h0M-223 -438h0M-5 -367h0M-217 -412h0M-207 -454h0M194 -461h0M-16 -366h0M-158 -384h0M2 -365h0M51 -367h0M-104 -372h0M-225 -438h0M-9 -365h0M-221 -411h0M-207 -454h0M199 -459h0M-21 -364h0M-164 -382h0M-229 -422h0M208 -399h0M95 -369h0M-227 -438h0M-192 -391h0M36 -363h0M-120 -371h0M-75 -365h0M-103 -368h0M-56 -363h0M119 -370h0M-155 -377h0M13 -361h0M-141 -373h0M-98 -366h0M-50 -362h0M126 -370h0M-151 -375h0M20 -360h0M-136 -371h0M-91 -364h0M-213 -452h0M-230 -438h0M-23 -359h0M-170 -378h0M-4 -358h0M213 -394h0M-235 -413h0M-203 -457h0M-97 -362h0M-213 -452h0M-232 -438h0M-28 -357h0M-236 -433h0M-196 -383h0M43 -357h0M11 -355h0M-146 -369h0M31 -355h0M-241 -415h0M-84 -358h0M-114 -362h0M-65 -356h0M-230 -441h0M-219 -449h0M-236 -436h0M-107 -359h0M-136 -364h0M219 -449h0M-223 -447h0M-240 -433h0M-231 -441h0M-219 -449h0M-238 -436h0M-113 -358h0M-214 -452h0M224 -447h0M-124 -359h0M-76 -353h0M-177 -370h0M-3 -349h0M224 -387h0M18 -349h0M-249 -415h0M38 -349h0M138 -359h0M-112 -354h0M-219 -450h0M226 -446h0M-228 -444h0M-74 -349h0M-54 -347h0M-244 -433h0M-118 -353h0M-13 -345h0M-47 -346h0M-247 -430h0M29 -344h0M-205 -372h0M176 -363h0M150 -356h0M37 -343h0M-85 -346h0M24 -342h0M129 -351h0M-233 -442h0M-258 -412h0M-228 -445h0M54 -341h0M-193 -363h0M41 -340h0M-83 -343h0M28 -339h0M134 -348h0M-238 -439h0M-20 -338h0M142 -348h0M-243 -437h0M-12 -336h0M-238 -440h0M-26 -336h0M-4 -335h0M-39 -335h0M-18 -334h0M4 -334h0M-31 -334h0M-100 -338h0M13 -332h0M-113 -339h0M-1 -332h0M-37 -332h0M-106 -337h0M151 -343h0M-195 -353h0M52 -331h0M-205 -355h0M39 -329h0M-91 -333h0M167 -343h0M47 -329h0M-210 -354h0M34 -327h0M-97 -331h0M164 -341h0M182 -344h0M65 -327h0M-67 -327h0M189 -345h0M-81 -327h0M-59 -325h0M60 -325h0M-73 -325h0M-278 -406h0M69 -324h0M-65 -323h0M55 -322h0M-79 -324h0M-57 -322h0M-93 -324h0M173 -336h0M192 -340h0M73 -321h0M96 -323h0M59 -319h0M-77 -320h0M-283 -403h0M68 -319h0M-68 -318h0M-105 -321h0M16 -316h0M-22 -315h0M2 -315h0M-36 -315h0M220 -342h0M194 -334h0M-88 -317h0M183 -331h0M-103 -318h0M20 -313h0M-19 -312h0M-57 -313h0M68 -314h0M-72 -314h0M53 -312h0M168 -325h0M39 -311h0M156 -322h0M122 -317h0M223 -337h0M-54 -310h0M72 -311h0M-69 -310h0M203 -330h0M-84 -311h0M-121 -314h0M3 -307h0M-36 -307h0M90 -310h0M-295 -394h0M-90 -309h0M189 -324h0M61 -306h0M178 -320h0M47 -305h0M7 -303h0M-33 -304h0M291 -404h0M-299 -391h0M-87 -306h0M-125 -309h0M1 -302h0M127 -309h0M-14 -301h0M113 -307h0M298 -397h0M-70 -302h0M-108 -305h0M286 -410h0M227 -327h0M-60 -300h0M70 -301h0M187 -316h0M55 -299h0M14 -297h0M-26 -297h0M295 -402h0M-42 -297h0M89 -300h0M-57 -297h0M74 -298h0M34 -295h0M-7 -295h0M122 -301h0M230 -322h0M108 -299h0M219 -318h0M93 -297h0M-308 -385h0M-95 -296h0M38 -293h0M163 -304h0M22 -291h0M150 -301h0M6 -290h0M136 -299h0M-10 -290h0M297 -402h0M-26 -289h0M108 -294h0M-42 -289h0M-16 -288h0M300 -399h0M-32 -288h0M305 -394h0M-48 -287h0M87 -289h0M206 -307h0M72 -288h0M194 -303h0M215 -308h0M82 -287h0M-70 -286h0M223 -309h0M92 -287h0M-61 -284h0M231 -309h0M102 -286h0M126 -289h0M150 -291h0M2 -281h0M28 -281h0M55 -281h0M81 -282h0M106 -284h0M-48 -279h0M91 -282h0M116 -284h0M32 -278h0M165 -289h0M187 -293h0M209 -297h0M69 -278h0M-87 -278h0M-61 -276h0M79 -277h0M105 -279h0M131 -281h0M-24 -273h0M262 -309h0M30 -273h0M165 -284h0M14 -272h0M41 -272h0M174 -285h0M-90 -274h0M218 -293h0M78 -272h0M104 -274h0M-54 -270h0M-27 -269h0M320 -383h0M140 -276h0M165 -279h0M271 -305h0M39 -267h0M174 -280h0M-94 -269h0M-67 -267h0M77 -267h0M258 -298h0M129 -271h0M-29 -264h0M325 -380h0M140 -271h0M-19 -263h0M323 -382h0M150 -271h0M174 -275h0M92 -264h0M118 -266h0M-43 -261h0M169 -272h0M277 -299h0M41 -259h0M69 -260h0M96 -262h0M123 -264h0M149 -266h0M174 -270h0M198 -274h0M-74 -258h0M144 -264h0M169 -267h0M11 -254h0M216 -275h0M-53 -255h0M164 -264h0M189 -268h0M212 -272h0M234 -277h0M255 -282h0M116 -256h0M26 -251h0M54 -251h0M83 -252h0M110 -254h0M137 -256h0M48 -249h0M76 -250h0M-91 -251h0M-63 -249h0M-34 -247h0M-5 -246h0M24 -246h0M231 -269h0M252 -274h0M109 -249h0M17 -244h0M226 -266h0M248 -271h0M103 -247h0M10 -242h0M222 -263h0M244 -268h0M-26 -241h0M3 -240h0M217 -260h0M240 -265h0M-33 -239h0M-4 -239h0M213 -257h0M-69 -240h0M157 -247h0M183 -251h0M208 -255h0M124 -242h0M30 -236h0M60 -236h0M89 -238h0M-7 -234h0M213 -253h0M128 -239h0M35 -233h0M245 -258h0M357 -349h0M-2 -231h0M218 -251h0M58 -232h0M-39 -230h0M-9 -229h0M213 -248h0M-76 -231h0M-46 -229h0M-16 -228h0M208 -245h0M-83 -229h0M-54 -227h0M359 -347h0M7 -225h0M-91 -228h0M-61 -226h0M-31 -224h0M-1 -224h0M222 -244h0M60 -224h0M365 -340h0M359 -348h0M23 -222h0M53 -222h0M-46 -221h0M-15 -220h0M212 -238h0M-83 -222h0M-53 -220h0M364 -342h0M8 -218h0M-90 -221h0M-60 -218h0M-30 -217h0M202 -232h0M-98 -219h0M-68 -217h0M-37 -215h0M-6 -215h0M222 -234h0M-75 -216h0M163 -223h0M190 -227h0M371 -334h0M-2 -212h0M-101 -215h0M-71 -213h0M168 -221h0M195 -225h0M372 -333h0M3 -209h0M-97 -212h0M-67 -210h0M173 -219h0M77 -209h0M373 -332h0M8 -206h0M-94 -209h0M-63 -207h0M178 -217h0M82 -207h0M374 -331h0M12 -203h0M-89 -206h0M154 -211h0M56 -203h0M-47 -202h0M-15 -201h0M99 -204h0M130 -206h0M29 -200h0M61 -200h0M-42 -199h0M-10 -198h0M104 -202h0M135 -204h0M-101 -200h0M-69 -198h0M176 -207h0M-57 -196h0M187 -208h0M-45 -195h0M-13 -194h0M102 -197h0M133 -199h0M31 -193h0M-73 -194h0M174 -203h0M76 -193h0M-29 -191h0M88 -193h0M383 -321h0M16 -189h0M-88 -191h0M29 -188h0M-76 -189h0M41 -187h0M-64 -188h0M184 -198h0M-52 -186h0M196 -199h0M391 -311h0M-7 -184h0M110 -188h0M141 -190h0M122 -188h0M18 -182h0M-88 -184h0M31 -181h0M-75 -182h0M43 -180h0M-63 -181h0M56 -180h0M170 -189h0M-71 -179h0M48 -178h0M-59 -178h0M61 -177h0M175 -186h0M-66 -176h0M53 -175h0M169 -184h0M66 -175h0M180 -184h0M79 -174h0M192 -185h0M-49 -172h0M71 -172h0M186 -182h0M84 -172h0M197 -183h0M-45 -169h0M76 -170h0M191 -180h0M-53 -168h0M69 -168h0M184 -178h0M-61 -166h0M61 -166h0M177 -175h0M-69 -165h0M53 -164h0M171 -172h0M-77 -164h0M45 -162h0M164 -170h0M-85 -162h0M37 -160h0M157 -167h0M137 -165h0M117 -162h0M8 -157h0M-13 -157h0M-34 -156h0M-55 -156h0M69 -156h0M48 -155h0M27 -154h0M148 -160h0M128 -158h0M107 -156h0M87 -154h0M66 -152h0M45 -150h0M24 -149h0M146 -156h0M125 -153h0M413 -282h0M84 -149h0M63 -147h0M42 -146h0M110 -149h0M-1 -144h0M-22 -144h0M-44 -144h0M-65 -144h0M149 -149h0M129 -147h0M416 -277h0M87 -142h0M66 -141h0M186 -151h0M23 -138h0M92 -140h0M71 -138h0M191 -149h0M172 -145h0M6 -135h0M76 -136h0M55 -134h0M33 -133h0M103 -135h0M82 -133h0M150 -138h0M129 -135h0M423 -267h0M30 -129h0M100 -131h0M79 -129h0M148 -133h0M127 -131h0M425 -263h0M27 -124h0M98 -126h0M76 -125h0M90 -124h0M10 -121h0M-12 -120h0M60 -121h0M130 -124h0M87 -120h0M-51 -117h0M21 -116h0M71 -116h0M-10 -114h0M433 -249h0M200 -124h0M68 -112h0M81 -111h0M-22 -108h0M-8 -107h0M190 -117h0M203 -118h0M11 -103h0M25 -102h0M17 -101h0M31 -100h0M45 -99h0M206 -112h0M14 -96h0M28 -96h0M78 -96h0M-4 -93h0M47 -93h0M61 -92h0M16 -90h0M-30 -89h0M447 -223h0M35 -87h0M-11 -85h0M41 -84h0M-5 -82h0M9 -81h0M449 -221h0M52 -79h0M6 -77h0M57 -77h0M11 -75h0M2 -73h0M453 -212h0M455 -208h0M74 -70h0M65 -68h0M19 -66h0M458 -199h0M459 -196h0M54 -62h0M45 -60h0M191 -70h0M459 -197h0M79 -57h0M189 -65h0M47 -54h0M38 -52h0M462 -192h0M234 -66h0M35 -48h0M463 -188h0M232 -62h0M244 -63h0M145 -49h0M467 -176h0M52 -41h0M468 -175h0M467 -178h0M72 -38h0M87 -38h0M253 -55h0M153 -41h0M-344 -73h0M471 -166h0M51 -30h0M471 -165h0M80 -30h0M33 -27h0M147 -32h0M38 -24h0M298 -52h0M473 -160h0M83 -23h0M159 -28h0M314 -52h0M127 -23h0M474 -159h0M133 -21h0M124 -19h0M476 -154h0M477 -150h0M477 -146h0M112 -13h0M141 -13h0M94 -9h0M123 -9h0M153 -9h0M479 -144h0M149 -5h0M480 -139h0M481 -135h0M198 -5h0M189 -2h0M483 -127h0M484 -123h0M140 8h0M484 -126h0M198 5h0M166 11h0M172 13h0M192 14h0M174 19h0M488 -110h0M489 -106h0M188 28h0M299 14h0M191 34h0M196 36h0M188 38h0M325 16h0M265 30h0M341 15h0M335 19h0M328 22h0M321 25h0M281 35h0M325 26h0M230 46h0M243 45h0M257 43h0M213 51h0M227 50h0M275 43h0M288 42h0M246 50h0M259 49h0M355 29h0M229 56h0M278 49h0M370 28h0M335 39h0M346 37h0M308 47h0M267 56h0M313 48h0M272 58h0M318 50h0M277 59h0M370 38h0M334 49h0M295 59h0M384 36h0M266 66h0M361 46h0M372 43h0M382 41h0M263 70h0M277 69h0M290 67h0M302 66h0M315 64h0M327 62h0M339 60h0M266 76h0M279 75h0M413 39h0M354 59h0M365 57h0M376 54h0M386 52h0M322 71h0M333 69h0M260 85h0M400 50h0M409 48h0M349 68h0M278 84h0M412 48h0M354 69h0M365 66h0M296 84h0M309 82h0M369 68h0M301 85h0M313 84h0M373 69h0M383 66h0M318 85h0M377 70h0M387 67h0M323 86h0M381 71h0M315 89h0M375 74h0M385 72h0M320 90h0M379 75h0M389 73h0M325 91h0M383 76h0M317 95h0M376 79h0M387 77h0M322 96h0M380 80h0M314 99h0M374 84h0M307 102h0M368 87h0M299 105h0M361 91h0M291 108h0M304 106h0M365 92h0M296 109h0M358 95h0M288 112h0M420 75h0M280 115h0M414 79h0M272 118h0M337 105h0M264 121h0M330 108h0M387 92h0M233 128h0M421 81h0M282 121h0M346 107h0M327 112h0M385 97h0M230 132h0M419 85h0M404 91h0M257 129h0M435 79h0M304 121h0M284 126h0M348 112h0M329 118h0M386 102h0M370 108h0M352 113h0M333 119h0M390 103h0M237 139h0M423 91h0M409 98h0M394 104h0M242 140h0M426 92h0M412 98h0M269 137h0M247 141h0M429 93h0M416 99h0M401 106h0M385 112h0M462 77h0M451 84h0M440 91h0M427 97h0M413 104h0M325 131h0M305 136h0M284 141h0M263 145h0M376 119h0M456 85h0M445 92h0M232 152h0M352 128h0M333 134h0M314 139h0M294 144h0M399 115h0M384 121h0M461 87h0M265 151h0M377 125h0M457 91h0M446 97h0M234 158h0M353 134h0M441 101h0M225 160h0M346 137h0M436 105h0M424 111h0M339 140h0M432 109h0M418 115h0M332 143h0M312 148h0M292 153h0M398 125h0M469 89h0M284 156h0M474 86h0M297 154h0M401 126h0M470 90h0M289 157h0M475 87h0M302 156h0M405 127h0M472 91h0M294 159h0M399 130h0M469 95h0M286 161h0M474 91h0M298 160h0M402 131h0M470 95h0M290 163h0M475 92h0M303 161h0M406 132h0M472 96h0M295 164h0M400 135h0M469 100h0M287 167h0M474 97h0M300 165h0M403 136h0M471 100h0M292 168h0M397 140h0M467 104h0M284 171h0M391 143h0M464 108h0M276 174h0M385 147h0M460 112h0M268 177h0M379 150h0M456 116h0M259 179h0M372 154h0M452 120h0M251 182h0M366 157h0M448 123h0M242 185h0M359 160h0M443 127h0M432 134h0M352 163h0M439 131h0M427 138h0M345 167h0M434 135h0M421 141h0M338 170h0M319 175h0M416 145h0M331 173h0M311 178h0M411 148h0M396 155h0M465 119h0M283 186h0M390 158h0M462 123h0M452 130h0M254 193h0M367 167h0M350 173h0M437 141h0M425 147h0M343 176h0M324 181h0M305 186h0M405 157h0M391 163h0M462 128h0M452 135h0M255 198h0M368 173h0M351 178h0M437 146h0M425 152h0M411 159h0M397 165h0M465 130h0M286 196h0M265 201h0M375 174h0M358 180h0M341 185h0M322 191h0M303 196h0M403 167h0M388 173h0M460 138h0M450 145h0M439 152h0M428 158h0M415 165h0M401 171h0M385 177h0M458 142h0M448 149h0M250 211h0M363 186h0M345 192h0M327 197h0M308 202h0M288 207h0M268 211h0M376 185h0M360 190h0M342 196h0M324 201h0M305 206h0M285 211h0M264 215h0M373 189h0M357 195h0M339 200h0M321 205h0M301 210h0M451 156h0M441 163h0M430 169h0M417 176h0M286 216h0M265 220h0M432 170h0M420 177h0M407 183h0M392 189h0M377 195h0M361 201h0M344 206h0M395 190h0M380 196h0M364 202h0M347 207h0M398 191h0M384 197h0M368 203h0M351 208h0M401 192h0M387 198h0M371 203h0M355 209h0M404 192h0M390 198h0M374 204h0M358 210h0M341 215h0M393 199h0M378 205h0M362 211h0M345 216h0M395 200h0M381 206h0M424 188h0M412 195h0M281 234h0M438 183h0M323 226h0M305 231h0M449 176h0M439 183h0M327 227h0M309 232h0M365 217h0M348 222h0M398 206h0M384 212h0M426 194h0M414 201h0M286 240h0M439 188h0M328 232h0M309 237h0M290 242h0M349 228h0M398 211h0M384 217h0M425 199h0M306 241h0M286 246h0M345 232h0M395 215h0M434 197h0M321 240h0M374 225h0M314 243h0M368 228h0M413 211h0M287 251h0M346 237h0M328 242h0M380 226h0M422 209h0M303 250h0M417 212h0M295 253h0M352 239h0M400 222h0M346 242h0M394 226h0M339 245h0M389 229h0M428 211h0M383 232h0M423 215h0M307 256h0M418 218h0M300 259h0M414 222h0M292 262h0M349 248h0M396 231h0M342 251h0M391 235h0M335 254h0M434 214h0M329 257h0M430 217h0M322 260h0M425 221h0M382 242h0M421 225h0M376 246h0M417 228h0M370 249h0M311 267h0M364 252h0M304 270h0M414 233h0M367 253h0M307 271h0M361 256h0M300 274h0M411 237h0M293 277h0M406 240h0M285 280h0M401 244h0M351 264h0M396 247h0M345 267h0M391 251h0M398 248h0M348 268h0M393 251h0M341 271h0M387 255h0M395 252h0M344 272h0M282 288h0M397 253h0M404 250h0M356 270h0M297 288h0M307 286h0M317 284h0M327 282h0M337 280h0M346 278h0M286 294h0M296 293h0M307 291h0M317 289h0M387 266h0M394 263h0M303 295h0M313 293h0M384 270h0M391 267h0M300 299h0M310 297h0M381 274h0M388 271h0M296 302h0M306 301h0M377 278h0M281 308h0M358 287h0M366 285h0M338 295h0M346 293h0M315 304h0M325 302h0M334 299h0M343 297h0M312 307h0M379 285h0M288 315h0M298 313h0M308 311h0M376 289h0M284 319h0M294 317h0M304 315h0M373 293h0M280 323h0M290 321h0M300 319h0M369 297h0M276 326h0M351 306h0M358 303h0M262 332h0M339 312h0M309 322h0M318 320h0M286 329h0M357 308h0M262 336h0M338 317h0M308 327h0M275 336h0M285 334h0M355 313h0M328 324h0M297 333h0M307 331h0M274 341h0M346 320h0M318 330h0M287 340h0M253 348h0M328 329h0M299 339h0M266 348h0M301 340h0M269 349h0M340 329h0M272 350h0M342 330h0M315 340h0M284 349h0M317 341h0M287 350h0M319 342h0M247 361h0M321 343h0M250 362h0M243 365h0M279 358h0M272 360h0M266 363h0M-398 302h0M292 358h0M286 361h0M280 363h0M311 355h0M241 374h0M276 367h0M306 359h0M301 362h0M272 371h0M302 363h0M296 365h0M267 374h0M298 366h0M270 375h0M300 367h0M232 386h0M-377 328h0M234 387h0M268 380h0M261 382h0M240 389h0M-373 333h0M274 383h0M229 395h0M247 392h0M263 389h0M242 395h0M220 401h0M223 402h0M248 398h0M250 399h0M252 400h0M216 410h0M242 406h0M206 415h0M208 416h0M210 417h0M197 422h0M222 418h0M210 423h0M197 427h0M221 423h0M222 424h0M224 425h0M204 431h0M192 435h0M193 436h0M181 440h0M204 437h0M178 444h0M236 432h0M236 433h0M169 450h0M178 450h0M186 451h0M188 453h0M168 471h0M136 481h0M108 488h0M37 499h0"/>
+  </svg>
+  <div class="foot-mark" aria-hidden="true"></div>
+</footer>
+
+<div id="tip" role="tooltip"></div>
+<script>
+
+const themeToggle = document.querySelector('.theme-toggle');
+const themeMeta = document.querySelector('meta[name="theme-color"]');
+function setTheme(theme, persist = true) {
+  const dark = theme === 'dark';
+  document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+  themeToggle.setAttribute('aria-pressed', String(dark));
+  themeToggle.setAttribute('aria-label', dark ? 'Switch to light theme' : 'Switch to dark theme');
+  themeToggle.title = dark ? 'Switch to light theme' : 'Switch to dark theme';
+  themeMeta.content = dark ? '#0E0F14' : '#F8F7FF';
+  if (persist) {
+    try { localStorage.setItem('vestail-theme', dark ? 'dark' : 'light'); } catch (_) {}
+  }
+}
+setTheme(document.documentElement.dataset.theme, false);
+themeToggle.addEventListener('click', () => {
+  setTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark');
+});
+
+/* Reuse the canonical full-colour lockup already rendered in the footer. */
+document.querySelector('.foot-mark').append(document.querySelector('.foot-logo svg').cloneNode(true));
+
+const navMenus = [...document.querySelectorAll('.nav-menu')];
+navMenus.forEach(menu => {
+  menu.addEventListener('toggle', () => {
+    if (menu.open) navMenus.forEach(other => { if (other !== menu) other.open = false; });
+  });
+  menu.querySelectorAll('a').forEach(link => link.addEventListener('click', () => { menu.open = false; }));
+});
+document.addEventListener('click', event => {
+  if (!event.target.closest('.nav-menu')) navMenus.forEach(menu => { menu.open = false; });
+});
+document.addEventListener('keydown', event => {
+  if (event.key !== 'Escape') return;
+  const openMenu = navMenus.find(menu => menu.open);
+  if (!openMenu) return;
+  openMenu.open = false;
+  openMenu.querySelector('summary').focus();
+});
+
+const faqOptions = document.querySelector('.faq-options');
+const faqItems = [...document.querySelectorAll('.faq details')];
+faqOptions.addEventListener('click', () => {
+  const shouldOpen = faqItems.some(item => !item.open);
+  faqItems.forEach(item => { item.open = shouldOpen; });
+  faqOptions.setAttribute('aria-expanded', String(shouldOpen));
+  faqOptions.textContent = shouldOpen ? 'Close all answers ▴' : 'Open all answers ▾';
+});
+
+/* ============================================================
+   1. DATA
+   ============================================================ */
+const ASSETS = [
+  "Residential property", "Agricultural land", "Commercial property", "Domestic equities",
+  "Foreign equities", "Government bonds", "Corporate bonds", "Cryptocurrency",
+  "Foreign currency accounts", "Gold bullion", "Private company shares", "Foreign bank accounts",
+  "Firearms", "Private aircraft", "Yachts / vessels", "Offshore trusts",
+  "Media companies", "Telecom licences", "Mining rights", "Precious gems"
+];
+const A = Object.fromEntries(ASSETS.map((a, i) => [a, i])); // name -> index
+
+// Broad categories: one query word can fan out to several asset classes.
+const CATEGORIES = {
+  "Equities":        ["Domestic equities", "Foreign equities", "Private company shares"],
+  "Fixed income":    ["Government bonds", "Corporate bonds"],
+  "Real estate":     ["Residential property", "Agricultural land", "Commercial property"],
+  "Currency & cash": ["Foreign currency accounts", "Foreign bank accounts"],
+  "Digital assets":  ["Cryptocurrency"],
+  "Commodities":     ["Gold bullion", "Precious gems", "Mining rights"],
+  "Transport":       ["Private aircraft", "Yachts / vessels"],
+  "Regulated sectors": ["Media companies", "Telecom licences", "Mining rights"],
+  "Structures":      ["Offshore trusts", "Private company shares"],
+  "Weapons":         ["Firearms"]
+};
+
+// Aliases: everyday words → a category or a specific asset.
+const ALIASES = {
+  // categories
+  "equity": "Equities", "equities": "Equities", "stock": "Equities", "stocks": "Equities", "shares": "Equities", "share": "Equities", "listed company": "Equities",
+  "bond": "Fixed income", "bonds": "Fixed income", "debt": "Fixed income", "fixed income": "Fixed income",
+  "property": "Real estate", "real estate": "Real estate", "land": "Real estate", "realty": "Real estate",
+  "cash": "Currency & cash", "currency": "Currency & cash", "forex": "Currency & cash", "fx": "Currency & cash", "bank account": "Currency & cash", "account": "Currency & cash",
+  "crypto": "Digital assets", "coin": "Digital assets", "token": "Digital assets", "digital asset": "Digital assets",
+  "commodity": "Commodities", "commodities": "Commodities", "metal": "Commodities", "metals": "Commodities",
+  "vehicle": "Transport", "transport": "Transport",
+  "weapon": "Weapons", "weapons": "Weapons", "gun": "Weapons", "guns": "Weapons", "arms": "Weapons",
+  // specific assets
+  "house": "Residential property", "home": "Residential property", "apartment": "Residential property", "flat": "Residential property", "condo": "Residential property", "villa": "Residential property", "duplex": "Residential property",
+  "farm": "Agricultural land", "farmland": "Agricultural land", "ranch": "Agricultural land", "plantation": "Agricultural land", "acres": "Agricultural land", "arable": "Agricultural land",
+  "office": "Commercial property", "warehouse": "Commercial property", "mall": "Commercial property", "shop": "Commercial property", "retail space": "Commercial property", "hotel": "Commercial property",
+  "treasury": "Government bonds", "treasuries": "Government bonds", "t-bill": "Government bonds", "gilt": "Government bonds", "gilts": "Government bonds", "bund": "Government bonds", "bunds": "Government bonds", "sukuk": "Government bonds", "sovereign": "Government bonds", "fgn bond": "Government bonds",
+  "corporate": "Corporate bonds", "commercial paper": "Corporate bonds", "debenture": "Corporate bonds",
+  "dollar": "Foreign currency accounts", "usd": "Foreign currency accounts", "euro": "Foreign currency accounts", "pound": "Foreign currency accounts", "sterling": "Foreign currency accounts", "yen": "Foreign currency accounts", "domiciliary": "Foreign currency accounts",
+  "gold": "Gold bullion", "bullion": "Gold bullion", "krugerrand": "Gold bullion", "gold bar": "Gold bullion", "gold coin": "Gold bullion", "silver": "Gold bullion",
+  "startup": "Private company shares", "llc": "Private company shares", "private equity": "Private company shares", "venture": "Private company shares", "unlisted": "Private company shares", "stake": "Private company shares",
+  "offshore account": "Foreign bank accounts", "swiss account": "Foreign bank accounts", "overseas account": "Foreign bank accounts",
+  "rifle": "Firearms", "pistol": "Firearms", "handgun": "Firearms", "shotgun": "Firearms", "firearm": "Firearms", "ammunition": "Firearms",
+  "jet": "Private aircraft", "plane": "Private aircraft", "aircraft": "Private aircraft", "helicopter": "Private aircraft", "private jet": "Private aircraft",
+  "yacht": "Yachts / vessels", "boat": "Yachts / vessels", "vessel": "Yachts / vessels", "ship": "Yachts / vessels", "superyacht": "Yachts / vessels",
+  "trust": "Offshore trusts", "foundation": "Offshore trusts", "offshore": "Offshore trusts", "cayman": "Offshore trusts", "bvi": "Offshore trusts", "jersey trust": "Offshore trusts",
+  "newspaper": "Media companies", "tv station": "Media companies", "radio station": "Media companies", "broadcaster": "Media companies", "media": "Media companies", "press": "Media companies",
+  "telecom": "Telecom licences", "telco": "Telecom licences", "spectrum": "Telecom licences", "mobile network": "Telecom licences", "isp": "Telecom licences",
+  "mine": "Mining rights", "mining": "Mining rights", "mineral": "Mining rights", "lithium": "Mining rights", "oil block": "Mining rights", "quarry": "Mining rights",
+  "diamond": "Precious gems", "diamonds": "Precious gems", "ruby": "Precious gems", "sapphire": "Precious gems", "emerald": "Precious gems", "gem": "Precious gems", "gemstone": "Precious gems"
+};
+
+// Named entities: a real-world thing → what asset class it is, plus its home country
+// (used to decide domestic vs foreign equity for each row).
+const ENTITIES = [
+  // listed companies (home = ISO country code)
+  ...[["Google","US"],["Alphabet","US"],["Apple","US"],["Microsoft","US"],["Amazon","US"],["Nvidia","US"],["Meta","US"],["Tesla","US"],["Coca-Cola","US"],
+      ["Dangote Cement","NG"],["Dangote","NG"],["Zenith Bank","NG"],["GTBank","NG"],["Airtel Africa","NG"],["Seplat","NG"],["MTN Nigeria","NG"],
+      ["BP","GB"],["Shell","GB"],["HSBC","GB"],["Unilever","GB"],["Rolls-Royce","GB"],["Barclays","GB"],
+      ["Emirates NBD","AE"],["Emaar","AE"],["Etisalat","AE"],["e&","AE"],
+      ["Alibaba","CN"],["Tencent","CN"],["BYD","CN"],["Xiaomi","CN"],["ICBC","CN"],
+      ["Reliance","IN"],["Tata","IN"],["Infosys","IN"],["HDFC","IN"],["Adani","IN"],
+      ["Petrobras","BR"],["Vale","BR"],["Itaú","BR"],["Ambev","BR"],
+      ["Aramco","SA"],["Saudi Aramco","SA"],["SABIC","SA"],["Al Rajhi","SA"],
+      ["SoftBank","JP"],["Honda","JP"],["Mitsubishi","JP"],
+      ["Shoprite","ZA"],["Sasol","ZA"],["Standard Bank","ZA"],["Anglo American","ZA"],
+      ["SAP","DE"],["Siemens","DE"],["Volkswagen","DE"],["BMW","DE"],["Mercedes","DE"],["Adidas","DE"],
+      ["Samsung","KR"],["Hyundai","KR"],["LG","KR"],["SK Hynix","KR"],["Kia","KR"],
+      ["Toyota","JP"],["Sony","JP"],["Nintendo","JP"],["MTN","ZA"],["Naspers","ZA"],["Nestlé","CH"],["ASML","NL"]]
+    .map(([n, h]) => ({ name: n, kind: "Listed company", home: h, asset: "equity-by-home" })),
+  // crypto
+  ...["Bitcoin","BTC","Ethereum","ETH","Solana","SOL","Tether","USDT","USDC","XRP","Dogecoin","BNB","Cardano"]
+    .map(n => ({ name: n, kind: "Cryptocurrency", asset: "Cryptocurrency" })),
+  // aircraft / vessels
+  ...["Gulfstream","G650","Cessna","Citation","Bombardier","Global 7500","Learjet","Pilatus","Embraer Phenom","Falcon 8X","Airbus ACJ","Boeing BBJ"]
+    .map(n => ({ name: n, kind: "Aircraft model", asset: "Private aircraft" })),
+  ...["Azimut","Sunseeker","Benetti","Feadship","Lürssen","Riva","Ferretti","Princess yacht"]
+    .map(n => ({ name: n, kind: "Yacht builder", asset: "Yachts / vessels" })),
+  // firearms
+  ...["Glock","AK-47","AR-15","Beretta","Sig Sauer","Remington","Smith & Wesson","Kalashnikov"]
+    .map(n => ({ name: n, kind: "Firearm", asset: "Firearms" })),
+  // bonds
+  ...[["US Treasuries","US"],["T-bills","US"],["UK gilts","GB"],["German bunds","DE"],["FGN bonds","NG"],["Nigerian eurobond","NG"],["Saudi sukuk","SA"],["Indian G-secs","IN"]]
+    .map(([n, h]) => ({ name: n, kind: "Sovereign bond", home: h, asset: "Government bonds" })),
+  // media / telecom
+  ...["CNN","BBC","Channels TV","Al Jazeera","Fox","Netflix"].map(n => ({ name: n, kind: "Media company", asset: "Media companies" })),
+  ...["Vodafone","Verizon","AT&T","Airtel","Glo","9mobile","Jio","T-Mobile"].map(n => ({ name: n, kind: "Telecom operator", asset: "Telecom licences" }))
+];
+
+// Ownership rules. 2 = can own, 1 = conditional, 0 = cannot own. Illustrative values only.
+// "citizen" = passport holder; "foreigner" = non-resident or resident without citizenship.
+const COUNTRIES = [
+  { code: "NG", flag: "🇳🇬", name: "Nigeria",
+    citizen:   [2,2,2,2,1,2,2,1,2,2,2,1,1,1,2,1,1,1,1,2],
+    foreigner: [1,0,1,2,2,2,2,1,2,2,1,2,0,1,1,2,0,0,0,2] },
+  { code: "GB", flag: "🇬🇧", name: "United Kingdom",
+    citizen:   [2,2,2,2,2,2,2,2,2,2,2,2,1,2,2,2,2,1,2,2],
+    foreigner: [2,2,2,2,2,2,2,2,2,2,2,2,0,2,2,2,1,1,1,2] },
+  { code: "US", flag: "🇺🇸", name: "United States",
+    citizen:   [2,2,2,2,2,2,2,2,2,2,2,1,2,2,2,2,2,1,2,2],
+    foreigner: [2,1,2,2,2,2,2,2,2,2,2,2,0,1,1,2,0,0,1,2] },
+  { code: "AE", flag: "🇦🇪", name: "UAE",
+    citizen:   [2,2,2,2,2,2,2,1,2,2,2,2,0,1,2,1,1,0,0,2],
+    foreigner: [1,0,1,2,2,2,2,1,2,2,1,2,0,1,1,1,0,0,0,2] },
+  { code: "CN", flag: "🇨🇳", name: "China",
+    citizen:   [2,0,1,2,1,2,2,0,1,2,2,1,0,1,1,0,0,0,0,2],
+    foreigner: [1,0,1,1,2,1,1,0,2,2,1,2,0,0,0,0,0,0,0,2] },
+  { code: "IN", flag: "🇮🇳", name: "India",
+    citizen:   [2,1,2,2,1,2,2,1,1,2,2,1,1,1,2,0,1,1,1,2],
+    foreigner: [1,0,1,1,2,1,1,1,2,2,1,2,0,1,1,1,0,0,0,2] },
+  { code: "BR", flag: "🇧🇷", name: "Brazil",
+    citizen:   [2,1,2,2,2,2,2,2,1,2,2,1,1,2,2,1,1,1,1,2],
+    foreigner: [2,1,2,2,2,2,2,2,2,2,2,2,0,1,2,2,0,1,1,2] },
+  { code: "SA", flag: "🇸🇦", name: "Saudi Arabia",
+    citizen:   [2,2,2,2,1,2,2,0,2,2,2,1,1,1,2,0,0,0,1,2],
+    foreigner: [1,0,1,1,2,1,1,0,2,2,1,2,0,1,1,1,0,0,0,2] },
+  { code: "DE", flag: "🇩🇪", name: "Germany",
+    citizen:   [2,2,2,2,2,2,2,2,2,2,2,2,1,2,2,2,2,1,1,2],
+    foreigner: [2,2,2,2,2,2,2,2,2,2,2,2,0,2,2,2,1,1,1,2] },
+  { code: "JP", flag: "🇯🇵", name: "Japan",
+    citizen:   [2,2,2,2,2,2,2,2,2,2,2,2,1,2,2,2,1,1,1,2],
+    foreigner: [2,1,2,2,2,2,2,2,2,2,2,2,0,2,2,2,0,1,1,2] },
+  { code: "ZA", flag: "🇿🇦", name: "South Africa",
+    citizen:   [2,2,2,2,1,2,2,2,1,2,2,1,1,2,2,1,2,1,1,2],
+    foreigner: [2,1,2,2,2,2,2,2,2,2,1,2,0,1,2,2,1,1,0,2] },
+  { code: "KR", flag: "🇰🇷", name: "South Korea",
+    citizen:   [2,1,2,2,1,2,2,1,2,2,2,1,0,1,2,1,1,1,1,2],
+    foreigner: [1,1,1,1,2,1,1,0,2,2,1,2,0,1,1,1,0,0,0,2] }
+];
+const LABEL = { 2: "Can own", 1: "Conditional", 0: "Cannot own" };
+const CLASS = { 2: "yes", 1: "cond", 0: "no" };
+
+/* ============================================================
+   2. SEARCH PIPELINE
+   A query is resolved through ordered stages. The first stage
+   that produces a confident result wins; each stage records
+   a "trail" so the UI can show how the query was understood.
+
+   Result shape:
+   { assets: [index, ...],                  // which tiles to show
+     perCountry: (country) => [index,...],  // optional override per row
+     trail: [ {label, note} ... ],
+     note: "one-line explanation" }
+   ============================================================ */
+const norm = s => s.toLowerCase().replace(/[’']/g, "").replace(/[^a-z0-9&+\- ]/g, " ").replace(/\s+/g, " ").trim();
+
+function editDistance(a, b) {
+  const m = a.length, n = b.length, d = [];
+  for (let i = 0; i <= m; i++) { d[i] = [i]; }
+  for (let j = 1; j <= n; j++) d[0][j] = j;
+  for (let i = 1; i <= m; i++) for (let j = 1; j <= n; j++)
+    d[i][j] = Math.min(d[i-1][j] + 1, d[i][j-1] + 1, d[i-1][j-1] + (a[i-1] === b[j-1] ? 0 : 1));
+  return d[m][n];
+}
+// prefix / substring / small-typo matching for one candidate name
+function fuzzyHit(query, name) {
+  const q = norm(query), n = norm(name);
+  if (!q) return 0;
+  if (n === q) return 3;
+  if (n.startsWith(q) || n.split(" ").some(w => w.startsWith(q))) return 2;
+  if (n.includes(q)) return 1;
+  if (q.length >= 4 && editDistance(q, n) <= Math.floor(q.length / 4)) return 1;
+  return 0;
+}
+const assetsOf = names => names.map(n => A[n]);
+
+// Stage 1 — named entity: "Google" → listed company (US) → equity → domestic/foreign per country
+function stageEntity(q) {
+  let best = null, bestScore = 0;
+  for (const e of ENTITIES) {
+    const s = fuzzyHit(q, e.name);
+    if (s > bestScore) { best = e; bestScore = s; }
+  }
+  if (!best || bestScore < 1) return null;
+  const trail = [{ label: best.name }, { label: best.kind + (best.home ? ` (${best.home})` : "") }];
+  if (best.asset === "equity-by-home") {
+    trail.push({ label: "Equities" }, { label: `Domestic in ${best.home}, foreign elsewhere` });
+    return {
+      assets: assetsOf(["Domestic equities", "Foreign equities"]),
+      perCountry: c => [c.code === best.home ? A["Domestic equities"] : A["Foreign equities"]],
+      trail,
+      note: `${best.name} is a listed company from ${best.home}, so it counts as domestic equity there and foreign equity everywhere else.`
+    };
+  }
+  trail.push({ label: best.asset });
+  return { assets: [A[best.asset]], trail, note: `${best.name} is a ${best.kind.toLowerCase()}, governed by the ${best.asset.toLowerCase()} rule.` };
+}
+
+// Stage 2 — alias: "house" → Residential property; "stocks" → Equities category
+function stageAlias(q) {
+  const nq = norm(q);
+  let bestKey = null, bestScore = 0;
+  for (const key of Object.keys(ALIASES)) {
+    const s = fuzzyHit(nq, key);
+    if (s > bestScore) { bestKey = key; bestScore = s; }
+  }
+  if (!bestKey || bestScore < 1) return null;
+  const target = ALIASES[bestKey];
+  if (CATEGORIES[target]) {
+    return { assets: assetsOf(CATEGORIES[target]), trail: [{ label: bestKey }, { label: target }, { label: `${CATEGORIES[target].length} asset classes` }],
+      note: `“${bestKey}” is a category, so all ${target.toLowerCase()} classes are shown.` };
+  }
+  return { assets: [A[target]], trail: [{ label: bestKey }, { label: target }], note: `“${bestKey}” maps to the ${target.toLowerCase()} rule.` };
+}
+
+// Stage 3 — category name typed directly: "commodities"
+function stageCategory(q) {
+  for (const cat of Object.keys(CATEGORIES)) {
+    if (fuzzyHit(q, cat) >= 1) return { assets: assetsOf(CATEGORIES[cat]), trail: [{ label: cat }, { label: `${CATEGORIES[cat].length} asset classes` }], note: "" };
+  }
+  return null;
+}
+
+// Stage 4 — asset name typed directly (with prefix / typo tolerance): "foreign eq"
+function stageAsset(q) {
+  const hits = ASSETS.map((a, i) => ({ i, s: fuzzyHit(q, a) })).filter(h => h.s > 0);
+  if (!hits.length) return null;
+  const top = Math.max(...hits.map(h => h.s));
+  const idx = hits.filter(h => h.s === top).map(h => h.i);
+  return { assets: idx, trail: [{ label: idx.length === 1 ? ASSETS[idx[0]] : `${idx.length} asset names match` }], note: "" };
+}
+
+// Stage 0 — clean the query: drop filler words ("can I own a house in", "buy some gold")
+const STOP = new Set(["a","an","the","some","any","my","i","can","could","want","to","own","owning","buy","buying","purchase","hold","holding","in","of","for","as","is","it","do","does","allowed","get","have"]);
+function cleanQuery(query) {
+  const words = norm(query).split(" ").filter(Boolean);
+  const kept = words.filter(w => !STOP.has(w));
+  return { full: kept.join(" "), tokens: kept.slice().sort((a, b) => b.length - a.length) };
+}
+function runStages(q) { return stageEntity(q) || stageAlias(q) || stageCategory(q) || stageAsset(q); }
+function dedupeTrail(r) {
+  r.trail = r.trail.filter((t, i, arr) => !i || t.label !== arr[i - 1].label);
+  return r;
+}
+function resolve(query) {
+  if (!query.trim()) return { assets: ASSETS.map((_, i) => i), trail: [], note: "" };
+  const { full, tokens } = cleanQuery(query);
+  // 1) whole cleaned query  2) each remaining word, longest first
+  let r = full ? runStages(full) : null;
+  // 2a) a named entity in any word wins ("tesla shares" → Tesla), 2b) then aliases/assets, longest word first
+  if (!r && tokens.length > 1) for (const t of tokens) { r = stageEntity(t); if (r) break; }
+  if (!r && tokens.length > 1) for (const t of tokens) { r = runStages(t); if (r) break; }
+  return r ? dedupeTrail(r) : { assets: [], trail: [], note: "" };
+}
+
+
+/* ============================================================
+   3. VENUES  (call-to-action targets)
+   Each asset class has a default venue list, with per-country
+   overrides where a local venue is the natural place to buy.
+   REF is appended to every outbound link so partner / order-flow
+   attribution can be tracked. Set it to your partner tag.
+   ============================================================ */
+const REF = "ref=vestail";
+const V = (name, url) => ({ name, url });
+const VENUES = {
+  "Residential property": { default: [V("Local agents", null)], US: [V("Zillow", "https://www.zillow.com"), V("Redfin", "https://www.redfin.com")], GB: [V("Rightmove", "https://www.rightmove.co.uk"), V("Zoopla", "https://www.zoopla.co.uk")], NG: [V("PropertyPro", "https://www.propertypro.ng")], AE: [V("Bayut", "https://www.bayut.com"), V("Property Finder", "https://www.propertyfinder.ae")], IN: [V("99acres", "https://www.99acres.com"), V("MagicBricks", "https://www.magicbricks.com")], DE: [V("ImmoScout24", "https://www.immobilienscout24.de")], BR: [V("ZAP Imóveis", "https://www.zapimoveis.com.br")], CN: [V("Lianjia", "https://www.lianjia.com")], SA: [V("Aqar", "https://sa.aqar.fm")], KR: [V("Zigbang", "https://www.zigbang.com")] },
+  "Agricultural land":    { default: [V("Local agents", null)], US: [V("LandWatch", "https://www.landwatch.com")], GB: [V("Savills", "https://www.savills.co.uk")], BR: [V("ZAP Imóveis", "https://www.zapimoveis.com.br")] },
+  "Commercial property":  { default: [V("Local agents", null)], US: [V("LoopNet", "https://www.loopnet.com")], GB: [V("Rightmove Commercial", "https://www.rightmove.co.uk")], AE: [V("Bayut", "https://www.bayut.com")] },
+  "Domestic equities":    { default: [V("Interactive Brokers", "https://www.interactivebrokers.com")], US: [V("Robinhood", "https://robinhood.com"), V("Fidelity", "https://www.fidelity.com")], GB: [V("Hargreaves Lansdown", "https://www.hl.co.uk"), V("Trading 212", "https://www.trading212.com")], NG: [V("Chaka", "https://chaka.com"), V("Bamboo", "https://investbamboo.com")], IN: [V("Zerodha", "https://zerodha.com"), V("Groww", "https://groww.in")], DE: [V("Trade Republic", "https://traderepublic.com")], BR: [V("XP", "https://www.xpi.com.br")], AE: [V("Sarwa", "https://www.sarwa.co")] },
+  "Foreign equities":     { default: [V("Interactive Brokers", "https://www.interactivebrokers.com")], NG: [V("Bamboo", "https://investbamboo.com"), V("Interactive Brokers", "https://www.interactivebrokers.com")], IN: [V("Vested", "https://vestedfinance.com")], GB: [V("Trading 212", "https://www.trading212.com")] },
+  "Government bonds":     { default: [V("Interactive Brokers", "https://www.interactivebrokers.com")], US: [V("TreasuryDirect", "https://www.treasurydirect.gov")], GB: [V("Hargreaves Lansdown", "https://www.hl.co.uk")], IN: [V("RBI Retail Direct", "https://rbiretaildirect.org.in")] },
+  "Corporate bonds":      { default: [V("Interactive Brokers", "https://www.interactivebrokers.com")] },
+  "Cryptocurrency":       { default: [V("Coinbase", "https://www.coinbase.com"), V("Binance", "https://www.binance.com")], NG: [V("Luno", "https://www.luno.com"), V("Quidax", "https://www.quidax.io")], IN: [V("CoinDCX", "https://coindcx.com")], KR: [V("Upbit", "https://upbit.com")] },
+  "Foreign currency accounts": { default: [V("Wise", "https://wise.com"), V("Revolut", "https://www.revolut.com")] },
+  "Gold bullion":         { default: [V("BullionVault", "https://www.bullionvault.com"), V("Kitco", "https://www.kitco.com")] },
+  "Private company shares": { default: [V("AngelList", "https://www.angellist.com"), V("Republic", "https://republic.com")] },
+  "Foreign bank accounts": { default: [V("Wise", "https://wise.com"), V("HSBC Expat", "https://www.expat.hsbc.com")] },
+  "Firearms":             { default: [V("Licensed dealers only", null)] },
+  "Private aircraft":     { default: [V("Controller", "https://www.controller.com"), V("AvBuyer", "https://www.avbuyer.com")] },
+  "Yachts / vessels":     { default: [V("YachtWorld", "https://www.yachtworld.com"), V("Boat Trader", "https://www.boattrader.com")] },
+  "Offshore trusts":      { default: [V("Licensed trustee", null)] },
+  "Media companies":      { default: [V("Regulator approval + advisory", null)] },
+  "Telecom licences":     { default: [V("Regulator auction", null)] },
+  "Mining rights":        { default: [V("Ministry / cadastre", null)] },
+  "Precious gems":        { default: [V("Blue Nile", "https://www.bluenile.com"), V("Brilliant Earth", "https://www.brilliantearth.com")] }
+};
+function venuesFor(assetIdx, code) {
+  if (apiLive && apiVenues.has(`${assetIdx}|${code}`)) return apiVenues.get(`${assetIdx}|${code}`);
+  const v = VENUES[ASSETS[assetIdx]] || { default: [] };
+  return v[code] || v.default;
+}
+const withRef = url => url ? url + (url.includes("?") ? "&" : "?") + REF : null;
+
+/* ============================================================
+   3b. API MODE (optional)
+   Set window.VESTAIL_API to the API base in a script tag placed before
+   this one, e.g.  window.VESTAIL_API = "https://api.vestail.example/v1";
+   and the page loads assets, the board and the HUD from the API.
+   Set window.VESTAIL_API_KEY too and Buy presses go through
+   POST /orders/click, which records them and returns the tagged
+   redirect. Without VESTAIL_API, or if the API can't be reached, the
+   page runs entirely on the inline data above, as before.
+   ============================================================ */
+const API = typeof window.VESTAIL_API === "string" && window.VESTAIL_API ? window.VESTAIL_API.replace(/\/+$/, "") : null;
+/* Open App goes to the product app's sign-in page, /app on the same origin
+   (v2/web serves this page at / and the app under /app). Set window.VESTAIL_APP
+   only if the app is ever hosted on a different origin. */
+if (typeof window.VESTAIL_APP === "string" && window.VESTAIL_APP)
+  document.querySelectorAll("[data-app-link]").forEach(a => { a.href = window.VESTAIL_APP.replace(/\/+$/, "") + "/app"; });
+const API_KEY = typeof window.VESTAIL_API_KEY === "string" && window.VESTAIL_API_KEY ? window.VESTAIL_API_KEY : null;
+const STATUS_NUM = { can_own: 2, conditional: 1, cannot_own: 0 };
+const SESSION = (crypto.randomUUID && crypto.randomUUID()) || String(Math.random()).slice(2);
+let apiLive = false;       // true while the board comes from the API
+let ASSET_IDS = [];        // asset index -> API id
+const apiVenues = new Map(); // "index|CODE" -> venues, already tagged by the API
+async function api(path, init) {
+  const r = await fetch(API + path, init);
+  if (!r.ok) throw new Error(`${init && init.method || "GET"} ${path}: ${r.status}`);
+  return r.json();
+}
+const esc = s => String(s).replace(/[&<>"']/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
+// Inline venues get the ref tag here; API venues arrive tagged.
+const hrefOf = v => v.tagged ? v.url : withRef(v.url);
+
+/* ============================================================
+   4. STATE + RENDER
+   ============================================================ */
+const $ = id => document.getElementById(id);
+const rows = $("rows"), tip = $("tip"), q = $("q"), clearBtn = $("clear"), trailEl = $("trail"), boardHead = $("boardHead");
+let view = "status", who = "citizen", selected = null; // selected = asset index chosen for the buy column
+let firstPaint = true;
+
+// With no search, each card shows ten of its twenty assets, split so both groups appear:
+// its conditional and closed assets first, then open ones to fill the rest. A selected
+// asset always stays in view. "Show all 20" reveals everything; counts always cover all twenty.
+let showAll = false;
+const showAllBtn = $("showAll");
+showAllBtn.addEventListener("click", () => { showAll = !showAll; render(); });
+function pickTen(tiles, sel) {
+  const open = tiles.filter(t => t.s === 2), cond = tiles.filter(t => t.s === 1), no = tiles.filter(t => t.s === 0);
+  const restricted = cond.length + no.length;
+  // Restrictions first, but at least three open circles whenever the country has open assets,
+  // and at least one circle for each restricted group, so every card shows the split.
+  const openSlots = restricted >= 7 ? Math.min(open.length, 3) : Math.min(open.length, 10 - restricted);
+  let rest = 10 - openSlots;
+  let noSlots = no.length ? Math.min(no.length, Math.max(1, Math.round(rest * no.length / (restricted || 1)))) : 0;
+  let condSlots = Math.min(cond.length, rest - noSlots);
+  noSlots = Math.min(no.length, rest - condSlots); // hand unused slots back to closed
+  const chosen = [...open.slice(0, openSlots + (10 - openSlots - condSlots - noSlots)), ...cond.slice(0, condSlots), ...no.slice(0, noSlots)];
+  if (sel !== null && !chosen.some(t => t.i === sel)) {
+    const drop = chosen.map(t => t.s).lastIndexOf(2);
+    chosen[drop >= 0 ? drop : chosen.length - 1] = tiles.find(t => t.i === sel);
+  }
+  const keep = new Set(chosen.map(t => t.i));
+  return tiles.filter(t => keep.has(t.i)); // keep the board's sort order
+}
+
+// Acknowledged conditions, per country, asset and buyer type, so a re-render keeps the tick.
+const acks = new Set();
+const ackKey = (code, assetIdx) => `${code}|${assetIdx}|${who}`;
+
+function ctaHTML(c, assetIdx, status) {
+  // The panel's head names the asset and its verdict, as a pill.
+  const head = `<div class="cta-head"><div><span class="cta-kicker">Selected</span><span class="cta-asset">${esc(ASSETS[assetIdx])}</span></div><span class="vpill ${CLASS[status]}">${LABEL[status]}</span></div>`;
+  if (status === 0) return `<div class="cta v-no">${head}<p class="cta-note">Not permitted for ${who === "citizen" ? "citizens" : "foreigners"} here, so Vestail won't route it.</p></div>`;
+  const vs = venuesFor(assetIdx, c.code);
+  const primary = vs[0], secondary = vs[1];
+  if (!primary) return `<div class="cta v-${CLASS[status]}">${head}</div>`;
+  // A conditional cell is only bought after the buyer acknowledges the condition, as in v1.
+  const gated = status === 1 && !!primary.url, key = ackKey(c.code, assetIdx), acked = acks.has(key);
+  const locked = gated && !acked;
+  // data-* lets API mode record the press before following the link. A locked link keeps its
+  // target in data-href and has no href, so it can't be followed until the box is ticked.
+  const attrs = v => `data-country="${esc(c.code)}" data-asset="${assetIdx}" data-venue="${esc(v.name)}" `
+    + (locked ? `data-href="${esc(hrefOf(v))}" aria-disabled="true"` : `href="${esc(hrefOf(v))}"`);
+  const btn = primary.url
+    ? `<a class="cta-btn ${status === 1 ? "cond" : ""}" ${attrs(primary)} target="_blank" rel="noopener">Buy on ${esc(primary.name)}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></a>`
+    : `<span class="cta-route">${esc(primary.name)}</span>`;
+  const alt = secondary && secondary.url ? `<a class="cta-alt" ${attrs(secondary)} target="_blank" rel="noopener">or ${esc(secondary.name)}</a>` : "";
+  const gate = gated
+    ? `<label class="ack"><input type="checkbox" data-ack="${esc(key)}"${acked ? " checked" : ""}><span>I understand I can buy and hold <b>${esc(ASSETS[assetIdx].toLowerCase())}</b> here, but a licence, cap, approval or KYC check may apply to me.</span></label>`
+    : "";
+  return `<div class="cta v-${CLASS[status]}">${head}${gate}<div class="cta-act">${btn}${alt}</div></div>`;
+}
+
+// Board from the inline data: the resolution plus one entry per country row.
+function boardLocal() {
+  const res = resolve(q.value);
+  // If the search narrowed to a single asset per row, that becomes the selection automatically.
+  const autoSel = res.assets.length === 1 || !!res.perCountry;
+  const data = COUNTRIES.map(c => {
+    const vals = c[who];
+    const idx = res.perCountry ? res.perCountry(c) : res.assets;
+    let tiles = idx.map(i => ({ i, s: vals[i] }));
+    if (view === "status") tiles = tiles.slice().sort((a, b) => b.s - a.s || a.i - b.i);
+    const sel = autoSel ? idx[0] : (selected !== null && idx.includes(selected) ? selected : null);
+    return { code: c.code, name: c.name, flag: c.flag, tiles, sel,
+      yes: tiles.filter(t => t.s === 2).length, cond: tiles.filter(t => t.s === 1).length, no: tiles.filter(t => t.s === 0).length };
+  });
+  if (view === "status") data.sort((a, b) => b.yes - a.yes || a.no - b.no || a.name.localeCompare(b.name));
+  return { res, data };
+}
+
+// The same board from GET /matrix. The API already sorts, counts and picks each row's asset.
+async function boardFromApi() {
+  const m = await api(`/matrix?${new URLSearchParams({ q: q.value, who, sort: view })}`);
+  const r = m.resolution;
+  const res = { assets: r.assets, perCountry: !!r.perCountry, trail: r.trail.map(label => ({ label })), note: r.note };
+  const autoSel = r.assets.length === 1 || !!r.perCountry;
+  const tag = vs => vs.map(v => ({ ...v, tagged: true }));
+  const data = m.rows.map(row => {
+    const tiles = row.cells.map(x => ({ i: x.index, s: STATUS_NUM[x.status] }));
+    const idx = tiles.map(t => t.i);
+    const sel = autoSel ? idx[0] : (selected !== null && idx.includes(selected) ? selected : null);
+    if (row.cta && sel !== null) apiVenues.set(`${sel}|${row.code}`, tag(row.cta.venues));
+    return { code: row.code, name: row.name, flag: row.flag, tiles, sel,
+      yes: row.summary.can_own, cond: row.summary.conditional, no: row.summary.cannot_own };
+  });
+  // A tile picked by hand on a multi-asset board has no cta; fetch its venues where it can be bought.
+  await Promise.all(data.map(async c => {
+    if (c.sel === null || apiVenues.has(`${c.sel}|${c.code}`)) return;
+    if (!c.tiles.find(t => t.i === c.sel).s) return;
+    const vs = await api(`/venues/${encodeURIComponent(ASSET_IDS[c.sel])}?country=${encodeURIComponent(c.code)}`);
+    apiVenues.set(`${c.sel}|${c.code}`, tag(vs));
+  }));
+  return { res, data };
+}
+
+// Fetches can finish out of order while the user types; only the latest render paints.
+let renderSeq = 0;
+async function render() {
+  const seq = ++renderSeq;
+  let board = null;
+  if (apiLive) {
+    try { board = await boardFromApi(); }
+    catch (err) { console.warn("Vestail API unavailable, using inline data.", err); apiLive = false; }
+    if (seq !== renderSeq) return;
+  }
+  paint(board || boardLocal());
+}
+
+function paint({ res, data }) {
+  clearBtn.classList.toggle("on", q.value.trim().length > 0);
+
+  // trail
+  trailEl.innerHTML = "";
+  if (res.trail.length) {
+    res.trail.forEach((t, i) => {
+      if (i) { const a = document.createElement("span"); a.className = "arrow"; a.textContent = "→"; trailEl.appendChild(a); }
+      const s = document.createElement("span"); s.className = "step"; s.style.animationDelay = (i * 60) + "ms"; s.textContent = t.label; trailEl.appendChild(s);
+    });
+    if (res.note) { const w = document.createElement("span"); w.className = "why"; w.textContent = res.note; trailEl.appendChild(w); }
+  } else if (q.value.trim()) {
+    trailEl.innerHTML = `<span class="why">Nothing matched. Try the class it belongs to, like <b>equities</b>, <b>land</b> or <b>crypto</b>, or a name like <b>Google</b>.</span>`;
+  } else {
+    trailEl.innerHTML = `<span class="why">${selected !== null ? `Showing <b>${ASSETS[selected]}</b> below each chart. Pick another circle to switch, or clear to reset.` : "Pick any circle to see where to buy it."}</span>`;
+  }
+
+  rows.innerHTML = "";
+  if (!res.assets.length) { boardHead.classList.add("hide"); return; }
+
+  boardHead.classList.remove("hide");
+  const full = res.assets.length === ASSETS.length;
+  showAllBtn.hidden = !full;
+  showAllBtn.textContent = showAll ? "Show 10 per country" : "Show all 20";
+  showAllBtn.setAttribute("aria-pressed", showAll);
+  const order = view === "status" ? "most open first" : "in index order";
+  $("hAssets").textContent = full && !showAll ? `10 assets per country, restrictions included · counts cover all 20` : (view === "status" ? "Assets, most open first" : "Assets 1–20");
+  $("hWho").textContent = who === "citizen" ? "Citizens" : "Foreigners";
+
+  data.forEach((c, r) => {
+    const n = c.tiles.length;
+    const shown = full && !showAll ? pickTen(c.tiles, c.sel) : c.tiles;
+    const row = document.createElement("article");
+    row.className = "row" + (c.sel !== null ? " has-sel" : "") + (firstPaint ? " in" : "");
+    if (firstPaint) row.style.animationDelay = (r * 45) + "ms";
+    row.innerHTML = `
+      <header class="who"><span class="flag" aria-hidden="true">${esc(c.flag)}</span>
+        <div><h3 class="name">${esc(c.name)}</h3></div></header>
+      ${c.sel === null ? `<div class="cta-empty"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="8" cy="16" r="2.5"/><circle cx="16" cy="16" r="2.5"/><circle cx="24" cy="16" r="2.5"/></svg>Pick a circle to see what you can own</div>` : ""}
+      <div class="grid ${n <= 3 ? "labeled" : "bars"}" role="group" aria-label="${esc(c.name)}: assets by verdict"></div>
+      ${c.sel !== null ? `<div class="buy">${ctaHTML(c, c.sel, c.tiles.find(t => t.i === c.sel).s)}</div>` : ""}`;
+    const grid = row.querySelector(".grid");
+    // Verdict circles sit directly on the card; small result sets use labelled chips.
+    const holder = n <= 3 ? grid : grid.appendChild(Object.assign(document.createElement("div"), { className: "track" + (shown.length <= 10 ? " one" : "") }));
+    shown.forEach((t, k) => {
+      const splitHere = view === "status" && shown.length <= 10 && k > 0 && (shown[k - 1].s === 2) !== (t.s === 2);
+      const b = document.createElement("button");
+      b.className = "tile " + CLASS[t.s] + (c.sel === t.i ? " sel" : "") + (splitHere ? " split" : "") + (firstPaint ? " in" : "");
+      b.type = "button"; b.dataset.i = t.i;
+      if (firstPaint) b.style.animationDelay = (r * 45 + k * 12) + "ms";
+      if (n <= 3) b.innerHTML = `<i aria-hidden="true"></i>${esc(ASSETS[t.i])}`;
+      b.setAttribute("aria-label", `${ASSETS[t.i]}: ${LABEL[t.s]}`);
+      b.setAttribute("aria-pressed", c.sel === t.i);
+      b.dataset.text = `<b>${ASSETS[t.i]}</b> · ${LABEL[t.s]}`;
+      holder.appendChild(b);
+    });
+    rows.appendChild(row);
+  });
+  firstPaint = false;
+}
+
+/* --- buy: record the press with the API, then follow its redirect --- */
+async function buyViaApi(link) {
+  // Open the tab now, inside the click, or popup blockers stop it after the await.
+  const win = window.open("", "_blank");
+  if (win) win.opener = null;
+  const go = url => { if (win) win.location.href = url; else location.href = url; };
+  try {
+    const out = await api("/orders/click", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${API_KEY}` },
+      body: JSON.stringify({ country: link.dataset.country, asset: ASSET_IDS[+link.dataset.asset], who,
+        venue: link.dataset.venue, query: q.value.trim() || undefined, session: SESSION,
+        // The API refuses a conditional click without this; it is only true if the box was ticked.
+        acknowledged: !!link.closest(".cta").querySelector("input[data-ack]:checked") || undefined }),
+    });
+    if (!/^https?:\/\//i.test(out.redirect)) throw new Error("Unexpected redirect " + out.redirect);
+    go(out.redirect);
+    loadActivity().catch(() => {});
+  } catch (err) {
+    // The venue link is already tagged, so a failed record never blocks the buyer.
+    console.warn("Click not recorded; opening the venue directly.", err);
+    go(link.href);
+  }
+}
+
+/* --- interactions --- */
+rows.addEventListener("change", e => {
+  const box = e.target.closest("input[data-ack]"); if (!box) return;
+  if (box.checked) acks.add(box.dataset.ack); else acks.delete(box.dataset.ack);
+  box.closest(".cta").querySelectorAll("a[data-venue]").forEach(a => {
+    if (box.checked) { a.href = a.dataset.href; a.removeAttribute("aria-disabled"); }
+    else { a.dataset.href = a.getAttribute("href"); a.removeAttribute("href"); a.setAttribute("aria-disabled", "true"); }
+  });
+});
+rows.addEventListener("click", e => {
+  const link = e.target.closest("a[data-venue]");
+  if (link) {
+    if (link.getAttribute("aria-disabled") === "true") { e.preventDefault(); return; }
+    // Modified clicks (new tab, etc.) keep the browser's behaviour and skip recording.
+    if (apiLive && API_KEY && !(e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button)) { e.preventDefault(); buyViaApi(link); }
+    return;
+  }
+  const t = e.target.closest(".tile"); if (!t) return;
+  const i = +t.dataset.i;
+  selected = selected === i ? null : i;
+  render();
+});
+document.querySelectorAll("[role=tab]").forEach(b => b.addEventListener("click", () => {
+  view = b.dataset.view; document.querySelectorAll("[role=tab]").forEach(x => x.setAttribute("aria-selected", x === b)); render();
+}));
+document.querySelectorAll("[role=radio]").forEach(b => b.addEventListener("click", () => {
+  who = b.dataset.who; document.querySelectorAll("[role=radio]").forEach(x => x.setAttribute("aria-selected", x === b)); render();
+}));
+q.addEventListener("input", () => { selected = null; render(); });
+clearBtn.addEventListener("click", () => { q.value = ""; selected = null; render(); q.focus(); });
+document.querySelectorAll(".chip").forEach(ch => ch.addEventListener("click", () => { q.value = ch.dataset.q; selected = null; render(); q.focus(); }));
+document.addEventListener("keydown", e => { if (e.key === "Escape" && selected !== null) { selected = null; render(); } });
+
+function showTip(el) {
+  const r = el.getBoundingClientRect();
+  tip.innerHTML = el.dataset.text; tip.style.left = (r.left + r.width / 2) + "px"; tip.style.top = r.top + "px"; tip.classList.add("show");
+}
+function hideTip() { tip.classList.remove("show"); }
+rows.addEventListener("mouseover", e => { const t = e.target.closest(".tile"); if (t) showTip(t); });
+rows.addEventListener("mouseout", e => { if (e.target.closest(".tile")) hideTip(); });
+rows.addEventListener("focusin", e => { const t = e.target.closest(".tile"); if (t) showTip(t); });
+rows.addEventListener("focusout", hideTip);
+window.addEventListener("scroll", hideTip, { passive: true });
+
+/* ---------- Traction HUD (placeholder feed; wire to the order log) ---------- */
+const RECENT = [
+  ["🇳🇬", "Foreign equities", "Bamboo", "just now"], ["🇬🇧", "Gold bullion", "BullionVault", "1m ago"],
+  ["🇮🇳", "Cryptocurrency", "CoinDCX", "2m ago"], ["🇺🇸", "Government bonds", "TreasuryDirect", "3m ago"],
+  ["🇦🇪", "Residential property", "Bayut", "4m ago"], ["🇩🇪", "Domestic equities", "Trade Republic", "6m ago"],
+  ["🇧🇷", "Foreign equities", "Interactive Brokers", "7m ago"], ["🇰🇷", "Cryptocurrency", "Upbit", "9m ago"],
+  ["🇳🇬", "Foreign currency accounts", "Wise", "11m ago"], ["🇸🇦", "Gold bullion", "Kitco", "12m ago"]
+];
+const tickerEl = document.getElementById("ticker");
+function renderTicker(items) {
+  tickerEl.textContent = "";
+  tickI = 0;
+  tickerEl.style.transform = "translate3d(0, 0, 0)";
+  items.forEach(([f, a, v, t]) => {
+    const li = document.createElement("li");
+    li.innerHTML = `<span>${esc(f)}</span><span><span class="long">Someone bought </span><b>${esc(a)}</b> via <b>${esc(v)}</b></span><span class="t">${esc(t)}</span>`;
+    tickerEl.appendChild(li);
+  });
+}
+let tickI = 0;
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+function positionTicker() {
+  const row = tickerEl.firstElementChild;
+  if (!row) return;
+  tickerEl.style.transform = `translate3d(0, ${-tickI * row.getBoundingClientRect().height}px, 0)`;
+}
+if (!reduce) setInterval(() => {
+  const n = tickerEl.children.length;
+  if (!n) return;
+  tickI = (tickI + 1) % n;
+  positionTicker();
+}, 3200);
+window.addEventListener("resize", positionTicker, { passive: true });
+
+const fmt = (n, f, pre) => pre + (f === "compact" ? (n >= 1e6 ? (n / 1e6).toFixed(1) + "M" : n >= 1e3 ? Math.round(n / 1e3) + "k" : n) : Math.round(n).toLocaleString());
+// Counts up once on first paint; later updates set the number without replaying the motion.
+let statsShown = false;
+function showStats() {
+  const animate = !statsShown && !reduce;
+  statsShown = true;
+  document.querySelectorAll(".stat .v").forEach(el => {
+    const target = +el.dataset.count, f = el.dataset.fmt, pre = el.dataset.prefix || "";
+    if (!animate) { el.textContent = fmt(target, f, pre); return; }
+    const t0 = performance.now() + 500, dur = 1400;
+    (function step(now) { const p = Math.min(1, Math.max(0, (now - t0) / dur)); const e = 1 - Math.pow(1 - p, 3); el.textContent = fmt(target * e, f, pre); if (p < 1) requestAnimationFrame(step); })(t0);
+  });
+}
+
+// HUD from GET /activity: stats into the counters, recent buys into the ticker.
+async function loadActivity() {
+  const { stats, recent } = await api("/activity");
+  const [vol, orders, buyers] = document.querySelectorAll(".stat");
+  const delta = (el, pct) => { const d = el.querySelector(".d"); if (d) { d.textContent = pct ? `${pct > 0 ? "+" : ""}${pct}%` : ""; } };
+  vol.querySelector(".v").dataset.count = stats.volume_30d_usd; delta(vol, stats.volume_30d_delta_pct);
+  orders.querySelector(".v").dataset.count = stats.orders_routed; delta(orders, stats.orders_delta_pct);
+  buyers.querySelector(".v").dataset.count = stats.active_buyers_7d;
+  renderTicker(recent.map(r => [r.flag, r.asset, r.venue, r.ago]));
+  showStats();
+}
+
+
+document.querySelectorAll("[data-focus-search]").forEach(b => b.addEventListener("click", e => {
+  e.preventDefault();
+  // Smooth scrolling only animates on a visible page; jump otherwise (and under reduced motion).
+  q.scrollIntoView({ behavior: reduce || document.hidden ? "auto" : "smooth", block: "center" });
+  q.focus({ preventScroll: true });
+}));
+
+// A full placeholder is cut mid-word in the phone-width pill; give narrow screens a short one.
+if (matchMedia("(max-width: 480px)").matches) q.placeholder = "Google, a house, gold…";
+
+/* --- start --- */
+async function start() {
+  if (API) {
+    try {
+      const assets = (await api("/assets")).slice().sort((a, b) => a.index - b.index);
+      ASSET_IDS = assets.map(a => a.id);
+      ASSETS.splice(0, ASSETS.length, ...assets.map(a => a.name));
+      apiLive = true;
+    } catch (err) { console.warn("Vestail API unavailable, using inline data.", err); }
+  }
+  render();
+  if (apiLive) {
+    try { await loadActivity(); return; }
+    catch (err) { console.warn("Activity unavailable, showing the inline HUD.", err); }
+  }
+  renderTicker(RECENT);
+  showStats();
+}
+start();
+
+// segmented control thumb position
+document.querySelectorAll(".seg").forEach(seg => seg.addEventListener("click", e => {
+  const btns = [...seg.querySelectorAll("button")]; const i = btns.indexOf(e.target.closest("button")); if (i >= 0) seg.dataset.pos = i;
+}));
+</script>
+</body>
+</html>

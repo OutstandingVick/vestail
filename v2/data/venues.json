@@ -1,0 +1,430 @@
+{
+  "version": "1.0",
+  "ref": "ref=vestail",
+  "venues": {
+    "Residential property": {
+      "default": [
+        {
+          "name": "Local agents",
+          "url": null
+        }
+      ],
+      "US": [
+        {
+          "name": "Zillow",
+          "url": "https://www.zillow.com"
+        },
+        {
+          "name": "Redfin",
+          "url": "https://www.redfin.com"
+        }
+      ],
+      "GB": [
+        {
+          "name": "Rightmove",
+          "url": "https://www.rightmove.co.uk"
+        },
+        {
+          "name": "Zoopla",
+          "url": "https://www.zoopla.co.uk"
+        }
+      ],
+      "NG": [
+        {
+          "name": "PropertyPro",
+          "url": "https://www.propertypro.ng"
+        }
+      ],
+      "AE": [
+        {
+          "name": "Bayut",
+          "url": "https://www.bayut.com"
+        },
+        {
+          "name": "Property Finder",
+          "url": "https://www.propertyfinder.ae"
+        }
+      ],
+      "IN": [
+        {
+          "name": "99acres",
+          "url": "https://www.99acres.com"
+        },
+        {
+          "name": "MagicBricks",
+          "url": "https://www.magicbricks.com"
+        }
+      ],
+      "DE": [
+        {
+          "name": "ImmoScout24",
+          "url": "https://www.immobilienscout24.de"
+        }
+      ],
+      "BR": [
+        {
+          "name": "ZAP Imóveis",
+          "url": "https://www.zapimoveis.com.br"
+        }
+      ],
+      "CN": [
+        {
+          "name": "Lianjia",
+          "url": "https://www.lianjia.com"
+        }
+      ],
+      "SA": [
+        {
+          "name": "Aqar",
+          "url": "https://sa.aqar.fm"
+        }
+      ],
+      "KR": [
+        {
+          "name": "Zigbang",
+          "url": "https://www.zigbang.com"
+        }
+      ]
+    },
+    "Agricultural land": {
+      "default": [
+        {
+          "name": "Local agents",
+          "url": null
+        }
+      ],
+      "US": [
+        {
+          "name": "LandWatch",
+          "url": "https://www.landwatch.com"
+        }
+      ],
+      "GB": [
+        {
+          "name": "Savills",
+          "url": "https://www.savills.co.uk"
+        }
+      ],
+      "BR": [
+        {
+          "name": "ZAP Imóveis",
+          "url": "https://www.zapimoveis.com.br"
+        }
+      ]
+    },
+    "Commercial property": {
+      "default": [
+        {
+          "name": "Local agents",
+          "url": null
+        }
+      ],
+      "US": [
+        {
+          "name": "LoopNet",
+          "url": "https://www.loopnet.com"
+        }
+      ],
+      "GB": [
+        {
+          "name": "Rightmove Commercial",
+          "url": "https://www.rightmove.co.uk"
+        }
+      ],
+      "AE": [
+        {
+          "name": "Bayut",
+          "url": "https://www.bayut.com"
+        }
+      ]
+    },
+    "Domestic equities": {
+      "default": [
+        {
+          "name": "Interactive Brokers",
+          "url": "https://www.interactivebrokers.com"
+        }
+      ],
+      "US": [
+        {
+          "name": "Robinhood",
+          "url": "https://robinhood.com"
+        },
+        {
+          "name": "Fidelity",
+          "url": "https://www.fidelity.com"
+        }
+      ],
+      "GB": [
+        {
+          "name": "Hargreaves Lansdown",
+          "url": "https://www.hl.co.uk"
+        },
+        {
+          "name": "Trading 212",
+          "url": "https://www.trading212.com"
+        }
+      ],
+      "NG": [
+        {
+          "name": "Chaka",
+          "url": "https://chaka.com"
+        },
+        {
+          "name": "Bamboo",
+          "url": "https://investbamboo.com"
+        }
+      ],
+      "IN": [
+        {
+          "name": "Zerodha",
+          "url": "https://zerodha.com"
+        },
+        {
+          "name": "Groww",
+          "url": "https://groww.in"
+        }
+      ],
+      "DE": [
+        {
+          "name": "Trade Republic",
+          "url": "https://traderepublic.com"
+        }
+      ],
+      "BR": [
+        {
+          "name": "XP",
+          "url": "https://www.xpi.com.br"
+        }
+      ],
+      "AE": [
+        {
+          "name": "Sarwa",
+          "url": "https://www.sarwa.co"
+        }
+      ]
+    },
+    "Foreign equities": {
+      "default": [
+        {
+          "name": "Interactive Brokers",
+          "url": "https://www.interactivebrokers.com"
+        }
+      ],
+      "NG": [
+        {
+          "name": "Bamboo",
+          "url": "https://investbamboo.com"
+        },
+        {
+          "name": "Interactive Brokers",
+          "url": "https://www.interactivebrokers.com"
+        }
+      ],
+      "IN": [
+        {
+          "name": "Vested",
+          "url": "https://vestedfinance.com"
+        }
+      ],
+      "GB": [
+        {
+          "name": "Trading 212",
+          "url": "https://www.trading212.com"
+        }
+      ]
+    },
+    "Government bonds": {
+      "default": [
+        {
+          "name": "Interactive Brokers",
+          "url": "https://www.interactivebrokers.com"
+        }
+      ],
+      "US": [
+        {
+          "name": "TreasuryDirect",
+          "url": "https://www.treasurydirect.gov"
+        }
+      ],
+      "GB": [
+        {
+          "name": "Hargreaves Lansdown",
+          "url": "https://www.hl.co.uk"
+        }
+      ],
+      "IN": [
+        {
+          "name": "RBI Retail Direct",
+          "url": "https://rbiretaildirect.org.in"
+        }
+      ]
+    },
+    "Corporate bonds": {
+      "default": [
+        {
+          "name": "Interactive Brokers",
+          "url": "https://www.interactivebrokers.com"
+        }
+      ]
+    },
+    "Cryptocurrency": {
+      "default": [
+        {
+          "name": "Coinbase",
+          "url": "https://www.coinbase.com"
+        },
+        {
+          "name": "Binance",
+          "url": "https://www.binance.com"
+        }
+      ],
+      "NG": [
+        {
+          "name": "Luno",
+          "url": "https://www.luno.com"
+        },
+        {
+          "name": "Quidax",
+          "url": "https://www.quidax.io"
+        }
+      ],
+      "IN": [
+        {
+          "name": "CoinDCX",
+          "url": "https://coindcx.com"
+        }
+      ],
+      "KR": [
+        {
+          "name": "Upbit",
+          "url": "https://upbit.com"
+        }
+      ]
+    },
+    "Foreign currency accounts": {
+      "default": [
+        {
+          "name": "Wise",
+          "url": "https://wise.com"
+        },
+        {
+          "name": "Revolut",
+          "url": "https://www.revolut.com"
+        }
+      ]
+    },
+    "Gold bullion": {
+      "default": [
+        {
+          "name": "BullionVault",
+          "url": "https://www.bullionvault.com"
+        },
+        {
+          "name": "Kitco",
+          "url": "https://www.kitco.com"
+        }
+      ]
+    },
+    "Private company shares": {
+      "default": [
+        {
+          "name": "AngelList",
+          "url": "https://www.angellist.com"
+        },
+        {
+          "name": "Republic",
+          "url": "https://republic.com"
+        }
+      ]
+    },
+    "Foreign bank accounts": {
+      "default": [
+        {
+          "name": "Wise",
+          "url": "https://wise.com"
+        },
+        {
+          "name": "HSBC Expat",
+          "url": "https://www.expat.hsbc.com"
+        }
+      ]
+    },
+    "Firearms": {
+      "default": [
+        {
+          "name": "Licensed dealers only",
+          "url": null
+        }
+      ]
+    },
+    "Private aircraft": {
+      "default": [
+        {
+          "name": "Controller",
+          "url": "https://www.controller.com"
+        },
+        {
+          "name": "AvBuyer",
+          "url": "https://www.avbuyer.com"
+        }
+      ]
+    },
+    "Yachts / vessels": {
+      "default": [
+        {
+          "name": "YachtWorld",
+          "url": "https://www.yachtworld.com"
+        },
+        {
+          "name": "Boat Trader",
+          "url": "https://www.boattrader.com"
+        }
+      ]
+    },
+    "Offshore trusts": {
+      "default": [
+        {
+          "name": "Licensed trustee",
+          "url": null
+        }
+      ]
+    },
+    "Media companies": {
+      "default": [
+        {
+          "name": "Regulator approval + advisory",
+          "url": null
+        }
+      ]
+    },
+    "Telecom licences": {
+      "default": [
+        {
+          "name": "Regulator auction",
+          "url": null
+        }
+      ]
+    },
+    "Mining rights": {
+      "default": [
+        {
+          "name": "Ministry / cadastre",
+          "url": null
+        }
+      ]
+    },
+    "Precious gems": {
+      "default": [
+        {
+          "name": "Blue Nile",
+          "url": "https://www.bluenile.com"
+        },
+        {
+          "name": "Brilliant Earth",
+          "url": "https://www.brilliantearth.com"
+        }
+      ]
+    }
+  }
+}

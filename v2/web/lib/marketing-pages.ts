@@ -1,7 +1,7 @@
 export type MarketingPageSection = {
   title: string;
   body: string;
-  items?: string[];
+  items?: Array<string | { label: string; href: string }>;
 };
 
 export type MarketingPage = {
@@ -148,7 +148,7 @@ export const MARKETING_PAGES: Record<string, MarketingPage> = {
     sections: [
       { title: "Rule and source feedback", body: "When reporting a rule, include the country, buyer type, asset class and the source you believe should be reviewed." },
       { title: "Product and partnership enquiries", body: "Explain the user problem, market and route you want Vestail to evaluate." },
-      { title: "Contact channel", body: "Open a public issue in the Vestail GitHub repository for product feedback and reproducible technical reports.", items: ["github.com/OutstandingVick/vestail"] },
+      { title: "Contact channel", body: "Message Vestail on X for coverage questions, corrections, partnerships and product feedback.", items: [{ label: "@usevestail", href: "https://x.com/usevestail" }] },
     ],
   },
 };

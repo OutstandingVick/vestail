@@ -2051,6 +2051,26 @@ start();
   addEventListener("resize", resize, { passive: true });
 
   /*
+   * Palette. Canvas cannot read a custom property, so the computed values are
+   * pulled once and re-pulled when the theme flips — watching the data-theme
+   * attribute the page's own toggle sets, rather than the media query, so a
+   * manual override is picked up too.
+   */
+  const KEYS = ["sphere", "sphere-rim", "limb", "graticule", "land", "land-own",
+                "fill-own", "label", "label-own", "pin", "pin-halo"];
+  const C = {};
+
+  function readPalette() {
+    const cs = getComputedStyle(document.documentElement);
+    for (const k of KEYS) C[k] = cs.getPropertyValue(`--globe-${k}`).trim() || "transparent";
+  }
+
+  readPalette();
+  new MutationObserver(readPalette)
+    .observe(document.documentElement, { attributeFilter: ["data-theme"] });
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", readPalette);
+
+  /*
    * Orthographic projection. A point on the unit sphere is spun east by the
    * current yaw, then the north pole is tilted towards the viewer, and x and y
    * are read straight off — the parallel projection, which is what a sphere

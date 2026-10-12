@@ -7,7 +7,12 @@
  * the repo root, converts it once, and writes plain arrays the page can draw
  * with a hand-rolled orthographic projection.
  *
- * Usage, from v2/:  node scripts/bake-hero-globe.cjs > app/assets/globe.json
+ * The page has to keep working opened straight from disk, where fetch() of a
+ * sibling file is blocked, so the output is pasted into app/index.html as the
+ * contents of <script id="globe-geo" type="application/json">. Re-run this and
+ * replace that one line when the geography or the pin list changes.
+ *
+ * Usage, from v2/:  node scripts/bake-hero-globe.cjs
  */
 const { execSync } = require("child_process");
 const path = require("path");

@@ -48,6 +48,12 @@ const common = [
 ];
 
 const nextConfig: NextConfig = {
+  async redirects() {
+    return [
+      { source: "/early+access", destination: "/early-access", permanent: true },
+      { source: "/early%2Baccess", destination: "/early-access", permanent: true },
+    ];
+  },
   async headers() {
     return [
       { source: "/", headers: [...common, { key: "Content-Security-Policy", value: siteCsp }] },

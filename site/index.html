@@ -271,16 +271,8 @@
   .stat .d { display: inline-block; margin-top: 10px; font-size: 15.625px; font-weight: 700; color: var(--navy); font-variant-numeric: tabular-nums;
     background: var(--orange); box-shadow: 0 0 0 1px rgb(255 88 10 / .34), 0 8px 18px -12px rgb(255 88 10 / .8); border-radius: var(--r-pill); padding: 3px 9px; }
   .stat .d:empty { display: none; }
-  .ticker { margin: 40px auto 0; max-width: 700px; height: 50px; overflow: hidden; position: relative; background: var(--surface); border: 0; border-radius: var(--r-pill); box-shadow: var(--ring); }
-  .ticker .live { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); display: inline-flex; align-items: center; gap: 6px; font-size: 14.375px; font-weight: 700; color: var(--ink-2); z-index: 1; }
-  .ticker .live i { width: 7px; height: 7px; border-radius: 50%; background: var(--purple); box-shadow: 0 0 0 0 color-mix(in srgb, var(--purple) 55%, transparent); animation: pulse 1.8s ease-out infinite; }
-  .ticker ul { list-style: none; margin: 0; padding: 0 16px 0 68px; }
-  .ticker li { height: 50px; display: flex; align-items: center; gap: 8px; font-size: 16.875px; color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .ticker li b { color: var(--ink); font-weight: 600; }
-  .ticker li .t { margin-left: auto; color: var(--ink-3); font-size: 15px; flex: none; }
-  .ticker ul { transition: transform .5s var(--ease); }
   @keyframes pulse { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--purple) 55%, transparent); } 100% { box-shadow: 0 0 0 8px transparent; } }
-  @media (max-width: 480px) { .stat { padding: 2px 6px; } .stat .v { font-size: 37.5px; } .stat .l { font-size: 15.625px; margin-top: 8px; } .stat .d { font-size: 14.375px; padding: 2px 7px; } .ticker li .t { display: none; } .long { display: none; } .ticker li { font-size: 16.25px; } }
+  @media (max-width: 480px) { .stat { padding: 2px 6px; } .stat .v { font-size: 37.5px; } .stat .l { font-size: 15.625px; margin-top: 8px; } .stat .d { font-size: 14.375px; padding: 2px 7px; } .long { display: none; } }
 
   .chips { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 8px; margin: 18px auto 0; animation: rise .7s .42s var(--ease) both; }
   .chips .try { font-size: 16.875px; color: var(--hero-copy); margin-right: 4px; }
@@ -1031,15 +1023,11 @@
       <button class="chip" data-q="Dangote">Dangote</button>
       <button class="chip" data-q="private jet">Private jet</button>
     </div>
-    <div class="hud" aria-label="Activity on Vestail">
+    <div class="hud" aria-label="What Vestail covers">
       <div class="stats">
-        <div class="stat"><div class="v" data-count="48300000" data-prefix="$" data-fmt="compact">$0</div><div class="l">Bought<span class="long"> via Vestail</span>, 30 days</div><span class="d">+18%</span></div>
-        <div class="stat"><div class="v" data-count="12640" data-fmt="int">0</div><div class="l">Orders routed<span class="long"> to venues</span></div><span class="d">+9%</span></div>
-        <div class="stat"><div class="v" data-count="2310" data-fmt="int">0</div><div class="l">Active buyers<span class="long"> this week</span></div></div>
-      </div>
-      <div class="ticker" role="status" aria-live="off">
-        <span class="live"><i></i>LIVE</span>
-        <ul id="ticker"></ul>
+        <div class="stat"><div class="v" data-count="12" data-fmt="int">0</div><div class="l">Countries<span class="long"> covered</span></div></div>
+        <div class="stat"><div class="v" data-count="20" data-fmt="int">0</div><div class="l">Asset classes<span class="long"> mapped</span></div></div>
+        <div class="stat"><div class="v" data-count="480" data-fmt="int">0</div><div class="l">Ownership rules<span class="long">, citizen and foreigner</span></div></div>
       </div>
     </div>
   </section>
@@ -1868,7 +1856,6 @@ async function buyViaApi(link) {
     });
     if (!/^https?:\/\//i.test(out.redirect)) throw new Error("Unexpected redirect " + out.redirect);
     go(out.redirect);
-    loadActivity().catch(() => {});
   } catch (err) {
     // The venue link is already tagged, so a failed record never blocks the buyer.
     console.warn("Click not recorded; opening the venue directly.", err);
@@ -1920,39 +1907,21 @@ rows.addEventListener("focusin", e => { const t = e.target.closest(".tile"); if 
 rows.addEventListener("focusout", hideTip);
 window.addEventListener("scroll", hideTip, { passive: true });
 
-/* ---------- Traction HUD (placeholder feed; wire to the order log) ---------- */
-const RECENT = [
-  ["🇳🇬", "Foreign equities", "Bamboo", "just now"], ["🇬🇧", "Gold bullion", "BullionVault", "1m ago"],
-  ["🇮🇳", "Cryptocurrency", "CoinDCX", "2m ago"], ["🇺🇸", "Government bonds", "TreasuryDirect", "3m ago"],
-  ["🇦🇪", "Residential property", "Bayut", "4m ago"], ["🇩🇪", "Domestic equities", "Trade Republic", "6m ago"],
-  ["🇧🇷", "Foreign equities", "Interactive Brokers", "7m ago"], ["🇰🇷", "Cryptocurrency", "Upbit", "9m ago"],
-  ["🇳🇬", "Foreign currency accounts", "Wise", "11m ago"], ["🇸🇦", "Gold bullion", "Kitco", "12m ago"]
-];
-const tickerEl = document.getElementById("ticker");
-function renderTicker(items) {
-  tickerEl.textContent = "";
-  tickI = 0;
-  tickerEl.style.transform = "translate3d(0, 0, 0)";
-  items.forEach(([f, a, v, t]) => {
-    const li = document.createElement("li");
-    li.innerHTML = `<span>${esc(f)}</span><span><span class="long">Someone bought </span><b>${esc(a)}</b> via <b>${esc(v)}</b></span><span class="t">${esc(t)}</span>`;
-    tickerEl.appendChild(li);
-  });
-}
-let tickI = 0;
+/* ---------- Coverage figures ---------- */
+/*
+ * These three count up on first paint and nothing else touches them. They are
+ * facts about the rule set — twelve countries, twenty asset classes, and the
+ * 480 rules those make for citizens and foreigners — so they can be checked
+ * against data/ rather than taken on trust.
+ *
+ * What used to sit here was a traction HUD: dollars bought, orders routed,
+ * active buyers, and a pulsing LIVE feed of purchases. All of it was invented,
+ * and it went out on the public site. Vestail's whole claim is that it tells
+ * you the truth about what you may own; a made-up number on the front page
+ * costs more than it could ever buy. Real order data can earn a place here,
+ * and until there is some there is nothing to show.
+ */
 const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-function positionTicker() {
-  const row = tickerEl.firstElementChild;
-  if (!row) return;
-  tickerEl.style.transform = `translate3d(0, ${-tickI * row.getBoundingClientRect().height}px, 0)`;
-}
-if (!reduce) setInterval(() => {
-  const n = tickerEl.children.length;
-  if (!n) return;
-  tickI = (tickI + 1) % n;
-  positionTicker();
-}, 3200);
-window.addEventListener("resize", positionTicker, { passive: true });
 
 const fmt = (n, f, pre) => pre + (f === "compact" ? (n >= 1e6 ? (n / 1e6).toFixed(1) + "M" : n >= 1e3 ? Math.round(n / 1e3) + "k" : n) : Math.round(n).toLocaleString());
 // Counts up once on first paint; later updates set the number without replaying the motion.
@@ -1967,19 +1936,6 @@ function showStats() {
     (function step(now) { const p = Math.min(1, Math.max(0, (now - t0) / dur)); const e = 1 - Math.pow(1 - p, 3); el.textContent = fmt(target * e, f, pre); if (p < 1) requestAnimationFrame(step); })(t0);
   });
 }
-
-// HUD from GET /activity: stats into the counters, recent buys into the ticker.
-async function loadActivity() {
-  const { stats, recent } = await api("/activity");
-  const [vol, orders, buyers] = document.querySelectorAll(".stat");
-  const delta = (el, pct) => { const d = el.querySelector(".d"); if (d) { d.textContent = pct ? `${pct > 0 ? "+" : ""}${pct}%` : ""; } };
-  vol.querySelector(".v").dataset.count = stats.volume_30d_usd; delta(vol, stats.volume_30d_delta_pct);
-  orders.querySelector(".v").dataset.count = stats.orders_routed; delta(orders, stats.orders_delta_pct);
-  buyers.querySelector(".v").dataset.count = stats.active_buyers_7d;
-  renderTicker(recent.map(r => [r.flag, r.asset, r.venue, r.ago]));
-  showStats();
-}
-
 
 document.querySelectorAll("[data-focus-search]").forEach(b => b.addEventListener("click", e => {
   e.preventDefault();
@@ -2002,11 +1958,6 @@ async function start() {
     } catch (err) { console.warn("Vestail API unavailable, using inline data.", err); }
   }
   render();
-  if (apiLive) {
-    try { await loadActivity(); return; }
-    catch (err) { console.warn("Activity unavailable, showing the inline HUD.", err); }
-  }
-  renderTicker(RECENT);
   showStats();
 }
 start();

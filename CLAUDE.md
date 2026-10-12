@@ -16,10 +16,10 @@ Vestail is a country × asset-class ownership matrix with venue routing. This re
 - Entities beat aliases. "tesla shares" must resolve to Tesla, not the generic "shares" bucket. `packages/core/test.js` guards this; run it after any resolver change.
 - Conditional cells are bought only after the buyer acknowledges the condition: the page locks the links until the checkbox is ticked, and `POST /orders/click` refuses a conditional click without `acknowledged: true`. Cannot-own cells are never routed. Don't loosen either.
 - Every outbound venue url carries the ref tag (`ref=vestail`). With the API connected, Buy presses go through `POST /orders/click`, which returns the tagged redirect. Ask before changing venues or tag logic; they tie to commercial agreements.
-- HUD numbers must come from real order data before any public launch. Never ship the sample figures to production.
+- The hero figures are coverage facts, checkable against `data/`: countries, asset classes, rules. The traction HUD that stood there — dollars bought, orders routed, active buyers, and a LIVE feed of purchases — was invented and did reach production; it is gone. If traction returns it comes from real order data or not at all. Never put a number on the page that cannot be checked.
 
 ## Conventions
-- No build step for `app/`; it stays a single self-contained HTML file. The API and any framework app live beside it, not instead of it.
+- No build step for `site/`; it stays a single self-contained HTML file. The API and any framework app live beside it, not instead of it.
 - Data edits go in `data/*.json`; regenerate the inline data in `site/index.html` from them (or, better, make the app fetch them).
 - Motion respects `prefers-reduced-motion`. Keep entrance animation to first paint only.
 - Keep `docs/GLOSSARY.html` build log current when a phase lands.

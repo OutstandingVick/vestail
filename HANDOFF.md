@@ -62,7 +62,7 @@ Other commands: `node packages/core/test.js` (resolver only), `node scripts/spli
 - **Never invent `sources` or `verified_at`.** They stay `[]` and `null` until a rule is checked against a real document.
 - Conditional needs the acknowledgement; cannot-own is never routed, not even quoted. Don't loosen either.
 - Every outbound venue url carries `ref=vestail`. **Ask before touching `data/venues.json` or the ref-tag logic** — they tie to commercial agreements.
-- The activity figures must come from real order data before launch. `NODE_ENV=production` already stops the sample numbers being served.
+- The hero's three figures are coverage facts (12 countries, 20 asset classes, 480 rules), checkable against `data/`. The traction HUD that was there — dollars bought, orders routed, active buyers, and a LIVE purchase feed — was invented and reached production before being removed. `GET /activity` still serves sample figures outside `NODE_ENV=production`; nothing on the page reads them now, and nothing should until they are real.
 - `app/` stays one self-contained HTML file with no build step.
 - The resolver returns a trail for every hit. Any new stage must add to it. Never resolve silently.
 

@@ -2048,7 +2048,7 @@ start();
   }
 
   resize();
-  addEventListener("resize", resize, { passive: true });
+  addEventListener("resize", () => { if (resize()) draw(); }, { passive: true });
 
   /*
    * Palette. Canvas cannot read a custom property, so the computed values are
@@ -2097,6 +2097,34 @@ start();
   // Scratch object: this runs for every one of 4,144 points per frame, so it is
   // reused rather than allocated.
   const pt = { x: 0, y: 0, z: 0 };
+
+  setYaw(10);
+  draw();
+
+  function drawSphere() {
+    ctx.beginPath();
+    ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+    ctx.fillStyle = C.sphere;
+    ctx.fill();
+
+    // The limb: a ring of shade just inside the edge, where the surface turns
+    // away. It is what makes a flat disc read as a ball, and it is cheaper and
+    // steadier than shading every point by its own z.
+    const g = ctx.createRadialGradient(cx, cy, radius * 0.72, cx, cy, radius);
+    g.addColorStop(0, "transparent");
+    g.addColorStop(1, C.limb);
+    ctx.fillStyle = g;
+    ctx.fill();
+
+    ctx.strokeStyle = C["sphere-rim"];
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+    drawSphere();
+  }
 
   function project(lon, lat) {
     const la = lat * RAD, lo = lon * RAD;

@@ -65,6 +65,17 @@ const nextConfig: NextConfig = {
   },
   // v2 is its own npm workspace; without this Next picks the repo-root (v1) lockfile.
   outputFileTracingRoot: path.join(__dirname, ".."),
+  /*
+   * npm hoists next to v2/node_modules, so nothing inside web/ imports it by a
+   * path the tracer can see, and Vercel's packaging step then fails on
+   *   Cannot find module 'next/dist/compiled/next-server/server.runtime.prod.js'
+   * because the shim it writes beside the app requires that file at a point
+   * where only traced files exist. It is loaded dynamically, so it is never
+   * traced on its own; naming it here puts it in the bundle.
+   */
+  outputFileTracingIncludes: {
+    "/**": ["../node_modules/next/dist/compiled/next-server/**"],
+  },
   // Privy is hoisted to v2/node_modules but some of its Solana peers install
   // here, in web/node_modules, so let hoisted packages resolve from here too.
   webpack(config) {

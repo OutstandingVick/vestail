@@ -2221,6 +2221,7 @@ start();
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     const labels = [...(geo.labels || [])].sort((a, b) => b.own - a.own || a.n.localeCompare(b.n));
+    const placed = [];
     for (const label of labels) {
       const p = project(label.lon, label.lat);
       const x = p.x, y = p.y, z = p.z;
@@ -2229,6 +2230,10 @@ start();
       const angle = Math.atan2(east.y - y, east.x - x);
       const size = Math.max(label.own ? 10 : 8, radius / (label.own ? 42 : 52));
       ctx.font = `${label.own ? 650 : 500} ${size}px Inter, ui-sans-serif, system-ui, sans-serif`;
+      const width = ctx.measureText(label.n).width;
+      const box = { l: x - width / 2 - 3, r: x + width / 2 + 3, t: y - size / 2 - 3, b: y + size / 2 + 3 };
+      if (placed.some(other => box.l < other.r && box.r > other.l && box.t < other.b && box.b > other.t)) continue;
+      placed.push(box);
       ctx.fillStyle = label.own ? C["label-own"] : C.label;
       ctx.globalAlpha = Math.min(1, (z - 0.12) / 0.34);
       ctx.save();

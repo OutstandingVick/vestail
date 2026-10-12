@@ -50,7 +50,7 @@ const common = [
 const nextConfig: NextConfig = {
   async redirects() {
     return [
-      { source: "/early+access", destination: "/early-access", permanent: true },
+      { source: "/early\\+access", destination: "/early-access", permanent: true },
       { source: "/early%2Baccess", destination: "/early-access", permanent: true },
     ];
   },

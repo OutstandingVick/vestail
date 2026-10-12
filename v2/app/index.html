@@ -2133,9 +2133,10 @@ start();
   function drawLand() {
     ctx.beginPath();
     for (const r of geo.rings) {
+      const points = r.p || r;
       let open = false;
-      for (let i = 0; i < r.length; i += 2) {
-        const p = project(r[i], r[i + 1]);
+      for (let i = 0; i < points.length; i += 2) {
+        const p = project(points[i], points[i + 1]);
         if (p.z <= 0) { open = false; continue; }
         if (open) ctx.lineTo(p.x, p.y);
         else { ctx.moveTo(p.x, p.y); open = true; }

@@ -1,45 +1,24 @@
 {
-  "name": "vestail",
-  "version": "0.1.0",
+  "name": "vestail-v2",
   "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "services/*",
+    "web"
+  ],
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint",
-    "registry:sync": "node --env-file-if-exists=.env.local --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/sync-registry.mjs",
-    "test": "node --test --disable-warning=MODULE_TYPELESS_PACKAGE_JSON \"tests/**/*.test.mjs\"",
-    "globe:mask": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/generate-land-mask.mjs"
+    "test": "npm test --workspaces --if-present"
   },
-  "dependencies": {
-    "@phosphor-icons/react": "^2.1.10",
-    "@solana/wallet-adapter-base": "^0.9.28",
-    "@solana/wallet-adapter-phantom": "^0.9.30",
-    "@solana/wallet-adapter-react": "^0.15.40",
-    "@solana/wallet-adapter-react-ui": "^0.9.40",
-    "@solana/wallet-adapter-solflare": "^0.6.34",
-    "@solana/web3.js": "^1.99.0",
-    "next": "15.5.25",
-    "react": "19.2.8",
-    "react-dom": "19.2.8",
-    "server-only": "^0.0.1",
-    "three": "^0.186.0",
-    "zod": "^3.25.76"
+  "overrides": {
+    "postcss": "^8.5.29",
+    "next": {
+      "postcss": "^8.5.29"
+    },
+    "ws@>=8.0.0 <8.20.2": "^8.22.0"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4",
-    "@types/d3-geo": "^3.1.1",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "@types/three": "^0.186.0",
-    "@types/topojson-client": "^3.1.5",
-    "d3-geo": "^3.1.1",
-    "eslint": "^9",
-    "eslint-config-next": "15.5.25",
-    "tailwindcss": "^4",
     "topojson-client": "^3.1.0",
-    "typescript": "^5",
     "world-atlas": "^2.0.2"
   }
 }

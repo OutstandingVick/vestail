@@ -1,28 +1,25 @@
 /*
  * Bakes the footer's dot globe into a static SVG path.
  *
- * Vestail v1 already carries a land mask: one bit per point of a 100,000-point
- * Fibonacci sphere, set where the point falls on land (Natural Earth 110m, public
- * domain). v1 renders it with three.js. The v2 page has no build step and no
- * dependencies, so this bakes the same data into a path once, offline.
+ * The mask is one bit per point of a 100,000-point Fibonacci sphere, set where
+ * the point falls on land (Natural Earth 110m, public domain). It was generated
+ * by v1 and now lives in v2 as data/globe/land-mask.json. The v2 page has no
+ * build step, so this bakes it into a path once, offline.
  *
  * Each dot is a zero-length stroke ("M x y h0") with a round linecap, which is
  * about a third the size of the equivalent <circle> and draws identically.
  *
  * Usage, from v2/:  node scripts/bake-globe.cjs [dots] > /tmp/globe.txt
- * The mask is read from ../lib/globe/landMask.ts on the repo's main branch.
  */
-const { execSync } = require("child_process");
 
 const WANT = Number(process.argv[2]) || 1800;
 const LON = 18;            // degrees east at the centre: Europe, Africa, the Middle East
 const TILT = 16;           // degrees of northward tilt, so it reads as a globe not a disc
 const R = 500;             // path units; the SVG scales it
 
-const src = execSync("git show main:lib/globe/landMask.ts", { encoding: "utf8", maxBuffer: 1 << 26 });
-const bits = src.match(/bits:\s*"([^"]+)"/)[1];
-const points = Number(src.match(/points:\s*(\d+)/)[1]);
-const bytes = Buffer.from(bits, "base64");
+const mask = require("../data/globe/land-mask.json");
+const { points } = mask;
+const bytes = Buffer.from(mask.bits, "base64");
 
 const GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5));
 const isLand = i => bytes[i >> 3] & (1 << (i & 7));

@@ -105,3 +105,9 @@ select:disabled,
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+
+@keyframes early-access-enter {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.early-access-enter { animation: early-access-enter 360ms ease-out both; }

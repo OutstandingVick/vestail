@@ -5,6 +5,7 @@ import { useState } from "react";
 
 import { authedFetch, errorOf } from "@/lib/client";
 import type { Market } from "@/lib/types";
+import { safeHttps } from "@/lib/safeUrl";
 
 /**
  * Route to a commodity perpetual on trade.xyz. Locked until the buyer
@@ -22,7 +23,9 @@ export function ExposurePanel({ market }: { market: Market }) {
     const tab = window.open("about:blank", "_blank");
     const res = await authedFetch("/api/order/market", { method: "POST", body: JSON.stringify({ market: market.id, acknowledged: ack }) });
     if (!res.ok) { tab?.close(); return setError(await errorOf(res, "That route was refused.")); }
-    const { redirect } = await res.json();
+    const redirect = safeHttps((await res.json()).redirect);
+    // Only ever navigate to an https venue URL, whatever the server returned.
+    if (!redirect) { tab?.close(); return setError("That venue link isn't a secure https address, so Vestail won't open it."); }
     if (tab) { tab.opener = null; tab.location.href = redirect; } else window.location.href = redirect;
   }
 

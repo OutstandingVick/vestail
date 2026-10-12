@@ -7,6 +7,7 @@ import { EvmSwapForm } from "@/components/EvmSwapForm";
 import { SwapForm } from "@/components/SwapForm";
 import { authedFetch, errorOf } from "@/lib/client";
 import type { Status, Token, Venue } from "@/lib/types";
+import { safeHttps } from "@/lib/safeUrl";
 
 /**
  * Where the buyer acts. The rules, enforced here and again on the server:
@@ -37,7 +38,9 @@ export function ActionPanel({ assetId, assetName, classStatus, venues, symbol, t
     const tab = window.open("about:blank", "_blank");
     const res = await authedFetch("/api/order/click", { method: "POST", body: JSON.stringify({ asset: assetId, venue, acknowledged: ack }) });
     if (!res.ok) { tab?.close(); return setError(await errorOf(res, "That order was refused.")); }
-    const { redirect } = await res.json();
+    const redirect = safeHttps((await res.json()).redirect);
+    // Only ever navigate to an https venue URL, whatever the server returned.
+    if (!redirect) { tab?.close(); return setError("That venue link isn't a secure https address, so Vestail won't open it."); }
     if (tab) { tab.opener = null; tab.location.href = redirect; } else window.location.href = redirect;
   }
   if (classStatus === "cannot_own") {

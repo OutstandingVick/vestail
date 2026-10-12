@@ -1,4 +1,5 @@
 import type { Source } from "@/lib/types";
+import { safeHttps } from "@/lib/safeUrl";
 
 /**
  * Where a class verdict comes from. All 480 class rules are unsourced today,
@@ -21,7 +22,7 @@ export function Provenance({ sources, verifiedAt }: { sources: Source[]; verifie
       <strong className="text-sm">Sources · last verified {verifiedAt ?? "never"}</strong>
       <ul className="flex flex-col gap-1 text-sm">
         {sources.map(s => (
-          <li key={s.url}><a href={s.url} target="_blank" rel="noreferrer" className="text-emphasis underline">{s.title}</a></li>
+          <li key={s.url}>{safeHttps(s.url) ? <a href={safeHttps(s.url)!} target="_blank" rel="noopener noreferrer" className="text-emphasis underline">{s.title}</a> : s.title}</li>
         ))}
       </ul>
     </div>

@@ -1,9 +1,10 @@
-import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
+import { ArrowLeft, ArrowRight } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 
 import { ActionPanel } from "@/components/ActionPanel";
 import { Provenance } from "@/components/Provenance";
+import { PurchaseModal } from "@/components/PurchaseModal";
 import { TokenCard } from "@/components/TokenCard";
 import { VerdictBadge } from "@/components/VerdictBadge";
 import { WatchButton } from "@/components/WatchButton";
@@ -13,10 +14,10 @@ import { ONCHAIN_CLASSES } from "@/lib/tokens";
 import type { TokenBoard } from "@/lib/types";
 
 export default async function AssetPage({ params, searchParams }: {
-  params: Promise<{ id: string }>; searchParams: Promise<{ symbol?: string }>;
+  params: Promise<{ id: string }>; searchParams: Promise<{ symbol?: string; canonical?: string; buy?: string }>;
 }) {
   const { id } = await params;
-  const { symbol } = await searchParams;
+  const { symbol, canonical, buy } = await searchParams;
   const [profile, assets, countries, symbols] = await Promise.all([readProfile(), api.assets(), api.countries(), api.tokenSymbols()]);
   const asset = assets.find(a => a.id === id);
   if (!asset) notFound();
@@ -30,19 +31,29 @@ export default async function AssetPage({ params, searchParams }: {
   let board: TokenBoard | null = null;
   if (symbol && ONCHAIN_CLASSES.has(id) && symbols.some(s => s.symbol === symbol)) {
     const b = await api.tokens(symbol, profile.country, profile.who);
+    if (!canonical) redirect(`/app/assets/${encodeURIComponent(b.name.toLowerCase())}`);
     // NVDA is domestic equity in the US and foreign everywhere else: send the buyer to the class that governs it here.
     if (b.asset !== id) redirect(`/app/asset/${b.asset}?symbol=${symbol}`);
     board = b;
   }
   const others = ONCHAIN_CLASSES.has(id) && !board ? symbols : [];
+  const selectedToken = buy ? board?.tokens.find(token => token.token_symbol.toLowerCase() === buy.toLowerCase()) : undefined;
+  const cleanHref = board ? `/app/assets/${encodeURIComponent(board.name.toLowerCase())}` : `/app/asset/${id}`;
 
   return (
     <div className="mt-8 flex flex-col gap-4">
+      <Link
+        href={board ? `/app/discover/${id}/${encodeURIComponent(board.name)}` : "/app/discover"}
+        className="inline-flex min-h-11 w-fit items-center gap-2 rounded-full border border-line bg-surface px-4 font-semibold hover:border-field hover:bg-wash"
+      >
+        <ArrowLeft size={18} weight="bold" aria-hidden="true" />
+        Back to results
+      </Link>
       <p className="text-[13px] font-semibold tracking-[0.08em] text-muted uppercase">
         <Link href="/app/discover" className="hover:text-ink">Discover</Link> / {asset.name}{board && ` / ${board.name}`}
       </p>
-      <div className="flex flex-wrap items-start gap-4">
-        <div className="flex min-w-0 flex-[999_1_560px] flex-col gap-4">
+      <div className="flex flex-col gap-4">
+        <div className="flex min-w-0 flex-col gap-4">
           <section className="flex flex-col gap-4 rounded-panel bg-surface p-7">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <h1 className="text-[28px] font-bold">{asset.name} in {country.name}</h1>
@@ -62,7 +73,15 @@ export default async function AssetPage({ params, searchParams }: {
                 <h2 id="tokens-title" className="text-[22px] font-bold">{board.name} onchain</h2>
                 <p className="text-[15px] text-muted">Same ticker, different legal claims, on {[...new Set(board.tokens.map(t => t.chain_name))].join(", ")}. Each is judged by its issuer&apos;s own terms; the stricter of the issuer rule and the class rule decides.</p>
               </div>
-              {board.tokens.map(t => <TokenCard key={t.mint} token={t} />)}
+              <div className="grid grid-cols-1 gap-3.5 md:grid-cols-2">
+                {board.tokens.map(t => (
+                  <TokenCard
+                    key={t.mint}
+                    token={t}
+                    buyHref={(t.status === "can_own" || t.status === "conditional") ? `${cleanHref}?buy=${encodeURIComponent(t.token_symbol)}` : undefined}
+                  />
+                ))}
+              </div>
             </section>
           )}
 
@@ -72,7 +91,7 @@ export default async function AssetPage({ params, searchParams }: {
               <p className="text-[15px] text-muted">Tokenised stocks that may fall under this class. Pick one to see each version&apos;s verdict.</p>
               <div className="flex flex-wrap gap-2">
                 {others.map(s => (
-                  <Link key={s.symbol} href={`/app/asset/${id}?symbol=${s.symbol}`} className="rounded-full border border-line bg-wash px-3.5 py-2 text-sm hover:border-field">
+                  <Link key={s.symbol} href={`/app/assets/${encodeURIComponent(s.name.toLowerCase())}`} className="rounded-full border border-line bg-wash px-3.5 py-2 text-sm hover:border-field">
                     {s.name} <span className="text-muted">{s.symbol}</span>
                   </Link>
                 ))}
@@ -81,10 +100,12 @@ export default async function AssetPage({ params, searchParams }: {
           )}
         </div>
 
-        <div className="min-w-0 flex-[1_1_340px]">
-          <ActionPanel assetName={asset.name} classStatus={rule.status} venues={rule.venues} symbol={board?.symbol} tokens={board?.tokens ?? []} />
-        </div>
       </div>
+      {selectedToken && board && (
+        <PurchaseModal closeHref={cleanHref}>
+          <ActionPanel assetId={id} assetName={asset.name} classStatus={rule.status} venues={rule.venues} symbol={board.symbol} tokens={[selectedToken]} />
+        </PurchaseModal>
+      )}
     </div>
   );
 }

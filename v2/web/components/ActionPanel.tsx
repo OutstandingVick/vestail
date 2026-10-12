@@ -14,8 +14,8 @@ import type { Status, Token, Venue } from "@/lib/types";
  *  - conditional: every Buy stays locked until the acknowledgement is ticked;
  *  - a token that is not assessed or cannot be owned is never offered.
  */
-export function ActionPanel({ assetName, classStatus, venues, symbol, tokens }: {
-  assetName: string; classStatus: Status; venues: Venue[]; symbol?: string; tokens: Token[];
+export function ActionPanel({ assetId, assetName, classStatus, venues, symbol, tokens }: {
+  assetId: string; assetName: string; classStatus: Status; venues: Venue[]; symbol?: string; tokens: Token[];
 }) {
   const [ack, setAck] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -35,13 +35,11 @@ export function ActionPanel({ assetName, classStatus, venues, symbol, tokens }: 
     setError(null);
     // Open the tab now, inside the click, so popup blockers allow it; point it once the server approves.
     const tab = window.open("about:blank", "_blank");
-    const res = await authedFetch("/api/order/click", { method: "POST", body: JSON.stringify({ asset: assetSlug(), venue, acknowledged: ack }) });
+    const res = await authedFetch("/api/order/click", { method: "POST", body: JSON.stringify({ asset: assetId, venue, acknowledged: ack }) });
     if (!res.ok) { tab?.close(); return setError(await errorOf(res, "That order was refused.")); }
     const { redirect } = await res.json();
     if (tab) { tab.opener = null; tab.location.href = redirect; } else window.location.href = redirect;
   }
-  const assetSlug = () => location.pathname.split("/").pop()!;
-
   if (classStatus === "cannot_own") {
     return (
       <aside className="flex flex-col gap-3 rounded-panel bg-surface p-6">
@@ -53,7 +51,7 @@ export function ActionPanel({ assetName, classStatus, venues, symbol, tokens }: 
 
   return (
     <aside className="flex flex-col gap-4 rounded-panel bg-surface p-6">
-      <h2 className="text-xl font-bold">Buy {symbol ?? assetName}</h2>
+      <h2 id="purchase-title" className="pr-12 text-xl font-bold">Buy {symbol ?? assetName}</h2>
 
       {conditions.length > 0 && (
         <div className="flex flex-col gap-3 rounded-field bg-cond-wash p-4">

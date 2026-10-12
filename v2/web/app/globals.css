@@ -76,6 +76,22 @@ h1, h2 { text-wrap: balance; }
 p { text-wrap: pretty; }
 button, input, select, textarea { font: inherit; }
 
+/* Make clickability visible before a control is pressed. */
+button:not(:disabled),
+a[href],
+label[for],
+select:not(:disabled),
+summary,
+[role="button"]:not([aria-disabled="true"]) {
+  cursor: pointer;
+}
+
+button:disabled,
+select:disabled,
+[role="button"][aria-disabled="true"] {
+  cursor: not-allowed;
+}
+
 /* Alternate families stay opt-in for future comparison work. */
 .font-geist { font-family: var(--font-geist), ui-sans-serif, system-ui, sans-serif; }
 .font-dm-sans { font-family: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif; }

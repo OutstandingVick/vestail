@@ -4,11 +4,23 @@ export type MarketingPageSection = {
   items?: Array<string | { label: string; href: string }>;
 };
 
+export type MarketingShowcaseGroup = {
+  title: string;
+  description: string;
+  entries: Array<{
+    name: string;
+    symbol: string;
+    detail: string;
+    tags: string[];
+  }>;
+};
+
 export type MarketingPage = {
   section: "Explore" | "Countries" | "Company";
   title: string;
   summary: string;
   sections: MarketingPageSection[];
+  showcases?: MarketingShowcaseGroup[];
 };
 
 export const MARKETING_PAGES: Record<string, MarketingPage> = {
@@ -134,11 +146,53 @@ export const MARKETING_PAGES: Record<string, MarketingPage> = {
   },
   "company/partners": {
     section: "Company",
-    title: "Partners",
-    summary: "Vestail connects eligible users to external venues while keeping the ownership decision independent from the route.",
+    title: "Companies & chains",
+    summary: "Explore the companies, funds and networks represented by assets in Vestail's current catalogue.",
+    showcases: [
+      {
+        title: "Token issuers and providers",
+        description: "The companies behind the tokenized versions Vestail currently maps. Inclusion describes product coverage, not a formal partnership or endorsement.",
+        entries: [
+          { name: "xStocks by Backed Finance", symbol: "XSTOCKS", detail: "Collateral-backed tracker certificates for public equities, funds and SpaceX", tags: ["Solana", "9 symbols"] },
+          { name: "Ondo Global Markets", symbol: "ONDO", detail: "Total-return notes linked to public equities, funds and SpaceX", tags: ["Solana", "9 symbols"] },
+          { name: "Backpack Securities", symbol: "BACKPACK", detail: "Security-entitlement exposure to SpaceX", tags: ["Solana", "1 symbol"] },
+          { name: "Tessera", symbol: "TESSERA", detail: "Loan-participation tokens linked to private companies", tags: ["Solana", "3 symbols"] },
+          { name: "PreStocks", symbol: "PRESTOCKS", detail: "SPV-based economic exposure to private companies", tags: ["Solana", "3 symbols"] },
+          { name: "Robinhood", symbol: "ROBINHOOD", detail: "Tokenized debt linked to NVIDIA and Tesla", tags: ["Robinhood Chain", "2 symbols"] },
+          { name: "Coinbase", symbol: "COINBASE", detail: "A tokenized share claim linked to NVIDIA", tags: ["Base", "1 symbol"] },
+        ],
+      },
+      {
+        title: "Companies and funds",
+        description: "Public-company tokens, private-market exposure and fund-linked instruments currently mapped by Vestail.",
+        entries: [
+          { name: "NVIDIA", symbol: "NVDA", detail: "Public equity", tags: ["Solana", "Base", "Robinhood Chain"] },
+          { name: "Tesla", symbol: "TSLA", detail: "Public equity", tags: ["Solana", "Robinhood Chain"] },
+          { name: "Apple", symbol: "AAPL", detail: "Public equity", tags: ["Solana"] },
+          { name: "Microsoft", symbol: "MSFT", detail: "Public equity", tags: ["Solana"] },
+          { name: "Alphabet", symbol: "GOOGL", detail: "Public equity", tags: ["Solana"] },
+          { name: "Amazon", symbol: "AMZN", detail: "Public equity", tags: ["Solana"] },
+          { name: "SpaceX", symbol: "SPCX", detail: "Private-market exposure", tags: ["Solana"] },
+          { name: "OpenAI", symbol: "OPENAI", detail: "Private-market exposure", tags: ["Solana"] },
+          { name: "Kalshi", symbol: "KALSHI", detail: "Private-market exposure", tags: ["Solana"] },
+          { name: "S&P 500 ETF", symbol: "SPY", detail: "Fund-linked instrument", tags: ["Solana"] },
+          { name: "Nasdaq-100 ETF", symbol: "QQQ", detail: "Fund-linked instrument", tags: ["Solana"] },
+        ],
+      },
+      {
+        title: "Chains and markets",
+        description: "Where Vestail currently maps an onchain representation or a routed market.",
+        entries: [
+          { name: "Solana", symbol: "SOL", detail: "Tokenized equities, funds and private-market exposure", tags: ["11 assets"] },
+          { name: "Base", symbol: "BASE", detail: "Tokenized NVIDIA exposure", tags: ["1 asset"] },
+          { name: "Robinhood Chain", symbol: "RHC", detail: "NVIDIA and Tesla stock tokens", tags: ["2 assets"] },
+          { name: "Hyperliquid", symbol: "HYPE", detail: "Gold, WTI crude oil and copper price exposure", tags: ["3 markets", "Price exposure"] },
+        ],
+      },
+    ],
     sections: [
-      { title: "What a partner route means", body: "The venue provides the transaction or product. Vestail provides the ownership context and sends a user onward only when the verdict permits it." },
-      { title: "What it does not mean", body: "A listed route is not legal, tax or investment advice and does not guarantee that a venue will accept or complete a transaction.", items: ["No custody by Vestail", "No paid change to a verdict", "No route for cannot-own assets"] },
+      { title: "Availability follows the rule", body: "A listed asset is part of Vestail's coverage, not a promise that every user can buy it. Your country, buyer type and the issuer's own restrictions still determine the verdict." },
+      { title: "Coverage is not endorsement", body: "Company and network names identify the underlying asset or route. They do not imply sponsorship, affiliation or a formal partnership with Vestail.", items: ["No custody by Vestail", "No paid change to a verdict", "No route for cannot-own assets"] },
     ],
   },
   "company/contact": {

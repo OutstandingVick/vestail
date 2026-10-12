@@ -24,7 +24,11 @@ export async function POST(request: Request) {
 
   await saveProfileFor(userId, { country, who });
   const res = NextResponse.json({ country, who });
-  res.cookies.set(PROFILE_COOKIE, `${country}:${who}`, { path: "/", sameSite: "lax", maxAge: 60 * 60 * 24 * 365 });
+  // httpOnly: only the server reads it, so a script on the page can't quietly
+  // change the country every verdict and buy gate depends on. secure in production.
+  res.cookies.set(PROFILE_COOKIE, `${country}:${who}`, {
+    path: "/", sameSite: "lax", maxAge: 60 * 60 * 24 * 365, httpOnly: true, secure: process.env.NODE_ENV === "production",
+  });
   return res;
 }
 

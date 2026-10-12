@@ -5,6 +5,7 @@ import { z } from "zod";
 import { base64ToBytes } from "@/lib/base64";
 import { USDC_MINT, WSOL_MINT } from "@/lib/constants";
 import { api, ApiError } from "@/lib/server/api";
+import { simulateBase64 } from "@/lib/server/holdings";
 import { getOrder, isNoRoute } from "@/lib/server/jupiterSwap";
 import { orderSigningReady, signOrder } from "@/lib/server/orderToken";
 import { userFrom } from "@/lib/server/privy";
@@ -96,6 +97,13 @@ export async function POST(request: Request) {
     taker, maxLamportsFromTaker: maxLamportsFor(USDC_MINT, units, WSOL_MINT),
   });
   if (!inspection.ok) return fail(502, inspection.reason);
+
+  // Simulate before asking for a signature: a swap that would fail proves nothing and may cost fees.
+  const failed = await simulateBase64(order.transaction);
+  if (failed) {
+    const reason = /InsufficientFunds|insufficient/i.test(failed) ? "Not enough USDC or SOL in the wallet for this swap." : "This swap would fail right now. Get a new price and try again.";
+    return fail(422, reason);
+  }
 
   // The Buy press, recorded and re-checked by the API before anything is signed.
   try {

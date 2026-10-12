@@ -57,3 +57,20 @@ export async function pricesOf(mints: string[]): Promise<Map<string, number>> {
 }
 
 export { SOL_MINT, USDC_MINT };
+
+/**
+ * Dry-run a base64 transaction before anyone signs it. Signatures aren't
+ * checked (the buyer hasn't signed yet; a gasless order also awaits the
+ * market maker's), so this asks only: would it run? Returns null if so, or
+ * the failure. Uses this server's own RPC.
+ */
+export async function simulateBase64(transaction: string): Promise<string | null> {
+  try {
+    const result = await rpc<{ value: { err: unknown; logs: string[] | null } }>("simulateTransaction", [
+      transaction, { encoding: "base64", sigVerify: false, replaceRecentBlockhash: true, commitment: "processed" },
+    ]);
+    return result.value.err ? JSON.stringify(result.value.err) : null;
+  } catch (e) {
+    return e instanceof Error ? e.message : "simulation failed";
+  }
+}

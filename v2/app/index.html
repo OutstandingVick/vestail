@@ -2216,6 +2216,19 @@ start();
     }
   }
 
+  function drawLabels() {
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    for (const label of geo.labels || []) {
+      const p = project(label.lon, label.lat);
+      if (p.z <= 0.12) continue;
+      const size = Math.max(label.own ? 10 : 8, radius / (label.own ? 42 : 52));
+      ctx.font = `${label.own ? 650 : 500} ${size}px Inter, ui-sans-serif, system-ui, sans-serif`;
+      ctx.fillStyle = label.own ? C["label-own"] : C.label;
+      ctx.fillText(label.n, p.x, p.y);
+    }
+  }
+
   function draw() {
     ctx.clearRect(0, 0, w, h);
     drawSphere();
@@ -2223,6 +2236,7 @@ start();
     drawMarketFills();
     drawLand();
     drawPins();
+    drawLabels();
   }
 
   function project(lon, lat) {

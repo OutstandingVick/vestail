@@ -3,26 +3,45 @@
  *
  * The aggregator's response is untrusted input from a third party. Buys are
  * paid in native ETH, so a legitimate one is a single call to KyberSwap's
- * router carrying exactly the amount the buyer chose, with the buyer's own
- * address as the recipient. Anything else is refused before it is offered for
- * signature. Pure and synchronous, so it runs on the server and in tests.
+ * router, spending exactly the ETH the buyer chose, swapping native ETH for
+ * exactly the token they picked, with the output sent to the buyer. The
+ * calldata is decoded with the router's own ABI and each of those fields is
+ * checked; anything else is refused before it is offered for signature.
+ * Pure and synchronous, so it runs on the server and in tests.
  */
+import { decodeFunctionData, parseAbi } from "viem";
 
 /** KyberSwap's MetaAggregationRouterV2, the same address on Base and Robinhood Chain. */
 export const KYBER_ROUTER = "0x6131B5fae19EA4f9D964eAc0408E4408b66337b5";
+const NATIVE = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
 
-/** The router's swap entrypoints, by selector. */
-const ALLOWED_SELECTORS = new Set(["0xe21fd0e9" /* swap(SwapExecutionParams) */, "0x8af033fb" /* swapSimpleMode */]);
+const ROUTER_ABI = parseAbi([
+  "struct SwapDescriptionV2 { address srcToken; address dstToken; address[] srcReceivers; uint256[] srcAmounts; address[] feeReceivers; uint256[] feeAmounts; address dstReceiver; uint256 amount; uint256 minReturnAmount; uint256 flags; bytes permit; }",
+  "struct SwapExecutionParams { address callTarget; address approveTarget; bytes targetData; SwapDescriptionV2 desc; bytes clientData; }",
+  "function swap(SwapExecutionParams execution) payable returns (uint256, uint256)",
+  "function swapSimpleMode(address caller, SwapDescriptionV2 desc, bytes executorData, bytes clientData) returns (uint256, uint256)",
+]);
 
 export interface EvmTx { to: string; data: string; value: string }
+type Result = { ok: true } | { ok: false; reason: string };
 
-export function inspectEvmBuy(tx: EvmTx, expect: { taker: string; amountWei: string }): { ok: true } | { ok: false; reason: string } {
+export function inspectEvmBuy(tx: EvmTx, expect: { taker: string; amountWei: string; tokenOut: string }): Result {
   const lower = (s: string) => s.toLowerCase();
   if (lower(tx.to) !== lower(KYBER_ROUTER)) return { ok: false, reason: "The swap isn't addressed to KyberSwap's router." };
-  if (!/^0x[0-9a-fA-F]+$/.test(tx.data) || tx.data.length < 10) return { ok: false, reason: "The swap's calldata is malformed." };
-  if (!ALLOWED_SELECTORS.has(lower(tx.data.slice(0, 10)))) return { ok: false, reason: "The swap calls something other than a router swap." };
   if (BigInt(tx.value) !== BigInt(expect.amountWei)) return { ok: false, reason: "The swap would send a different amount of ETH than you chose." };
-  // The output must come back to the buyer: their address has to be in the call.
-  if (!lower(tx.data).includes(lower(expect.taker).slice(2))) return { ok: false, reason: "The swap doesn't send the tokens to your wallet." };
+
+  let decoded;
+  try {
+    decoded = decodeFunctionData({ abi: ROUTER_ABI, data: tx.data as `0x${string}` });
+  } catch {
+    return { ok: false, reason: "The swap calls something other than a router swap." };
+  }
+  const desc = decoded.functionName === "swap" ? decoded.args[0].desc : decoded.args[1];
+
+  if (lower(desc.srcToken) !== NATIVE) return { ok: false, reason: "The swap would spend a token instead of the ETH you chose." };
+  if (desc.amount !== BigInt(expect.amountWei)) return { ok: false, reason: "The swap's amount doesn't match what you chose." };
+  if (lower(desc.dstToken) !== lower(expect.tokenOut)) return { ok: false, reason: "The swap would buy a different token than the one you picked." };
+  if (lower(desc.dstReceiver) !== lower(expect.taker)) return { ok: false, reason: "The swap doesn't send the tokens to your wallet." };
+  if (desc.feeReceivers.length) return { ok: false, reason: "The swap would pay a fee to an address Vestail doesn't know." };
   return { ok: true };
 }

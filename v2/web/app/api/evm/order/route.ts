@@ -78,7 +78,7 @@ export async function POST(request: Request) {
   const b = await build(chain.kyber, r.data, taker, REQUESTED_SLIPPAGE_BPS);
   if (!b.ok) return fail(422, `KyberSwap couldn't build this buy (${b.message}).`);
   const tx = { to: b.data.routerAddress, data: b.data.data, value: b.data.transactionValue };
-  const inspection = inspectEvmBuy(tx, { taker, amountWei });
+  const inspection = inspectEvmBuy(tx, { taker, amountWei, tokenOut: token.address });
   if (!inspection.ok) return fail(502, inspection.reason);
 
   try {

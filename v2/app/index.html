@@ -2147,6 +2147,28 @@ start();
     ctx.stroke();
   }
 
+  function drawMarketFills() {
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+    ctx.clip();
+    ctx.fillStyle = C["fill-own"];
+    for (const r of geo.rings) {
+      if (!r.own) continue;
+      const points = r.p || r;
+      ctx.beginPath();
+      let open = false;
+      for (let i = 0; i < points.length; i += 2) {
+        const p = project(points[i], points[i + 1]);
+        if (p.z <= 0) { open = false; continue; }
+        if (open) ctx.lineTo(p.x, p.y);
+        else { ctx.moveTo(p.x, p.y); open = true; }
+      }
+      if (open) { ctx.closePath(); ctx.fill(); }
+    }
+    ctx.restore();
+  }
+
   /*
    * Country outlines. Each ring is a flat [lon, lat, ...] array; the path is cut
    * wherever the coastline crosses onto the far side of the globe, so the back
@@ -2178,6 +2200,7 @@ start();
     ctx.clearRect(0, 0, w, h);
     drawSphere();
     drawGraticule();
+    drawMarketFills();
     drawLand();
   }
 

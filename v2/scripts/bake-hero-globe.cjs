@@ -198,6 +198,35 @@ labels.sort((a, b) => b.own - a.own || a.n.localeCompare(b.n));
 const ownFound = labels.filter(l => l.own).length;
 process.stderr.write(`labels: ${labels.length} (${ownFound}/12 of Vestail's countries), ${unnamed} unnamed features\n`);
 
+/*
+ * Pins. One per market Vestail has rules for, placed on that country's main
+ * financial centre. These are fixed city coordinates, not activity: the globe
+ * must not imply live orders or real-time location, so nothing here moves and
+ * nothing here is a number.
+ */
+const PINS = [
+  { c: "NG", city: "Lagos",        lon:   3.4, lat:   6.5 },
+  { c: "GB", city: "London",       lon:  -0.1, lat:  51.5 },
+  { c: "US", city: "New York",     lon: -74.0, lat:  40.7 },
+  { c: "AE", city: "Dubai",        lon:  55.3, lat:  25.2 },
+  { c: "CN", city: "Shanghai",     lon: 121.5, lat:  31.2 },
+  { c: "IN", city: "Mumbai",       lon:  72.9, lat:  19.1 },
+  { c: "BR", city: "São Paulo",    lon: -46.6, lat: -23.5 },
+  { c: "SA", city: "Riyadh",       lon:  46.7, lat:  24.7 },
+  { c: "DE", city: "Frankfurt",    lon:   8.7, lat:  50.1 },
+  { c: "JP", city: "Tokyo",        lon: 139.7, lat:  35.7 },
+  { c: "ZA", city: "Johannesburg", lon:  28.0, lat: -26.2 },
+  { c: "KR", city: "Seoul",        lon: 127.0, lat:  37.6 },
+];
+
+const countries = require(path.join(__dirname, "../data/countries.json"));
+const known = new Set((countries.countries || countries).map(c => c.code));
+const missing = PINS.filter(p => !known.has(p.c)).map(p => p.c);
+const uncovered = [...known].filter(c => !PINS.some(p => p.c === c));
+if (missing.length) throw new Error(`pins for countries with no rules: ${missing.join(", ")}`);
+if (uncovered.length) throw new Error(`countries with rules but no pin: ${uncovered.join(", ")}`);
+process.stderr.write(`pins: ${PINS.length}, one per country in data/countries.json\n`);
+
 const points = rings.reduce((n, r) => n + r.length / 2, 0);
 process.stderr.write(`rings kept: ${rings.length} (${points} points at ${TOLERANCE} deg), dropped below ${MIN_AREA} sq deg: ${dropped}\n`);
-process.stdout.write(JSON.stringify({ rings, labels }));
+process.stdout.write(JSON.stringify({ rings, labels, pins: PINS }));

@@ -1,6 +1,6 @@
 import "server-only";
 
-import type { Asset, BuyerType, Market, Order, Category, Country, Matrix, Resolution, Rule, TokenBoard, TokenSymbol } from "@/lib/types";
+import type { Asset, BuyerType, Market, Order, Category, Country, Matrix, ProductActivity, Resolution, Rule, TokenBoard, TokenSymbol } from "@/lib/types";
 
 /**
  * The v2 API, read from the server. Rules are fetched uncached: a compliance
@@ -39,6 +39,7 @@ export const api = {
     get<TokenBoard>(`/tokens/${encodeURIComponent(symbol)}` + qs({ country, who })),
 
   derivatives: (q?: string) => get<Market[]>("/derivatives" + (q ? qs({ q }) : ""), !q),
+  activity: () => get<ProductActivity>("/activity"),
   derivative: (id: string, country: string) => get<Market>(`/derivatives/${encodeURIComponent(id)}` + qs({ country })),
 
   /** One user's recorded Buy presses (GET /orders), with the server's key. */

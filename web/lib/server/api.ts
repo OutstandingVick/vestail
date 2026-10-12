@@ -3,22 +3,47 @@ import "server-only";
 import type { Asset, BuyerType, Market, Order, Category, Country, Matrix, ProductActivity, Resolution, Rule, TokenBoard, TokenSymbol } from "@/lib/types";
 
 /**
- * The v2 API, read from the server. Rules are fetched uncached: a compliance
- * answer should change the moment its rule does, not an hour later. Reference
- * lists (countries, assets, categories, token symbols) change only with a
- * deploy and are cached for five minutes.
+ * The v2 API, called in-process.
+ *
+ * This used to fetch over HTTP from VESTAIL_API_URL, defaulting to
+ * http://localhost:8787/v1. That default is unreachable from a deployed
+ * function, so with the variable unset every signed-in page threw a
+ * server-side exception — which is exactly what happened in production. The
+ * Hono app is now called directly (see local-api.ts): same code, same spec
+ * validation, no second service and no network.
+ *
+ * Caching is unchanged in intent. Rules are read fresh, because a compliance
+ * answer should change the moment its rule does. Reference lists change only
+ * with a deploy, so they are memoised for the lifetime of the function
+ * instance rather than through Next's fetch cache, which no longer applies
+ * now that nothing is fetched.
  */
-
-const BASE = (process.env.VESTAIL_API_URL || "http://localhost:8787/v1").replace(/\/$/, "");
+import { callApi } from "./local-api.ts";
 
 export class ApiError extends Error {
   constructor(public status: number, public code: string, message: string) { super(message); }
 }
 
+/*
+ * Reference data is baked into the deployment, so a value read once is good
+ * until the next deploy. The promise is cached, not the result, so concurrent
+ * first calls share one trip through the API rather than racing.
+ */
+const reference_cache = new Map<string, Promise<unknown>>();
+
 async function get<T>(path: string, reference = false): Promise<T> {
-  // Reference lists are cached briefly, not for a day: a cached copy from an
-  // older API (say, before the token list carried mints) must not outlive it.
-  const res = await fetch(BASE + path, reference ? { next: { revalidate: 300 } } : { cache: "no-store" });
+  if (reference) {
+    const hit = reference_cache.get(path);
+    if (hit) return hit as Promise<T>;
+    const pending = read<T>(path).catch(err => { reference_cache.delete(path); throw err; });
+    reference_cache.set(path, pending);
+    return pending;
+  }
+  return read<T>(path);
+}
+
+async function read<T>(path: string): Promise<T> {
+  const res = await callApi(path);
   const body = await res.json().catch(() => null);
   if (!res.ok) throw new ApiError(res.status, body?.error?.code ?? "unavailable", body?.error?.message ?? `API returned ${res.status}`);
   return body as T;
@@ -42,26 +67,21 @@ export const api = {
   activity: () => get<ProductActivity>("/activity"),
   derivative: (id: string, country: string) => get<Market>(`/derivatives/${encodeURIComponent(id)}` + qs({ country })),
 
-  /** One user's recorded Buy presses (GET /orders), with the server's key. */
+  /** One user's recorded Buy presses (GET /orders). */
   async orders(session: string, limit = 20): Promise<Order[]> {
-    const key = process.env.VESTAIL_API_KEY;
-    if (!key) return [];
     const safeLimit = Math.min(200, Math.max(1, Math.trunc(limit)));
-    const res = await fetch(BASE + "/orders" + qs({ session, limit: String(safeLimit) }), { cache: "no-store", headers: { Authorization: `Bearer ${key}` } });
+    const res = await callApi("/orders" + qs({ session, limit: String(safeLimit) }));
     return res.ok ? res.json() : [];
   },
 
-  /** POST /orders/click with the server's key; the key never reaches the browser. */
+  /** POST /orders/click. The key is internal to this process and never reaches the browser. */
   async click(body: {
     country: string; asset: string; who: BuyerType; venue: string;
     acknowledged?: boolean; mint?: string; market?: string; query?: string; session?: string;
   }): Promise<{ id: string; redirect: string }> {
-    const key = process.env.VESTAIL_API_KEY;
-    if (!key) throw new ApiError(503, "not_configured", "VESTAIL_API_KEY is not set on this server.");
-    const res = await fetch(BASE + "/orders/click", {
+    const res = await callApi("/orders/click", {
       method: "POST",
-      cache: "no-store",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${key}` },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     });
     const json = await res.json().catch(() => null);

@@ -74,7 +74,23 @@ const nextConfig: NextConfig = {
    * traced on its own; naming it here puts it in the bundle.
    */
   outputFileTracingIncludes: {
-    "/**": ["../node_modules/next/dist/compiled/next-server/**"],
+    "/**": [
+      "../node_modules/next/dist/compiled/next-server/**",
+      /*
+       * The API runs in this process (lib/server/local-api.ts) and reads the
+       * rule data and the OpenAPI contract from outside web/, by paths built
+       * at runtime from import.meta.url. The tracer cannot follow those, so
+       * without naming them here the deployment ships without the rules and
+       * every signed-in page fails.
+       */
+      "../data/**",
+      "../docs/api/openapi.yaml",
+      // The API itself is loaded at runtime (webpackIgnore), so nothing in the
+      // bundle points at these files for the tracer to follow.
+      "../services/api/src/**",
+      "../services/api/package.json",
+      "../packages/core/**",
+    ],
   },
   // Privy is hoisted to v2/node_modules but some of its Solana peers install
   // here, in web/node_modules, so let hoisted packages resolve from here too.

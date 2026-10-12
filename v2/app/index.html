@@ -233,6 +233,9 @@
   @media (min-width: 1500px) {
     .hero > .hero-globe { right: max(-300px, calc((100vw - 1720px) / -2)); height: min(158%, 1020px); }
   }
+  @media (max-width: 1024px) {
+    .hero > .hero-globe { right: -310px; height: min(132%, 820px); opacity: .88; }
+  }
   .hero::after { background: var(--hero-overlay); }
   .hero h1 { font-family: var(--font-manrope); font-weight: 800; color: var(--hero-heading); font-size: clamp(52.5px, 9.5vw, 115px); line-height: 1; letter-spacing: -.04em; margin: 0 auto 22px; text-shadow: 0 2px 28px rgb(0 0 0 / .12); }
   /* Two weights of one face: a light set-up line, a bold payoff. */

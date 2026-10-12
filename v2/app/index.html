@@ -2107,9 +2107,6 @@ start();
   // reused rather than allocated.
   const pt = { x: 0, y: 0, z: 0 };
 
-  setYaw(10);
-  draw();
-
   function drawSphere() {
     ctx.beginPath();
     ctx.arc(cx, cy, radius, 0, Math.PI * 2);
@@ -2277,6 +2274,15 @@ start();
     pt.z = z;
     return pt;
   }
+
+  const startYaw = 10;
+  const startedAt = performance.now();
+  function animate(now) {
+    setYaw(startYaw + (now - startedAt) * 0.0036);
+    draw();
+    requestAnimationFrame(animate);
+  }
+  requestAnimationFrame(animate);
 })();
 
 // segmented control thumb position

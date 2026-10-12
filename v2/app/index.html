@@ -2058,6 +2058,7 @@ start();
 
   resize();
   addEventListener("resize", () => { if (resize()) draw(); }, { passive: true });
+  new ResizeObserver(() => { if (resize()) draw(); }).observe(canvas);
 
   /*
    * Palette. Canvas cannot read a custom property, so the computed values are

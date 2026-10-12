@@ -51,3 +51,11 @@ VESTAIL_ADMIN_USER_IDS=did:privy:your-owner-user-id
 
 Separate multiple owners with commas. The server checks this allowlist on every
 admin data request; never give it a `NEXT_PUBLIC_` prefix.
+
+## Early access
+
+`/early-access` is a standalone signup page. In production, configure
+`KV_REST_API_URL` and `KV_REST_API_TOKEN` for durable, email-deduplicated
+storage. Local development falls back to `.data/early-access.jsonl`, which is
+git-ignored. The signup API validates every payload, uses a honeypot and keeps a
+short-lived in-memory IP rate limit; IP addresses are not written with signups.

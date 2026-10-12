@@ -2019,6 +2019,48 @@ start();
 
   resize();
   addEventListener("resize", resize, { passive: true });
+
+  /*
+   * Orthographic projection. A point on the unit sphere is spun east by the
+   * current yaw, then the north pole is tilted towards the viewer, and x and y
+   * are read straight off — the parallel projection, which is what a sphere
+   * looks like from far enough away.
+   *
+   * z is kept because its sign is the whole back-face test: positive is the near
+   * hemisphere, negative is behind the globe. Its magnitude is how square-on the
+   * point faces us, which later shades the limb and fades labels as they turn
+   * away.
+   */
+  const RAD = Math.PI / 180;
+  const TILT = 15 * RAD;          // northward, so it reads as a sphere not a disc
+  const sinT = Math.sin(TILT), cosT = Math.cos(TILT);
+
+  let yaw = 0;                    // degrees east at the centre of the face
+  let sinY = 0, cosY = 1;
+
+  function setYaw(deg) {
+    yaw = deg;
+    const a = -deg * RAD;
+    sinY = Math.sin(a); cosY = Math.cos(a);
+  }
+
+  // Scratch object: this runs for every one of 4,144 points per frame, so it is
+  // reused rather than allocated.
+  const pt = { x: 0, y: 0, z: 0 };
+
+  function project(lon, lat) {
+    const la = lat * RAD, lo = lon * RAD;
+    const cl = Math.cos(la);
+    let x = cl * Math.sin(lo), y = Math.sin(la), z = cl * Math.cos(lo);
+    const x2 = x * cosY + z * sinY;
+    z = -x * sinY + z * cosY;
+    const y2 = y * cosT - z * sinT;
+    z = y * sinT + z * cosT;
+    pt.x = cx + x2 * radius;
+    pt.y = cy - y2 * radius;
+    pt.z = z;
+    return pt;
+  }
 })();
 
 // segmented control thumb position

@@ -1,5 +1,3 @@
-import "server-only";
-
 const attempts = new Map<string, number[]>();
 const WINDOW_MS = 10 * 60 * 1000;
 const LIMIT = 8;

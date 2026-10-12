@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { CITIZENSHIP_OPTIONS, OWNERSHIP_INTERESTS } from "@/lib/early-access";
+import { CITIZENSHIP_OPTIONS, OWNERSHIP_INTERESTS } from "./early-access.ts";
 
 export const earlyAccessSchema = z.object({
   firstName: z.string().trim().min(1, "Enter your first name.").max(80),

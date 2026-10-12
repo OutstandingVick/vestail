@@ -4,6 +4,7 @@ import { EarlyAccessForm } from "@/components/early-access/EarlyAccessForm";
 import { EarlyAccessShell } from "@/components/early-access/EarlyAccessShell";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://www.vestail.fun"),
   title: "Early access — Vestail",
   description: "Join Vestail early access and find out what you can own, wherever you are.",
   alternates: { canonical: "https://www.vestail.fun/early-access" },

@@ -9,7 +9,7 @@ import { inspectEvmBuy, KYBER_ROUTER } from "./inspectEvm.ts";
 const taker = "0x1111111111111111111111111111111111111111";
 const NVDAC = "0xb20000000000000000000078ee7ce2fE4908108C";
 const real = { to: fixture.to, data: fixture.data, value: fixture.value };
-const expect = { taker, amountWei: fixture.value, tokenOut: NVDAC };
+const expect = { taker, amountWei: fixture.value, tokenOut: NVDAC, quotedOut: fixture.amountOut };
 
 const abi = parseAbi([
   "struct SwapDescriptionV2 { address srcToken; address dstToken; address[] srcReceivers; uint256[] srcAmounts; address[] feeReceivers; uint256[] feeAmounts; address dstReceiver; uint256 amount; uint256 minReturnAmount; uint256 flags; bytes permit; }",
@@ -20,7 +20,7 @@ const simple = (over: Record<string, unknown>) => ({
   ...real,
   data: encodeFunctionData({ abi, functionName: "swapSimpleMode", args: [taker, {
     srcToken: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE", dstToken: NVDAC, srcReceivers: [], srcAmounts: [], feeReceivers: [], feeAmounts: [],
-    dstReceiver: taker, amount: BigInt(fixture.value), minReturnAmount: BigInt(1), flags: BigInt(0), permit: "0x", ...over,
+    dstReceiver: taker, amount: BigInt(fixture.value), minReturnAmount: BigInt(fixture.amountOut), flags: BigInt(0), permit: "0x", ...over,
   } as never, "0x", "0x"] }),
 });
 
@@ -38,3 +38,6 @@ test("spending a token instead of ETH is refused", () => assert.equal(inspectEvm
 test("an unknown fee receiver is refused", () => assert.equal(inspectEvmBuy(simple({ feeReceivers: [attacker], feeAmounts: [BigInt(1)] }), expect).ok, false));
 test("the honest swapSimpleMode shape passes", () => assert.deepEqual(inspectEvmBuy(simple({}), expect), { ok: true }));
 test("router is KyberSwap's", () => assert.equal(KYBER_ROUTER.toLowerCase(), real.to.toLowerCase()));
+test("a minimum of almost nothing is refused (sandwich protection)", () => assert.equal(inspectEvmBuy(simple({ minReturnAmount: BigInt(1) }), expect).ok, false));
+test("a minimum more than 3% below the quote is refused", () =>
+  assert.equal(inspectEvmBuy(simple({ minReturnAmount: (BigInt(fixture.amountOut) * BigInt(96)) / BigInt(100) }), expect).ok, false));

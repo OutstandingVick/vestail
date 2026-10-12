@@ -23,9 +23,12 @@ const ROUTER_ABI = parseAbi([
 ]);
 
 export interface EvmTx { to: string; data: string; value: string }
+
+/** The most the onchain minimum may sit below the quote: Vestail's slippage ceiling, as on Solana. */
+export const MAX_SLIPPAGE_BPS = BigInt(300);
 type Result = { ok: true } | { ok: false; reason: string };
 
-export function inspectEvmBuy(tx: EvmTx, expect: { taker: string; amountWei: string; tokenOut: string }): Result {
+export function inspectEvmBuy(tx: EvmTx, expect: { taker: string; amountWei: string; tokenOut: string; quotedOut: string }): Result {
   const lower = (s: string) => s.toLowerCase();
   if (lower(tx.to) !== lower(KYBER_ROUTER)) return { ok: false, reason: "The swap isn't addressed to KyberSwap's router." };
   if (BigInt(tx.value) !== BigInt(expect.amountWei)) return { ok: false, reason: "The swap would send a different amount of ETH than you chose." };
@@ -42,6 +45,12 @@ export function inspectEvmBuy(tx: EvmTx, expect: { taker: string; amountWei: str
   if (desc.amount !== BigInt(expect.amountWei)) return { ok: false, reason: "The swap's amount doesn't match what you chose." };
   if (lower(desc.dstToken) !== lower(expect.tokenOut)) return { ok: false, reason: "The swap would buy a different token than the one you picked." };
   if (lower(desc.dstReceiver) !== lower(expect.taker)) return { ok: false, reason: "The swap doesn't send the tokens to your wallet." };
+  // The router reverts if the swap returns less than minReturnAmount. A tiny
+  // minimum would let a sandwich take almost the whole buy, so it must sit
+  // within the slippage ceiling of the quote the buyer was shown.
+  const floor = (BigInt(expect.quotedOut) * (BigInt(10000) - MAX_SLIPPAGE_BPS)) / BigInt(10000);
+  if (desc.minReturnAmount === BigInt(0) || desc.minReturnAmount < floor)
+    return { ok: false, reason: "The swap's guaranteed minimum is too far below the quote." };
   if (desc.feeReceivers.length) return { ok: false, reason: "The swap would pay a fee to an address Vestail doesn't know." };
   return { ok: true };
 }

@@ -67,10 +67,14 @@ export function EvmSwapForm({ symbol, tokens, acknowledged, locked }: { symbol: 
 
   return (
     <div className="flex flex-col gap-2.5">
-      <label htmlFor={`evm-token-${symbol}`} className="text-sm">Version</label>
-      <select id={`evm-token-${symbol}`} value={address} onChange={e => { setAddress(e.target.value); setQuote(null); }} className="min-h-11 rounded-field border-[1.5px] border-field bg-wash px-3">
-        {tokens.map(t => <option key={t.address} value={t.address}>{t.token_symbol} · {t.chain_name}</option>)}
-      </select>
+      {tokens.length > 1 ? (
+        <>
+          <label htmlFor={`evm-token-${symbol}`} className="text-sm">Version</label>
+          <select id={`evm-token-${symbol}`} value={address} onChange={e => { setAddress(e.target.value); setQuote(null); }} className="min-h-11 rounded-field border-[1.5px] border-field bg-wash px-3">
+            {tokens.map(t => <option key={t.address} value={t.address}>{t.token_symbol} · {t.chain_name}</option>)}
+          </select>
+        </>
+      ) : <p className="font-semibold">{token?.token_symbol} · {token?.chain_name}</p>}
       <label htmlFor={`evm-amount-${symbol}`} className="text-sm">Amount (ETH on {chain?.name ?? "the token's chain"})</label>
       <input id={`evm-amount-${symbol}`} inputMode="decimal" value={amount} onChange={e => { setAmount(e.target.value); setQuote(null); }} className="min-h-12 rounded-field border-[1.5px] border-field bg-wash px-3.5 text-lg" />
       {quote && token && (

@@ -7,9 +7,12 @@ import type { BuyerType } from "@/lib/types";
  * search URL, so every view of the board can be shared or reloaded. Viewing as
  * a foreigner here doesn't change the buyer's own declared profile.
  */
-export function BoardControls({ q, who, sort }: { q: string; who: BuyerType; sort: "status" | "asset" }) {
-  const href = (p: { who?: BuyerType; sort?: string }) =>
-    `/app/discover?${new URLSearchParams({ q, who: p.who ?? who, sort: p.sort ?? sort })}`;
+export function BoardControls({ q, who, sort, basePath = "/app/discover" }: { q: string; who: BuyerType; sort: "status" | "asset"; basePath?: string }) {
+  const href = (p: { who?: BuyerType; sort?: string }) => {
+    const params = new URLSearchParams({ who: p.who ?? who, sort: p.sort ?? sort });
+    if (basePath === "/app/discover") params.set("q", q);
+    return `${basePath}?${params}`;
+  };
   const pill = (active: boolean) =>
     `flex min-h-9 items-center rounded-full px-4 text-[13px] font-semibold ${active ? "bg-surface shadow-sm" : "text-muted hover:text-ink"}`;
   return (

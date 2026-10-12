@@ -73,10 +73,14 @@ export function SwapForm({ symbol, tokens, acknowledged, locked }: {
 
   return (
     <div className="flex flex-col gap-2.5">
-      <label htmlFor="swap-token" className="text-sm">Version</label>
-      <select id="swap-token" value={mint} onChange={e => { setMint(e.target.value); setQuote(null); }} className="min-h-11 rounded-field border-[1.5px] border-field bg-wash px-3">
-        {tokens.map(t => <option key={t.mint} value={t.mint}>{t.token_symbol}</option>)}
-      </select>
+      {tokens.length > 1 ? (
+        <>
+          <label htmlFor="swap-token" className="text-sm">Version</label>
+          <select id="swap-token" value={mint} onChange={e => { setMint(e.target.value); setQuote(null); }} className="min-h-11 rounded-field border-[1.5px] border-field bg-wash px-3">
+            {tokens.map(t => <option key={t.mint} value={t.mint}>{t.token_symbol}</option>)}
+          </select>
+        </>
+      ) : <p className="font-semibold">{token?.token_symbol}</p>}
       <label htmlFor="swap-amount" className="text-sm">Amount (USDC)</label>
       <input id="swap-amount" inputMode="decimal" value={amount} onChange={e => { setAmount(e.target.value); setQuote(null); }} className="min-h-12 rounded-field border-[1.5px] border-field bg-wash px-3.5 text-lg" />
       {quote && token && (

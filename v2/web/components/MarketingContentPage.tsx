@@ -36,6 +36,40 @@ export function MarketingContentPage({ page }: { page: MarketingPage }) {
           <p className="mt-7 max-w-3xl text-lg leading-8 text-muted sm:text-xl">{page.summary}</p>
         </section>
 
+        {page.showcases?.map(group => (
+          <section key={group.title} aria-labelledby={`${group.title.toLowerCase().replaceAll(" ", "-")}-title`} className="space-y-5">
+            <div className="max-w-3xl">
+              <h2 id={`${group.title.toLowerCase().replaceAll(" ", "-")}-title`} className="text-3xl font-bold tracking-[-0.035em] text-ink-strong sm:text-4xl">
+                {group.title}
+              </h2>
+              <p className="mt-2 text-base leading-7 text-muted sm:text-lg">{group.description}</p>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {group.entries.map(entry => (
+                <article key={entry.name} className="flex min-h-48 flex-col justify-between rounded-panel bg-surface p-6 ring-1 ring-line">
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <p className="text-sm font-bold tracking-[0.08em] text-emphasis">{entry.symbol}</p>
+                      <h3 className="mt-2 text-2xl font-bold tracking-[-0.025em] text-ink-strong">{entry.name}</h3>
+                    </div>
+                    <span className="inline-flex h-11 min-w-11 items-center justify-center rounded-full bg-tint px-3 text-sm font-bold text-emphasis" aria-hidden="true">
+                      {entry.name.slice(0, 2).toUpperCase()}
+                    </span>
+                  </div>
+                  <div className="mt-8">
+                    <p className="leading-6 text-muted">{entry.detail}</p>
+                    <ul aria-label={`${entry.name} availability`} className="mt-4 flex flex-wrap gap-2">
+                      {entry.tags.map(tag => (
+                        <li key={tag} className="rounded-full bg-tint px-3 py-1.5 text-xs font-semibold text-ink">{tag}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </section>
+        ))}
+
         <section aria-label={`${page.title} details`} className="grid gap-4 md:grid-cols-2">
           {page.sections.map((section, index) => (
             <article key={section.title} className="rounded-panel bg-surface p-6 ring-1 ring-line sm:p-8">

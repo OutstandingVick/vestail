@@ -8,8 +8,8 @@ import type { BuyerType, MatrixRow } from "@/lib/types";
  * matching asset. The buyer's own country leads; the rest follow the API's
  * order (most open first, or as listed).
  */
-export function CountryBoard({ q, rows, nameOf, who, sort, mine }: {
-  q: string; rows: MatrixRow[]; nameOf: Record<string, string>; who: BuyerType; sort: "status" | "asset"; mine: string;
+export function CountryBoard({ q, rows, nameOf, who, sort, mine, basePath }: {
+  q: string; rows: MatrixRow[]; nameOf: Record<string, string>; who: BuyerType; sort: "status" | "asset"; mine: string; basePath?: string;
 }) {
   const ordered = [...rows.filter(r => r.code === mine), ...rows.filter(r => r.code !== mine)];
   const assets = rows[0]?.cells.length ?? 0;
@@ -17,7 +17,7 @@ export function CountryBoard({ q, rows, nameOf, who, sort, mine }: {
   return (
     <section aria-labelledby="board-title" className="flex flex-col gap-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <BoardControls q={q} who={who} sort={sort} />
+        <BoardControls q={q} who={who} sort={sort} basePath={basePath} />
         <BoardLegend />
       </div>
       <div className="flex flex-wrap items-baseline justify-between gap-2">

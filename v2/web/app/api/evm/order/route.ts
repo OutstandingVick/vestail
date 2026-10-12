@@ -3,6 +3,7 @@ import { z } from "zod";
 
 import { EVM_CHAINS, isEvmChain } from "@/lib/chains";
 import { api, ApiError } from "@/lib/server/api";
+import { simulate } from "@/lib/server/evmHoldings";
 import { build, route } from "@/lib/server/kyber";
 import { userFrom } from "@/lib/server/privy";
 import { readProfile } from "@/lib/server/profile";
@@ -80,6 +81,13 @@ export async function POST(request: Request) {
   const tx = { to: b.data.routerAddress, data: b.data.data, value: b.data.transactionValue };
   const inspection = inspectEvmBuy(tx, { taker, amountWei, tokenOut: token.address, quotedOut: amountOut });
   if (!inspection.ok) return fail(502, inspection.reason);
+
+  // Simulate before asking for a signature: a swap that would revert costs gas and proves nothing.
+  const reverted = await simulate(token.chain, { from: taker, ...tx });
+  if (reverted) {
+    const reason = /insufficient funds/i.test(reverted) ? `Not enough ETH on ${chain.name} for this amount plus gas.` : "This swap would fail right now. Get a new price and try again.";
+    return fail(422, reason);
+  }
 
   try {
     await api.click({

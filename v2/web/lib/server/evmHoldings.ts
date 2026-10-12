@@ -47,3 +47,17 @@ export async function usdPrice(chain: EvmChainKey, token: string, decimals: numb
     return null;
   }
 }
+
+/**
+ * Dry-run a transaction from `from` with eth_call. Returns null when it would
+ * succeed, or the node's reason when it would revert, so a swap that can't
+ * land (not enough ETH, a stale route) is refused before the wallet opens.
+ */
+export async function simulate(chain: EvmChainKey, tx: { from: string; to: string; data: string; value: string }): Promise<string | null> {
+  try {
+    await rpc(chain, "eth_call", [{ from: tx.from, to: tx.to, data: tx.data, value: "0x" + BigInt(tx.value).toString(16) }, "latest"]);
+    return null;
+  } catch (e) {
+    return e instanceof Error ? e.message : "the swap would fail";
+  }
+}

@@ -2228,7 +2228,7 @@ start();
       if (z <= 0.12) continue;
       const east = project(label.lon + 0.5, label.lat);
       const angle = Math.atan2(east.y - y, east.x - x);
-      const size = Math.max(label.own ? 10 : 8, radius / (label.own ? 42 : 52));
+      const size = Math.min(label.own ? 14 : 11, Math.max(label.own ? 10 : 8, radius / (label.own ? 42 : 52)));
       ctx.font = `${label.own ? 650 : 500} ${size}px Inter, ui-sans-serif, system-ui, sans-serif`;
       const width = ctx.measureText(label.n).width;
       const box = { l: x - width / 2 - 3, r: x + width / 2 + 3, t: y - size / 2 - 3, b: y + size / 2 + 3 };

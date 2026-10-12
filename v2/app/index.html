@@ -1978,6 +1978,49 @@ async function start() {
 }
 start();
 
+/* ==========================================================================
+ * Hero globe
+ *
+ * A cartographic globe on a 2D canvas: country outlines, country names and one
+ * pin per market, under an orthographic projection turned by hand. No library —
+ * the geometry is 4,144 points baked offline and the projection is nine lines,
+ * so pulling in a globe package would cost more bytes than the whole feature.
+ * ======================================================================== */
+(() => {
+  const canvas = document.getElementById("hero-globe-canvas");
+  const geoTag = document.getElementById("globe-geo");
+  if (!canvas || !geoTag || !canvas.getContext) return;
+
+  let geo;
+  try { geo = JSON.parse(geoTag.textContent); } catch { return; }
+  if (!geo || !geo.rings) return;
+
+  const ctx = canvas.getContext("2d");
+
+  /*
+   * Size. The container is sized in CSS; the backing store follows it at the
+   * device pixel ratio, capped at 2 — a phone at 3x would be drawing nine times
+   * the pixels for a difference nobody can see on hairlines this fine.
+   */
+  let w = 0, h = 0, cx = 0, cy = 0, radius = 0;
+
+  function resize() {
+    const box = canvas.getBoundingClientRect();
+    if (!box.width || !box.height) return false;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = box.width; h = box.height;
+    canvas.width = Math.round(w * dpr);
+    canvas.height = Math.round(h * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    cx = w / 2; cy = h / 2;
+    radius = Math.min(w, h) / 2;
+    return true;
+  }
+
+  resize();
+  addEventListener("resize", resize, { passive: true });
+})();
+
 // segmented control thumb position
 document.querySelectorAll(".seg").forEach(seg => seg.addEventListener("click", e => {
   const btns = [...seg.querySelectorAll("button")]; const i = btns.indexOf(e.target.closest("button")); if (i >= 0) seg.dataset.pos = i;

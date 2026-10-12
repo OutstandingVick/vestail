@@ -8,6 +8,7 @@ import { INSTRUMENT_LABEL } from "@/lib/instrument";
 import { api, ApiError } from "@/lib/server/api";
 import { liveMarkets } from "@/lib/server/hyperliquid";
 import { readProfile } from "@/lib/server/profile";
+import { safeHttps } from "@/lib/safeUrl";
 
 const usd = (n: number, max = 2) => n.toLocaleString(undefined, { style: "currency", currency: "USD", maximumFractionDigits: max });
 const compact = (n: number) => n.toLocaleString(undefined, { style: "currency", currency: "USD", notation: "compact", maximumFractionDigits: 1 });
@@ -74,7 +75,7 @@ export default async function ExposurePage({ params }: { params: Promise<{ coin:
                 {gates.map(g => (
                   <li key={g.rule}>
                     {g.reason}{" "}
-                    <a href={g.source_url} target="_blank" rel="noreferrer" className="text-emphasis underline">source</a>
+                    {safeHttps(g.source_url) && <a href={safeHttps(g.source_url)!} target="_blank" rel="noopener noreferrer" className="text-emphasis underline">source</a>}
                     {g.source_quality === "secondary" && <span className="text-muted"> (secondary source)</span>}
                   </li>
                 ))}

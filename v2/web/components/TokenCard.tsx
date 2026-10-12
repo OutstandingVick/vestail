@@ -6,6 +6,7 @@ import type { ReactNode } from "react";
 import { NotAssessedBadge, VerdictBadge } from "@/components/VerdictBadge";
 import { CHAIN_LABEL, INSTRUMENT_LABEL } from "@/lib/instrument";
 import type { Token } from "@/lib/types";
+import { safeHttps } from "@/lib/safeUrl";
 
 const STRUCTURE: Record<string, string> = {
   custody_backed: "Custody-backed certificate: the real share held 1:1 by a custodian",
@@ -66,7 +67,7 @@ export function TokenCard({ token, buyHref }: { token: Token; buyHref?: string }
               {gates.map((g, i) => (
                 <span key={g.rule}>
                   {i > 0 && ", "}
-                  <a href={g.source_url} target="_blank" rel="noreferrer" className="text-emphasis underline">issuer terms</a>
+                  {safeHttps(g.source_url) ? <a href={safeHttps(g.source_url)!} target="_blank" rel="noopener noreferrer" className="text-emphasis underline">issuer terms</a> : "issuer terms (link withheld)"}
                   {g.source_quality === "secondary" && " (secondary source)"}
                 </span>
               ))}

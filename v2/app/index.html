@@ -2276,18 +2276,39 @@ start();
   }
 
   const startYaw = 10;
-  const startedAt = performance.now();
   const reduceGlobeMotion = matchMedia("(prefers-reduced-motion: reduce)");
-  function animate(now) {
-    setYaw(startYaw + (now - startedAt) * 0.0036);
-    draw();
+  let currentYaw = startYaw;
+  let previousFrame = performance.now();
+  let frameQueued = false;
+  let globeInView = true;
+
+  function queueFrame() {
+    if (reduceGlobeMotion.matches || !globeInView || frameQueued) return;
+    previousFrame = performance.now();
+    frameQueued = true;
     requestAnimationFrame(animate);
   }
+
+  function animate(now) {
+    frameQueued = false;
+    if (reduceGlobeMotion.matches || !globeInView) return;
+    currentYaw += Math.min(now - previousFrame, 50) * 0.0036;
+    previousFrame = now;
+    setYaw(currentYaw);
+    draw();
+    queueFrame();
+  }
+
+  new IntersectionObserver(([entry]) => {
+    globeInView = entry.isIntersecting;
+    if (globeInView) queueFrame();
+  }, { threshold: 0.01 }).observe(canvas.closest(".hero"));
+
   if (reduceGlobeMotion.matches) {
     setYaw(startYaw);
     draw();
   } else {
-    requestAnimationFrame(animate);
+    queueFrame();
   }
 })();
 

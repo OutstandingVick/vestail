@@ -17,6 +17,15 @@ function privy(): PrivyClient {
   return client;
 }
 
+export async function listPrivyUsers(limit = 500) {
+  const rows = [];
+  for await (const user of privy().users().list()) {
+    rows.push(user);
+    if (rows.length >= limit) break;
+  }
+  return rows;
+}
+
 /** The signed-in user's id, or null when the request carries no valid token. */
 export async function userFrom(request: Request): Promise<string | null> {
   const header = request.headers.get("authorization") ?? "";

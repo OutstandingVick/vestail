@@ -5,6 +5,7 @@ import { useState } from "react";
 
 import { EVM_CHAINS, isEvmChain } from "@/lib/chains";
 import { authedFetch, errorOf } from "@/lib/client";
+import { inspectEvmBuy } from "@/lib/swap/inspectEvm";
 import type { Token } from "@/lib/types";
 
 const toWei = (eth: string) => {
@@ -52,6 +53,11 @@ export function EvmSwapForm({ symbol, tokens, acknowledged, locked }: { symbol: 
     setBusy("buy"); setMessage(null);
     try {
       const o = await order(true);
+      // Check again in the browser, against what this buyer chose: their own
+      // wallet as receiver, the token they picked, the ETH they typed. A
+      // compromised server must not get an unchecked transaction signed.
+      const inspection = inspectEvmBuy(o.tx, { taker: wallet.address, amountWei: toWei(amount)!, tokenOut: address, quotedOut: o.amountOut });
+      if (!inspection.ok) throw new Error(`Refused before signing: ${inspection.reason}`);
       await wallet.switchChain(chain.id);
       const provider = await wallet.getEthereumProvider();
       // KyberSwap's router has the same address on every chain, so a wallet left

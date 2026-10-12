@@ -2220,7 +2220,8 @@ start();
     ctx.save();
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    for (const label of geo.labels || []) {
+    const labels = [...(geo.labels || [])].sort((a, b) => b.own - a.own || a.n.localeCompare(b.n));
+    for (const label of labels) {
       const p = project(label.lon, label.lat);
       const x = p.x, y = p.y, z = p.z;
       if (z <= 0.12) continue;

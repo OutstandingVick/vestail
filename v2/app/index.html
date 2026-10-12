@@ -54,8 +54,6 @@
     --hero-bg: #F8F7FF;
     --hero-heading: #17171a;
     --hero-copy: rgb(23 23 26 / .72);
-    --hero-earth-opacity: .72;
-    --hero-earth-filter: saturate(.92) contrast(1.04) brightness(1.02);
     --hero-overlay: radial-gradient(circle at 62% 45%, rgb(124 92 255 / .1), transparent 44%), radial-gradient(circle at 18% 18%, rgb(255 88 10 / .07), transparent 31%), linear-gradient(rgb(248 247 255 / .16), rgb(248 247 255 / .48));
     --hero-divider: rgb(23 23 26 / .14);
     --hero-chip-bg: rgb(255 255 255 / .62);
@@ -122,8 +120,6 @@
     --hero-bg: #0E0F14;
     --hero-heading: #f8f7ff;
     --hero-copy: rgb(248 247 255 / .78);
-    --hero-earth-opacity: .62;
-    --hero-earth-filter: saturate(.76) contrast(.96) brightness(.76);
     --hero-overlay: radial-gradient(circle at 62% 45%, rgb(124 92 255 / .25), transparent 40%), radial-gradient(circle at 18% 18%, rgb(255 88 10 / .12), transparent 31%), linear-gradient(rgb(14 15 20 / .34), rgb(14 15 20 / .7));
     --hero-divider: rgb(248 247 255 / .18);
     --hero-chip-bg: rgb(14 15 20 / .34);
@@ -219,8 +215,6 @@
   .hero { position: relative; isolation: isolate; overflow: hidden; padding: 56px 0 28px; border-radius: 0 0 var(--r-xl) var(--r-xl); background: var(--hero-bg); text-align: center; }
   .hero::before, .hero::after { content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none; }
   .hero > * { position: relative; z-index: 1; }
-  .hero::before { display: none; }
-
   /*
    * The globe. Oversized and pushed off the right edge, so it reads as part of
    * the page's ground rather than a picture sitting on it: the hero's overflow

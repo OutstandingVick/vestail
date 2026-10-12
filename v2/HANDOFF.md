@@ -29,7 +29,7 @@ v2/
 ├── docs/DESIGN_HANDOFF.md  brief for a designer: brand tokens, screens, states
 ├── DEPLOY.md             running the API and serving the page
 ├── CLAUDE.md             the invariants, in short form
-└── scripts/              serve-page.js (local preview) and split-data-from-app.cjs (regenerate data/)
+└── scripts/              local preview, data splitting and the offline hero-globe baker
 ```
 
 **Branch:** all v2 work lives on `v2-own`, which is ~109 commits ahead of `main`. `main` is frozen as the STOCKLANA-judged v1 and must not change until judging is settled; merge `v2-own` into it via PR afterwards. Hotfixes go to `main` first, then merge into `v2-own`.
@@ -82,6 +82,12 @@ Light, dark-only was dropped. Full detail in `docs/GLOSSARY.html` (design system
 | Verdicts | `#5C9A4A` / `#BF861C` / `#C9604F` | Verdicts only; cannot-own always hatched |
 
 Type is Outfit (300–800). Corner scale: panels 28, cards 20, fields 16, buttons and small tiles 12, verdict tiles 6, pills. Contrast was measured, not assumed — if you change a colour, re-measure the text on it.
+
+### Hero globe
+
+The marketing hero's globe is a decorative canvas, not a live-activity map. `scripts/bake-hero-globe.cjs` converts Natural Earth 110m geography from `world-atlas` into compact rings, labels and one fixed financial-centre pin for each of the twelve countries Vestail covers. Run it from `v2/` and replace the contents of the `globe-geo` JSON script in `app/index.html`; the payload stays inline so the page continues to work from `file://`.
+
+The browser renderer is dependency-free: an orthographic projection draws the sphere, graticule, market tint, borders, static pins and collision-rejected labels. The globe turns once every 100 seconds, stops under `prefers-reduced-motion`, pauses outside the viewport and in hidden tabs, and redraws when its container or theme changes. CSS crops it from the right like part of the hero's ground, softens its edge with a radial mask, and moves it below the headline at phone width. Keep the canvas `aria-hidden`, do not add activity counts or pulsing pins, and re-check `document.documentElement.scrollWidth === innerWidth` after placement changes.
 
 ## 7. What is done
 

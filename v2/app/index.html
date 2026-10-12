@@ -2277,12 +2277,18 @@ start();
 
   const startYaw = 10;
   const startedAt = performance.now();
+  const reduceGlobeMotion = matchMedia("(prefers-reduced-motion: reduce)");
   function animate(now) {
     setYaw(startYaw + (now - startedAt) * 0.0036);
     draw();
     requestAnimationFrame(animate);
   }
-  requestAnimationFrame(animate);
+  if (reduceGlobeMotion.matches) {
+    setYaw(startYaw);
+    draw();
+  } else {
+    requestAnimationFrame(animate);
+  }
 })();
 
 // segmented control thumb position

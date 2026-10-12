@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 
 import { EarlyAccessForm } from "@/components/early-access/EarlyAccessForm";
 import { EarlyAccessShell } from "@/components/early-access/EarlyAccessShell";
@@ -13,5 +14,6 @@ export const metadata: Metadata = {
 };
 
 export default function EarlyAccessPage() {
+  if (process.env.NODE_ENV === "production") notFound();
   return <EarlyAccessShell><section className="mx-auto w-full max-w-[560px] px-5 pt-10 pb-20 sm:px-8 sm:pt-16"><div className="mb-10 text-center"><p className="text-sm font-bold uppercase tracking-[.16em] text-[#B83D00]">Vestail early access</p><h1 className="mt-4 text-[clamp(2.4rem,7vw,4.25rem)] leading-[.98] font-semibold tracking-[-.045em]">Find out what you can own, wherever you are.</h1><p className="mx-auto mt-5 max-w-[470px] text-lg leading-7 text-[#5e5b65]">Join early access to Vestail. We&apos;ll let you in as your country goes live.</p></div><EarlyAccessForm /></section></EarlyAccessShell>;
 }

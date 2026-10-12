@@ -6,6 +6,7 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
+  if (process.env.NODE_ENV === "production") return Response.json({ error: "Not found." }, { status: 404 });
   const forwarded = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
   const ip = forwarded || request.headers.get("x-real-ip") || "unknown";
   if (!earlyAccessRateAllowed(ip)) return Response.json({ error: "Too many attempts. Try again in a few minutes." }, { status: 429 });

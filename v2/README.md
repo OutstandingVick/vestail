@@ -36,3 +36,18 @@ core.venues("cryptocurrency", "NG");     // -> [{ name:"Luno", url:"…?ref=vest
 
 ## Status of the data
 Everything in `data/` is **illustrative**. Rules need legal review and provenance; venues are homepages, not affiliate links; HUD numbers are placeholders. See "Open questions" in the glossary.
+
+## Owner dashboard
+
+The private operational dashboard is available at `http://localhost:8080/admin`.
+It reads live Privy accounts, the current catalog and rule matrices, and recorded
+route activity. It does not display sample metrics or call a route a completed trade.
+
+Add the owner's exact Privy user ID to `web/.env.local`:
+
+```bash
+VESTAIL_ADMIN_USER_IDS=did:privy:your-owner-user-id
+```
+
+Separate multiple owners with commas. The server checks this allowlist on every
+admin data request; never give it a `NEXT_PUBLIC_` prefix.

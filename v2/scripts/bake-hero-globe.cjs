@@ -109,6 +109,95 @@ for (const f of fc.features) {
   }
 }
 
+/*
+ * Labels. Each country gets one anchor point and a name. The anchor is the
+ * area-weighted centroid of its rings, which lands inside the country for every
+ * shape here (it would not for a crescent, and the United States is the one to
+ * watch: Alaska and Hawaii pull it west, so the lower 48 ring is used alone).
+ *
+ * `own` marks the twelve countries Vestail has rules for. The rest are context:
+ * drawn quieter, so the globe reads as a map rather than a dozen floating names.
+ */
+const OWN = new Set([
+  "Nigeria", "United Kingdom", "United States of America", "United Arab Emirates",
+  "China", "India", "Brazil", "Saudi Arabia", "Germany", "Japan",
+  "South Africa", "South Korea",
+]);
+
+// Natural Earth's long forms are too wide to set on a globe.
+const SHORT = {
+  "United States of America": "United States",
+  "United Arab Emirates": "UAE",
+  "Dem. Rep. Congo": "DR Congo",
+  "Central African Rep.": "Central African Rep.",
+  "Bosnia and Herz.": "Bosnia",
+  "Dominican Rep.": "Dominican Rep.",
+  "Papua New Guinea": "Papua New Guinea",
+  "Czechia": "Czechia",
+  "Solomon Is.": "Solomon Is.",
+  "Eq. Guinea": "Eq. Guinea",
+  "S. Sudan": "South Sudan",
+  "W. Sahara": "W. Sahara",
+  "N. Cyprus": "N. Cyprus",
+  "Falkland Is.": "Falkland Is.",
+  "Fr. S. Antarctic Lands": null,
+  "Antarctica": null,
+  "Greenland": "Greenland",
+};
+
+/*
+ * Below this the country is too small for its name to sit on it. Vestail's own
+ * twelve are kept whatever their size — the UAE and South Korea are both well
+ * under the limit and both have to be on the globe — and their labels are
+ * nudged clear of the outline instead.
+ */
+const LABEL_MIN_AREA = 18;   // square degrees
+
+const centroid = ring => {
+  let a = 0, cx = 0, cy = 0;
+  for (let i = 0, n = ring.length; i < n; i++) {
+    const [x1, y1] = ring[i], [x2, y2] = ring[(i + 1) % n];
+    const f = x1 * y2 - x2 * y1;
+    a += f; cx += (x1 + x2) * f; cy += (y1 + y2) * f;
+  }
+  if (!a) return null;
+  return { lon: cx / (3 * a), lat: cy / (3 * a), area: Math.abs(a / 2) };
+};
+
+const labels = [];
+let unnamed = 0;
+for (const f of fc.features) {
+  const raw = f.properties && f.properties.name;
+  if (!raw) { unnamed++; continue; }
+  const name = raw in SHORT ? SHORT[raw] : raw;
+  if (!name) continue;
+
+  const g = f.geometry;
+  if (!g) continue;
+  const polys = g.type === "Polygon" ? [g.coordinates] : g.type === "MultiPolygon" ? g.coordinates : [];
+
+  // The outer ring of the largest part, not the mean of every part: an island
+  // chain's average sits in open water.
+  let best = null;
+  for (const poly of polys) {
+    const c = centroid(poly[0]);
+    if (c && (!best || c.area > best.area)) best = c;
+  }
+  const own = OWN.has(raw);
+  if (!best || (best.area < LABEL_MIN_AREA && !own)) continue;
+
+  labels.push({
+    n: name,
+    lon: +best.lon.toFixed(1),
+    lat: +best.lat.toFixed(1),
+    own: own ? 1 : 0,
+  });
+}
+
+labels.sort((a, b) => b.own - a.own || a.n.localeCompare(b.n));
+const ownFound = labels.filter(l => l.own).length;
+process.stderr.write(`labels: ${labels.length} (${ownFound}/12 of Vestail's countries), ${unnamed} unnamed features\n`);
+
 const points = rings.reduce((n, r) => n + r.length / 2, 0);
 process.stderr.write(`rings kept: ${rings.length} (${points} points at ${TOLERANCE} deg), dropped below ${MIN_AREA} sq deg: ${dropped}\n`);
-process.stdout.write(JSON.stringify({ rings }));
+process.stdout.write(JSON.stringify({ rings, labels }));

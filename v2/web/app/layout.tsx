@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { DM_Sans, Geist, Inter, Manrope, Syne } from "next/font/google";
+import { DM_Sans, Geist, Inter, Manrope, Outfit, Syne } from "next/font/google";
 import { Providers } from "@/components/Providers";
 import "./globals.css";
 
@@ -8,6 +8,7 @@ const manrope = Manrope({ variable: "--font-manrope", subsets: ["latin"], weight
 const syne = Syne({ variable: "--font-syne", subsets: ["latin"], weight: ["600", "700"] });
 const geist = Geist({ variable: "--font-geist", subsets: ["latin"] });
 const dmSans = DM_Sans({ variable: "--font-dm-sans", subsets: ["latin"] });
+const outfit = Outfit({ variable: "--font-outfit", subsets: ["latin"] });
 
 const THEME_SCRIPT = `try{var t=localStorage.getItem("vestail-theme");document.documentElement.dataset.theme=t||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")}catch(e){}`;
 
@@ -18,7 +19,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${manrope.variable} ${syne.variable} ${geist.variable} ${dmSans.variable}`} suppressHydrationWarning>
+    <html lang="en" className={`${inter.variable} ${manrope.variable} ${syne.variable} ${geist.variable} ${dmSans.variable} ${outfit.variable}`} suppressHydrationWarning>
       <head>
         {/* Set the theme before first paint, the same way and under the same key as the marketing site. */}
         <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />

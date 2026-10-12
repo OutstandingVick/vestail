@@ -1,6 +1,7 @@
 import "server-only";
 
 import type { AdminHealthCheck, AdminOverview } from "@/lib/admin-types";
+import { summarizeAdminUsers } from "@/lib/admin-metrics";
 import { api } from "@/lib/server/api";
 import { productCoverage } from "@/lib/server/admin-product";
 import { adminUsers } from "@/lib/server/admin-users";
@@ -25,15 +26,9 @@ export async function buildAdminOverview(): Promise<AdminOverview> {
   const activity = activityResult.status === "fulfilled" ? activityResult.value : {
     stats: { volume_30d_usd: 0, volume_30d_delta_pct: 0, orders_routed: 0, orders_delta_pct: 0, active_buyers_7d: 0 }, recent: [],
   };
-  const weekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
   return {
     generatedAt: new Date().toISOString(),
-    users: {
-      total: users.length,
-      profiled: users.filter(user => user.hasProfile).length,
-      wallets: users.reduce((sum, user) => sum + user.walletCount, 0),
-      recent7d: users.filter(user => Date.parse(user.joinedAt) >= weekAgo).length,
-    },
+    users: summarizeAdminUsers(users),
     catalog: { countries: catalog[0].length, assets: catalog[1].length, tokenSymbols: catalog[2].length, markets: catalog[3].length },
     coverage: coverageResult.status === "fulfilled" ? coverageResult.value : [],
     activity,

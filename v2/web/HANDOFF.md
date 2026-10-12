@@ -19,7 +19,7 @@ npm run dev -w @vestail/web                                                     
 ```
 
 `web/.env.local` (git-ignored, already filled on this machine; template in `web/.env.example`):
-`NEXT_PUBLIC_PRIVY_APP_ID`, `PRIVY_APP_SECRET`, `VESTAIL_API_URL`, `VESTAIL_API_KEY=local-dev-key`, `JUPITER_API_KEY`,
+`NEXT_PUBLIC_PRIVY_APP_ID`, `PRIVY_APP_SECRET`, `VESTAIL_INVITE_SECRET`, `VESTAIL_API_URL`, `VESTAIL_API_KEY=local-dev-key`, `JUPITER_API_KEY`,
 `SOLANA_RPC_URL` (server-only Helius URL), optional `VESTAIL_ORDER_SECRET` (required in production), `VESTAIL_DATA_DIR`.
 Privy dashboard must list `http://localhost:8080` as an allowed origin. The Next app serves the marketing site (`v2/app/index.html`, read from disk at `/`, images at `/assets/*`) and the app under `/app`, so the old Python static server is not needed. Port 3000 is taken by Docker on this machine.
 

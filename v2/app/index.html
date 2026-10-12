@@ -2283,7 +2283,7 @@ start();
   let globeInView = true;
 
   function queueFrame() {
-    if (reduceGlobeMotion.matches || !globeInView || frameQueued) return;
+    if (reduceGlobeMotion.matches || !globeInView || document.hidden || frameQueued) return;
     previousFrame = performance.now();
     frameQueued = true;
     requestAnimationFrame(animate);
@@ -2291,7 +2291,7 @@ start();
 
   function animate(now) {
     frameQueued = false;
-    if (reduceGlobeMotion.matches || !globeInView) return;
+    if (reduceGlobeMotion.matches || !globeInView || document.hidden) return;
     currentYaw += Math.min(now - previousFrame, 50) * 0.0036;
     previousFrame = now;
     setYaw(currentYaw);
@@ -2303,6 +2303,10 @@ start();
     globeInView = entry.isIntersecting;
     if (globeInView) queueFrame();
   }, { threshold: 0.01 }).observe(canvas.closest(".hero"));
+
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden) queueFrame();
+  });
 
   if (reduceGlobeMotion.matches) {
     setYaw(startYaw);

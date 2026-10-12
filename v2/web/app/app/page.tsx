@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { Logo } from "@/components/Logo";
+import { authedFetch } from "@/lib/client";
 
 type Mode = "signup" | "login";
 
@@ -18,12 +19,17 @@ type Mode = "signup" | "login";
 export default function SignInPage() {
   const router = useRouter();
   const { ready, authenticated } = usePrivy();
-  const done = () => router.replace("/app/portfolio");
+  const done = async () => {
+    if (mode === "signup") await authedFetch("/api/early-access/complete", { method: "POST" }).catch(() => undefined);
+    router.replace("/app/portfolio");
+  };
   const { login } = useLogin({ onComplete: done });
   const { sendCode, loginWithCode, state } = useLoginWithEmail({ onComplete: done });
   const [mode, setMode] = useState<Mode>("signup");
   const [email, setEmail] = useState("");
   const [code, setCode] = useState("");
+  const [accessCode, setAccessCode] = useState("");
+  const [accessVerified, setAccessVerified] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const awaitingCode = state.status === "awaiting-code-input" || state.status === "submitting-code";
@@ -43,6 +49,36 @@ export default function SignInPage() {
     setBusy(false);
   }
 
+  async function verifyEarlyAccess() {
+    if (accessVerified) return true;
+    const response = await fetch("/api/early-access/verify", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ code: accessCode }),
+    });
+    const body = await response.json().catch(() => null) as { error?: string } | null;
+    if (!response.ok) throw new Error(body?.error ?? "We couldn't verify that early access code.");
+    setAccessVerified(true);
+    return true;
+  }
+
+  async function beginEmailSignIn() {
+    if (mode === "signup") await verifyEarlyAccess();
+    await sendCode({ email: email.trim(), disableSignup: mode === "login" });
+  }
+
+  async function beginWalletSignIn() {
+    setBusy(true); setError(null);
+    try {
+      if (mode === "signup") await verifyEarlyAccess();
+      login({ loginMethods: ["wallet"] });
+    } catch (e) {
+      setError((e as Error).message || "We couldn't verify that early access code.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
   const tab = (m: Mode, label: string) => (
     <button type="button" role="tab" aria-selected={mode === m} onClick={() => { setMode(m); setError(null); setCode(""); }}
       className={`min-h-11 flex-1 rounded-full text-[15px] font-semibold transition-colors ${mode === m ? "bg-ink text-page" : "text-muted hover:text-ink"}`}>
@@ -52,12 +88,12 @@ export default function SignInPage() {
 
   return (
     <div className="relative isolate flex min-h-screen flex-col overflow-hidden">
-      {/* Background: the site's globe, soft brand-colour light and a quiet dot grid. Decorative only. */}
+      {/* Background: the site's line globe, soft brand-colour light and a quiet dot grid. Decorative only. */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
         <div className="absolute inset-0 bg-[radial-gradient(var(--color-field)_1px,transparent_1px)] [background-size:22px_22px] opacity-60" />
         <div className="absolute top-[-12%] left-[-10%] size-[46vmax] rounded-full bg-action opacity-[0.16] blur-[90px]" />
         <div className="absolute right-[-12%] bottom-[-18%] size-[50vmax] rounded-full bg-[#7C5CFF] opacity-[0.20] blur-[100px]" />
-        <div className="absolute top-1/2 left-1/2 size-[min(92vw,880px)] -translate-x-1/2 -translate-y-1/2 bg-[url('/assets/atlantic-earth-globe.png')] bg-contain bg-center bg-no-repeat opacity-[0.13] saturate-[0.7]" />
+        <div className="absolute top-1/2 left-1/2 size-[min(92vw,860px)] -translate-x-1/2 -translate-y-1/2 bg-[url('/vestail-hero-globe.svg')] bg-contain bg-center bg-no-repeat opacity-35 sm:size-[min(78vw,860px)]" />
       </div>
 
       <main className="flex flex-1 flex-col items-center justify-center gap-6 px-4 py-12 sm:py-16">
@@ -82,7 +118,12 @@ export default function SignInPage() {
           </div>
 
           {!awaitingCode ? (
-            <form className="flex flex-col gap-3" onSubmit={e => { e.preventDefault(); run(() => sendCode({ email: email.trim(), disableSignup: mode === "login" }), "We couldn't send a code. Check the email and try again."); }}>
+            <form className="flex flex-col gap-3" onSubmit={e => { e.preventDefault(); run(beginEmailSignIn, mode === "signup" ? "That early access code is not valid." : "We couldn't send a code. Check the email and try again."); }}>
+              {mode === "signup" && <>
+                <label htmlFor="access-code" className="text-sm font-semibold">Early access code</label>
+                <input id="access-code" type="text" required autoComplete="off" value={accessCode} onChange={e => { setAccessCode(e.target.value); setAccessVerified(false); }} placeholder="Enter your invitation code"
+                  className="min-h-12 rounded-field border-[1.5px] border-field bg-wash px-4 text-[16px]" />
+              </>}
               <label htmlFor="email" className="text-sm font-semibold">Email</label>
               <input id="email" type="email" required autoComplete="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="you@example.com"
                 className="min-h-12 rounded-field border-[1.5px] border-field bg-wash px-4 text-[16px]" />
@@ -106,10 +147,10 @@ export default function SignInPage() {
           <div className="my-5 flex items-center gap-3 text-[13px] text-muted">
             <span className="h-px flex-1 bg-line" />or<span className="h-px flex-1 bg-line" />
           </div>
-          <button type="button" disabled={!ready} onClick={() => login({ loginMethods: ["wallet"] })}
+          <button type="button" disabled={!ready || busy} onClick={beginWalletSignIn}
             className="flex min-h-12 w-full items-center justify-center gap-2 rounded-full border-[1.5px] border-field bg-surface font-semibold hover:bg-wash disabled:opacity-60">
             <Wallet size={18} weight="regular" aria-hidden="true" />
-            Continue with a wallet
+            {mode === "signup" ? "Sign up with a wallet" : "Continue with a wallet"}
           </button>
           <p className="mt-3 text-center text-xs text-muted">Phantom, Solflare, MetaMask, Rabby or Coinbase Wallet.</p>
 

@@ -2179,21 +2179,26 @@ start();
    * costs about four times as much for an identical picture.
    */
   function drawLand() {
-    ctx.beginPath();
-    for (const r of geo.rings) {
-      const points = r.p || r;
-      let open = false;
-      for (let i = 0; i < points.length; i += 2) {
-        const p = project(points[i], points[i + 1]);
-        if (p.z <= 0) { open = false; continue; }
-        if (open) ctx.lineTo(p.x, p.y);
-        else { ctx.moveTo(p.x, p.y); open = true; }
+    const stroke = (own, color, width) => {
+      ctx.beginPath();
+      for (const r of geo.rings) {
+        if (!!r.own !== own) continue;
+        const points = r.p || r;
+        let open = false;
+        for (let i = 0; i < points.length; i += 2) {
+          const p = project(points[i], points[i + 1]);
+          if (p.z <= 0) { open = false; continue; }
+          if (open) ctx.lineTo(p.x, p.y);
+          else { ctx.moveTo(p.x, p.y); open = true; }
+        }
       }
-    }
-    ctx.strokeStyle = C.land;
-    ctx.lineWidth = Math.max(0.6, radius / 820);
-    ctx.lineJoin = "round";
-    ctx.stroke();
+      ctx.strokeStyle = color;
+      ctx.lineWidth = width;
+      ctx.lineJoin = "round";
+      ctx.stroke();
+    };
+    stroke(false, C.land, Math.max(0.6, radius / 820));
+    stroke(true, C["land-own"], Math.max(0.9, radius / 620));
   }
 
   function draw() {

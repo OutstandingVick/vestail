@@ -3,9 +3,12 @@
  *
  * The landing page has no build step and no runtime dependencies, so the
  * country outlines can't be loaded from topojson in the browser. This reads
- * world-atlas (Natural Earth, public domain) from the v1 app's node_modules at
- * the repo root, converts it once, and writes plain arrays the page can draw
- * with a hand-rolled orthographic projection.
+ * world-atlas (Natural Earth, public domain), converts it once, and writes
+ * plain arrays the page can draw with a hand-rolled orthographic projection.
+ *
+ * Both packages are devDependencies of v2 itself. They used to be resolved
+ * from the repo root, which is v1's install — that coupled the v2 globe to v1
+ * staying in this repo, for no reason beyond the two already being there.
  *
  * The page has to keep working opened straight from disk, where fetch() of a
  * sibling file is blocked, so the output is pasted into app/index.html as the
@@ -14,12 +17,9 @@
  *
  * Usage, from v2/:  node scripts/bake-hero-globe.cjs
  */
-const { execSync } = require("child_process");
 const path = require("path");
-
-const ROOT = path.resolve(__dirname, "../..");
-const topojson = require(path.join(ROOT, "node_modules/topojson-client"));
-const world = require(path.join(ROOT, "node_modules/world-atlas/countries-110m.json"));
+const topojson = require("topojson-client");
+const world = require("world-atlas/countries-110m.json");
 
 const fc = topojson.feature(world, world.objects.countries);
 process.stderr.write(`countries in source: ${fc.features.length}\n`);

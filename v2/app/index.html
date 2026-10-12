@@ -63,6 +63,24 @@
     --hero-chip-text: rgb(23 23 26 / .82);
     --hero-chip-hover-bg: rgb(255 255 255 / .88);
     --hero-chip-hover-text: #17171a;
+
+    /*
+     * The globe's own palette, so the canvas can be themed from CSS like
+     * everything else. Orange is reserved for the twelve markets Vestail has
+     * rules for and their pins; everything else is ink at low opacity, which is
+     * what keeps a map of 87 countries from competing with the headline.
+     */
+    --globe-sphere: rgb(255 255 255 / .5);
+    --globe-sphere-rim: rgb(23 23 26 / .08);
+    --globe-limb: rgb(23 23 26 / .1);
+    --globe-graticule: rgb(23 23 26 / .06);
+    --globe-land: rgb(23 23 26 / .2);
+    --globe-land-own: rgb(255 88 10 / .46);
+    --globe-fill-own: rgb(255 88 10 / .07);
+    --globe-label: rgb(23 23 26 / .46);
+    --globe-label-own: #cc4608;
+    --globe-pin: #ff580a;
+    --globe-pin-halo: rgb(255 88 10 / .22);
     --ink: #0d0d0f;
     --ink-2: color-mix(in srgb, #17171a 80%, #6f6c75);
     --ink-3: var(--muted);
@@ -113,6 +131,18 @@
     --hero-chip-text: rgb(248 247 255 / .86);
     --hero-chip-hover-bg: rgb(14 15 20 / .58);
     --hero-chip-hover-text: #fff;
+
+    --globe-sphere: rgb(248 247 255 / .035);
+    --globe-sphere-rim: rgb(248 247 255 / .1);
+    --globe-limb: rgb(248 247 255 / .07);
+    --globe-graticule: rgb(248 247 255 / .055);
+    --globe-land: rgb(248 247 255 / .22);
+    --globe-land-own: rgb(255 122 60 / .55);
+    --globe-fill-own: rgb(255 88 10 / .09);
+    --globe-label: rgb(248 247 255 / .44);
+    --globe-label-own: #ff8a4c;
+    --globe-pin: #ff7a3c;
+    --globe-pin-halo: rgb(255 122 60 / .2);
     --country-card: #1b1c29;
     --lavender-surface: #181925;
     --lavender-strong: #212233;

@@ -219,7 +219,7 @@
   .hero { position: relative; isolation: isolate; overflow: hidden; padding: 56px 0 28px; border-radius: 0 0 var(--r-xl) var(--r-xl); background: var(--hero-bg); text-align: center; }
   .hero::before, .hero::after { content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none; }
   .hero > * { position: relative; z-index: 1; }
-  .hero::before { background: url("assets/atlantic-earth-globe.png") 52% 50% / min(82vw, 1040px) auto no-repeat; filter: var(--hero-earth-filter); opacity: var(--hero-earth-opacity); }
+  .hero::before { display: none; }
 
   /*
    * The globe. Oversized and pushed off the right edge, so it reads as part of

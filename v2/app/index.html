@@ -2202,10 +2202,14 @@ start();
   }
 
   function drawPins() {
-    ctx.fillStyle = C.pin;
     for (const pin of geo.pins || []) {
       const p = project(pin.lon, pin.lat);
       if (p.z <= 0.06) continue;
+      ctx.fillStyle = C["pin-halo"];
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, Math.max(6, radius / 72), 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = C.pin;
       ctx.beginPath();
       ctx.arc(p.x, p.y, Math.max(2.2, radius / 180), 0, Math.PI * 2);
       ctx.fill();

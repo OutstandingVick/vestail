@@ -2067,13 +2067,12 @@ start();
   function readPalette() {
     const cs = getComputedStyle(document.documentElement);
     for (const k of KEYS) C[k] = cs.getPropertyValue(`--globe-${k}`).trim() || "transparent";
-    if (w && h) draw();
   }
 
   readPalette();
-  new MutationObserver(readPalette)
+  new MutationObserver(() => { readPalette(); draw(); })
     .observe(document.documentElement, { attributeFilter: ["data-theme"] });
-  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", readPalette);
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { readPalette(); draw(); });
 
   /*
    * Orthographic projection. A point on the unit sphere is spun east by the

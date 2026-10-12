@@ -46,6 +46,17 @@ export interface ActivityItem extends Order {
   country_label?: string;
 }
 
+export interface ProductActivity {
+  stats: {
+    volume_30d_usd: number;
+    volume_30d_delta_pct: number;
+    orders_routed: number;
+    orders_delta_pct: number;
+    active_buyers_7d: number;
+  };
+  recent: { flag: string; asset: string; venue: string; ago: string }[];
+}
+
 /** A Hyperliquid perpetual judged for a country: price exposure, never ownership. */
 export interface Market {
   id: string; coin: string; name: string; commodity: string; related_asset: string | null;

@@ -1,11 +1,13 @@
 "use client";
 
 import { useSignTransaction, useWallets } from "@privy-io/react-auth/solana";
+import { VersionedTransaction } from "@solana/web3.js";
 import { useState } from "react";
 
 import { base64ToBytes, bytesToBase64 } from "@/lib/base64";
 import { authedFetch, errorOf } from "@/lib/client";
-import { USDC_DECIMALS } from "@/lib/constants";
+import { USDC_DECIMALS, USDC_MINT, WSOL_MINT } from "@/lib/constants";
+import { inspectSwapTransaction, maxLamportsFor } from "@/lib/swap/inspect";
 import type { Token } from "@/lib/types";
 
 type Quote = { outAmount: string; outputDecimals: number; priceImpactPct: number | null };
@@ -56,7 +58,16 @@ export function SwapForm({ symbol, tokens, acknowledged, locked }: {
     setBusy("buy"); setMessage(null);
     try {
       const o = await order(true);
-      const { signedTransaction } = await signTransaction({ transaction: base64ToBytes(o.transaction), wallet });
+      // Check again here, before the wallet opens: the server already inspected
+      // this transaction, but a compromised server must not be able to get an
+      // uninspected one signed. Same rules as the server, in the browser.
+      const bytes = base64ToBytes(o.transaction);
+      const inspection = inspectSwapTransaction(VersionedTransaction.deserialize(bytes), {
+        taker: wallet.address,
+        maxLamportsFromTaker: maxLamportsFor(USDC_MINT, BigInt(units(amount) ?? "0"), WSOL_MINT),
+      });
+      if (!inspection.ok) throw new Error(`Refused before signing: ${inspection.reason}`);
+      const { signedTransaction } = await signTransaction({ transaction: bytes, wallet });
       const res = await authedFetch("/api/swap/execute", {
         method: "POST",
         body: JSON.stringify({ signedTransaction: bytesToBase64(signedTransaction), requestId: o.requestId, orderToken: o.orderToken }),

@@ -100,20 +100,6 @@ const flat = r => {
   return out;
 };
 
-const rings = [];
-let dropped = 0;
-for (const f of fc.features) {
-  const g = f.geometry;
-  if (!g) continue;
-  const polys = g.type === "Polygon" ? [g.coordinates] : g.type === "MultiPolygon" ? g.coordinates : [];
-  for (const poly of polys) {
-    for (const ring of poly) {
-      if (ringArea(ring) < MIN_AREA) { dropped++; continue; }
-      rings.push(flat(simplify(ring, TOLERANCE)));
-    }
-  }
-}
-
 /*
  * Labels. Each country gets one anchor point and a name. The anchor is the
  * area-weighted centroid of its rings, which lands inside the country for every
@@ -128,6 +114,21 @@ const OWN = new Set([
   "China", "India", "Brazil", "Saudi Arabia", "Germany", "Japan",
   "South Africa", "South Korea",
 ]);
+
+const rings = [];
+let dropped = 0;
+for (const f of fc.features) {
+  const raw = f.properties && f.properties.name;
+  const g = f.geometry;
+  if (!raw || !g) continue;
+  const polys = g.type === "Polygon" ? [g.coordinates] : g.type === "MultiPolygon" ? g.coordinates : [];
+  for (const poly of polys) {
+    for (const ring of poly) {
+      if (ringArea(ring) < MIN_AREA) { dropped++; continue; }
+      rings.push({ c: raw, own: OWN.has(raw) ? 1 : 0, p: flat(simplify(ring, TOLERANCE)) });
+    }
+  }
+}
 
 // Natural Earth's long forms are too wide to set on a globe.
 const SHORT = {
@@ -232,6 +233,6 @@ if (missing.length) throw new Error(`pins for countries with no rules: ${missing
 if (uncovered.length) throw new Error(`countries with rules but no pin: ${uncovered.join(", ")}`);
 process.stderr.write(`pins: ${PINS.length}, one per country in data/countries.json\n`);
 
-const points = rings.reduce((n, r) => n + r.length / 2, 0);
+const points = rings.reduce((n, r) => n + r.p.length / 2, 0);
 process.stderr.write(`rings kept: ${rings.length} (${points} points at ${TOLERANCE} deg), dropped below ${MIN_AREA} sq deg: ${dropped}\n`);
 process.stdout.write(JSON.stringify({ rings, labels, pins: PINS }));

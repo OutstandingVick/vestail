@@ -2217,6 +2217,7 @@ start();
   }
 
   function drawLabels() {
+    ctx.save();
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     for (const label of geo.labels || []) {
@@ -2225,8 +2226,10 @@ start();
       const size = Math.max(label.own ? 10 : 8, radius / (label.own ? 42 : 52));
       ctx.font = `${label.own ? 650 : 500} ${size}px Inter, ui-sans-serif, system-ui, sans-serif`;
       ctx.fillStyle = label.own ? C["label-own"] : C.label;
+      ctx.globalAlpha = Math.min(1, (p.z - 0.12) / 0.34);
       ctx.fillText(label.n, p.x, p.y);
     }
+    ctx.restore();
   }
 
   function draw() {

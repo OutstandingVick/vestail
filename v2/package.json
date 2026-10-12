@@ -16,5 +16,9 @@
       "postcss": "^8.5.29"
     },
     "ws@>=8.0.0 <8.20.2": "^8.22.0"
+  },
+  "devDependencies": {
+    "topojson-client": "^3.1.0",
+    "world-atlas": "^2.0.2"
   }
 }

@@ -54,9 +54,14 @@ export function EvmSwapForm({ symbol, tokens, acknowledged, locked }: { symbol: 
       const o = await order(true);
       await wallet.switchChain(chain.id);
       const provider = await wallet.getEthereumProvider();
+      // KyberSwap's router has the same address on every chain, so a wallet left
+      // on the wrong network would run this swap there. Confirm the switch took.
+      const current = Number(await provider.request({ method: "eth_chainId" }));
+      if (current !== chain.id || o.tx.chainId !== chain.id)
+        throw new Error(`Your wallet is on another network. Switch it to ${chain.name} and try again.`);
       const hash = (await provider.request({
         method: "eth_sendTransaction",
-        params: [{ from: wallet.address, to: o.tx.to, data: o.tx.data, value: "0x" + BigInt(o.tx.value).toString(16) }],
+        params: [{ from: wallet.address, to: o.tx.to, data: o.tx.data, value: "0x" + BigInt(o.tx.value).toString(16), chainId: "0x" + chain.id.toString(16) }],
       })) as string;
       setMessage({ kind: "ok", text: `Sent. Your ${token?.token_symbol} arrives once it confirms.`, href: `${chain.explorer}/tx/${hash}` });
     } catch (e) {

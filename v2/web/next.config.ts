@@ -57,6 +57,7 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       { source: "/", headers: [...common, { key: "Content-Security-Policy", value: siteCsp }] },
+      { source: "/early-access", headers: [...common, { key: "Content-Security-Policy", value: siteCsp }] },
       { source: "/app/:path*", headers: [...common, { key: "Content-Security-Policy", value: appCsp }] },
       { source: "/app", headers: [...common, { key: "Content-Security-Policy", value: appCsp }] },
       { source: "/api/:path*", headers: common },

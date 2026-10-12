@@ -2072,6 +2072,7 @@ start();
   function readPalette() {
     const cs = getComputedStyle(document.documentElement);
     for (const k of KEYS) C[k] = cs.getPropertyValue(`--globe-${k}`).trim() || "transparent";
+    if (w && h) draw();
   }
 
   readPalette();

@@ -2121,6 +2121,32 @@ start();
     ctx.stroke();
   }
 
+  function drawGraticule() {
+    ctx.beginPath();
+    const trace = points => {
+      let open = false;
+      for (const [lon, lat] of points) {
+        const p = project(lon, lat);
+        if (p.z <= 0) { open = false; continue; }
+        if (open) ctx.lineTo(p.x, p.y);
+        else { ctx.moveTo(p.x, p.y); open = true; }
+      }
+    };
+    for (let lon = -150; lon <= 180; lon += 30) {
+      const points = [];
+      for (let lat = -90; lat <= 90; lat += 3) points.push([lon, lat]);
+      trace(points);
+    }
+    for (let lat = -60; lat <= 60; lat += 30) {
+      const points = [];
+      for (let lon = -180; lon <= 180; lon += 3) points.push([lon, lat]);
+      trace(points);
+    }
+    ctx.strokeStyle = C.graticule;
+    ctx.lineWidth = Math.max(0.5, radius / 1100);
+    ctx.stroke();
+  }
+
   /*
    * Country outlines. Each ring is a flat [lon, lat, ...] array; the path is cut
    * wherever the coastline crosses onto the far side of the globe, so the back
@@ -2151,6 +2177,7 @@ start();
   function draw() {
     ctx.clearRect(0, 0, w, h);
     drawSphere();
+    drawGraticule();
     drawLand();
   }
 

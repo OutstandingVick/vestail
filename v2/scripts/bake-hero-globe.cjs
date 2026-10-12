@@ -37,6 +37,58 @@ const ringArea = r => {
   return Math.abs(a / 2);
 };
 
+/*
+ * Douglas-Peucker, run per ring before quantising. At the sizes this globe is
+ * drawn, a degree is roughly two or three pixels, so a tolerance well under one
+ * degree is already sub-pixel and the coastline reads the same with a third of
+ * the points.
+ */
+const TOLERANCE = 0.35;      // degrees
+
+function dp(pts, tol) {
+  if (pts.length < 3) return pts;
+  const keep = new Uint8Array(pts.length);
+  keep[0] = keep[pts.length - 1] = 1;
+  const stack = [[0, pts.length - 1]];
+  while (stack.length) {
+    const [a, b] = stack.pop();
+    if (b - a < 2) continue;
+    const [ax, ay] = pts[a], [bx, by] = pts[b];
+    const dx = bx - ax, dy = by - ay, len = Math.hypot(dx, dy);
+    let far = -1, best = tol;
+    for (let i = a + 1; i < b; i++) {
+      const [px, py] = pts[i];
+      // Perpendicular distance to the chord, or to the point itself if the
+      // chord has no length (which happens on a ring that returns to its start).
+      const d = len
+        ? Math.abs(dy * (px - ax) - dx * (py - ay)) / len
+        : Math.hypot(px - ax, py - ay);
+      if (d > best) { best = d; far = i; }
+    }
+    if (far > 0) { keep[far] = 1; stack.push([a, far], [far, b]); }
+  }
+  return pts.filter((_, i) => keep[i]);
+}
+
+/*
+ * A closed ring starts and ends on the same point, so running Douglas-Peucker
+ * over it whole leaves a zero-length chord that every point sits on top of, and
+ * the whole coastline collapses to two points. Cut the ring at the point
+ * furthest from its start, simplify each half, then rejoin.
+ */
+function simplify(ring, tol) {
+  if (ring.length < 5) return ring;
+  const [ax, ay] = ring[0];
+  let k = 0, best = -1;
+  for (let i = 1; i < ring.length - 1; i++) {
+    const d = Math.hypot(ring[i][0] - ax, ring[i][1] - ay);
+    if (d > best) { best = d; k = i; }
+  }
+  const head = dp(ring.slice(0, k + 1), tol);
+  const tail = dp(ring.slice(k), tol);
+  return head.concat(tail.slice(1));
+}
+
 const flat = r => {
   const out = [];
   for (const [lon, lat] of r) out.push(+lon.toFixed(QUANT), +lat.toFixed(QUANT));
@@ -52,11 +104,11 @@ for (const f of fc.features) {
   for (const poly of polys) {
     for (const ring of poly) {
       if (ringArea(ring) < MIN_AREA) { dropped++; continue; }
-      rings.push(flat(ring));
+      rings.push(flat(simplify(ring, TOLERANCE)));
     }
   }
 }
 
 const points = rings.reduce((n, r) => n + r.length / 2, 0);
-process.stderr.write(`rings kept: ${rings.length} (${points} points), dropped below ${MIN_AREA} sq deg: ${dropped}\n`);
+process.stderr.write(`rings kept: ${rings.length} (${points} points at ${TOLERANCE} deg), dropped below ${MIN_AREA} sq deg: ${dropped}\n`);
 process.stdout.write(JSON.stringify({ rings }));

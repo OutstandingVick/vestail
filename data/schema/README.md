@@ -39,6 +39,24 @@ Either a literal asset name, or the sentinel `"equity-by-home"` meaning: domesti
 ```
 Every country needs a rule for every asset id, for both buyer types; the core refuses to load a missing, unknown or invalid one. `sources` lists the documents the status rests on and `verified_at` is the date it was last checked against them. Both start empty (`[]`, `null`): an unsourced rule is illustrative. `schemas.json` validates the shape, and the API tests run it over `countries.json`.
 
+## Tokenised symbols
+
+`tokens/representations.json` (Solana) and `tokens/evm.json` (Robinhood Chain,
+Base) list the onchain versions of a listed equity. A row says which contract,
+on which chain, from which provider, and — the part that matters — what it
+legally is: `custody_backed`, `security_entitlement`, `share_claim` or
+`tokenized_debt`, plus whether it can be redeemed and who, if anyone, holds the
+underlying share. The same ticker through three providers is three different
+answers, and that difference is the thing being recorded.
+
+Addresses are read from the chain, never taken on trust from a provider's
+registry. `scripts/sync-robinhood-tokens.mjs` does this for Robinhood.
+
+`tokens/symbols.json` maps each symbol to the asset class that governs it.
+`equity-by-home` means the `home` market decides: domestic equities there,
+foreign equities everywhere else. Pre-IPO names are private company shares.
+Every symbol needs an entry — the core refuses to load without one.
+
 ## Roadmap
 1. ~~Keyed rules~~ and 2. ~~`sources[]` and `verified_at` on every rule~~: done; values still to be filled.
 3. Replace `entities.json` with a securities master (ISIN/ticker lookup) behind the same `{name, kind, home, asset}` shape.

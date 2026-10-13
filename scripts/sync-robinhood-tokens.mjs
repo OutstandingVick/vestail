@@ -10,6 +10,7 @@
  */
 
 import { readFileSync, writeFileSync } from "node:fs";
+import { pathToFileURL } from "node:url";
 
 /*
  * Named, because the RPC refuses Node's default. curl gets a 200 from the same
@@ -36,7 +37,7 @@ async function fetchRegistry() {
  * until it is checked. A malformed or truncated response must stop the run
  * rather than quietly produce a short, plausible-looking token list.
  */
-function validate(registry) {
+export function validate(registry) {
   if (!registry || !Array.isArray(registry.assets)) throw new Error("registry has no assets array");
   if (!registry.assets.length) throw new Error("registry is empty");
 
@@ -162,7 +163,7 @@ async function ethCall(address, selector, attempt = 1) {
  * then the bytes. Older tokens predating the final standard return a fixed
  * `bytes32` padded with zeros. Both appear in the wild, so both are read.
  */
-function decodeString(hex) {
+export function decodeString(hex) {
   const data = (hex || "").replace(/^0x/, "");
   if (!data) return null;
   const bytes = Buffer.from(data, "hex");
@@ -176,7 +177,7 @@ function decodeString(hex) {
   return bytes.subarray(offset + 32, offset + 32 + length).toString("utf8") || null;
 }
 
-function decodeUint(hex) {
+export function decodeUint(hex) {
   const data = (hex || "").replace(/^0x/, "");
   if (!data) return null;
   const n = Number(BigInt("0x" + data));
@@ -204,7 +205,7 @@ async function readToken(address) {
  * is describing a different token, and writing either down would put a wrong
  * address behind a right-looking symbol. Say so and skip it.
  */
-function reconcile(ticker, listed, onchain) {
+export function reconcile(ticker, listed, onchain) {
   if (!onchain) return { ok: false, why: "nothing deployed at that address" };
   if (onchain.symbol && onchain.symbol !== ticker) {
     return { ok: false, why: `registry says ${ticker}, the contract says ${onchain.symbol}` };
@@ -219,7 +220,7 @@ function reconcile(ticker, listed, onchain) {
  * accuracy stops deserving the word. --all exists for when someone has decided
  * to carry all of them.
  */
-function parseArgs(argv) {
+export function parseArgs(argv) {
   const args = { symbols: null, all: false, dryRun: false };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
@@ -235,64 +236,12 @@ function parseArgs(argv) {
   return args;
 }
 
-const args = parseArgs(process.argv.slice(2));
-const assets = validate(await fetchRegistry());
-const live = onChain(assets);
-process.stderr.write(`registry: ${assets.length} assets, ${live.size} live on chain ${CHAIN_ID}\n`);
-
 /*
- * What every Robinhood Stock Token is, legally. These do not vary per ticker,
- * so they are stated once rather than guessed per row.
- *
- * "tokenized_debt" is the whole point: a Stock Token is a debt security issued
- * by Robinhood Assets (Jersey) Limited giving economic exposure to the share
- * and no legal or beneficial right to it. You cannot redeem it for the share,
- * so redeemable is false and there is no custodian holding one for you. That
- * is exactly the distinction Vestail exists to surface — the same ticker, held
- * three ways, with three different answers about what you actually own.
+ * Importing this file must not start a sync — the tests import it for the
+ * decoders alone, and a network run triggered by an import is a trap.
  */
-const ISSUER = {
-  provider: "robinhood",
-  structure: "tokenized_debt",
-  redeemable: false,
-  custodian: null,
-  source: "https://docs.robinhood.com/chain/stock-tokens",
-};
-
 /** The registry's display name, minus the issuer's own typography. */
-const cleanName = name => name.replace(/\s*•\s*/g, " ").replace(/\s+/g, " ").trim();
-
-function toRepresentation({ ticker, listed, result }) {
-  return {
-    chain: "robinhood",
-    address: listed.address,
-    provider: ISSUER.provider,
-    symbol: ticker,
-    name: cleanName(result.name),
-    tokenSymbol: ticker,
-    decimals: result.decimals,
-    structure: ISSUER.structure,
-    redeemable: ISSUER.redeemable,
-    custodian: ISSUER.custodian,
-    source: ISSUER.source,
-  };
-}
-
-const wanted = args.all ? [...live.keys()] : args.symbols;
-const missing = wanted.filter(t => !live.has(t));
-if (missing.length) throw new Error(`not on chain ${CHAIN_ID}: ${missing.join(", ")}`);
-
-const checked = await pooled(wanted, 3, async ticker => {
-  const listed = live.get(ticker);
-  return { ticker, listed, result: reconcile(ticker, listed, await readToken(listed.address)) };
-});
-
-for (const { ticker, result } of checked) {
-  process.stderr.write(`  ${result.ok ? "ok  " : "SKIP"} ${ticker.padEnd(7)} ${result.ok ? `${cleanName(result.name)} (${result.decimals} decimals)` : result.why}\n`);
-}
-
-const fresh = checked.filter(c => c.result.ok).map(toRepresentation);
-process.stderr.write(`verified: ${fresh.length} of ${wanted.length}\n`);
+export const cleanName = name => name.replace(/\s*•\s*/g, " ").replace(/\s+/g, " ").trim();
 
 /*
  * Merging, not replacing. data/tokens/evm.json also carries Base entries and
@@ -302,8 +251,7 @@ process.stderr.write(`verified: ${fresh.length} of ${wanted.length}\n`);
  * letting it in twice would show the buyer the same thing twice.
  */
 const key = r => `${r.chain}:${r.address.toLowerCase()}`;
-
-function merge(existing, incoming) {
+export function merge(existing, incoming) {
   const byKey = new Map(existing.map(r => [key(r), r]));
   let added = 0, updated = 0;
   for (const r of incoming) {
@@ -319,19 +267,80 @@ function merge(existing, incoming) {
   return { rows, added, updated };
 }
 
-const file = JSON.parse(readFileSync(OUT, "utf8"));
-const { rows, added, updated } = merge(file.representations, fresh);
+if (import.meta.url === pathToFileURL(process.argv[1] ?? "").href) {
+  const args = parseArgs(process.argv.slice(2));
+  const assets = validate(await fetchRegistry());
+  const live = onChain(assets);
+  process.stderr.write(`registry: ${assets.length} assets, ${live.size} live on chain ${CHAIN_ID}\n`);
 
-if (args.dryRun) {
-  process.stderr.write(`dry run: would add ${added}, update ${updated}; ${rows.length} rows total\n`);
-} else {
   /*
-   * Two spaces and a trailing newline, matching the file as it was written by
-   * hand. A formatting change across every row would bury the one line that
-   * actually changed, and this file is read in diffs more often than it is
-   * read whole.
+   * What every Robinhood Stock Token is, legally. These do not vary per ticker,
+   * so they are stated once rather than guessed per row.
+   *
+   * "tokenized_debt" is the whole point: a Stock Token is a debt security issued
+   * by Robinhood Assets (Jersey) Limited giving economic exposure to the share
+   * and no legal or beneficial right to it. You cannot redeem it for the share,
+   * so redeemable is false and there is no custodian holding one for you. That
+   * is exactly the distinction Vestail exists to surface — the same ticker, held
+   * three ways, with three different answers about what you actually own.
    */
-  file.representations = rows;
-  writeFileSync(OUT, JSON.stringify(file, null, 2) + "\n");
-  process.stderr.write(`wrote ${rows.length} rows: ${added} added, ${updated} updated\n`);
+  const ISSUER = {
+    provider: "robinhood",
+    structure: "tokenized_debt",
+    redeemable: false,
+    custodian: null,
+    source: "https://docs.robinhood.com/chain/stock-tokens",
+  };
+
+
+  function toRepresentation({ ticker, listed, result }) {
+    return {
+      chain: "robinhood",
+      address: listed.address,
+      provider: ISSUER.provider,
+      symbol: ticker,
+      name: cleanName(result.name),
+      tokenSymbol: ticker,
+      decimals: result.decimals,
+      structure: ISSUER.structure,
+      redeemable: ISSUER.redeemable,
+      custodian: ISSUER.custodian,
+      source: ISSUER.source,
+    };
+  }
+
+  const wanted = args.all ? [...live.keys()] : args.symbols;
+  const missing = wanted.filter(t => !live.has(t));
+  if (missing.length) throw new Error(`not on chain ${CHAIN_ID}: ${missing.join(", ")}`);
+
+  const checked = await pooled(wanted, 3, async ticker => {
+    const listed = live.get(ticker);
+    return { ticker, listed, result: reconcile(ticker, listed, await readToken(listed.address)) };
+  });
+
+  for (const { ticker, result } of checked) {
+    process.stderr.write(`  ${result.ok ? "ok  " : "SKIP"} ${ticker.padEnd(7)} ${result.ok ? `${cleanName(result.name)} (${result.decimals} decimals)` : result.why}\n`);
+  }
+
+  const fresh = checked.filter(c => c.result.ok).map(toRepresentation);
+  process.stderr.write(`verified: ${fresh.length} of ${wanted.length}\n`);
+
+
+
+  const file = JSON.parse(readFileSync(OUT, "utf8"));
+  const { rows, added, updated } = merge(file.representations, fresh);
+
+  if (args.dryRun) {
+    process.stderr.write(`dry run: would add ${added}, update ${updated}; ${rows.length} rows total\n`);
+  } else {
+    /*
+     * Two spaces and a trailing newline, matching the file as it was written by
+     * hand. A formatting change across every row would bury the one line that
+     * actually changed, and this file is read in diffs more often than it is
+     * read whole.
+     */
+    file.representations = rows;
+    writeFileSync(OUT, JSON.stringify(file, null, 2) + "\n");
+    process.stderr.write(`wrote ${rows.length} rows: ${added} added, ${updated} updated\n`);
+  }
 }

@@ -9,7 +9,10 @@
  *   node scripts/sync-robinhood-tokens.mjs --symbols NVDA,TSLA
  */
 
+import { readFileSync, writeFileSync } from "node:fs";
+
 const REGISTRY = "https://api.robinhood.com/rhj/assets";
+const OUT = new URL("../data/tokens/evm.json", import.meta.url);
 
 /** Robinhood Chain. Also in data/tokens/evm.json; they must agree. */
 const CHAIN_ID = 4663;
@@ -271,4 +274,21 @@ function merge(existing, incoming) {
   const rows = [...byKey.values()].sort((a, b) =>
     a.chain.localeCompare(b.chain) || a.symbol.localeCompare(b.symbol) || a.provider.localeCompare(b.provider));
   return { rows, added, updated };
+}
+
+const file = JSON.parse(readFileSync(OUT, "utf8"));
+const { rows, added, updated } = merge(file.representations, fresh);
+
+if (args.dryRun) {
+  process.stderr.write(`dry run: would add ${added}, update ${updated}; ${rows.length} rows total\n`);
+} else {
+  /*
+   * Two spaces and a trailing newline, matching the file as it was written by
+   * hand. A formatting change across every row would bury the one line that
+   * actually changed, and this file is read in diffs more often than it is
+   * read whole.
+   */
+  file.representations = rows;
+  writeFileSync(OUT, JSON.stringify(file, null, 2) + "\n");
+  process.stderr.write(`wrote ${rows.length} rows: ${added} added, ${updated} updated\n`);
 }

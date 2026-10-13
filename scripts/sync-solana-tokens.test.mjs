@@ -96,6 +96,10 @@ test("refuses freeze authority drift", () => {
   assert.match(reconcile(candidate, { ...live, freezeAuthority: "unexpected" }, provider).why, /catalogue freeze authority/);
 });
 
+test("refuses decimal drift", () => {
+  assert.match(reconcile(candidate, { ...live, decimals: 6 }, provider).why, /catalogue says 8 decimals/);
+});
+
 const representation = (symbol, tokenMint = mint) => ({ mint: tokenMint, provider: "xstocks", symbol, name: `${symbol} xStock`, tokenSymbol: `${symbol}x` });
 
 test("merges additively without losing existing symbols", () => {

@@ -45,6 +45,11 @@ test("selects only the exact symbol issued by the expected authority", () => {
   assert.equal(selectCandidate([impostor], "METAx", authority), null);
 });
 
+test("refuses two trusted catalogue rows for the same token symbol", () => {
+  const duplicate = { ...candidate, id: "So11111111111111111111111111111111111111112" };
+  assert.throws(() => selectCandidate([candidate, duplicate], "METAx", authority), /returned two METAx mints/);
+});
+
 test("derives the canonical Metaplex metadata PDA", () => {
   assert.equal(metadataPda(mint), "HCMyzTzo5e9NjRhSeUuBUtPfiTDnSCpL2c2uzRdhPkuL");
   assert.doesNotThrow(() => new PublicKey(metadataPda(mint)));

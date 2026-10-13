@@ -11,6 +11,14 @@
 
 import { readFileSync, writeFileSync } from "node:fs";
 
+/*
+ * Named, because the RPC refuses Node's default. curl gets a 200 from the same
+ * endpoint that answers undici's user agent with a 403, and five retries do
+ * not help with a request that was never going to be served. Saying who is
+ * calling is also the polite thing to do with someone else's public node.
+ */
+const USER_AGENT = "vestail-token-sync (+https://vestail.fun)";
+
 const REGISTRY = "https://api.robinhood.com/rhj/assets";
 const OUT = new URL("../data/tokens/evm.json", import.meta.url);
 
@@ -18,7 +26,7 @@ const OUT = new URL("../data/tokens/evm.json", import.meta.url);
 const CHAIN_ID = 4663;
 
 async function fetchRegistry() {
-  const res = await fetch(REGISTRY, { headers: { Accept: "application/json" } });
+  const res = await fetch(REGISTRY, { headers: { Accept: "application/json", "User-Agent": USER_AGENT } });
   if (!res.ok) throw new Error(`${REGISTRY} returned ${res.status}`);
   return res.json();
 }
@@ -69,6 +77,25 @@ const SELECTOR = { symbol: "0x95d89b41", name: "0x06fdde03", decimals: "0x313ce5
 let rpcId = 0;
 
 /*
+ * One call at a time, with a gap. The node answers a named caller happily and
+ * starts returning 403 the moment several requests overlap, so the limit here
+ * is politeness rather than throughput: 23 tokens is about seventy calls and
+ * ten seconds, which is nothing for a script run by hand when a token list
+ * changes.
+ */
+const GAP_MS = 120;
+let turn = Promise.resolve();
+
+function serialise(fn) {
+  const next = turn.then(async () => {
+    await new Promise(r => setTimeout(r, GAP_MS));
+    return fn();
+  });
+  turn = next.catch(() => {});
+  return next;
+}
+
+/*
  * A public RPC answering 194 tokens times three calls is 582 requests. Sent at
  * once that reads as an attack and gets throttled, and a throttled call that
  * returns nothing is indistinguishable here from a token that does not exist —
@@ -94,20 +121,23 @@ async function pooled(items, size, worker) {
  */
 async function ethCall(address, selector, attempt = 1) {
   try {
-    const res = await fetch(RPC, {
+    const res = await serialise(() => fetch(RPC, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", "User-Agent": USER_AGENT },
       body: JSON.stringify({ jsonrpc: "2.0", id: ++rpcId, method: "eth_call", params: [{ to: address, data: selector }, "latest"] }),
-    });
-    if (res.status === 429 || res.status >= 500) throw new Error(`rpc ${res.status}`);
+    }));
+    // 403 is this RPC's throttle, not a refusal: it appears under concurrency
+    // and clears on a slower retry. Treating it as fatal stopped a run that
+    // only needed to wait.
+    if (res.status === 403 || res.status === 429 || res.status >= 500) throw new Error(`rpc ${res.status}`);
     if (!res.ok) throw Object.assign(new Error(`rpc ${res.status}`), { fatal: true });
     const body = await res.json();
     // "execution reverted" is an answer: there is no such function here.
     if (body.error) return null;
     return body.result;
   } catch (err) {
-    if (err.fatal || attempt >= 3) throw err;
-    await new Promise(r => setTimeout(r, 250 * 2 ** attempt));
+    if (err.fatal || attempt >= 5) throw err;
+    await new Promise(r => setTimeout(r, 400 * 2 ** attempt));
     return ethCall(address, selector, attempt + 1);
   }
 }
@@ -239,7 +269,7 @@ const wanted = args.all ? [...live.keys()] : args.symbols;
 const missing = wanted.filter(t => !live.has(t));
 if (missing.length) throw new Error(`not on chain ${CHAIN_ID}: ${missing.join(", ")}`);
 
-const checked = await pooled(wanted, 6, async ticker => {
+const checked = await pooled(wanted, 3, async ticker => {
   const listed = live.get(ticker);
   return { ticker, listed, result: reconcile(ticker, listed, await readToken(listed.address)) };
 });

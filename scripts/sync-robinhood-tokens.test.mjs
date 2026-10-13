@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { decodeString, decodeUint, merge, reconcile } from "./sync-robinhood-tokens.mjs";
+import { decodeString, decodeUint, merge, parseArgs, reconcile, validate } from "./sync-robinhood-tokens.mjs";
 
 /*
  * The decoders are the part of the syncer that can be wrong quietly. A bad
@@ -98,4 +98,27 @@ test("orders by chain then ticker, so a diff reads as a list of tokens", () => {
     row("robinhood", "0x02", "TSLA"), row("base", "0x03", "NVDA"), row("robinhood", "0x01", "AAPL"),
   ]);
   assert.deepEqual(rows.map(r => `${r.chain}:${r.symbol}`), ["base:NVDA", "robinhood:AAPL", "robinhood:TSLA"]);
+});
+
+test("stops on a registry that is not the shape it should be", () => {
+  assert.throws(() => validate(null), /no assets array/);
+  assert.throws(() => validate({ assets: [] }), /empty/);
+  assert.throws(
+    () => validate({ assets: [{ id: "x", tokenSymbol: "NVDA", tokenName: "NVIDIA", deployments: [{ chainId: 4663, contractAddress: "nonsense" }] }] }),
+    /bad address/,
+  );
+});
+
+test("a deployment on another chain is not held to this chain's address rule", () => {
+  const ok = validate({ assets: [{ id: "x", tokenSymbol: "NVDA", tokenName: "NVIDIA", deployments: [{ chainId: 1, contractAddress: "whatever" }] }] });
+  assert.equal(ok.length, 1);
+});
+
+test("makes the caller choose", () => {
+  assert.throws(() => parseArgs([]), /--symbols/);
+  assert.deepEqual(parseArgs(["--symbols", "nvda,tsla"]).symbols, ["NVDA", "TSLA"]);
+  assert.deepEqual(parseArgs(["--symbols=nvda, tsla"]).symbols, ["NVDA", "TSLA"]);
+  assert.equal(parseArgs(["--all"]).all, true);
+  assert.equal(parseArgs(["--all", "--dry-run"]).dryRun, true);
+  assert.throws(() => parseArgs(["--wat"]), /unknown argument/);
 });

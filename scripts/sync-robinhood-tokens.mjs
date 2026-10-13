@@ -69,7 +69,15 @@ function onChain(assets) {
  * written down. This is the same standard the two hand-added tokens were held
  * to; the script exists so the standard survives contact with 194 of them.
  */
-const RPC = "https://rpc.mainnet.chain.robinhood.com";
+/*
+ * Robinhood's public node sits behind Cloudflare, which challenges some clients
+ * by TLS fingerprint regardless of how politely they behave or what they call
+ * themselves. When that happens the answer is not to disguise the caller — it
+ * is to use an endpoint that will talk to you. Point VESTAIL_RH_RPC at your own
+ * provider (Robinhood Chain is an Arbitrum Orbit chain, so the usual ones serve
+ * it) and the run proceeds normally.
+ */
+const RPC = process.env.VESTAIL_RH_RPC || "https://rpc.mainnet.chain.robinhood.com";
 
 /** ERC-20 selectors: the first four bytes of keccak("symbol()") and friends. */
 const SELECTOR = { symbol: "0x95d89b41", name: "0x06fdde03", decimals: "0x313ce567" };
@@ -130,6 +138,11 @@ async function ethCall(address, selector, attempt = 1) {
     // and clears on a slower retry. Treating it as fatal stopped a run that
     // only needed to wait.
     if (res.status === 403 || res.status === 429 || res.status >= 500) throw new Error(`rpc ${res.status}`);
+    if (res.headers.get("cf-mitigated") === "challenge") {
+      throw Object.assign(new Error(
+        `${RPC} challenged this client (Cloudflare). Set VESTAIL_RH_RPC to an endpoint you control and re-run; ` +
+        `addresses must be read from a chain, not taken on trust from the registry.`), { fatal: true });
+    }
     if (!res.ok) throw Object.assign(new Error(`rpc ${res.status}`), { fatal: true });
     const body = await res.json();
     // "execution reverted" is an answer: there is no such function here.

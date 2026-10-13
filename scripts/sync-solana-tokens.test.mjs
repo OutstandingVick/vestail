@@ -92,6 +92,10 @@ test("accepts a candidate only when catalogue and chain agree", () => {
   assert.match(reconcile(candidate, { ...live, metadata: null }, provider).why, /no Metaplex PDA or Token-2022 metadata/);
 });
 
+test("refuses freeze authority drift", () => {
+  assert.match(reconcile(candidate, { ...live, freezeAuthority: "unexpected" }, provider).why, /catalogue freeze authority/);
+});
+
 const representation = (symbol, tokenMint = mint) => ({ mint: tokenMint, provider: "xstocks", symbol, name: `${symbol} xStock`, tokenSymbol: `${symbol}x` });
 
 test("merges additively without losing existing symbols", () => {

@@ -148,6 +148,11 @@
       "name": "Eli Lilly",
       "class": "equity-by-home",
       "home": "US"
+    },
+    "UBER": {
+      "name": "Uber",
+      "class": "equity-by-home",
+      "home": "US"
     }
   }
 }

@@ -9,7 +9,8 @@
   ],
   "scripts": {
     "test": "npm test --workspaces --if-present && npm run test:scripts",
-    "test:scripts": "node --test \"scripts/**/*.test.mjs\""
+    "test:scripts": "node --test \"scripts/**/*.test.mjs\"",
+    "tokens:robinhood": "node scripts/sync-robinhood-tokens.mjs"
   },
   "overrides": {
     "postcss": "^8.5.29",

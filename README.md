@@ -31,7 +31,7 @@ records which, where, and what each one actually is:
 
 | Chain | Provider | Tokens | Structure |
 |---|---|---|---|
-| Solana | xStocks, Backpack, Ondo, PreStocks, Tessera | 11 symbols | custody-backed, entitlement, note |
+| Solana | xStocks, Backpack, Ondo, Tessera, PreStocks | 25 tokens across 11 symbols | custody-backed, entitlement, note |
 | Robinhood Chain | Robinhood | 25 | tokenised debt, not redeemable |
 | Base | Coinbase | 1 | share claim, redeemable |
 

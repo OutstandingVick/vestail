@@ -62,6 +62,11 @@ test("decodes name and symbol from a Metaplex metadata account", () => {
   assert.equal(decodeMetaplexMetadata(null), null);
 });
 
+test("refuses truncated Metaplex metadata instead of filling gaps", () => {
+  const bytes = Buffer.concat([Buffer.alloc(65), borshString("Meta xStock")]);
+  assert.throws(() => decodeMetaplexMetadata(bytes.toString("base64")), /truncated metadata string length/);
+});
+
 test("reads decimals, authorities and Token-2022 metadata from a mint account", () => {
   const parsed = parseMintAccount({ owner: "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb", data: { parsed: { info: {
     decimals: 8, mintAuthority: authority, freezeAuthority: freeze,

@@ -221,15 +221,17 @@ export function reconcile(ticker, listed, onchain) {
  * to carry all of them.
  */
 export function parseArgs(argv) {
-  const args = { symbols: null, all: false, dryRun: false };
+  const args = { symbols: null, all: false, dryRun: false, list: false };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     if (a === "--all") args.all = true;
+    else if (a === "--list") args.list = true;
     else if (a === "--dry-run") args.dryRun = true;
     else if (a === "--symbols") args.symbols = (argv[++i] || "").split(",").map(s => s.trim().toUpperCase()).filter(Boolean);
     else if (a.startsWith("--symbols=")) args.symbols = a.slice(10).split(",").map(s => s.trim().toUpperCase()).filter(Boolean);
     else throw new Error(`unknown argument ${a}`);
   }
+  if (args.list) return args;
   if (!args.all && !args.symbols?.length) {
     throw new Error("name the tickers with --symbols NVDA,TSLA, or pass --all");
   }
@@ -307,6 +309,20 @@ if (import.meta.url === pathToFileURL(process.argv[1] ?? "").href) {
       custodian: ISSUER.custodian,
       source: ISSUER.source,
     };
+  }
+
+  /*
+   * --list prints what is on offer. Choosing 23 out of 194 means reading the
+   * 194 first, and nobody should have to curl the registry by hand to do that.
+   */
+  if (args.list) {
+    const held = new Set(JSON.parse(readFileSync(OUT, "utf8")).representations
+      .filter(r => r.chain === "robinhood").map(r => r.symbol));
+    for (const [ticker, a] of [...live].sort(([x], [y]) => x.localeCompare(y))) {
+      process.stdout.write(`${held.has(ticker) ? "have" : "    "}  ${ticker.padEnd(8)}${cleanName(a.tokenName)}\n`);
+    }
+    process.stderr.write(`${live.size} live, ${held.size} already carried\n`);
+    process.exit(0);
   }
 
   const wanted = args.all ? [...live.keys()] : args.symbols;

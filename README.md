@@ -24,6 +24,20 @@ Open `site/index.html` in a browser to see it. Open `docs/GLOSSARY.html` to unde
     └── diagrams/  resolver-pipeline.svg · system-flow.svg
 ```
 
+## Tokenised stocks
+
+The same listed share exists onchain as several different legal claims. Vestail
+records which, where, and what each one actually is:
+
+| Chain | Provider | Tokens | Structure |
+|---|---|---|---|
+| Solana | xStocks, Backpack, Ondo, PreStocks, Tessera | 11 symbols | custody-backed, entitlement, note |
+| Robinhood Chain | Robinhood | 25 | tokenised debt, not redeemable |
+| Base | Coinbase | 1 | share claim, redeemable |
+
+Robinhood's rows are kept current by `npm run tokens:robinhood`, which reads
+every address off the chain rather than trusting the registry that listed it.
+
 ## Using the core in another app
 ```js
 import { createVestail } from "./packages/core/index.js";

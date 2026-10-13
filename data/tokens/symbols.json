@@ -153,6 +153,11 @@
       "name": "Uber",
       "class": "equity-by-home",
       "home": "US"
+    },
+    "JPM": {
+      "name": "JPMorgan Chase",
+      "class": "equity-by-home",
+      "home": "US"
     }
   }
 }

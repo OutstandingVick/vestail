@@ -51,6 +51,32 @@ function onChain(assets) {
   return out;
 }
 
+/*
+ * The registry says what Robinhood intends to be deployed. The chain says what
+ * is. Those can disagree — a stale entry, a typo, an address that never shipped
+ * — so every address is read back from the contract itself before it is
+ * written down. This is the same standard the two hand-added tokens were held
+ * to; the script exists so the standard survives contact with 194 of them.
+ */
+const RPC = "https://rpc.mainnet.chain.robinhood.com";
+
+/** ERC-20 selectors: the first four bytes of keccak("symbol()") and friends. */
+const SELECTOR = { symbol: "0x95d89b41", name: "0x06fdde03", decimals: "0x313ce567" };
+
+let rpcId = 0;
+
+async function ethCall(address, selector) {
+  const res = await fetch(RPC, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ jsonrpc: "2.0", id: ++rpcId, method: "eth_call", params: [{ to: address, data: selector }, "latest"] }),
+  });
+  if (!res.ok) throw new Error(`rpc ${res.status}`);
+  const body = await res.json();
+  if (body.error) throw new Error(`rpc: ${body.error.message}`);
+  return body.result;
+}
+
 const assets = validate(await fetchRegistry());
 const live = onChain(assets);
 process.stderr.write(`registry: ${assets.length} assets, ${live.size} live on chain ${CHAIN_ID}\n`);

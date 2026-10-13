@@ -1109,6 +1109,45 @@
           "pythFeedId": null
         }
       ]
+    },
+    "JPM": {
+      "referenceFeedId": null,
+      "representations": [
+        {
+          "mint": "E5Gczsavxcomqf6Cw1sGCKLabL1xYD2FzKxVoB4ondo",
+          "provider": "ondo",
+          "symbol": "JPM",
+          "name": "JPMorgan Chase (Ondo Tokenized)",
+          "tokenSymbol": "JPMon",
+          "structure": "total_return_note",
+          "decimals": 9,
+          "redeemable": true,
+          "custodian": null,
+          "source": "https://docs.ondo.finance/ondo-stocks/legal-and-regulatory",
+          "fetchedAt": "2026-10-13T15:49:21.292Z",
+          "tokenProgram": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+          "mintAuthority": "9foMHsSDq7nMg4WPusSz9eY7tyxyukqborA8GyU5cUxD",
+          "freezeAuthority": "51QVCuHfL1FeNjd8BDeffCKhCcAYoULnVB3yjNhShiuK",
+          "pythFeedId": null
+        },
+        {
+          "mint": "XsMAqkcKsUewDrzVkait4e5u4y8REgtyS7jWgCpLV2C",
+          "provider": "xstocks",
+          "symbol": "JPM",
+          "name": "JPMorgan Chase xStock",
+          "tokenSymbol": "JPMx",
+          "structure": "custody_backed",
+          "decimals": 8,
+          "redeemable": true,
+          "custodian": "InCore Bank AG",
+          "source": "https://assets.backed.fi/legal-documentation",
+          "fetchedAt": "2026-10-13T15:49:21.292Z",
+          "tokenProgram": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+          "mintAuthority": "7pt9tkctJPK7PPNQJ77GKg8ZffSF6QxoMiCFYHxrtaCj",
+          "freezeAuthority": "JDq14BWvqCRFNu1krb12bcRpbGtJZ1FLEakMw6FdxJNs",
+          "pythFeedId": null
+        }
+      ]
     }
   }
 }

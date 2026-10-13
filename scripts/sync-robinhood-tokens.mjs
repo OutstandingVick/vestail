@@ -77,6 +77,34 @@ async function ethCall(address, selector) {
   return body.result;
 }
 
+/*
+ * ABI decoding, for the two return types these three calls can produce.
+ *
+ * A well-behaved ERC-20 returns `string`: a 32-byte offset, a 32-byte length,
+ * then the bytes. Older tokens predating the final standard return a fixed
+ * `bytes32` padded with zeros. Both appear in the wild, so both are read.
+ */
+function decodeString(hex) {
+  const data = (hex || "").replace(/^0x/, "");
+  if (!data) return null;
+  const bytes = Buffer.from(data, "hex");
+
+  // bytes32: one word, no offset to follow.
+  if (bytes.length === 32) return bytes.toString("utf8").replace(/\0+$/, "") || null;
+
+  const offset = Number(BigInt("0x" + data.slice(0, 64)));
+  const length = Number(BigInt("0x" + data.slice(offset * 2, offset * 2 + 64)));
+  if (!Number.isFinite(offset) || !Number.isFinite(length)) return null;
+  return bytes.subarray(offset + 32, offset + 32 + length).toString("utf8") || null;
+}
+
+function decodeUint(hex) {
+  const data = (hex || "").replace(/^0x/, "");
+  if (!data) return null;
+  const n = Number(BigInt("0x" + data));
+  return Number.isSafeInteger(n) ? n : null;
+}
+
 const assets = validate(await fetchRegistry());
 const live = onChain(assets);
 process.stderr.write(`registry: ${assets.length} assets, ${live.size} live on chain ${CHAIN_ID}\n`);

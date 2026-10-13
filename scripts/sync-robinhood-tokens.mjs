@@ -83,16 +83,30 @@ async function pooled(items, size, worker) {
   return out;
 }
 
-async function ethCall(address, selector) {
-  const res = await fetch(RPC, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ jsonrpc: "2.0", id: ++rpcId, method: "eth_call", params: [{ to: address, data: selector }, "latest"] }),
-  });
-  if (!res.ok) throw new Error(`rpc ${res.status}`);
-  const body = await res.json();
-  if (body.error) throw new Error(`rpc: ${body.error.message}`);
-  return body.result;
+/*
+ * Retried, because the alternative is worse than slow. A dropped connection or
+ * a 429 would otherwise surface as "nothing deployed there" and silently drop
+ * a real token from the output — a wrong answer that looks like a right one.
+ * Three attempts, backing off; after that the run fails rather than guesses.
+ */
+async function ethCall(address, selector, attempt = 1) {
+  try {
+    const res = await fetch(RPC, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ jsonrpc: "2.0", id: ++rpcId, method: "eth_call", params: [{ to: address, data: selector }, "latest"] }),
+    });
+    if (res.status === 429 || res.status >= 500) throw new Error(`rpc ${res.status}`);
+    if (!res.ok) throw Object.assign(new Error(`rpc ${res.status}`), { fatal: true });
+    const body = await res.json();
+    // "execution reverted" is an answer: there is no such function here.
+    if (body.error) return null;
+    return body.result;
+  } catch (err) {
+    if (err.fatal || attempt >= 3) throw err;
+    await new Promise(r => setTimeout(r, 250 * 2 ** attempt));
+    return ethCall(address, selector, attempt + 1);
+  }
 }
 
 /*

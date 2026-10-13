@@ -247,3 +247,28 @@ for (const { ticker, result } of checked) {
 
 const fresh = checked.filter(c => c.result.ok).map(toRepresentation);
 process.stderr.write(`verified: ${fresh.length} of ${wanted.length}\n`);
+
+/*
+ * Merging, not replacing. data/tokens/evm.json also carries Base entries and
+ * anything else added by hand, and a sync of two Robinhood tickers must not
+ * take the rest of the file with it. Identity is chain plus address, lowercased
+ * — the same contract written with different capitalisation is one token, and
+ * letting it in twice would show the buyer the same thing twice.
+ */
+const key = r => `${r.chain}:${r.address.toLowerCase()}`;
+
+function merge(existing, incoming) {
+  const byKey = new Map(existing.map(r => [key(r), r]));
+  let added = 0, updated = 0;
+  for (const r of incoming) {
+    const k = key(r);
+    if (!byKey.has(k)) added++;
+    else if (JSON.stringify(byKey.get(k)) !== JSON.stringify(r)) updated++;
+    byKey.set(k, r);
+  }
+  // Grouped by chain, then by ticker, so a diff reads as a list of tokens
+  // rather than as wherever the registry happened to put them.
+  const rows = [...byKey.values()].sort((a, b) =>
+    a.chain.localeCompare(b.chain) || a.symbol.localeCompare(b.symbol) || a.provider.localeCompare(b.provider));
+  return { rows, added, updated };
+}

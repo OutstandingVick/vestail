@@ -636,6 +636,28 @@
           "pythFeedId": null
         }
       ]
+    },
+    "COST": {
+      "referenceFeedId": null,
+      "representations": [
+        {
+          "mint": "6btaz134wjHkR8sqhAYrtSM6tavftfxnRvnyMd8ondo",
+          "provider": "ondo",
+          "symbol": "COST",
+          "name": "Costco (Ondo Tokenized)",
+          "tokenSymbol": "COSTon",
+          "structure": "total_return_note",
+          "decimals": 9,
+          "redeemable": true,
+          "custodian": null,
+          "source": "https://docs.ondo.finance/ondo-stocks/legal-and-regulatory",
+          "fetchedAt": "2026-10-13T15:47:46.043Z",
+          "tokenProgram": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+          "mintAuthority": "9foMHsSDq7nMg4WPusSz9eY7tyxyukqborA8GyU5cUxD",
+          "freezeAuthority": "51QVCuHfL1FeNjd8BDeffCKhCcAYoULnVB3yjNhShiuK",
+          "pythFeedId": null
+        }
+      ]
     }
   }
 }

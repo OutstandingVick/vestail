@@ -105,6 +105,43 @@ function decodeUint(hex) {
   return Number.isSafeInteger(n) ? n : null;
 }
 
+/**
+ * Read a token's own account of itself: symbol, name, decimals, from the
+ * contract at that address. Returns null when nothing answers, which is how a
+ * registry entry pointing at an address that never shipped shows up.
+ */
+async function readToken(address) {
+  const [symbol, name, decimals] = await Promise.all([
+    ethCall(address, SELECTOR.symbol).then(decodeString),
+    ethCall(address, SELECTOR.name).then(decodeString),
+    ethCall(address, SELECTOR.decimals).then(decodeUint),
+  ]);
+  if (symbol === null && name === null && decimals === null) return null;
+  return { symbol, name, decimals };
+}
+
+/**
+ * The chain is the authority. Where the registry and the contract disagree on
+ * the ticker, that is not a difference to average out — it means one of them
+ * is describing a different token, and writing either down would put a wrong
+ * address behind a right-looking symbol. Say so and skip it.
+ */
+function reconcile(ticker, listed, onchain) {
+  if (!onchain) return { ok: false, why: "nothing deployed at that address" };
+  if (onchain.symbol && onchain.symbol !== ticker) {
+    return { ok: false, why: `registry says ${ticker}, the contract says ${onchain.symbol}` };
+  }
+  if (!Number.isInteger(onchain.decimals)) return { ok: false, why: "no decimals()" };
+  return { ok: true, symbol: ticker, name: listed.tokenName, decimals: onchain.decimals };
+}
+
 const assets = validate(await fetchRegistry());
 const live = onChain(assets);
 process.stderr.write(`registry: ${assets.length} assets, ${live.size} live on chain ${CHAIN_ID}\n`);
+
+// Smoke-check the pair the repo already trusts, read from the chain.
+for (const t of ["NVDA", "TSLA"]) {
+  const a = live.get(t);
+  const r = reconcile(t, a, await readToken(a.address));
+  process.stderr.write(`  ${t}: ${r.ok ? `${r.name} (${r.decimals} decimals)` : r.why}\n`);
+}

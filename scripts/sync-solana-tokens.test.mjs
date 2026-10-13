@@ -100,6 +100,11 @@ test("refuses decimal drift", () => {
   assert.match(reconcile(candidate, { ...live, decimals: 6 }, provider).why, /catalogue says 8 decimals/);
 });
 
+test("refuses metadata identity drift", () => {
+  const metadata = { ...live.metadata, name: "Impostor token" };
+  assert.match(reconcile(candidate, { ...live, metadata }, provider).why, /chain metadata says Impostor token/);
+});
+
 const representation = (symbol, tokenMint = mint) => ({ mint: tokenMint, provider: "xstocks", symbol, name: `${symbol} xStock`, tokenSymbol: `${symbol}x` });
 
 test("merges additively without losing existing symbols", () => {

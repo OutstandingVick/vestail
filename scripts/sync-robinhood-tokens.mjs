@@ -65,6 +65,24 @@ const SELECTOR = { symbol: "0x95d89b41", name: "0x06fdde03", decimals: "0x313ce5
 
 let rpcId = 0;
 
+/*
+ * A public RPC answering 194 tokens times three calls is 582 requests. Sent at
+ * once that reads as an attack and gets throttled, and a throttled call that
+ * returns nothing is indistinguishable here from a token that does not exist —
+ * which would quietly drop real tokens from the output. Hence a small pool.
+ */
+async function pooled(items, size, worker) {
+  const out = new Array(items.length);
+  let next = 0;
+  await Promise.all(Array.from({ length: Math.min(size, items.length) }, async () => {
+    while (next < items.length) {
+      const i = next++;
+      out[i] = await worker(items[i], i);
+    }
+  }));
+  return out;
+}
+
 async function ethCall(address, selector) {
   const res = await fetch(RPC, {
     method: "POST",

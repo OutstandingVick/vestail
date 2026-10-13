@@ -339,7 +339,18 @@ if (import.meta.url === pathToFileURL(process.argv[1] ?? "").href) {
   }
 
   const fresh = checked.filter(c => c.result.ok).map(toRepresentation);
+  const refused = checked.filter(c => !c.result.ok);
   process.stderr.write(`verified: ${fresh.length} of ${wanted.length}\n`);
+
+  /*
+   * A partial sync is not a success. If a ticker was asked for and could not be
+   * verified, the run exits non-zero so that a person running this by hand sees
+   * it, and so that it cannot pass silently in a pipeline — the file would
+   * otherwise be written with a quietly shorter list than was requested.
+   */
+  if (refused.length) {
+    process.stderr.write(`refused ${refused.length}: ${refused.map(r => r.ticker).join(", ")}\n`);
+  }
 
 
 
@@ -359,4 +370,6 @@ if (import.meta.url === pathToFileURL(process.argv[1] ?? "").href) {
     writeFileSync(OUT, JSON.stringify(file, null, 2) + "\n");
     process.stderr.write(`wrote ${rows.length} rows: ${added} added, ${updated} updated\n`);
   }
+
+  if (refused.length) process.exitCode = 1;
 }

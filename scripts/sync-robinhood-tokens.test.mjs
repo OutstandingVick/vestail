@@ -76,13 +76,15 @@ test("leaves other chains alone", () => {
 });
 
 test("the same address in different capitalisation is one token", () => {
-  const { rows, added, updated } = merge(
+  const { rows, added } = merge(
     [row("robinhood", "0xAbCdEf0123456789012345678901234567890123", "NVDA")],
     [row("robinhood", "0xabcdef0123456789012345678901234567890123", "NVDA")],
   );
+  // Not added twice: a buyer must never be offered the same contract as two
+  // options. The incoming row wins, so the casing settles on the registry's.
   assert.equal(added, 0);
-  assert.equal(updated, 0);
   assert.equal(rows.length, 1);
+  assert.equal(rows[0].address, "0xabcdef0123456789012345678901234567890123");
 });
 
 test("re-syncing an unchanged token reports no change", () => {

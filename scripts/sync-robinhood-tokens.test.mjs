@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { decodeString, decodeUint, reconcile } from "./sync-robinhood-tokens.mjs";
+import { decodeString, decodeUint, merge, reconcile } from "./sync-robinhood-tokens.mjs";
 
 /*
  * The decoders are the part of the syncer that can be wrong quietly. A bad
@@ -60,4 +60,40 @@ test("refuses a token that cannot say how many decimals it has", () => {
 test("takes the display name from the registry and the decimals from the chain", () => {
   const r = reconcile("NVDA", { tokenName: "NVIDIA • Robinhood Token" }, { symbol: "NVDA", name: "whatever", decimals: 18 });
   assert.deepEqual(r, { ok: true, symbol: "NVDA", name: "NVIDIA • Robinhood Token", decimals: 18 });
+});
+
+const row = (chain, address, symbol) => ({
+  chain, address, provider: "robinhood", symbol, name: symbol, tokenSymbol: symbol,
+  decimals: 18, structure: "tokenized_debt", redeemable: false, custodian: null, source: "x",
+});
+
+test("leaves other chains alone", () => {
+  const base = { ...row("base", "0xbb", "NVDA"), provider: "coinbase" };
+  const { rows, added } = merge([base], [row("robinhood", "0xaa", "NVDA")]);
+  assert.equal(added, 1);
+  assert.equal(rows.length, 2);
+  assert.ok(rows.some(r => r.chain === "base" && r.provider === "coinbase"));
+});
+
+test("the same address in different capitalisation is one token", () => {
+  const { rows, added, updated } = merge(
+    [row("robinhood", "0xAbCdEf0123456789012345678901234567890123", "NVDA")],
+    [row("robinhood", "0xabcdef0123456789012345678901234567890123", "NVDA")],
+  );
+  assert.equal(added, 0);
+  assert.equal(updated, 0);
+  assert.equal(rows.length, 1);
+});
+
+test("re-syncing an unchanged token reports no change", () => {
+  const existing = [row("robinhood", "0xaa", "NVDA")];
+  const { added, updated } = merge(existing, [row("robinhood", "0xaa", "NVDA")]);
+  assert.equal(added + updated, 0);
+});
+
+test("orders by chain then ticker, so a diff reads as a list of tokens", () => {
+  const { rows } = merge([], [
+    row("robinhood", "0x02", "TSLA"), row("base", "0x03", "NVDA"), row("robinhood", "0x01", "AAPL"),
+  ]);
+  assert.deepEqual(rows.map(r => `${r.chain}:${r.symbol}`), ["base:NVDA", "robinhood:AAPL", "robinhood:TSLA"]);
 });

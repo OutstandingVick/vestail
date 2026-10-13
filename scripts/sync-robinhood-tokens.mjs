@@ -194,6 +194,44 @@ const assets = validate(await fetchRegistry());
 const live = onChain(assets);
 process.stderr.write(`registry: ${assets.length} assets, ${live.size} live on chain ${CHAIN_ID}\n`);
 
+/*
+ * What every Robinhood Stock Token is, legally. These do not vary per ticker,
+ * so they are stated once rather than guessed per row.
+ *
+ * "tokenized_debt" is the whole point: a Stock Token is a debt security issued
+ * by Robinhood Assets (Jersey) Limited giving economic exposure to the share
+ * and no legal or beneficial right to it. You cannot redeem it for the share,
+ * so redeemable is false and there is no custodian holding one for you. That
+ * is exactly the distinction Vestail exists to surface — the same ticker, held
+ * three ways, with three different answers about what you actually own.
+ */
+const ISSUER = {
+  provider: "robinhood",
+  structure: "tokenized_debt",
+  redeemable: false,
+  custodian: null,
+  source: "https://docs.robinhood.com/chain/stock-tokens",
+};
+
+/** The registry's display name, minus the issuer's own typography. */
+const cleanName = name => name.replace(/\s*•\s*/g, " ").replace(/\s+/g, " ").trim();
+
+function toRepresentation({ ticker, listed, result }) {
+  return {
+    chain: "robinhood",
+    address: listed.address,
+    provider: ISSUER.provider,
+    symbol: ticker,
+    name: cleanName(result.name),
+    tokenSymbol: ticker,
+    decimals: result.decimals,
+    structure: ISSUER.structure,
+    redeemable: ISSUER.redeemable,
+    custodian: ISSUER.custodian,
+    source: ISSUER.source,
+  };
+}
+
 const wanted = args.all ? [...live.keys()] : args.symbols;
 const missing = wanted.filter(t => !live.has(t));
 if (missing.length) throw new Error(`not on chain ${CHAIN_ID}: ${missing.join(", ")}`);
@@ -204,5 +242,8 @@ const checked = await pooled(wanted, 6, async ticker => {
 });
 
 for (const { ticker, result } of checked) {
-  process.stderr.write(`  ${result.ok ? "ok  " : "SKIP"} ${ticker.padEnd(7)} ${result.ok ? `${result.name} (${result.decimals} decimals)` : result.why}\n`);
+  process.stderr.write(`  ${result.ok ? "ok  " : "SKIP"} ${ticker.padEnd(7)} ${result.ok ? `${cleanName(result.name)} (${result.decimals} decimals)` : result.why}\n`);
 }
+
+const fresh = checked.filter(c => c.result.ok).map(toRepresentation);
+process.stderr.write(`verified: ${fresh.length} of ${wanted.length}\n`);

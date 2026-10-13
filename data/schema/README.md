@@ -51,6 +51,11 @@ answers, and that difference is the thing being recorded.
 
 Addresses are read from the chain, never taken on trust from a provider's
 registry. `scripts/sync-robinhood-tokens.mjs` does this for Robinhood.
+`scripts/sync-solana-tokens.mjs` treats the Solana catalogue as candidate
+discovery only, then verifies the SPL mint account and canonical Metaplex
+metadata PDA. Token-2022 mints may carry their metadata in an onchain mint
+extension instead; the synchronizer accepts that chain-owned record, not an
+offchain replacement.
 
 `tokens/symbols.json` maps each symbol to the asset class that governs it.
 `equity-by-home` means the `home` market decides: domestic equities there,

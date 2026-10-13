@@ -1,5 +1,5 @@
 {
-  "$comment": "Issuer-level facts about each provider's tokens. Hand-maintained: every claim carries a sourceUrl, and anything read only from a secondary source is listed under `unverified` until a primary document confirms it. Per-token data (mints, decimals, authorities) is generated into representations.json by scripts/sync-registry.mjs.",
+  "$comment": "Issuer-level facts about each provider's tokens. Hand-maintained: every claim carries a sourceUrl, and anything read only from a secondary source is listed under `unverified` until a primary document confirms it. Per-token data (mints, decimals, authorities) is generated into representations.json by scripts/sync-solana-tokens.mjs.",
   "xstocks": {
     "issuer": "Backed Finance",
     "structure": "custody_backed",

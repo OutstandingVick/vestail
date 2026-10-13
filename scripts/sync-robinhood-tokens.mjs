@@ -167,13 +167,42 @@ function reconcile(ticker, listed, onchain) {
   return { ok: true, symbol: ticker, name: listed.tokenName, decimals: onchain.decimals };
 }
 
+/*
+ * Which tickers to sync. Explicit by default: 194 tokens is a catalogue, and a
+ * catalogue dropped into the rule set unread is how a product that promises
+ * accuracy stops deserving the word. --all exists for when someone has decided
+ * to carry all of them.
+ */
+function parseArgs(argv) {
+  const args = { symbols: null, all: false, dryRun: false };
+  for (let i = 0; i < argv.length; i++) {
+    const a = argv[i];
+    if (a === "--all") args.all = true;
+    else if (a === "--dry-run") args.dryRun = true;
+    else if (a === "--symbols") args.symbols = (argv[++i] || "").split(",").map(s => s.trim().toUpperCase()).filter(Boolean);
+    else if (a.startsWith("--symbols=")) args.symbols = a.slice(10).split(",").map(s => s.trim().toUpperCase()).filter(Boolean);
+    else throw new Error(`unknown argument ${a}`);
+  }
+  if (!args.all && !args.symbols?.length) {
+    throw new Error("name the tickers with --symbols NVDA,TSLA, or pass --all");
+  }
+  return args;
+}
+
+const args = parseArgs(process.argv.slice(2));
 const assets = validate(await fetchRegistry());
 const live = onChain(assets);
 process.stderr.write(`registry: ${assets.length} assets, ${live.size} live on chain ${CHAIN_ID}\n`);
 
-// Smoke-check the pair the repo already trusts, read from the chain.
-for (const t of ["NVDA", "TSLA"]) {
-  const a = live.get(t);
-  const r = reconcile(t, a, await readToken(a.address));
-  process.stderr.write(`  ${t}: ${r.ok ? `${r.name} (${r.decimals} decimals)` : r.why}\n`);
+const wanted = args.all ? [...live.keys()] : args.symbols;
+const missing = wanted.filter(t => !live.has(t));
+if (missing.length) throw new Error(`not on chain ${CHAIN_ID}: ${missing.join(", ")}`);
+
+const checked = await pooled(wanted, 6, async ticker => {
+  const listed = live.get(ticker);
+  return { ticker, listed, result: reconcile(ticker, listed, await readToken(listed.address)) };
+});
+
+for (const { ticker, result } of checked) {
+  process.stderr.write(`  ${result.ok ? "ok  " : "SKIP"} ${ticker.padEnd(7)} ${result.ok ? `${result.name} (${result.decimals} decimals)` : result.why}\n`);
 }

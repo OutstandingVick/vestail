@@ -1148,6 +1148,28 @@
           "pythFeedId": null
         }
       ]
+    },
+    "BAC": {
+      "referenceFeedId": null,
+      "representations": [
+        {
+          "mint": "XswsQk4duEQmCbGzfqUUWYmi7pV7xpJ9eEmLHXCaEQP",
+          "provider": "xstocks",
+          "symbol": "BAC",
+          "name": "Bank of America xStock",
+          "tokenSymbol": "BACx",
+          "structure": "custody_backed",
+          "decimals": 8,
+          "redeemable": true,
+          "custodian": "InCore Bank AG",
+          "source": "https://assets.backed.fi/legal-documentation",
+          "fetchedAt": "2026-10-13T15:49:36.086Z",
+          "tokenProgram": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+          "mintAuthority": "7pt9tkctJPK7PPNQJ77GKg8ZffSF6QxoMiCFYHxrtaCj",
+          "freezeAuthority": "JDq14BWvqCRFNu1krb12bcRpbGtJZ1FLEakMw6FdxJNs",
+          "pythFeedId": null
+        }
+      ]
     }
   }
 }

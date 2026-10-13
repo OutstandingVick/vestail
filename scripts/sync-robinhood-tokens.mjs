@@ -264,6 +264,21 @@ export function merge(existing, incoming) {
   }
   // Grouped by chain, then by ticker, so a diff reads as a list of tokens
   // rather than as wherever the registry happened to put them.
+  /*
+   * One ticker, one contract, per chain. Two addresses both claiming to be NVDA
+   * on the same chain means one of them is wrong, and a buyer shown both would
+   * be choosing between a real token and a mistake with no way to tell which.
+   */
+  const perChain = new Map();
+  for (const r of byKey.values()) {
+    const k = `${r.chain}:${r.symbol}`;
+    const seen = perChain.get(k);
+    if (seen && seen.toLowerCase() !== r.address.toLowerCase()) {
+      throw new Error(`two addresses claim ${r.symbol} on ${r.chain}: ${seen} and ${r.address}`);
+    }
+    perChain.set(k, r.address);
+  }
+
   const rows = [...byKey.values()].sort((a, b) =>
     a.chain.localeCompare(b.chain) || a.symbol.localeCompare(b.symbol) || a.provider.localeCompare(b.provider));
   return { rows, added, updated };

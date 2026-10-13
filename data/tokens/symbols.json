@@ -163,6 +163,11 @@
       "name": "Bank of America",
       "class": "equity-by-home",
       "home": "US"
+    },
+    "DIS": {
+      "name": "Walt Disney",
+      "class": "equity-by-home",
+      "home": "US"
     }
   }
 }

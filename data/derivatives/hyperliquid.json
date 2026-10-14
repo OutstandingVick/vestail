@@ -72,6 +72,19 @@
         "nifty 50",
         "india 50"
       ]
+    },
+    {
+      "id": "xyz:JP225",
+      "coin": "JP225",
+      "name": "Japan 225 Index",
+      "category": "indices",
+      "related_asset": null,
+      "aliases": [
+        "jp225",
+        "nikkei",
+        "nikkei 225",
+        "japan 225"
+      ]
     }
   ]
 }

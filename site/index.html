@@ -1161,9 +1161,9 @@
     </div>
     <div class="hud" aria-label="What Vestail covers">
       <div class="stats">
-        <div class="stat"><div class="v" data-count="12" data-fmt="int">0</div><div class="l">Countries<span class="long"> covered</span></div></div>
-        <div class="stat"><div class="v" data-count="20" data-fmt="int">0</div><div class="l">Asset classes<span class="long"> mapped</span></div></div>
-        <div class="stat"><div class="v" data-count="480" data-fmt="int">0</div><div class="l">Ownership rules<span class="long">, citizen and foreigner</span></div></div>
+        <div class="stat"><div class="v" data-count="12" data-fmt="int">12</div><div class="l">Countries<span class="long"> covered</span></div></div>
+        <div class="stat"><div class="v" data-count="20" data-fmt="int">20</div><div class="l">Asset classes<span class="long"> mapped</span></div></div>
+        <div class="stat"><div class="v" data-count="480" data-fmt="int">480</div><div class="l">Ownership rules<span class="long">, citizen and foreigner</span></div></div>
       </div>
     </div>
   </section>
@@ -2062,6 +2062,11 @@ const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const fmt = (n, f, pre) => pre + (f === "compact" ? (n >= 1e6 ? (n / 1e6).toFixed(1) + "M" : n >= 1e3 ? Math.round(n / 1e3) + "k" : n) : Math.round(n).toLocaleString());
 // Counts up once on first paint; later updates set the number without replaying the motion.
 let statsShown = false;
+/*
+ * The figures are already in the HTML, so a crawler, a reader with JavaScript
+ * off and a tab that never becomes visible all see 12, 20 and 480 rather than
+ * three zeros. This only animates from zero up to them, and only once.
+ */
 function showStats() {
   const animate = !statsShown && !reduce;
   statsShown = true;

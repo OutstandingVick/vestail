@@ -1,8 +1,9 @@
 /**
- * Price exposure that is not ownership: perpetual futures on Hyperliquid.
+ * Price exposure that is not ownership: commodity, index, currency and
+ * volatility perpetual futures on Hyperliquid.
  *
- * A gold perpetual is judged by the venue's own rules, never by the gold
- * bullion class rule, because the buyer never holds gold. The verdict keeps
+ * A perpetual is judged by the venue's own rules, never by an underlying
+ * ownership rule, because the buyer never holds that underlying. The verdict keeps
  * the three-state scale, and every market carries instrument
  * "perpetual_future" so no screen can show it as owning the underlying.
  *

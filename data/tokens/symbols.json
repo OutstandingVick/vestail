@@ -220,6 +220,12 @@
       "name": "Micron Technology",
       "class": "equity-by-home",
       "home": "US"
+    },
+    "BABA": {
+      "name": "Alibaba Group",
+      "class": "equity-by-home",
+      "home": "HK",
+      "mapping_note": "Alibaba is dual-listed in Hong Kong and the United States; the model records its Hong Kong primary listing."
     }
   }
 }

@@ -93,7 +93,7 @@ dropped (USDY has no usable DEX liquidity there).
 
 | Chain | Assets | Instrument | How it's bought |
 |---|---|---|---|
-| Solana | v1's 11 | per issuer | Jupiter, USDC (`SwapForm`, `/api/swap/*`) |
+| Solana | 92 verified representations across 48 symbols | per issuer | Jupiter, USDC (`SwapForm`, `/api/swap/*`) |
 | Robinhood Chain (4663) | NVDA `0xd060…9EEC`, TSLA `0x322F…3b2d` | tokenized_debt (Robinhood Assets Jersey) | KyberSwap, ETH (`EvmSwapForm`, `/api/evm/order`) |
 | Base (8453) | Coinbase NVDAc `0xb200…108C` (8 decimals) | tokenized_equity (1:1 share at Alpaca) | KyberSwap, ETH |
 

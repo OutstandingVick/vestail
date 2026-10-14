@@ -11,6 +11,7 @@ const check = (ok, label) => { if (!ok) fail++; console.log(ok ? "ok  " : "FAIL"
 check(["xyz:GOLD", "xyz:CL", "xyz:COPPER"].every(id => d.list().some(m => m.id === id)), "the original commodity markets remain covered");
 check(d.list().length === 11, "the venue catalogue carries eleven reviewed markets");
 check(new Set(d.list().map(m => m.id)).size === d.list().length, "every market id is unique");
+check(d.list().every(m => ["commodities", "indices", "fx"].includes(m.category)), "every market has a reviewed category");
 check(d.list().every(m => m.instrument === "perpetual_future"), "every market is a perpetual future, never ownership");
 check(d.find("can I buy oil")[0]?.id === "xyz:CL", "oil finds WTI crude");
 check(d.find("copper")[0]?.id === "xyz:COPPER", "copper finds copper");

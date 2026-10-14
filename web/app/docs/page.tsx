@@ -42,39 +42,42 @@ const glossary = [
 ] as const;
 
 const endpoints = [
-  ["GET", "/resolve", "Turn free text into asset classes with an explanation trail."],
-  ["GET", "/matrix", "Return ownership verdicts across countries for a query."],
-  ["GET", "/rules/{country}/{asset}", "Read one rule, its venues, sources, and verification date."],
-  ["GET", "/venues/{asset}", "List eligible buying venues, optionally scoped to a country."],
-  ["GET", "/tokens/{symbol}", "Compare tokenized versions using issuer and class rules."],
-  ["POST", "/orders/click", "Validate and record an outbound route to a venue."],
+  ["POST", "/check", "Check one asset for a declared country and residency."],
+  ["POST", "/check/batch", "Run up to 100 independent checks in one request."],
+  ["GET", "/assets", "List every class and issuer version with its profile-specific verdict."],
+  ["GET", "/countries", "Read supported countries and sourced-rule coverage."],
+  ["GET", "/rules/{id}", "Read one rule with sources and available history."],
 ] as const;
 
-const resolveExample = `curl "https://api.vestail.example/v1/resolve?q=tesla%20shares"`;
-const resolveResponse = `{
-  "stage": "entity",
-  "assets": ["domestic_equities", "foreign_equities"],
-  "entity": { "name": "Tesla", "kind": "Listed company", "home": "US" },
-  "trail": ["Tesla", "Listed company (US)", "Equities", "Domestic in US, foreign elsewhere"]
-}`;
-const matrixExample = `const response = await fetch(
-  "https://api.vestail.example/v1/matrix?q=tesla%20shares&who=citizen&countries=NG,GB,US"
-);
-const matrix = await response.json();`;
-const clickExample = `await fetch("https://api.vestail.example/v1/orders/click", {
+const curlExample = `curl "$VESTAIL_API_BASE_URL/api/v1/check" \\
+  -H "Authorization: Bearer $VESTAIL_API_KEY" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "country": "NG",
+    "residency": "citizen",
+    "asset": { "class": "gold_bullion" }
+  }'`;
+const fetchExample = `const response = await fetch(\`${"${process.env.VESTAIL_API_BASE_URL}"}/api/v1/check\`, {
   method: "POST",
   headers: {
-    "content-type": "application/json",
-    "x-api-key": process.env.VESTAIL_API_KEY
+    "Authorization": \`Bearer \${process.env.VESTAIL_API_KEY}\`,
+    "Content-Type": "application/json"
   },
   body: JSON.stringify({
     country: "NG",
-    asset: "cryptocurrency",
-    who: "citizen",
-    venue: "Luno",
-    acknowledged: true
+    residency: "citizen",
+    asset: { class: "gold_bullion" }
   })
-});`;
+});
+const eligibility = await response.json();`;
+const responseShapes = `// Shape examples — placeholders are replaced by sourced rule data.
+{ "verdict": "eligible", "reasons": ["<sourced reason>"], "conditions": [],
+  "sources": [{ "label": "<source label>", "url": "<source URL>" }] }
+{ "verdict": "conditional", "reasons": ["<sourced reason>"],
+  "conditions": ["<condition from the rule>"],
+  "sources": [{ "label": "<source label>", "url": "<source URL>" }] }
+{ "verdict": "restricted", "reasons": ["<sourced reason>"], "conditions": [],
+  "sources": [{ "label": "<source label>", "url": "<source URL>" }] }`;
 
 function CodeBlock({ children, label }: { children: string; label: string }) {
   return (
@@ -96,7 +99,7 @@ export default function DocsPage() {
           <span>Docs</span>
         </Link>
         <div className={styles.headerActions}>
-          <span className={styles.version}>API v0.1</span>
+          <span className={styles.version}>Eligibility API v1</span>
           <Link className={styles.secondaryAction} href="/">View website</Link>
           <Link className={styles.primaryAction} href="/app?signin">Open app</Link>
         </div>
@@ -121,22 +124,22 @@ export default function DocsPage() {
           </nav>
           <div className={styles.sidebarNote}>
             <strong>Need the contract?</strong>
-            <p>The running API serves its OpenAPI document at <code>/v1/openapi.json</code>.</p>
+            <p>The running API serves its OpenAPI document at <code>/api/v1/openapi.json</code>.</p>
           </div>
         </aside>
 
         <main id="docs-content" className={styles.main}>
           <section id="overview" className={styles.hero}>
             <div className={styles.eyebrow}>Vestail developer platform</div>
-            <h1>Ownership rules your product can explain.</h1>
-            <p className={styles.lede}>Resolve what someone wants to buy, judge it for their declared country and buyer type, and route only the outcomes that can proceed.</p>
+            <h1>Eligibility answers your product can explain.</h1>
+            <p className={styles.lede}>Check what a person may own using only a declared country, residency, and asset—without sending names, IDs, or wallet addresses.</p>
             <div className={styles.heroActions}>
               <a className={styles.primaryAction} href="#quickstart">Start building</a>
               <a className={styles.textLink} href="#api">Explore the API <span aria-hidden="true">→</span></a>
             </div>
             <div className={styles.previewNotice} role="note">
               <span className={styles.noticeMark} aria-hidden="true" />
-              <div><strong>Preview API</strong><p>The contract is implemented and tested. The public production host and credentials are not yet generally available.</p></div>
+              <div><strong>Design-partner access</strong><p>Ask Vestail for a test key. Test keys begin with <code>vst_test_</code>; live keys begin with <code>vst_live_</code>.</p></div>
             </div>
           </section>
 
@@ -156,21 +159,21 @@ export default function DocsPage() {
           <section id="quickstart" className={styles.section}>
             <div className={styles.sectionIntro}>
               <p className={styles.kicker}>Quickstart</p>
-              <h2>Go from text to a country matrix.</h2>
-              <p>Start with the resolver, then request verdicts for the buyer context you actually have.</p>
+              <h2>Make your first eligibility check.</h2>
+              <p>Get an API key from Vestail, keep it on your server, and send only the declared eligibility context.</p>
             </div>
             <div className={styles.twoColumn}>
               <div>
-                <h3>1. Resolve the query</h3>
-                <p>Resolution is never silent. Every match returns a stage and a trail your interface can show to the buyer.</p>
-                <CodeBlock label="Request">{resolveExample}</CodeBlock>
+                <h3>1. Call the API with curl</h3>
+                <p>Use the bearer key in the Authorization header. Never expose a live key in browser code.</p>
+                <CodeBlock label="curl">{curlExample}</CodeBlock>
               </div>
-              <CodeBlock label="Response">{resolveResponse}</CodeBlock>
+              <div><h3>2. Call it from TypeScript</h3><CodeBlock label="Server-side TypeScript">{fetchExample}</CodeBlock></div>
             </div>
             <div className={styles.callout}>
-              <strong>2. Ask for verdicts</strong>
-              <p>Pass <code>who=citizen</code> or <code>who=foreigner</code>. Omit <code>countries</code> to return every supported country.</p>
-              <CodeBlock label="JavaScript">{matrixExample}</CodeBlock>
+              <strong>Example response shapes</strong>
+              <p>These are structural examples, not claims about a country or asset. Real reasons and sources always come from Vestail’s stored rule data.</p>
+              <CodeBlock label="Eligible, conditional, restricted">{responseShapes}</CodeBlock>
             </div>
           </section>
 
@@ -199,11 +202,12 @@ export default function DocsPage() {
               <h2>Three states. Never a misleading boolean.</h2>
             </div>
             <div className={styles.verdictGrid}>
-              <article className={styles.can}><span className={styles.verdictIcon}><CheckCircle size={22} weight="duotone" aria-hidden="true" /></span><h3>Can own</h3><code>can_own · 2</code><p>Ownership is permitted outright for this buyer context.</p></article>
+              <article className={styles.can}><span className={styles.verdictIcon}><CheckCircle size={22} weight="duotone" aria-hidden="true" /></span><h3>Eligible</h3><code>eligible</code><p>The sourced rules indicate ownership is available for this declared context.</p></article>
               <article className={styles.conditional}><span className={styles.verdictIcon}><WarningCircle size={22} weight="duotone" aria-hidden="true" /></span><h3>Conditional</h3><code>conditional · 1</code><p>A licence, cap, approval, residency rule, or other condition applies.</p></article>
-              <article className={styles.cannot}><span className={styles.verdictIcon}><XCircle size={22} weight="duotone" aria-hidden="true" /></span><h3>Cannot own</h3><code>cannot_own · 0</code><p>Vestail does not provide a buy route for this buyer context.</p></article>
+              <article className={styles.cannot}><span className={styles.verdictIcon}><XCircle size={22} weight="duotone" aria-hidden="true" /></span><h3>Restricted</h3><code>restricted</code><p>The sourced rules indicate ownership is restricted for this declared context.</p></article>
             </div>
             <div className={styles.ruleBox}><strong>Routing invariant</strong><p>Conditional routes require <code>acknowledged: true</code>. Cannot-own routes are always refused.</p></div>
+            <div className={styles.warning}><strong>Unverified is not eligible</strong><p>If a rule has no source, the public API returns <code>unverified</code>. It never promotes missing research to an eligibility verdict.</p></div>
           </section>
 
           <section id="rules" className={styles.section}>
@@ -234,7 +238,7 @@ export default function DocsPage() {
               <h2>Small surface, composable responses.</h2>
               <p>All responses are JSON. Reference data is designed to be cacheable; activity data is live.</p>
             </div>
-            <div className={styles.baseUrl}><span>Base URL</span><code>https://api.vestail.example/v1</code><small>Placeholder until the production API host is published</small></div>
+            <div className={styles.baseUrl}><span>Base path</span><code>/api/v1</code><small>The running service publishes its generated OpenAPI 3.1 document at <code>/api/v1/openapi.json</code>.</small></div>
             <div className={styles.endpointList}>
               {endpoints.map(([method, path, description]) => (
                 <article key={`${method}${path}`}>
@@ -249,20 +253,24 @@ export default function DocsPage() {
           <section id="integration" className={styles.section}>
             <div className={styles.sectionIntro}>
               <p className={styles.kicker}>Integration guide</p>
-              <h2>Route the verdict, not just the asset.</h2>
+              <h2>Use the disclosure, not a boolean.</h2>
             </div>
             <div className={styles.integrationGrid}>
               <div>
-                <h3>Before showing a buy action</h3>
+                <h3>For every response</h3>
                 <ul>
-                  <li>Collect a declared country and buyer type.</li>
-                  <li>Keep the asset ID returned by the resolver.</li>
-                  <li>Display the verdict label, reason, and provenance.</li>
-                  <li>Require explicit acknowledgement for a conditional result.</li>
-                  <li>Never construct venue links for a cannot-own result.</li>
+                  <li>Display the verdict, reasons, conditions, and sources together.</li>
+                  <li>Treat <code>unverified</code> as unknown, never eligible.</li>
+                  <li>Use <code>ruleId</code> to retrieve the current rule and available history.</li>
+                  <li>Respect <code>429</code> and the <code>Retry-After</code> header.</li>
+                  <li>Do not send personal data, IDs, or wallet addresses.</li>
                 </ul>
               </div>
-              <CodeBlock label="Record an eligible route">{clickExample}</CodeBlock>
+              <CodeBlock label="Batch request">{`await fetch(\`${"${process.env.VESTAIL_API_BASE_URL}"}/api/v1/check/batch\`, {
+  method: "POST",
+  headers: { Authorization: \`Bearer \${key}\`, "Content-Type": "application/json" },
+  body: JSON.stringify({ checks: [firstCheck, secondCheck] })
+});`}</CodeBlock>
             </div>
           </section>
 
@@ -273,11 +281,11 @@ export default function DocsPage() {
             </div>
             <div className={styles.trustGrid}>
               <article><h3>Buyer context is declared</h3><p>Vestail does not infer citizenship, residency, or identity. Results depend on the values supplied by the buyer or integrating product.</p></article>
-              <article><h3>Provenance is explicit</h3><p>Each sourced rule can include documents and a verification date. Empty sources and a null date mean the rule is illustrative, not verified.</p></article>
-              <article><h3>Guidance is not legal advice</h3><p>Rules can change and may not capture every personal circumstance. High-stakes decisions still require qualified advice.</p></article>
-              <article><h3>Routing has hard gates</h3><p>The API refuses cannot-own clicks and conditional clicks without acknowledgement. A venue URL alone never overrides a verdict.</p></article>
+              <article><h3>Provenance is mandatory</h3><p>A result without a source is returned as <code>unverified</code>, regardless of the internal rule status.</p></article>
+              <article><h3>Disclosure, not enforcement</h3><p>Every response includes a disclaimer. Vestail informs; it does not certify compliance or guarantee a transaction.</p></article>
+              <article><h3>Usage is privacy-minimal</h3><p>Vestail counts requests per API key per day for limits and future billing. Request bodies are not retained.</p></article>
             </div>
-            <div className={styles.warning}><strong>Current infrastructure limit</strong><p>Click records and rate-limit windows are held in memory and reset on restart. A shared persistent store is required before multi-instance production deployment.</p></div>
+            <div className={styles.warning}><strong>Residency coverage</strong><p>The current rule set distinguishes citizens and foreigners. Requests for residents return <code>unverified</code> until resident-specific sourced rules are added.</p></div>
           </section>
 
           <section id="glossary" className={styles.section}>
@@ -301,6 +309,10 @@ export default function DocsPage() {
               <p className={styles.kicker}>Changelog</p>
               <h2>What changed.</h2>
             </div>
+            <article className={styles.change}>
+              <time dateTime="2026-10-14">14 October 2026</time>
+              <div><h3>Public Eligibility API v1</h3><p>Added bearer-key access, single and batch checks, profile-scoped assets, coverage statistics, rule history, unverified handling, and generated OpenAPI documentation.</p></div>
+            </article>
             <article className={styles.change}>
               <time dateTime="2026-10-09">9 October 2026</time>
               <div><h3>Developer documentation launched</h3><p>Added the resolver, matrix, verdict, rule schema, route gating, provenance, API reference, and deployment-limit guidance in one connected path.</p></div>

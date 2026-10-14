@@ -32,6 +32,7 @@ check(d.judge("xyz:GOLD", "NG").status === "conditional" && d.judge("xyz:GOLD", 
 check(d.judge("xyz:XYZ100", "NG").status === "conditional", "venue index exposure inherits Nigeria's conditional rule");
 check(d.judge("xyz:DXY", "DE").status === "conditional", "currency index exposure inherits Germany's conditional rule");
 check(d.judge("xyz:GOLD", "GB").assessed === false && d.judge("xyz:GOLD", "GB").status === null, "no rule for GB: not assessed");
+check(d.judge("xyz:VIX", "GB").assessed === false, "new markets do not invent a missing country rule");
 check(d.judge("xyz:NOPE", "NG") === null, "unknown market is null");
 
 console.log(fail ? `${fail} failed` : "all derivative tests pass");

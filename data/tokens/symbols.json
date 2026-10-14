@@ -204,6 +204,12 @@
       "class": null,
       "home": "US",
       "mapping_note": "Oil-futures fund units have no honest ownership class in the current model."
+    },
+    "SLV": {
+      "name": "iShares Silver Trust",
+      "class": null,
+      "home": "US",
+      "mapping_note": "Silver bullion has no honest ownership class in the current model."
     }
   }
 }

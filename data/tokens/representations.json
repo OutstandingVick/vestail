@@ -1431,6 +1431,45 @@
           "pythFeedId": null
         }
       ]
+    },
+    "SLV": {
+      "referenceFeedId": null,
+      "representations": [
+        {
+          "mint": "iy11ytbSGcUnrjE6Lfv78TFqxKyUESfku1FugS9ondo",
+          "provider": "ondo",
+          "symbol": "SLV",
+          "name": "iShares Silver Trust (Ondo Tokenized)",
+          "tokenSymbol": "SLVon",
+          "structure": "total_return_note",
+          "decimals": 9,
+          "redeemable": true,
+          "custodian": null,
+          "source": "https://docs.ondo.finance/ondo-stocks/legal-and-regulatory",
+          "fetchedAt": "2026-10-14T16:53:05.465Z",
+          "tokenProgram": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+          "mintAuthority": "9foMHsSDq7nMg4WPusSz9eY7tyxyukqborA8GyU5cUxD",
+          "freezeAuthority": "51QVCuHfL1FeNjd8BDeffCKhCcAYoULnVB3yjNhShiuK",
+          "pythFeedId": null
+        },
+        {
+          "mint": "XsxAd6okt8y1RRK6gNg7iJaqiWNiq5Md5EDf3ZrF2dm",
+          "provider": "xstocks",
+          "symbol": "SLV",
+          "name": "iShares Silver Trust xStock",
+          "tokenSymbol": "SLVx",
+          "structure": "custody_backed",
+          "decimals": 8,
+          "redeemable": true,
+          "custodian": "InCore Bank AG",
+          "source": "https://assets.backed.fi/legal-documentation",
+          "fetchedAt": "2026-10-14T16:53:05.465Z",
+          "tokenProgram": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+          "mintAuthority": "7pt9tkctJPK7PPNQJ77GKg8ZffSF6QxoMiCFYHxrtaCj",
+          "freezeAuthority": "JDq14BWvqCRFNu1krb12bcRpbGtJZ1FLEakMw6FdxJNs",
+          "pythFeedId": null
+        }
+      ]
     }
   }
 }

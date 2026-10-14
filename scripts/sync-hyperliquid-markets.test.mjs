@@ -69,6 +69,12 @@ test("a verified correction updates the matching market only", () => {
   assert.equal(result.data.markets[1].id, "xyz:GOLD");
 });
 
+test("rechecking unchanged data produces no catalogue churn", () => {
+  const market = { id: "xyz:SP500", coin: "SP500", ...MARKET_SPECS.SP500 };
+  const result = merge({ markets: [market] }, [market]);
+  assert.deepEqual({ added: result.added, updated: result.updated }, { added: 0, updated: 0 });
+});
+
 test("a requested market that cannot be verified makes the batch incomplete", async () => {
   const request = async (type, extra) => {
     if (type === "meta") return { universe: [{ name: "xyz:SP500" }] };

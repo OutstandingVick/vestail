@@ -111,6 +111,19 @@
         "ibovespa",
         "brazil 60"
       ]
+    },
+    {
+      "id": "xyz:DXY",
+      "coin": "DXY",
+      "name": "U.S. Dollar Index",
+      "category": "fx",
+      "related_asset": null,
+      "aliases": [
+        "dxy",
+        "dollar index",
+        "us dollar index",
+        "dollar basket"
+      ]
     }
   ]
 }

@@ -194,28 +194,6 @@ export function Dashboard({ assets, countryName, who }: { assets: Asset[]; count
           ) : <Empty>Nothing watched yet. Use “Watch” on any asset page.</Empty>}
         </Card>
       </div>
-      <Card title="Price exposure on Hyperliquid" aside={<span className="text-xs text-muted">Positions, not holdings: you own no commodity</span>}>
-        {data.positions.length ? (
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[520px] text-left text-sm">
-              <thead className="text-xs text-muted">
-                <tr><th className="py-2 font-medium">Market</th><th className="py-2 font-medium">Size</th><th className="py-2 font-medium">Notional</th><th className="py-2 font-medium">Unrealised P&amp;L</th><th className="py-2 text-right font-medium">Verdict here</th></tr>
-              </thead>
-              <tbody>
-                {data.positions.map(p => (
-                  <tr key={p.market} className="border-t border-line">
-                    <td className="py-3"><Link href={`/app/exposure/${p.coin.toLowerCase()}`} className="font-semibold hover:text-emphasis">{p.name}</Link><div className="text-xs text-muted">{p.market} · {p.size > 0 ? "long" : "short"}</div></td>
-                    <td className="py-3">{Math.abs(p.size).toLocaleString(undefined, { maximumFractionDigits: 4 })}</td>
-                    <td className="py-3">{usd(p.valueUsd)}</td>
-                    <td className={`py-3 font-semibold ${p.pnlUsd >= 0 ? "text-can" : "text-cannot"}`}>{p.pnlUsd >= 0 ? "+" : ""}{usd(p.pnlUsd)}</td>
-                    <td className="py-3 text-right">{p.status ? <VerdictBadge status={p.status} /> : <NotAssessedBadge />}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        ) : <Empty>No open positions. Gold, crude oil and copper exposure is under <Link href="/app/discover?q=crude%20oil" className="text-emphasis underline">Discover</Link>.</Empty>}
-      </Card>
     </>
   );
 }

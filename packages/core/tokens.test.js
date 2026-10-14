@@ -44,6 +44,10 @@ check(tokens.board("SPCX", "NG", "citizen", core).asset === "Private company sha
 check(tokens.board("NOPE", "NG", "citizen", core) === null, "unknown symbol is null");
 check(tokens.forEntity("Nvidia")[0]?.symbol === "NVDA", "entity joins to its symbol");
 check(tokens.list().find(s => s.symbol === "TSLA").chains.join() === "solana,robinhood", "TSLA lists its chains");
+check(tokens.list().length === 48, "the verified token catalogue covers 48 symbols");
+check(tokens.board("GLD", "NG", "citizen", core)?.asset === "Gold bullion", "gold trackers use the bullion ownership rule");
+check(tokens.board("USO", "NG", "citizen", core) === null && tokens.board("SLV", "NG", "citizen", core) === null,
+  "oil futures and silver stay unclassified until honest ownership classes exist");
 const mint = ng.tokens[0].mint;
 check(tokens.token(mint, "NG", "citizen", core).token.mint === mint, "token by mint");
 

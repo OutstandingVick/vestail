@@ -98,6 +98,19 @@
         "kospi 200",
         "korea 200"
       ]
+    },
+    {
+      "id": "xyz:IBOV",
+      "coin": "IBOV",
+      "name": "Bovespa Index",
+      "category": "indices",
+      "related_asset": null,
+      "aliases": [
+        "ibov",
+        "bovespa",
+        "ibovespa",
+        "brazil 60"
+      ]
     }
   ]
 }

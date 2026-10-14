@@ -210,6 +210,11 @@
       "class": null,
       "home": "US",
       "mapping_note": "Silver bullion has no honest ownership class in the current model."
+    },
+    "NBIS": {
+      "name": "Nebius Group",
+      "class": "equity-by-home",
+      "home": "NL"
     }
   }
 }

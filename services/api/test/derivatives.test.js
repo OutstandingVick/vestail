@@ -5,6 +5,7 @@ import { json } from "./helpers.js";
 
 test("GET /derivatives preserves the original commodity markets as perpetuals", async () => {
   const { body } = await json("/derivatives");
+  assert.equal(body.length, 11);
   assert.ok(["xyz:GOLD", "xyz:CL", "xyz:COPPER"].every(id => body.some(m => m.id === id)));
   assert.ok(body.every(m => m.instrument === "perpetual_future"));
   assert.equal((await json("/derivatives?q=crude%20oil")).body[0].id, "xyz:CL");

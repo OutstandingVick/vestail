@@ -18,6 +18,7 @@ check(d.list().every(m => m.instrument === "perpetual_future"), "every market is
 check(d.find("can I buy oil")[0]?.id === "xyz:CL", "oil finds WTI crude");
 check(d.find("copper")[0]?.id === "xyz:COPPER", "copper finds copper");
 check(d.find("goldman sachs").length === 0, "goldman is not gold");
+check(d.find("s&p 500")[0]?.id === "xyz:SP500", "S and P searches find SP500");
 check(d.judge("xyz:GOLD", "US").status === "cannot_own", "US persons barred");
 check(d.judge("xyz:GOLD", "NG").status === "conditional" && d.judge("xyz:GOLD", "NG").issuer.acknowledgement, "NG conditional with an acknowledgement");
 check(d.judge("xyz:GOLD", "GB").assessed === false && d.judge("xyz:GOLD", "GB").status === null, "no rule for GB: not assessed");

@@ -172,6 +172,11 @@
 .trustGrid p { margin: 13px 0 0; color: var(--color-muted); line-height: 1.6; }
 .warning { border-inline-start: 5px solid var(--color-cond); background: var(--color-cond-wash); color: var(--color-cond-ink); }
 
+.glossary { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; overflow: hidden; margin: 0; border: 1px solid var(--color-line); border-radius: 20px; background: var(--color-line); }
+.glossary div { background: var(--color-surface); padding: 22px; }
+.glossary dt { color: var(--color-ink-strong); font-weight: 700; }
+.glossary dd { margin: 9px 0 0; color: var(--color-muted); line-height: 1.6; }
+
 .change { display: grid; grid-template-columns: 170px 1fr; gap: 28px; }
 .change time { color: var(--color-muted); font-size: 14px; }
 .change h3 { margin: 0; font-size: 20px; }
@@ -225,7 +230,7 @@
   .brand span { display: none; }
   .primaryAction, .secondaryAction { padding-inline: 15px; }
   .heroActions { align-items: flex-start; flex-direction: column; }
-  .steps, .pipeline, .trustGrid { grid-template-columns: 1fr; }
+  .steps, .pipeline, .trustGrid, .glossary { grid-template-columns: 1fr; }
   .steps li { min-height: 190px; }
   .steps strong { margin-block-start: 34px; }
   .mobileNav nav { grid-template-columns: 1fr; max-height: 60vh; overflow-y: auto; }

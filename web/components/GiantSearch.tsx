@@ -16,7 +16,7 @@ export function GiantSearch({ q, action = "/app/discover/buy" }: { q: string; ac
       <p className="max-w-[720px] text-[17px] text-muted">
         Buy tokenized stocks on <strong className="text-ink">Solana</strong>, <strong className="text-ink">Base</strong> and{" "}
         <strong className="text-ink">Robinhood Chain</strong>, trade gold, oil and copper price exposure on{" "}
-        <strong className="text-ink">Hyperliquid</strong>, and check who can own 20 kinds of assets in 12 countries.
+        and check who can own 20 kinds of assets in 12 countries.
       </p>
       <form action={action} method="get" role="search" className="flex w-full max-w-[960px] items-center gap-2.5 rounded-full border-2 border-line bg-surface py-2.5 pr-2.5 pl-7 shadow-[0_18px_50px_rgba(124,92,255,0.14)]">
         <MagnifyingGlass size={30} weight="regular" className="shrink-0 text-muted" aria-hidden="true" />

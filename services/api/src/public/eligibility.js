@@ -47,7 +47,8 @@ function classEligibility(data, { country, residency, assetId }) {
   const judged = data.core.rule(country, residency, assetName);
   const raw = rawRule(data, country, residency, assetId);
   const sources = validSources(judged?.sources);
-  if (!judged || !raw || sources.length === 0) {
+  const conditions = judged?.statusKey === "conditional" ? (raw?.conditions || []) : [];
+  if (!judged || !raw || sources.length === 0 || (judged.statusKey === "conditional" && conditions.length === 0)) {
     return unverified({ ruleId, data, reasons: raw?.reasons || [], sources });
   }
 
@@ -55,7 +56,7 @@ function classEligibility(data, { country, residency, assetId }) {
     ruleId,
     verdict: PUBLIC_VERDICT[judged.statusKey],
     reasons: raw.reasons || [`The sourced Vestail rule classifies ${assetName} as ${PUBLIC_VERDICT[judged.statusKey]} for this profile.`],
-    conditions: judged.statusKey === "conditional" ? (raw.conditions || []) : [],
+    conditions,
     sources,
     lastVerified: judged.verified_at,
     ruleVersion: versionOf(data),

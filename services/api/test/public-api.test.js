@@ -17,6 +17,7 @@ async function fixture({ rateLimit = 60 } = {}) {
   };
   setSource("NG", "citizen", "residential_property"); // can_own
   setSource("NG", "citizen", "foreign_equities"); // conditional
+  data.raw.countries.countries.find(item => item.code === "NG").rules.citizen.foreign_equities.conditions = ["Complete the condition described by the sourced rule."];
   setSource("NG", "foreigner", "agricultural_land"); // cannot_own
   const store = new MemoryKeyStore();
   const issued = await store.issue({ label: "test", rateLimit });
@@ -49,6 +50,7 @@ test("check exposes all three sourced verdicts and unverified separately", async
     assert.ok(body.reasons.length > 0);
     assert.match(body.disclaimer, /informational/i);
     if (verdict !== "unverified") assert.deepEqual(body.sources, [{ label: source.title, url: source.url }]);
+    if (verdict === "conditional") assert.ok(body.conditions.length > 0);
   }
 });
 

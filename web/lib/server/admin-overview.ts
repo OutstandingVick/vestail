@@ -10,7 +10,7 @@ export async function buildAdminOverview(): Promise<AdminOverview> {
   const started = Date.now();
   const [usersResult, catalogResult, coverageResult, activityResult] = await Promise.allSettled([
     adminUsers(),
-    Promise.all([api.countries(), api.assets(), api.tokenSymbols(), api.derivatives()]),
+    Promise.all([api.countries(), api.assets(), api.tokenSymbols()]),
     productCoverage(),
     api.activity(),
   ]);
@@ -29,7 +29,7 @@ export async function buildAdminOverview(): Promise<AdminOverview> {
   return {
     generatedAt: new Date().toISOString(),
     users: summarizeAdminUsers(users),
-    catalog: { countries: catalog[0].length, assets: catalog[1].length, tokenSymbols: catalog[2].length, markets: catalog[3].length },
+    catalog: { countries: catalog[0].length, assets: catalog[1].length, tokenSymbols: catalog[2].length },
     coverage: coverageResult.status === "fulfilled" ? coverageResult.value : [],
     activity,
     health,

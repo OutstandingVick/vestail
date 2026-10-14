@@ -70,6 +70,16 @@ GET /tokens/NVDA?country=NG&who=foreigner
 
 Data lives in `data/tokens/` (registry, issuer policies, and `symbols.json`, which maps each symbol to its asset class).
 
+## Perpetual futures
+
+`GET /derivatives` lists trade.xyz markets verified through Hyperliquid's
+primary info API. These are `perpetual_future` instruments: price exposure
+with liquidation risk, not tokens and not ownership of an index constituent,
+currency or commodity. Search with `?q=` using familiar names such as
+`s&p 500`, `nifty 50`, `nikkei`, `kospi`, `bovespa`, `vix` or `dollar index`.
+`GET /derivatives/{id}?country=` applies the venue policy unchanged across all
+markets.
+
 ## Attribution
 Every Buy press should `POST /orders/click` before redirecting. The response returns the final redirect url so the tag logic lives server-side. This is the hook for referral revenue and payment-for-order-flow accounting; it also feeds the live ticker.
 

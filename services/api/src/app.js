@@ -16,6 +16,8 @@ import { registerOrders } from "./routes/orders.js";
 import { registerTokens } from "./routes/tokens.js";
 import { createAuth, keysFromEnv } from "./auth.js";
 import { rateLimit } from "./ratelimit.js";
+import { createKeyStore } from "./public/key-store.js";
+import { createPublicApi } from "./public/routes.js";
 
 /** Build the API. Everything it needs is injected so tests can run it in-process. */
 export function createApp({
@@ -26,6 +28,8 @@ export function createApp({
   apiKeys = keysFromEnv(),
   limiter = rateLimit({ limit: Number(process.env.VESTAIL_RATE_LIMIT) || 120 }),
   corsOrigins = (process.env.VESTAIL_CORS_ORIGINS || "*").split(",").map(s => s.trim()),
+  partnerKeyStore = createKeyStore(),
+  partnerAccessNow,
 } = {}) {
   const app = new Hono();
   const v1 = new Hono();
@@ -39,7 +43,7 @@ export function createApp({
     allowHeaders: ["Authorization", "Content-Type"],
     maxAge: 86400,
   }));
-  app.use(limiter);
+  app.use((c, next) => c.req.path.startsWith("/v1/") ? limiter(c, next) : next());
   app.use(cacheControl);
   v1.get("/health", c => c.json({ ok: true }));
   v1.get("/openapi.json", c => c.json(spec));
@@ -53,6 +57,7 @@ export function createApp({
   registerOrders(v1, ctx);
 
   app.route("/v1", v1);
+  app.route("/api/v1", createPublicApi({ data, keyStore: partnerKeyStore, accessNow: partnerAccessNow }));
   app.onError(onError);
   app.notFound(notFound);
   return app;

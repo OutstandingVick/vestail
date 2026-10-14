@@ -10,6 +10,7 @@
   "scripts": {
     "test": "npm test --workspaces --if-present && npm run test:scripts",
     "test:scripts": "node --test \"scripts/**/*.test.mjs\"",
+    "markets:hyperliquid": "node scripts/sync-hyperliquid-markets.mjs",
     "tokens:robinhood": "node scripts/sync-robinhood-tokens.mjs",
     "tokens:solana": "node scripts/sync-solana-tokens.mjs"
   },

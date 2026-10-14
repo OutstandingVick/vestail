@@ -167,44 +167,6 @@
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-2 6 102 93'%3E%3Cline x1='12' y1='42' x2='27' y2='65' stroke='%23FF580A' stroke-width='27' stroke-linecap='round'/%3E%3Cline x1='60' y1='82' x2='83' y2='23' stroke='%23FF580A' stroke-width='30' stroke-linecap='round'/%3E%3Cellipse cx='84.26' cy='39.59' rx='4.6' ry='6.6' fill='%23141414'/%3E%3Ccircle cx='85.66' cy='37.19' r='1.7' fill='%23FFFFFF'/%3E%3Cellipse cx='70.84' cy='34.36' rx='4.6' ry='6.6' fill='%23141414'/%3E%3Ccircle cx='72.24' cy='31.96' r='1.7' fill='%23FFFFFF'/%3E%3C/svg%3E">
 <style>
   /* ---------- Design tokens ---------- */
-
-  /*
-   * Fallback faces, measured to match the webfonts they stand in for.
-   *
-   * Loading the fonts without blocking the render cost 1.4 seconds of delay
-   * but left the swap visible: the fallback sets at a different width and
-   * height, so every line of text moved when Inter and Syne arrived. That is
-   * the whole of this page's layout shift.
-   *
-   * These override the metrics of a local face so it occupies the same box as
-   * the real one. Nothing downloads — src is local() — so there is no cost to
-   * the swap being invisible instead of merely fast.
-   */
-  @font-face {
-    font-family: "Inter Fallback";
-    src: local("Arial");
-    ascent-override: 90.20%;
-    descent-override: 22.48%;
-    line-gap-override: 0%;
-    size-adjust: 107.40%;
-  }
-  @font-face {
-    font-family: "Manrope Fallback";
-    src: local("Arial");
-    ascent-override: 105.12%;
-    descent-override: 29.12%;
-    line-gap-override: 0%;
-    size-adjust: 102.74%;
-  }
-  @font-face {
-    font-family: "Syne Fallback";
-    src: local("Arial");
-    ascent-override: 94.35%;
-    descent-override: 25.16%;
-    line-gap-override: 0%;
-    size-adjust: 106.00%;
-  }
-
   :root {
     box-sizing: border-box;
     padding-top: env(safe-area-inset-top, 0px);
@@ -281,9 +243,9 @@
     --shadow-2: var(--card-raised);
     /* Corner scale, and only these: panels 28, cards 20, fields 16, buttons and small tiles 12, verdict tiles and swatches 6, pills. */
     --r-tile: 6px; --r-xl: 28px; --r-lg: 28px; --r-card: 20px; --r-md: 16px; --r-sm: 12px; --r-pill: 999px;
-    --font-manrope: "Manrope", "Manrope Fallback", ui-sans-serif, system-ui, sans-serif;
-    --font-inter: "Inter", "Inter Fallback", ui-sans-serif, system-ui, sans-serif;
-    --font-syne: "Syne", "Syne Fallback", ui-sans-serif, system-ui, sans-serif;
+    --font-manrope: "Manrope", ui-sans-serif, system-ui, sans-serif;
+    --font-inter: "Inter", ui-sans-serif, system-ui, sans-serif;
+    --font-syne: "Syne", ui-sans-serif, system-ui, sans-serif;
     --font-geist: "Geist", ui-sans-serif, system-ui, sans-serif;
     --font-dm-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
     --font-satoshi: "Satoshi", ui-sans-serif, system-ui, sans-serif;

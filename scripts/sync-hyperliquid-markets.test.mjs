@@ -28,6 +28,7 @@ test("validates the primary universe before using it", () => {
 test("validates category rows before trusting them", () => {
   assert.throws(() => validateCategories({}), /not an array/);
   assert.throws(() => validateCategories([["xyz:SP500"]]), /malformed/);
+  assert.throws(() => validateCategories([["xyz:SP500", null]]), /malformed/);
   assert.throws(() => validateCategories([["xyz:SP500", "indices"], ["xyz:SP500", "indices"]]), /repeat/);
 });
 

@@ -143,25 +143,6 @@ paths:
           content: { application/json: { schema: { $ref: "#/components/schemas/TokenBoard" } } }
         "404": { description: Unknown symbol }
 
-  /derivatives:
-    get:
-      tags: [derivatives]
-      summary: Commodity price exposure markets (Hyperliquid perpetuals)
-      parameters: [{ name: q, in: query, schema: { type: string }, description: "Free text: oil, copper, gold" }]
-      responses: { "200": { description: Markets, content: { application/json: { schema: { type: array, items: { $ref: "#/components/schemas/Market" } } } } } }
-
-  /derivatives/{id}:
-    get:
-      tags: [derivatives]
-      summary: One market judged for a country
-      description: Judged by the venue's own rule, never by the commodity's ownership class, because nothing is owned. No rule for the country means assessed false and status null.
-      parameters:
-        - { name: id, in: path, required: true, schema: { type: string }, example: "xyz:GOLD" }
-        - { name: country, in: query, required: true, schema: { type: string, pattern: "^[A-Z]{2}$" } }
-      responses:
-        "200": { description: Judged market, content: { application/json: { schema: { $ref: "#/components/schemas/JudgedMarket" } } } }
-        "404": { description: Unknown market }
-
   /activity:
     get:
       tags: [activity]
@@ -245,29 +226,7 @@ components:
         sources: { type: array, items: { $ref: "#/components/schemas/Source" }, description: Empty until the rule has been sourced. }
         verified_at: { type: [string, "null"], format: date, description: When the rule was last checked against its sources; null if never. }
     TokenSymbol: { type: object, properties: { symbol: { type: string }, name: { type: string }, entity: { type: [string, "null"], description: Matching name in /entities, when there is one }, home: { type: string }, providers: { type: array, items: { type: string } }, chains: { type: array, items: { $ref: "#/components/schemas/Chain" } }, mints: { type: array, items: { type: string }, description: Token addresses on every chain } } }
-    Chain: { type: string, enum: [solana, robinhood, base, hyperliquid] }
-    Market:
-      type: object
-      properties:
-        id: { type: string }
-        coin: { type: string }
-        name: { type: string }
-        category: { type: string, enum: [commodities, indices, fx], description: The kind of reference price tracked by the perpetual. }
-        related_asset: { type: [string, "null"], description: The ownership class this tracks the price of, if any; its rule does not apply }
-        aliases: { type: array, items: { type: string } }
-        venue: { type: string }
-        chain: { $ref: "#/components/schemas/Chain" }
-        deployer: { type: string }
-        instrument: { type: string, enum: [perpetual_future], description: Leveraged price exposure with no ownership of the underlying. }
-    JudgedMarket:
-      allOf:
-        - { $ref: "#/components/schemas/Market" }
-        - type: object
-          properties:
-            country: { type: string }
-            assessed: { type: boolean }
-            status: { oneOf: [{ $ref: "#/components/schemas/Status" }, { type: "null" }] }
-            issuer: { oneOf: [{ $ref: "#/components/schemas/IssuerVerdict" }, { type: "null" }] }
+    Chain: { type: string, enum: [solana, robinhood, base] }
     Instrument: { type: string, enum: [tokenized_equity, tokenized_debt, broker_entitlement, contractual_exposure], description: "What the token legally is. tokenized_equity = a 1:1 claim on custodied shares; tokenized_debt = a note tracking the price; broker_entitlement = a share held through a broker; contractual_exposure = an SPV or loan participation." }
     Order: { type: object, properties: { id: { type: string }, at: { type: string, format: date-time }, country: { type: string }, asset: { type: string }, who: { $ref: "#/components/schemas/BuyerType" }, venue: { type: string }, mint: { type: string }, market: { type: string }, chain: { $ref: "#/components/schemas/Chain" }, acknowledged: { type: boolean } } }
     IssuerEvidence: { type: object, properties: { rule: { type: string }, kind: { type: string, enum: [gate, note] }, reason: { type: string }, source_url: { type: string, format: uri }, source_quality: { type: string, enum: [primary, secondary] } } }

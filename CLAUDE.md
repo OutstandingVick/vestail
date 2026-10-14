@@ -28,6 +28,7 @@ Vestail is a country × asset-class ownership matrix with venue routing. This re
 
 ## Commands
 - `npm test` — every test (core and API)
+- `npm run markets:hyperliquid -- --all --dry-run` — verify every reviewed trade.xyz market against Hyperliquid without writing
 - `node packages/core/test.js` — resolver tests only
 - `npm start -w @vestail/api` — the API on http://localhost:8787/v1
 - open `site/index.html` — the app (no server needed); see `DEPLOY.md` to point it at the API

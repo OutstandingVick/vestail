@@ -136,6 +136,19 @@
         "volatility index",
         "fear index"
       ]
+    },
+    {
+      "id": "xyz:XYZ100",
+      "coin": "XYZ100",
+      "name": "XYZ100 Index",
+      "category": "indices",
+      "related_asset": null,
+      "aliases": [
+        "xyz100",
+        "xyz 100",
+        "us technology 100",
+        "nasdaq 100"
+      ]
     }
   ]
 }

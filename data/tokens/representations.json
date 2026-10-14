@@ -1470,6 +1470,45 @@
           "pythFeedId": null
         }
       ]
+    },
+    "NBIS": {
+      "referenceFeedId": null,
+      "representations": [
+        {
+          "mint": "DiRshqNDE68bWbGdLHm1GwQ76MvWQG3af6w1NdQondo",
+          "provider": "ondo",
+          "symbol": "NBIS",
+          "name": "Nebius Group (Ondo Tokenized)",
+          "tokenSymbol": "NBISon",
+          "structure": "total_return_note",
+          "decimals": 9,
+          "redeemable": true,
+          "custodian": null,
+          "source": "https://docs.ondo.finance/ondo-stocks/legal-and-regulatory",
+          "fetchedAt": "2026-10-14T16:53:18.383Z",
+          "tokenProgram": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+          "mintAuthority": "9foMHsSDq7nMg4WPusSz9eY7tyxyukqborA8GyU5cUxD",
+          "freezeAuthority": "Chm9dcASBc9C54FGxcSRGv9qC998TueQqr5XzGZkEVCc",
+          "pythFeedId": null
+        },
+        {
+          "mint": "Xsii5eERa2sKFyTHQqdYxpxL5xoUSLVurzHeqBEMBho",
+          "provider": "xstocks",
+          "symbol": "NBIS",
+          "name": "Nebius xStock",
+          "tokenSymbol": "NBISx",
+          "structure": "custody_backed",
+          "decimals": 8,
+          "redeemable": true,
+          "custodian": "InCore Bank AG",
+          "source": "https://assets.backed.fi/legal-documentation",
+          "fetchedAt": "2026-10-14T16:53:18.383Z",
+          "tokenProgram": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+          "mintAuthority": "7pt9tkctJPK7PPNQJ77GKg8ZffSF6QxoMiCFYHxrtaCj",
+          "freezeAuthority": "JDq14BWvqCRFNu1krb12bcRpbGtJZ1FLEakMw6FdxJNs",
+          "pythFeedId": null
+        }
+      ]
     }
   }
 }

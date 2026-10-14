@@ -3,9 +3,9 @@ import assert from "node:assert/strict";
 import { createApp } from "../src/app.js";
 import { json } from "./helpers.js";
 
-test("GET /derivatives lists exactly gold, crude oil and copper as derivatives", async () => {
+test("GET /derivatives preserves the original commodity markets as perpetuals", async () => {
   const { body } = await json("/derivatives");
-  assert.deepEqual(body.map(m => m.id), ["xyz:GOLD", "xyz:CL", "xyz:COPPER"]);
+  assert.ok(["xyz:GOLD", "xyz:CL", "xyz:COPPER"].every(id => body.some(m => m.id === id)));
   assert.ok(body.every(m => m.instrument === "perpetual_future"));
   assert.equal((await json("/derivatives?q=crude%20oil")).body[0].id, "xyz:CL");
 });

@@ -7,8 +7,8 @@ import { useEffect, useMemo, useState } from "react";
 import { authedFetch, errorOf } from "@/lib/client";
 import type { ActivityItem } from "@/lib/types";
 
-const CHAINS = ["all", "solana", "base", "robinhood", "hyperliquid"] as const;
-const CHAIN_NAME: Record<string, string> = { all: "All chains", solana: "Solana", base: "Base", robinhood: "Robinhood Chain", hyperliquid: "Hyperliquid" };
+const CHAINS = ["all", "solana", "base", "robinhood"] as const;
+const CHAIN_NAME: Record<string, string> = { all: "All chains", solana: "Solana", base: "Base", robinhood: "Robinhood Chain" };
 
 export function ActivityHistory() {
   const searchParams = useSearchParams();

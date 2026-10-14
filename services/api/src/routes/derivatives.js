@@ -3,7 +3,7 @@ import { ApiError } from "../errors.js";
 /**
  * GET /derivatives[?q=] and GET /derivatives/{id}?country= — commodity price
  * exposure (Hyperliquid perpetuals), judged by the venue's rule. Every market
- * is instrument commodity_derivative: price exposure, never ownership.
+ * is instrument perpetual_future: price exposure, never ownership.
  */
 export function registerDerivatives(v1, { v, data }) {
   const { derivatives, countryByCode } = data;

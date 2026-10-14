@@ -7,7 +7,7 @@ import { readProfile } from "@/lib/server/profile";
 import type { Chain, Instrument, Status } from "@/lib/types";
 
 const CHAINS: Chain[] = ["solana", "base", "robinhood", "hyperliquid"];
-const INSTRUMENTS: Instrument[] = ["tokenized_equity", "tokenized_debt", "broker_entitlement", "contractual_exposure", "commodity_derivative"];
+const INSTRUMENTS: Instrument[] = ["tokenized_equity", "tokenized_debt", "broker_entitlement", "contractual_exposure", "perpetual_future"];
 type MarketRow = { id: string; name: string; symbol: string; chain: Chain; instrument: Instrument; provider: string; status: Status | null; assessed: boolean; href: string; exposure: boolean };
 
 export default async function MarketsPage({ searchParams }: { searchParams: Promise<{ chain?: string; instrument?: string; show?: string }> }) {

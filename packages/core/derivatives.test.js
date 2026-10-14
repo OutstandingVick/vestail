@@ -29,6 +29,7 @@ check(d.find("xyz 100")[0]?.id === "xyz:XYZ100", "XYZ 100 searches find the venu
 check(d.judge("xyz:GOLD", "US").status === "cannot_own", "US persons barred");
 check(d.judge("xyz:SP500", "US").status === "cannot_own", "index markets inherit the US venue restriction");
 check(d.judge("xyz:GOLD", "NG").status === "conditional" && d.judge("xyz:GOLD", "NG").issuer.acknowledgement, "NG conditional with an acknowledgement");
+check(d.judge("xyz:XYZ100", "NG").status === "conditional", "venue index exposure inherits Nigeria's conditional rule");
 check(d.judge("xyz:GOLD", "GB").assessed === false && d.judge("xyz:GOLD", "GB").status === null, "no rule for GB: not assessed");
 check(d.judge("xyz:NOPE", "NG") === null, "unknown market is null");
 

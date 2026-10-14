@@ -25,6 +25,7 @@ check(d.find("kospi 200")[0]?.id === "xyz:KR200", "KOSPI 200 searches find KR200
 check(d.find("bovespa")[0]?.id === "xyz:IBOV", "Bovespa searches find IBOV");
 check(d.find("dollar index")[0]?.id === "xyz:DXY", "dollar index searches find DXY");
 check(d.find("vix")[0]?.id === "xyz:VIX", "VIX searches find the volatility future");
+check(d.find("xyz 100")[0]?.id === "xyz:XYZ100", "XYZ 100 searches find the venue index");
 check(d.judge("xyz:GOLD", "US").status === "cannot_own", "US persons barred");
 check(d.judge("xyz:GOLD", "NG").status === "conditional" && d.judge("xyz:GOLD", "NG").issuer.acknowledgement, "NG conditional with an acknowledgement");
 check(d.judge("xyz:GOLD", "GB").assessed === false && d.judge("xyz:GOLD", "GB").status === null, "no rule for GB: not assessed");

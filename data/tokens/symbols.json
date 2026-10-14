@@ -188,6 +188,11 @@
       "name": "Gold",
       "class": "gold_bullion",
       "home": "US"
+    },
+    "HOOD": {
+      "name": "Robinhood Markets",
+      "class": "equity-by-home",
+      "home": "US"
     }
   }
 }

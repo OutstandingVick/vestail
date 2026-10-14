@@ -60,14 +60,14 @@ export interface ProductActivity {
 /** A Hyperliquid perpetual judged for a country: price exposure, never ownership. */
 export interface Market {
   id: string; coin: string; name: string; category: "commodities" | "indices" | "fx"; related_asset: string | null;
-  venue: string; chain: "hyperliquid"; deployer: string; instrument: "commodity_derivative";
+  venue: string; chain: "hyperliquid"; deployer: string; instrument: "perpetual_future";
   country?: string; assessed?: boolean; status?: Status | null;
   issuer?: Token["issuer"];
 }
 
 export interface IssuerEvidence { rule: string; kind: "gate" | "note"; reason: string; source_url: string; source_quality: "primary" | "secondary" }
 export type Chain = "solana" | "robinhood" | "base" | "hyperliquid";
-export type Instrument = "tokenized_equity" | "tokenized_debt" | "broker_entitlement" | "contractual_exposure" | "commodity_derivative";
+export type Instrument = "tokenized_equity" | "tokenized_debt" | "broker_entitlement" | "contractual_exposure" | "perpetual_future";
 export interface Token {
   mint: string; address: string; chain: Chain; chain_name: string; instrument: Instrument; provider: string; token_symbol: string; name: string; structure: string;
   redeemable: boolean; custodian: string | null; decimals: number; token_program: string; issuer_source: string;

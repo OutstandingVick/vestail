@@ -6,7 +6,7 @@ import { json } from "./helpers.js";
 test("GET /derivatives lists exactly gold, crude oil and copper as derivatives", async () => {
   const { body } = await json("/derivatives");
   assert.deepEqual(body.map(m => m.id), ["xyz:GOLD", "xyz:CL", "xyz:COPPER"]);
-  assert.ok(body.every(m => m.instrument === "commodity_derivative"));
+  assert.ok(body.every(m => m.instrument === "perpetual_future"));
   assert.equal((await json("/derivatives?q=crude%20oil")).body[0].id, "xyz:CL");
 });
 

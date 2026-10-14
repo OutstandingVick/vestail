@@ -37,7 +37,7 @@ export default async function ExposurePage({ params }: { params: Promise<{ coin:
             </div>
             <div className="flex flex-wrap gap-2 text-xs font-semibold">
               <span className="rounded-full bg-tint px-2.5 py-1">Hyperliquid</span>
-              <span className="rounded-full border-[1.5px] border-cond px-2.5 py-1">{INSTRUMENT_LABEL.commodity_derivative.label}</span>
+              <span className="rounded-full border-[1.5px] border-cond px-2.5 py-1">{INSTRUMENT_LABEL.perpetual_future.label}</span>
               <span className="rounded-full bg-wash px-2.5 py-1">Deployed by {market.deployer}</span>
             </div>
             <p className="text-[15px]">

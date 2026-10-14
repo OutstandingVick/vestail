@@ -258,7 +258,7 @@ components:
         venue: { type: string }
         chain: { $ref: "#/components/schemas/Chain" }
         deployer: { type: string }
-        instrument: { type: string, enum: [commodity_derivative] }
+        instrument: { type: string, enum: [perpetual_future] }
     JudgedMarket:
       allOf:
         - { $ref: "#/components/schemas/Market" }

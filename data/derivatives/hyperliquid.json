@@ -85,6 +85,19 @@
         "nikkei 225",
         "japan 225"
       ]
+    },
+    {
+      "id": "xyz:KR200",
+      "coin": "KR200",
+      "name": "Korea 200 Index",
+      "category": "indices",
+      "related_asset": null,
+      "aliases": [
+        "kr200",
+        "kospi",
+        "kospi 200",
+        "korea 200"
+      ]
     }
   ]
 }

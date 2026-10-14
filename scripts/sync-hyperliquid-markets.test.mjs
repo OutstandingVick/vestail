@@ -61,6 +61,14 @@ test("merges additively and leaves unrelated markets intact", () => {
   assert.equal(existing.markets.length, 1);
 });
 
+test("a verified correction updates the matching market only", () => {
+  const existing = { markets: [{ id: "xyz:SP500", coin: "SP500", name: "Old name" }, { id: "xyz:GOLD", coin: "GOLD" }] };
+  const corrected = { id: "xyz:SP500", coin: "SP500", ...MARKET_SPECS.SP500 };
+  const result = merge(existing, [corrected]);
+  assert.equal(result.updated, 1);
+  assert.equal(result.data.markets[1].id, "xyz:GOLD");
+});
+
 test("a requested market that cannot be verified makes the batch incomplete", async () => {
   const request = async (type, extra) => {
     if (type === "meta") return { universe: [{ name: "xyz:SP500" }] };

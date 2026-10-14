@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { DM_Sans, Geist, Inter, Manrope, Outfit, Syne } from "next/font/google";
 import { Providers } from "@/components/Providers";
+import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/seo";
 import "./globals.css";
 
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
@@ -12,9 +13,43 @@ const outfit = Outfit({ variable: "--font-outfit", subsets: ["latin"] });
 
 const THEME_SCRIPT = `try{var t=localStorage.getItem("vestail-theme");document.documentElement.dataset.theme=t||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")}catch(e){}`;
 
+/*
+ * The defaults every page inherits.
+ *
+ * metadataBase makes the relative URLs below absolute, which Open Graph
+ * requires — a relative og:image is simply dropped by most crawlers. The title
+ * template appends the brand to each page's own title rather than each page
+ * repeating it, and `default` covers routes that set none.
+ */
 export const metadata: Metadata = {
-  title: "Vestail",
-  description: "What you can own in your country, and where to buy it.",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "Vestail — What Can You Own in Your Country? Stocks, Land, Gold",
+    template: "%s · Vestail",
+  },
+  description: SITE_DESCRIPTION,
+  applicationName: SITE_NAME,
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    siteName: SITE_NAME,
+    url: SITE_URL,
+    title: "Vestail — What Can You Own in Your Country?",
+    description: SITE_DESCRIPTION,
+    locale: "en",
+  },
+  twitter: {
+    card: "summary_large_image",
+    site: "@usevestail",
+    creator: "@usevestail",
+    title: "Vestail — What Can You Own in Your Country?",
+    description: SITE_DESCRIPTION,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 },
+  },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

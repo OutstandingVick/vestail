@@ -252,13 +252,13 @@ components:
         id: { type: string }
         coin: { type: string }
         name: { type: string }
-        category: { type: string, enum: [commodities, indices, fx] }
+        category: { type: string, enum: [commodities, indices, fx], description: The kind of reference price tracked by the perpetual. }
         related_asset: { type: [string, "null"], description: The ownership class this tracks the price of, if any; its rule does not apply }
         aliases: { type: array, items: { type: string } }
         venue: { type: string }
         chain: { $ref: "#/components/schemas/Chain" }
         deployer: { type: string }
-        instrument: { type: string, enum: [perpetual_future] }
+        instrument: { type: string, enum: [perpetual_future], description: Leveraged price exposure with no ownership of the underlying. }
     JudgedMarket:
       allOf:
         - { $ref: "#/components/schemas/Market" }

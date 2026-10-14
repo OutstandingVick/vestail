@@ -10,12 +10,11 @@ export async function GET(request: Request) {
   const userId = await userFrom(request);
   if (!userId) return NextResponse.json({ error: "Sign in first." }, { status: 401 });
 
-  const [orders, assets, countries, symbols, markets] = await Promise.all([
-    api.orders(userId, 200), api.assets(), api.countries(), api.tokenSymbols(), api.derivatives(),
+  const [orders, assets, countries, symbols] = await Promise.all([
+    api.orders(userId, 200), api.assets(), api.countries(), api.tokenSymbols(),
   ]);
   const assetName = new Map(assets.map(asset => [asset.id, asset.name]));
   const countryName = new Map(countries.map(country => [country.code, `${country.flag} ${country.name}`]));
-  const marketName = new Map(markets.map(market => [market.id, market.name]));
   const symbolByMint = new Map(symbols.flatMap(symbol => symbol.mints.map(mint => [mint, symbol.symbol] as const)));
   const boardCache = new Map<string, Promise<TokenBoard | null>>();
 
@@ -23,11 +22,7 @@ export async function GET(request: Request) {
     let name = assetName.get(order.asset) ?? order.asset;
     let symbol: string | undefined;
     let chain = order.chain;
-    if (order.market) {
-      name = marketName.get(order.market) ?? order.market;
-      symbol = order.market.split(":").at(-1);
-      chain ??= "hyperliquid";
-    } else if (order.mint) {
+    if (order.mint) {
       symbol = symbolByMint.get(order.mint);
       if (symbol) {
         const key = `${symbol}:${order.country}:${order.who}`;

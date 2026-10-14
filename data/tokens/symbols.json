@@ -198,6 +198,12 @@
       "name": "McDonald's",
       "class": "equity-by-home",
       "home": "US"
+    },
+    "USO": {
+      "name": "United States Oil Fund",
+      "class": null,
+      "home": "US",
+      "mapping_note": "Oil-futures fund units have no honest ownership class in the current model."
     }
   }
 }

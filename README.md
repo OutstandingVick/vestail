@@ -40,6 +40,9 @@ representations, three PreStocks representations and one Backpack entitlement.
 
 Robinhood's rows are kept current by `npm run tokens:robinhood`, which reads
 every address off the chain rather than trusting the registry that listed it.
+Solana additions use `scripts/sync-solana-tokens.mjs`: Jupiter search supplies
+candidates, while the SPL mint and its canonical metadata supply the facts
+that Vestail records.
 
 ## Using the core in another app
 ```js

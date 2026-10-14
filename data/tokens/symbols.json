@@ -173,6 +173,11 @@
       "name": "Xiaomi",
       "class": "equity-by-home",
       "home": "HK"
+    },
+    "CRCL": {
+      "name": "Circle Internet Group",
+      "class": "equity-by-home",
+      "home": "US"
     }
   }
 }

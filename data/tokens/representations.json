@@ -1765,6 +1765,45 @@
           "pythFeedId": null
         }
       ]
+    },
+    "SNDK": {
+      "referenceFeedId": null,
+      "representations": [
+        {
+          "mint": "EJmUVvDqAdfH5zEohkdS4234bi3c6iunqEMobjmondo",
+          "provider": "ondo",
+          "symbol": "SNDK",
+          "name": "SanDisk (Ondo Tokenized)",
+          "tokenSymbol": "SNDKon",
+          "structure": "total_return_note",
+          "decimals": 9,
+          "redeemable": true,
+          "custodian": null,
+          "source": "https://docs.ondo.finance/ondo-stocks/legal-and-regulatory",
+          "fetchedAt": "2026-10-14T16:55:07.564Z",
+          "tokenProgram": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+          "mintAuthority": "9foMHsSDq7nMg4WPusSz9eY7tyxyukqborA8GyU5cUxD",
+          "freezeAuthority": "Chm9dcASBc9C54FGxcSRGv9qC998TueQqr5XzGZkEVCc",
+          "pythFeedId": null
+        },
+        {
+          "mint": "Xswbpc8UqU6e1j9QZEWCjBMjyvz4twqD7PCy6j2e7jj",
+          "provider": "xstocks",
+          "symbol": "SNDK",
+          "name": "Sandisk Corporation xStock",
+          "tokenSymbol": "SNDKx",
+          "structure": "custody_backed",
+          "decimals": 8,
+          "redeemable": true,
+          "custodian": "InCore Bank AG",
+          "source": "https://assets.backed.fi/legal-documentation",
+          "fetchedAt": "2026-10-14T16:55:07.564Z",
+          "tokenProgram": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+          "mintAuthority": "7pt9tkctJPK7PPNQJ77GKg8ZffSF6QxoMiCFYHxrtaCj",
+          "freezeAuthority": "JDq14BWvqCRFNu1krb12bcRpbGtJZ1FLEakMw6FdxJNs",
+          "pythFeedId": null
+        }
+      ]
     }
   }
 }

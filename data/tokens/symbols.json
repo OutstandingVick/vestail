@@ -253,6 +253,11 @@
       "name": "Marvell Technology",
       "class": "equity-by-home",
       "home": "US"
+    },
+    "SNDK": {
+      "name": "SanDisk",
+      "class": "equity-by-home",
+      "home": "US"
     }
   }
 }

@@ -193,6 +193,11 @@
       "name": "Robinhood Markets",
       "class": "equity-by-home",
       "home": "US"
+    },
+    "MCD": {
+      "name": "McDonald's",
+      "class": "equity-by-home",
+      "home": "US"
     }
   }
 }

@@ -29,6 +29,46 @@
 <meta name="twitter:description" content="Stocks, land, gold and more — what you may hold where you live, for citizens and foreigners.">
 <meta name="twitter:image" content="https://www.vestail.fun/opengraph-image">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+
+<!--
+  Structured data. An @graph so the Organization is declared once and the
+  WebSite points at it by id, rather than two blocks each describing the
+  publisher and risking disagreement.
+
+  No SearchAction: the sitelinks search box wants a URL a crawler can query,
+  and Vestail's search lives behind sign-in. Declaring one that returns a
+  login page would be a claim about the site that is not true.
+-->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://www.vestail.fun/#organization",
+      "name": "Vestail",
+      "url": "https://www.vestail.fun/",
+      "logo": "https://www.vestail.fun/vestail-logo.svg",
+      "description": "Vestail shows what you are allowed to own where you live, for citizens and foreigners, and where to buy it.",
+      "sameAs": [
+        "https://x.com/usevestail",
+        "https://github.com/OutstandingVick/vestail"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://www.vestail.fun/#website",
+      "url": "https://www.vestail.fun/",
+      "name": "Vestail",
+      "description": "What you can own in your country, and where to buy it.",
+      "publisher": {
+        "@id": "https://www.vestail.fun/#organization"
+      },
+      "inLanguage": "en"
+    }
+  ]
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&family=Syne:wght@600;700&display=swap" rel="stylesheet">

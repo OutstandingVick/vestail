@@ -124,6 +124,18 @@
         "us dollar index",
         "dollar basket"
       ]
+    },
+    {
+      "id": "xyz:VIX",
+      "coin": "VIX",
+      "name": "Cboe Volatility Index",
+      "category": "indices",
+      "related_asset": null,
+      "aliases": [
+        "vix",
+        "volatility index",
+        "fear index"
+      ]
     }
   ]
 }

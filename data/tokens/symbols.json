@@ -183,6 +183,11 @@
       "name": "GameStop",
       "class": "equity-by-home",
       "home": "US"
+    },
+    "GLD": {
+      "name": "Gold",
+      "class": "gold_bullion",
+      "home": "US"
     }
   }
 }

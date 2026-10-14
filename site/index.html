@@ -71,7 +71,19 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&family=Syne:wght@600;700&display=swap" rel="stylesheet">
+<!--
+  Loaded without blocking the first paint. As a plain stylesheet this one link
+  held the render for about 1.4 seconds on mobile — a 1.5KB file on a third
+  origin, standing in front of a page whose largest element is a paragraph of
+  text. Fetched as a preload and promoted to a stylesheet on load, the text
+  paints immediately in the fallback face and swaps when the webfont arrives,
+  which is what display=swap already asks for.
+
+  The noscript copy keeps the fonts for a reader without JavaScript, who has
+  nothing to gain from the non-blocking path anyway.
+-->
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&family=Syne:wght@600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&family=Syne:wght@600;700&display=swap" rel="stylesheet"></noscript>
 <!--
   FAQPage, generated from the questions and answers rendered further down by
   scripts/bake-faq-schema.mjs. Re-run it when the FAQ changes; do not edit

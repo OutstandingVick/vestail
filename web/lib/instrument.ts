@@ -10,7 +10,6 @@ export const INSTRUMENT_LABEL: Record<Instrument, { label: string; explain: stri
   tokenized_debt: { label: "Debt token", explain: "A note that tracks the price. No rights in the share." },
   broker_entitlement: { label: "Broker entitlement", explain: "A share held for you through a broker." },
   contractual_exposure: { label: "Contractual exposure", explain: "An SPV or loan participation that tracks the company." },
-  perpetual_future: { label: "Price exposure only", explain: "A perpetual future. You own nothing and can be liquidated." },
 };
 
-export const CHAIN_LABEL: Record<string, string> = { solana: "Solana", robinhood: "Robinhood Chain", base: "Base", hyperliquid: "Hyperliquid" };
+export const CHAIN_LABEL: Record<string, string> = { solana: "Solana", robinhood: "Robinhood Chain", base: "Base" };

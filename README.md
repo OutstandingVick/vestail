@@ -44,6 +44,11 @@ Solana additions use `scripts/sync-solana-tokens.mjs`: Jupiter search supplies
 candidates, while the SPL mint and its canonical metadata supply the facts
 that Vestail records.
 
+`USO` and `SLV` are carried as verified representations but deliberately have
+no ownership verdict yet: the current model has no honest class for an
+oil-futures fund or silver bullion. `DRAM` and `COPX` are classified by the
+listed equity-fund units a buyer holds, not by their underlying sectors.
+
 ## Using the core in another app
 ```js
 import { createVestail } from "./packages/core/index.js";

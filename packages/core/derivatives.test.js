@@ -9,6 +9,7 @@ let fail = 0;
 const check = (ok, label) => { if (!ok) fail++; console.log(ok ? "ok  " : "FAIL", label); };
 
 check(["xyz:GOLD", "xyz:CL", "xyz:COPPER"].every(id => d.list().some(m => m.id === id)), "the original commodity markets remain covered");
+check(d.list().length === 11, "the venue catalogue carries eleven reviewed markets");
 check(d.list().every(m => m.instrument === "perpetual_future"), "every market is a perpetual future, never ownership");
 check(d.find("can I buy oil")[0]?.id === "xyz:CL", "oil finds WTI crude");
 check(d.find("copper")[0]?.id === "xyz:COPPER", "copper finds copper");

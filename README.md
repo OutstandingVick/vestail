@@ -35,6 +35,9 @@ records which, where, and what each one actually is:
 | Robinhood Chain | Robinhood | 25 | tokenised debt, not redeemable |
 | Base | Coinbase | 1 | share claim, redeemable |
 
+The Solana total is 42 xStocks, 43 Ondo representations, three Tessera
+representations, three PreStocks representations and one Backpack entitlement.
+
 Robinhood's rows are kept current by `npm run tokens:robinhood`, which reads
 every address off the chain rather than trusting the registry that listed it.
 

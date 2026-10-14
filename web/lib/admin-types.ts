@@ -25,7 +25,7 @@ export interface AdminHealthCheck {
 export interface AdminOverview {
   generatedAt: string;
   users: { total: number; profiled: number; wallets: number; recent7d: number };
-  catalog: { countries: number; assets: number; tokenSymbols: number; markets: number };
+  catalog: { countries: number; assets: number; tokenSymbols: number };
   coverage: CoverageCell[];
   activity: ProductActivity;
   health: AdminHealthCheck[];

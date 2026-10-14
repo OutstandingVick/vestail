@@ -8,8 +8,8 @@ import type { Profile, Status, Token } from "@/lib/types";
 
 /** Build the Discover directory from the same rules used everywhere else. */
 export async function loadDiscovery(profile: Profile) {
-  const [countries, assets, matrix, symbols, markets] = await Promise.all([
-    api.countries(), api.assets(), api.matrix({ who: profile.who, sort: "asset" }), api.tokenSymbols(), api.derivatives(),
+  const [countries, assets, matrix, symbols] = await Promise.all([
+    api.countries(), api.assets(), api.matrix({ who: profile.who, sort: "asset" }), api.tokenSymbols(),
   ]);
   const country = countries.find(place => place.code === profile.country)!;
   const nameOf = new Map(assets.map(asset => [asset.id, asset.name]));
@@ -25,8 +25,6 @@ export async function loadDiscovery(profile: Profile) {
     entry.tokens.push(token);
     bySymbol.set(board.symbol, entry);
   }
-  const judged = await Promise.all(markets.map(market => api.derivative(market.id, profile.country).catch(() => null)));
-  const exposure = judged.filter(market => market && (market.status === "can_own" || market.status === "conditional"));
   const rows: DiscoverRow[] = [
     ...discovery.rare.map(item => ({
       id: `advantage-${item.asset}`, name: nameOf.get(item.asset) ?? item.asset, symbol: shortAsset(item.asset),
@@ -46,11 +44,6 @@ export async function loadDiscovery(profile: Profile) {
       kind: "Within reach" as const, status: "conditional" as const,
       detail: "A licence, cap, approval, residency rule, or KYC step applies",
       reach: `${item.openIn}/${total} open outright`, href: `/app/asset/${item.asset}`,
-    })),
-    ...exposure.map(market => ({
-      id: `exposure-${market!.id}`, name: market!.name, symbol: market!.coin, kind: "Price exposure" as const,
-      status: market!.status as Status, detail: "Hyperliquid perpetual · tracks price only · this is not ownership",
-      reach: "Hyperliquid", href: `/app/exposure/${market!.coin.toLowerCase()}`,
     })),
     ...discovery.elsewhere.map(item => ({
       id: `elsewhere-${item.asset}`, name: nameOf.get(item.asset) ?? item.asset, symbol: shortAsset(item.asset),

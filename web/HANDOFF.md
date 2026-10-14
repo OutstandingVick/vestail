@@ -96,7 +96,7 @@ dropped (USDY has no usable DEX liquidity there).
 | Solana | v1's 11 | per issuer | Jupiter, USDC (`SwapForm`, `/api/swap/*`) |
 | Robinhood Chain (4663) | NVDA `0xd060…9EEC`, TSLA `0x322F…3b2d` | tokenized_debt (Robinhood Assets Jersey) | KyberSwap, ETH (`EvmSwapForm`, `/api/evm/order`) |
 | Base (8453) | Coinbase NVDAc `0xb200…108C` (8 decimals) | tokenized_equity (1:1 share at Alpaca) | KyberSwap, ETH |
-| Hyperliquid | trade.xyz HIP-3 markets | perpetual_future | Route-out to trade.xyz (`ExposurePanel`, `/api/order/market`); no in-app orders |
+| Hyperliquid | `GOLD`, `CL`, `COPPER`, `SP500`, `NIFTY`, `JP225`, `KR200`, `IBOV`, `DXY`, `VIX`, `XYZ100` on trade.xyz HIP-3 | perpetual_future | Route-out to trade.xyz (`ExposurePanel`, `/api/order/market`); no in-app orders |
 
 - Data: `data/tokens/evm.json` (+ `policies/robinhood.json`, `coinbase.json`), `data/derivatives/` (+ policy). Core:
   `packages/core/tokens.js` (merges chains, names `instrument`), `derivatives.js` (judged by the venue rule, never the

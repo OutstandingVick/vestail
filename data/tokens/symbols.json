@@ -168,6 +168,11 @@
       "name": "Walt Disney",
       "class": "equity-by-home",
       "home": "US"
+    },
+    "XIAO": {
+      "name": "Xiaomi",
+      "class": "equity-by-home",
+      "home": "HK"
     }
   }
 }

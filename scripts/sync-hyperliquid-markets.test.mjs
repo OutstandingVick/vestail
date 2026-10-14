@@ -12,6 +12,7 @@ test("requires an explicit sync mode and normalizes market names", () => {
   assert.deepEqual(parseArgs(["--markets", "xyz:sp500, nifty,SP500"]).markets, ["SP500", "NIFTY"]);
   assert.equal(parseArgs(["--all", "--dry-run"]).dryRun, true);
   assert.equal(parseArgs(["--list"]).list, true);
+  assert.throws(() => parseArgs(["--guess"]), /unknown argument/);
 });
 
 test("validates the primary universe before using it", () => {

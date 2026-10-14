@@ -52,6 +52,10 @@ test("keeps buyer-dependent index mappings unasserted", () => {
   assert.ok(Object.values(MARKET_SPECS).every(market => market.related_asset === null));
 });
 
+test("reviewed aliases are normalized for deterministic search", () => {
+  assert.ok(Object.values(MARKET_SPECS).every(spec => spec.aliases.every(alias => alias === alias.toLowerCase() && alias.trim() === alias)));
+});
+
 test("merges additively and leaves unrelated markets intact", () => {
   const existing = { venue: { name: "Hyperliquid" }, markets: [{ id: "xyz:GOLD", coin: "GOLD" }] };
   const added = { id: "xyz:SP500", coin: "SP500", ...MARKET_SPECS.SP500 };

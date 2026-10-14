@@ -1,8 +1,13 @@
 import type { Metadata } from "next";
 
 import { LegalPage } from "@/components/LegalPage";
+import { absolute } from "@/lib/seo";
 
-export const metadata: Metadata = { title: "Terms · Vestail" };
+export const metadata: Metadata = {
+  title: "Terms",
+  description: "The terms of using Vestail, an information service about what you may own where you live.",
+  alternates: { canonical: absolute("/terms") },
+};
 
 export default function TermsPage() {
   return (

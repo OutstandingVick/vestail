@@ -3,12 +3,14 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { Logo } from "@/components/Logo";
+import { absolute } from "@/lib/seo";
 
 import styles from "./docs.module.css";
 
 export const metadata: Metadata = {
-  title: "Developer docs · Vestail",
+  title: "Developer docs",
   description: "Build with Vestail's ownership resolver, rule engine, verdict model, and venue routing API.",
+  alternates: { canonical: absolute("/docs") },
 };
 
 const navigation = [

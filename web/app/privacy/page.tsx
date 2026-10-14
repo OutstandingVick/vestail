@@ -1,8 +1,13 @@
 import type { Metadata } from "next";
 
 import { LegalPage } from "@/components/LegalPage";
+import { absolute } from "@/lib/seo";
 
-export const metadata: Metadata = { title: "Privacy · Vestail" };
+export const metadata: Metadata = {
+  title: "Privacy",
+  description: "What Vestail stores, what it does not, and why there is no KYC or IP-based country detection.",
+  alternates: { canonical: absolute("/privacy") },
+};
 
 export default function PrivacyPage() {
   return (

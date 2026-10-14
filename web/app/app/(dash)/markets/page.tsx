@@ -6,9 +6,9 @@ import { api } from "@/lib/server/api";
 import { readProfile } from "@/lib/server/profile";
 import type { Chain, Instrument, Status } from "@/lib/types";
 
-const CHAINS: Chain[] = ["solana", "base", "robinhood", "hyperliquid"];
-const INSTRUMENTS: Instrument[] = ["tokenized_equity", "tokenized_debt", "broker_entitlement", "contractual_exposure", "perpetual_future"];
-type MarketRow = { id: string; name: string; symbol: string; chain: Chain; instrument: Instrument; provider: string; status: Status | null; assessed: boolean; href: string; exposure: boolean };
+const CHAINS: Chain[] = ["solana", "base", "robinhood"];
+const INSTRUMENTS: Instrument[] = ["tokenized_equity", "tokenized_debt", "broker_entitlement", "contractual_exposure"];
+type MarketRow = { id: string; name: string; symbol: string; chain: Chain; instrument: Instrument; provider: string; status: Status | null; assessed: boolean; href: string };
 
 export default async function MarketsPage({ searchParams }: { searchParams: Promise<{ chain?: string; instrument?: string; show?: string }> }) {
   const profile = (await readProfile())!;
@@ -16,23 +16,15 @@ export default async function MarketsPage({ searchParams }: { searchParams: Prom
   const chain = CHAINS.includes(params.chain as Chain) ? params.chain as Chain : undefined;
   const instrument = INSTRUMENTS.includes(params.instrument as Instrument) ? params.instrument as Instrument : undefined;
   const show = params.show === "all" ? "all" : "buyable";
-  const [symbols, markets] = await Promise.all([api.tokenSymbols(), api.derivatives()]);
-  const [boards, judgedMarkets] = await Promise.all([
-    Promise.all(symbols.map(symbol => api.tokens(symbol.symbol, profile.country, profile.who).catch(() => null))),
-    Promise.all(markets.map(market => api.derivative(market.id, profile.country).catch(() => null))),
-  ]);
+  const symbols = await api.tokenSymbols();
+  const boards = await Promise.all(symbols.map(symbol => api.tokens(symbol.symbol, profile.country, profile.who).catch(() => null)));
 
   const rows: MarketRow[] = [
     ...boards.flatMap(board => board ? board.tokens.map(token => ({
       id: `${token.chain}:${token.address}`, name: token.name, symbol: token.token_symbol, chain: token.chain,
       instrument: token.instrument, provider: token.provider, status: token.status, assessed: token.assessed,
-      href: `/app/asset/${board.asset}?symbol=${board.symbol}`, exposure: false,
+      href: `/app/asset/${board.asset}?symbol=${board.symbol}`,
     })) : []),
-    ...judgedMarkets.flatMap(market => market ? [{
-      id: market.id, name: market.name, symbol: market.coin, chain: market.chain,
-      instrument: market.instrument, provider: market.venue, status: market.status ?? null,
-      assessed: market.assessed ?? false, href: `/app/exposure/${market.coin.toLowerCase()}`, exposure: true,
-    }] : []),
   ].sort((a, b) => statusScore(b.status) - statusScore(a.status) || a.name.localeCompare(b.name));
 
   const isBuyable = (row: MarketRow) => row.status === "can_own" || row.status === "conditional";
@@ -52,8 +44,7 @@ export default async function MarketsPage({ searchParams }: { searchParams: Prom
 
   return (
     <div className="flex flex-col gap-7 pt-4">
-      <header><p className="mb-2 font-accent text-xs font-bold uppercase tracking-[0.13em] text-action-ink">Available through Vestail</p><h1 className="text-[clamp(36px,5vw,64px)] font-extrabold leading-[1.02] tracking-[-0.05em]">Markets</h1><p className="mt-3 max-w-3xl leading-7 text-muted">Everything you can buy or trade through Vestail, judged for your declared country and buyer type.</p></header>
-      <p className="rounded-card bg-tint px-5 py-4 text-sm leading-6 text-muted"><strong className="text-ink">Commodity markets are price exposure, not ownership.</strong> Hyperliquid rows are perpetual futures; you never own the underlying gold, oil, or copper.</p>
+      <header><p className="mb-2 font-accent text-xs font-bold uppercase tracking-[0.13em] text-action-ink">Available through Vestail</p><h1 className="text-[clamp(36px,5vw,64px)] font-extrabold leading-[1.02] tracking-[-0.05em]">Markets</h1><p className="mt-3 max-w-3xl leading-7 text-muted">Tokenized assets available through Vestail, judged for your declared country and buyer type.</p></header>
 
       <section aria-label="Market filters" className="flex flex-col gap-5 rounded-panel bg-surface p-5 sm:p-6">
         <Filter label="Chain">
@@ -74,7 +65,7 @@ export default async function MarketsPage({ searchParams }: { searchParams: Prom
         <div><h2 id="market-results-title" className="text-xl font-bold">Available markets</h2><p className="mt-1 text-sm text-muted">{visible.length} {visible.length === 1 ? "market" : "markets"} in this view</p></div>
         {visible.length ? <div className="overflow-x-auto rounded-panel bg-surface"><table className="w-full min-w-[820px] text-left text-sm">
           <thead className="text-xs text-muted"><tr><th className="px-5 py-4 font-medium">Market</th><th className="px-3 py-4 font-medium">Chain</th><th className="px-3 py-4 font-medium">Instrument</th><th className="px-3 py-4 font-medium">Issuer / venue</th><th className="px-5 py-4 text-right font-medium">Verdict</th></tr></thead>
-          <tbody>{visible.map(row => <tr key={row.id} className="border-t border-line"><td className="px-5 py-4"><Link href={row.href} className="block min-h-11 font-semibold hover:text-emphasis"><span>{row.name}</span><span className="mt-0.5 block text-xs font-normal text-muted">{row.symbol}{row.exposure ? " · price exposure only" : ""}</span></Link></td><td className="px-3 py-4"><span className="rounded-full bg-tint px-2.5 py-1 text-xs font-semibold">{CHAIN_LABEL[row.chain]}</span></td><td className="px-3 py-4"><span className="font-semibold">{INSTRUMENT_LABEL[row.instrument].label}</span><span className="mt-0.5 block max-w-[260px] text-xs leading-5 text-muted">{INSTRUMENT_LABEL[row.instrument].explain}</span></td><td className="px-3 py-4">{row.provider}</td><td className="px-5 py-4 text-right">{row.status ? <VerdictBadge status={row.status} /> : <NotAssessedBadge />}</td></tr>)}</tbody>
+          <tbody>{visible.map(row => <tr key={row.id} className="border-t border-line"><td className="px-5 py-4"><Link href={row.href} className="block min-h-11 font-semibold hover:text-emphasis"><span>{row.name}</span><span className="mt-0.5 block text-xs font-normal text-muted">{row.symbol}</span></Link></td><td className="px-3 py-4"><span className="rounded-full bg-tint px-2.5 py-1 text-xs font-semibold">{CHAIN_LABEL[row.chain]}</span></td><td className="px-3 py-4"><span className="font-semibold">{INSTRUMENT_LABEL[row.instrument].label}</span><span className="mt-0.5 block max-w-[260px] text-xs leading-5 text-muted">{INSTRUMENT_LABEL[row.instrument].explain}</span></td><td className="px-3 py-4">{row.provider}</td><td className="px-5 py-4 text-right">{row.status ? <VerdictBadge status={row.status} /> : <NotAssessedBadge />}</td></tr>)}</tbody>
         </table></div> : <div className="rounded-panel bg-surface px-6 py-14 text-center"><h3 className="text-lg font-bold">No markets match these filters</h3><p className="mt-2 text-sm text-muted">Try another chain, instrument, or show all assessment states.</p><Link href="/app/markets?show=all" className="mt-5 inline-flex min-h-11 items-center rounded-full bg-action px-5 font-bold text-on-action">Show all markets</Link></div>}
       </section>
     </div>

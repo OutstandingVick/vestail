@@ -7,15 +7,14 @@ import { readProfile } from "@/lib/server/profile";
 import { readUser, withSnapshot, writeUser } from "@/lib/server/store";
 import { walletsOf } from "@/lib/server/wallets";
 import { ethBalance, tokenBalance, usdPrice } from "@/lib/server/evmHoldings";
-import { positionsOf } from "@/lib/server/hyperliquid";
 import { isEvmChain, NATIVE_ETH, type EvmChainKey } from "@/lib/chains";
 import type { Holding, Portfolio } from "@/lib/types";
 
 /**
  * GET /api/portfolio — the signed-in user's dashboard, all from real sources:
  * balances read onchain from their own Privy-linked wallets (Solana, Base,
- * Robinhood Chain), prices from Jupiter and KyberSwap, open Hyperliquid
- * positions, each holding's verdict for their declared country, their recorded
+ * Robinhood Chain), prices from Jupiter and KyberSwap, each holding's verdict
+ * for their declared country, their recorded
  * buys, their watchlist and their value history. Each visit records today's
  * value, so the history fills in over time; nothing is back-filled or sampled.
  */
@@ -90,16 +89,6 @@ export async function GET(request: Request) {
   }
   holdings.sort((a, b) => (b.usd ?? -1) - (a.usd ?? -1));
 
-  // Hyperliquid: open commodity positions, read-only. Price exposure, not holdings.
-  const positions = [];
-  for (const w of evm) {
-    for (const p of await soft(positionsOf(w, "xyz"), [], "Couldn't read your Hyperliquid positions.")) {
-      const m = await soft(api.derivative(p.market, profile.country), null, `Couldn't judge ${p.market}.`);
-      positions.push({ ...p, name: m?.name ?? p.market, coin: p.market.split(":")[1] ?? p.market, status: m?.status ?? null });
-    }
-  }
-  const positionsUsd = positions.reduce((n, p) => n + p.pnlUsd, 0);
-
   const usdc = balances.tokens.get(USDC_MINT) ?? 0;
   const solPrice = prices.get(SOL_MINT) ?? null;
   const holdingsUsd = holdings.reduce((n, h) => n + (h.usd ?? 0), 0);
@@ -118,9 +107,9 @@ export async function GET(request: Request) {
 
   const body: Portfolio = {
     wallets: [...wallets, ...evm], evm_wallets: evm,
-    totals: { usd: holdingsUsd + cashUsd, holdings_usd: holdingsUsd, cash_usd: cashUsd, unpriced: holdings.filter(h => h.usd === null).length, positions_pnl_usd: positionsUsd },
+    totals: { usd: holdingsUsd + cashUsd, holdings_usd: holdingsUsd, cash_usd: cashUsd, unpriced: holdings.filter(h => h.usd === null).length },
     cash: { sol: balances.sol, sol_usd: solPrice ? balances.sol * solPrice : null, usdc, eth, eth_usd: ethUsd },
-    holdings, positions, orders, watchlist, history: data.snapshots, errors,
+    holdings, orders, watchlist, history: data.snapshots, errors,
   };
   return NextResponse.json(body, { headers: { "Cache-Control": "no-store" } });
 }

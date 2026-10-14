@@ -22,6 +22,7 @@ check(d.find("s&p 500")[0]?.id === "xyz:SP500", "S and P searches find SP500");
 check(d.find("nifty 50")[0]?.id === "xyz:NIFTY", "NIFTY 50 searches find NIFTY");
 check(d.find("nikkei")[0]?.id === "xyz:JP225", "Nikkei searches find JP225");
 check(d.find("kospi 200")[0]?.id === "xyz:KR200", "KOSPI 200 searches find KR200");
+check(d.find("bovespa")[0]?.id === "xyz:IBOV", "Bovespa searches find IBOV");
 check(d.judge("xyz:GOLD", "US").status === "cannot_own", "US persons barred");
 check(d.judge("xyz:GOLD", "NG").status === "conditional" && d.judge("xyz:GOLD", "NG").issuer.acknowledgement, "NG conditional with an acknowledgement");
 check(d.judge("xyz:GOLD", "GB").assessed === false && d.judge("xyz:GOLD", "GB").status === null, "no rule for GB: not assessed");

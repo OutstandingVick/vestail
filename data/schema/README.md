@@ -62,15 +62,6 @@ offchain replacement.
 foreign equities everywhere else. Pre-IPO names are private company shares.
 Every symbol needs an entry — the core refuses to load without one.
 
-## Perpetual futures
-
-`derivatives/hyperliquid.json` lists price-exposure markets separately from
-tokens and ownership assets. Each row carries its venue coin, reviewed
-category, aliases and an optional related ownership class. Equity-index rows
-leave `related_asset` null because domestic versus foreign depends on the
-buyer's home market. `scripts/sync-hyperliquid-markets.mjs` verifies selected
-trade.xyz markets against Hyperliquid's primary info API before merging them.
-
 ## Roadmap
 1. ~~Keyed rules~~ and 2. ~~`sources[]` and `verified_at` on every rule~~: done; values still to be filled.
 3. Replace `entities.json` with a securities master (ISIN/ticker lookup) behind the same `{name, kind, home, asset}` shape.

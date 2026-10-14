@@ -20,8 +20,24 @@ const navigation = [
   { label: "API reference", href: "#api" },
   { label: "Integration guide", href: "#integration" },
   { label: "Trust and limits", href: "#trust" },
+  { label: "Glossary", href: "#glossary" },
   { label: "Changelog", href: "#changelog" },
 ];
+
+const glossary = [
+  ["Price exposure only", "The product follows a reference price, but you do not own the company, index constituents, currency basket, commodity, or other underlying asset."],
+  ["Underlying asset", "The share, commodity, currency, index, or other reference whose value a product follows or claims to represent."],
+  ["Perpetual future", "A leveraged contract that tracks a reference price and has no expiry date. It is settled in money rather than by delivering the underlying."],
+  ["Liquidation", "The forced closing of a leveraged position when the account no longer has enough collateral to support it."],
+  ["Margin and collateral", "Collateral supports a trade; margin is the amount required to open and maintain a leveraged position."],
+  ["Tokenised asset", "An onchain token connected to an offchain asset. Its legal rights come from the issuer’s terms, not from its ticker or blockchain."],
+  ["Tokenised share", "A token whose issuer says a real share backs it or that it carries a claim on one. Voting, dividends, transfer, and redemption still depend on the terms."],
+  ["Debt token", "An issuer obligation that may follow a share’s price without making its holder a shareholder."],
+  ["Custodian", "An organisation that holds an underlying asset for someone else. Custody alone does not make each token holder the registered owner."],
+  ["Redemption", "Exchanging a product for its stated underlying asset or cash value. Eligibility checks, minimums, or jurisdiction limits may apply."],
+  ["Issuer", "The organisation that creates a product and defines the holder’s rights, restrictions, and claims."],
+  ["Conditional", "A route exists, but a licence, cap, identity check, investor-status test, or other condition may apply. Acknowledging it does not satisfy it."],
+] as const;
 
 const endpoints = [
   ["GET", "/resolve", "Turn free text into asset classes with an explanation trail."],
@@ -260,6 +276,22 @@ export default function DocsPage() {
               <article><h3>Routing has hard gates</h3><p>The API refuses cannot-own clicks and conditional clicks without acknowledgement. A venue URL alone never overrides a verdict.</p></article>
             </div>
             <div className={styles.warning}><strong>Current infrastructure limit</strong><p>Click records and rate-limit windows are held in memory and reset on restart. A shared persistent store is required before multi-instance production deployment.</p></div>
+          </section>
+
+          <section id="glossary" className={styles.section}>
+            <div className={styles.sectionIntro}>
+              <p className={styles.kicker}>Glossary</p>
+              <h2>Know what you are—and are not—buying.</h2>
+              <p>Plain-language meanings for the instrument and ownership terms used across Vestail.</p>
+            </div>
+            <dl className={styles.glossary}>
+              {glossary.map(([term, meaning]) => (
+                <div key={term}>
+                  <dt>{term}</dt>
+                  <dd>{meaning}</dd>
+                </div>
+              ))}
+            </dl>
           </section>
 
           <section id="changelog" className={styles.section}>

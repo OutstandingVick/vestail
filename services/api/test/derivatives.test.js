@@ -11,6 +11,7 @@ test("GET /derivatives preserves the original commodity markets as perpetuals", 
   assert.equal((await json("/derivatives?q=crude%20oil")).body[0].id, "xyz:CL");
   assert.equal((await json("/derivatives?q=s%26p%20500")).body[0].id, "xyz:SP500");
   assert.equal((await json("/derivatives?q=nifty%2050")).body[0].id, "xyz:NIFTY");
+  assert.equal((await json("/derivatives?q=dollar%20index")).body[0].category, "fx");
 });
 
 test("a market is judged by the venue: US barred, NG conditional, GB not assessed", async () => {

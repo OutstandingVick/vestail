@@ -71,3 +71,11 @@ test("a requested market that cannot be verified makes the batch incomplete", as
   assert.deepEqual(result.verified.map(market => market.coin), ["SP500"]);
   assert.equal(result.refused.length, 1);
 });
+
+test("verification reports a delisted universe entry honestly", async () => {
+  const request = async type => type === "meta"
+    ? { universe: [{ name: "xyz:VIX", isDelisted: true }] }
+    : type === "perpCategories" ? [["xyz:VIX", "indices"]] : { category: "indices" };
+  const result = await verifiedMarkets(["VIX"], request);
+  assert.equal(result.verified[0].isDelisted, true);
+});

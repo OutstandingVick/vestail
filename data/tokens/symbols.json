@@ -243,6 +243,11 @@
       "class": "equity-by-home",
       "home": "US",
       "mapping_note": "Mapped by ownership of the United States-listed equity fund unit, not as copper or mining rights."
+    },
+    "RGTI": {
+      "name": "Rigetti Computing",
+      "class": "equity-by-home",
+      "home": "US"
     }
   }
 }

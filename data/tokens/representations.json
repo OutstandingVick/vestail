@@ -1704,6 +1704,28 @@
           "pythFeedId": null
         }
       ]
+    },
+    "RGTI": {
+      "referenceFeedId": null,
+      "representations": [
+        {
+          "mint": "dwEPNKQab3iwRmjGvZPXhAmws1W5NsQGwuXwi8oondo",
+          "provider": "ondo",
+          "symbol": "RGTI",
+          "name": "Rigetti Computing (Ondo Tokenized)",
+          "tokenSymbol": "RGTIon",
+          "structure": "total_return_note",
+          "decimals": 9,
+          "redeemable": true,
+          "custodian": null,
+          "source": "https://docs.ondo.finance/ondo-stocks/legal-and-regulatory",
+          "fetchedAt": "2026-10-14T16:54:41.477Z",
+          "tokenProgram": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+          "mintAuthority": "9foMHsSDq7nMg4WPusSz9eY7tyxyukqborA8GyU5cUxD",
+          "freezeAuthority": "51QVCuHfL1FeNjd8BDeffCKhCcAYoULnVB3yjNhShiuK",
+          "pythFeedId": null
+        }
+      ]
     }
   }
 }

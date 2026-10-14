@@ -57,17 +57,9 @@ export interface ProductActivity {
   recent: { flag: string; asset: string; venue: string; ago: string }[];
 }
 
-/** A Hyperliquid perpetual judged for a country: price exposure, never ownership. */
-export interface Market {
-  id: string; coin: string; name: string; category: "commodities" | "indices" | "fx"; related_asset: string | null;
-  venue: string; chain: "hyperliquid"; deployer: string; instrument: "perpetual_future";
-  country?: string; assessed?: boolean; status?: Status | null;
-  issuer?: Token["issuer"];
-}
-
 export interface IssuerEvidence { rule: string; kind: "gate" | "note"; reason: string; source_url: string; source_quality: "primary" | "secondary" }
-export type Chain = "solana" | "robinhood" | "base" | "hyperliquid";
-export type Instrument = "tokenized_equity" | "tokenized_debt" | "broker_entitlement" | "contractual_exposure" | "perpetual_future";
+export type Chain = "solana" | "robinhood" | "base";
+export type Instrument = "tokenized_equity" | "tokenized_debt" | "broker_entitlement" | "contractual_exposure";
 export interface Token {
   mint: string; address: string; chain: Chain; chain_name: string; instrument: Instrument; provider: string; token_symbol: string; name: string; structure: string;
   redeemable: boolean; custodian: string | null; decimals: number; token_program: string; issuer_source: string;
@@ -99,10 +91,9 @@ export interface WatchItem { asset: string; symbol?: string; added: string }
 export interface Portfolio {
   wallets: string[];
   evm_wallets: string[];
-  totals: { usd: number; holdings_usd: number; cash_usd: number; unpriced: number; positions_pnl_usd: number };
+  totals: { usd: number; holdings_usd: number; cash_usd: number; unpriced: number };
   cash: { sol: number; sol_usd: number | null; usdc: number; eth: { base: number; robinhood: number }; eth_usd: number };
   holdings: Holding[];
-  positions: { market: string; coin: string; name: string; size: number; valueUsd: number; pnlUsd: number; entryPx: number; status: Status | null }[];
   orders: Order[];
   watchlist: (WatchItem & { name: string; status: Status })[];
   history: { day: string; usd: number }[];

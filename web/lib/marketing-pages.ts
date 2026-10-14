@@ -64,7 +64,7 @@ export const MARKETING_PAGES: Record<string, MarketingPage> = {
   "explore/all": {
     section: "Explore",
     title: "Explore Vestail",
-    summary: "Browse the full ownership map: countries, asset classes, onchain versions and price-exposure markets.",
+    summary: "Browse the full ownership map: countries, asset classes and onchain versions.",
     sections: [
       { title: "Ownership rules", body: "Check twenty asset classes for citizens and foreigners across the countries Vestail currently covers." },
       { title: "Onchain versions", body: "Compare tokenized versions by chain, issuer and legal instrument rather than ticker alone." },
@@ -186,7 +186,6 @@ export const MARKETING_PAGES: Record<string, MarketingPage> = {
           { name: "Solana", symbol: "SOL", detail: "Tokenized equities, funds and private-market exposure", tags: ["11 assets"] },
           { name: "Base", symbol: "BASE", detail: "Tokenized NVIDIA exposure", tags: ["1 asset"] },
           { name: "Robinhood Chain", symbol: "RHC", detail: "NVIDIA and Tesla stock tokens", tags: ["2 assets"] },
-          { name: "Hyperliquid", symbol: "HYPE", detail: "Gold, WTI crude oil and copper price exposure", tags: ["3 markets", "Price exposure"] },
         ],
       },
     ],

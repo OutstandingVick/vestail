@@ -44,7 +44,7 @@
   <h1>Vestail — glossary and build log</h1>
   <p class="lead">One page that explains every piece of the app: the words we use, how the pieces fit, and the order in which they were built. Read top to bottom the first time; use the chips to jump afterwards.</p>
   <nav>
-    <a href="#what">What it is</a><a href="#vocab">Vocabulary</a><a href="#data">Data modules</a><a href="#pipeline">Search pipeline</a><a href="#ui">Interface</a><a href="#cta">Buy column</a><a href="#hud">Traction HUD</a><a href="#design">Design system</a><a href="#api">API</a><a href="#log">Build log</a><a href="#next">Open questions</a>
+    <a href="#what">What it is</a><a href="#vocab">Vocabulary</a><a href="#instruments">Instrument terms</a><a href="#data">Data modules</a><a href="#pipeline">Search pipeline</a><a href="#ui">Interface</a><a href="#cta">Buy column</a><a href="#hud">Traction HUD</a><a href="#design">Design system</a><a href="#api">API</a><a href="#log">Build log</a><a href="#next">Open questions</a>
   </nav>
 
   <h2 id="what">What it is</h2>
@@ -70,6 +70,14 @@
     <dt>Selection</dt><dd>The asset currently chosen for the buy column. Set by clicking a tile or automatically when a search resolves to one asset. Escape clears it.</dd>
     <dt>HUD</dt><dd>The traction strip under the search: volume, orders routed, active buyers, and a live ticker of recent buys. Placeholder numbers until wired to the order log.</dd>
   </dl></div>
+
+  <h2 id="instruments">Instrument and ownership terms</h2>
+  <div class="card">
+    <p>These are the labels a buyer may see in Vestail. They explain what the product represents, what the buyer actually holds, and what can go wrong.</p>
+    <dl>
+      <dt>Price exposure only</dt><dd>The product follows the price of something else, but buying it does not give you that underlying asset. You may profit or lose as the reference price moves; you do not become an owner of the company, index constituents, currency basket or commodity.</dd>
+    </dl>
+  </div>
 
   <h2 id="data">Data modules</h2>
   <div class="card">

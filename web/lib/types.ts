@@ -59,7 +59,7 @@ export interface ProductActivity {
 
 /** A Hyperliquid perpetual judged for a country: price exposure, never ownership. */
 export interface Market {
-  id: string; coin: string; name: string; commodity: string; related_asset: string | null;
+  id: string; coin: string; name: string; category: "commodities" | "indices" | "fx"; related_asset: string | null;
   venue: string; chain: "hyperliquid"; deployer: string; instrument: "commodity_derivative";
   country?: string; assessed?: boolean; status?: Status | null;
   issuer?: Token["issuer"];

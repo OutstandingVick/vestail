@@ -252,7 +252,7 @@ components:
         id: { type: string }
         coin: { type: string }
         name: { type: string }
-        commodity: { type: string }
+        category: { type: string, enum: [commodities, indices, fx] }
         related_asset: { type: [string, "null"], description: The ownership class this tracks the price of, if any; its rule does not apply }
         aliases: { type: array, items: { type: string } }
         venue: { type: string }

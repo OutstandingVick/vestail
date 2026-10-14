@@ -226,6 +226,12 @@
       "class": "equity-by-home",
       "home": "HK",
       "mapping_note": "Alibaba is dual-listed in Hong Kong and the United States; the model records its Hong Kong primary listing."
+    },
+    "DRAM": {
+      "name": "Roundhill Memory ETF",
+      "class": "equity-by-home",
+      "home": "US",
+      "mapping_note": "Mapped by ownership of the United States-listed equity fund unit, not as a share in one company."
     }
   }
 }

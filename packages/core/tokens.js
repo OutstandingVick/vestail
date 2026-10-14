@@ -87,7 +87,10 @@ export function createTokens({ representations, policies, symbols, evm = null })
   function classOf(symbol, code) {
     const s = SYMBOLS[symbol];
     if (s.class === "equity-by-home") return code === s.home ? "Domestic equities" : "Foreign equities";
-    return { private_company_shares: "Private company shares" }[s.class] || s.class;
+    return {
+      private_company_shares: "Private company shares",
+      gold_bullion: "Gold bullion",
+    }[s.class] || s.class;
   }
 
   /** Which side set the final status: "issuer", "class", or "both" when they agree. */

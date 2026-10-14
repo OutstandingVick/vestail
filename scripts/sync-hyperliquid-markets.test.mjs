@@ -20,6 +20,7 @@ test("validates the primary universe before using it", () => {
   assert.throws(() => validateMeta({}), /no universe/);
   assert.throws(() => validateMeta({ universe: [] }), /empty/);
   assert.throws(() => validateMeta({ universe: [{ name: "SP500" }] }), /malformed/);
+  assert.throws(() => validateMeta({ universe: [null] }), /malformed/);
   assert.throws(() => validateMeta({ universe: [{ name: "xyz:SP500" }, { name: "xyz:SP500" }] }), /repeats/);
   assert.equal(validateMeta({ universe })[0].name, "xyz:SP500");
 });

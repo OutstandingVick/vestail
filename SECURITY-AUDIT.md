@@ -7,7 +7,7 @@ history and the client bundle, and browser checks of the new security headers.
 **The question:** could a user lose funds, or be misled into buying something they can't legally own?
 
 Vestail is non-custodial: it never holds keys or funds. v2 signs on three chains (Solana through Jupiter;
-Base and Robinhood Chain through KyberSwap), routes to a fourth (Hyperliquid, link-out only), creates
+Base and Robinhood Chain through KyberSwap), creates
 embedded wallets through Privy, and runs its own API that records and re-checks every buy.
 
 ## Summary
@@ -156,7 +156,7 @@ constant string), so this is defence in depth.
 - **No private key or seed phrase is ever handled.** Export goes through Privy's own iframe; no input accepts one.
 - **File-serving routes refuse path traversal** (`web/app/assets/[...path]/route.ts:13` checks the resolved path
   stays inside `site/assets`; `/` serves one fixed file). Checked: `/assets/../index.html` returns 404.
-- **No SSRF:** every outbound URL (RPC, Jupiter, KyberSwap, Hyperliquid) is a constant host; user input only
+- **No SSRF:** every outbound URL (RPC, Jupiter and KyberSwap) is a constant host; user input only
   ever lands in validated query parameters.
 - **Secrets:** no secret behind `NEXT_PUBLIC_` (only the Privy app ID, public by design); `.env*` files are
   gitignored; no secret found in git history; the Privy secret, API key and RPC key are absent from the
@@ -181,7 +181,7 @@ constant string), so this is defence in depth.
 
 ## What this audit does NOT cover
 
-- Privy's, KyberSwap's, Jupiter's and Hyperliquid's own security, and the smart contracts of the issuers'
+- Privy's, KyberSwap's and Jupiter's own security, and the smart contracts of the issuers'
   tokens (xStocks, Ondo, Robinhood, Coinbase and others). A flaw there is outside Vestail's code.
 - **Live end-to-end runs.** No real Solana or EVM buy was executed during the audit, so the new simulation
   steps (M1) and the browser-side checks were verified by tests and code review, not with funds.

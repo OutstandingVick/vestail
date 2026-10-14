@@ -215,6 +215,11 @@
       "name": "Nebius Group",
       "class": "equity-by-home",
       "home": "NL"
+    },
+    "MU": {
+      "name": "Micron Technology",
+      "class": "equity-by-home",
+      "home": "US"
     }
   }
 }

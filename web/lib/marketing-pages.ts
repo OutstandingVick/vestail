@@ -201,7 +201,7 @@ export const MARKETING_PAGES: Record<string, MarketingPage> = {
     sections: [
       { title: "Rule and source feedback", body: "When reporting a rule, include the country, buyer type, asset class and the source you believe should be reviewed." },
       { title: "Product and partnership enquiries", body: "Explain the user problem, market and route you want Vestail to evaluate." },
-      { title: "Contact channel", body: "Message Vestail on X for coverage questions, corrections, partnerships and product feedback.", items: [{ label: "@usevestail", href: "https://x.com/usevestail" }] },
+      { title: "Contact channels", body: "Email Vestail for coverage questions, corrections, partnerships and product feedback, or message us on X.", items: [{ label: "hello@vestail.fun", href: "mailto:hello@vestail.fun" }, { label: "@usevestail", href: "https://x.com/usevestail" }] },
     ],
   },
 };

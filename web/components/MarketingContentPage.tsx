@@ -1,4 +1,4 @@
-import { ArrowLeft, ArrowRight } from "@phosphor-icons/react/dist/ssr";
+import { ArrowLeft, ArrowRight, EnvelopeSimple } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 
 import { Logo } from "@/components/Logo";
@@ -82,11 +82,13 @@ export function MarketingContentPage({ page }: { page: MarketingPage }) {
                 <ul className="mt-6 space-y-3 border-t border-line pt-5">
                   {section.items.map(item => (
                     <li key={typeof item === "string" ? item : item.label} className="flex gap-3 leading-6 text-ink">
-                      <ArrowRight className="mt-1 shrink-0 text-action" size={17} weight="regular" aria-hidden="true" />
+                      {typeof item !== "string" && item.href.startsWith("mailto:")
+                        ? <EnvelopeSimple className="mt-1 shrink-0 text-action" size={17} weight="regular" aria-hidden="true" />
+                        : <ArrowRight className="mt-1 shrink-0 text-action" size={17} weight="regular" aria-hidden="true" />}
                       {typeof item === "string" ? (
                         <span>{item}</span>
                       ) : (
-                        <a href={item.href} target="_blank" rel="noopener noreferrer" className="font-semibold underline decoration-line underline-offset-4 hover:text-emphasis">
+                        <a href={item.href} target={item.href.startsWith("mailto:") ? undefined : "_blank"} rel={item.href.startsWith("mailto:") ? undefined : "noopener noreferrer"} className="font-semibold underline decoration-line underline-offset-4 hover:text-emphasis">
                           {item.label}
                         </a>
                       )}

@@ -13,6 +13,7 @@ test("requires an explicit sync mode and normalizes market names", () => {
   assert.equal(parseArgs(["--all", "--dry-run"]).dryRun, true);
   assert.equal(parseArgs(["--list"]).list, true);
   assert.throws(() => parseArgs(["--guess"]), /unknown argument/);
+  assert.throws(() => parseArgs(["--markets="]), /pass --all/);
 });
 
 test("validates the primary universe before using it", () => {

@@ -1,7 +1,6 @@
 import { readFileSync, readdirSync } from "node:fs";
 import { createVestail } from "@vestail/core";
 import { createTokens } from "@vestail/core/tokens";
-import { createDerivatives } from "@vestail/core/derivatives";
 
 const DATA_DIR = new URL("../../../data/", import.meta.url);
 const load = f => JSON.parse(readFileSync(new URL(f, DATA_DIR)));
@@ -30,9 +29,5 @@ export function loadData() {
     symbols: load("tokens/symbols.json"),
     evm: load("tokens/evm.json"),
   });
-  const derivatives = createDerivatives({
-    venue: load("derivatives/hyperliquid.json"),
-    policies: [load("derivatives/policies/hyperliquid.json")],
-  });
-  return { raw, core, tokens, derivatives, idByName, nameById, countryByCode };
+  return { raw, core, tokens, idByName, nameById, countryByCode };
 }

@@ -60,6 +60,18 @@
         "spx",
         "us 500"
       ]
+    },
+    {
+      "id": "xyz:NIFTY",
+      "coin": "NIFTY",
+      "name": "NIFTY 50 Index",
+      "category": "indices",
+      "related_asset": null,
+      "aliases": [
+        "nifty",
+        "nifty 50",
+        "india 50"
+      ]
     }
   ]
 }

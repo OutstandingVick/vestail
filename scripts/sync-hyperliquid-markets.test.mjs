@@ -79,3 +79,11 @@ test("verification reports a delisted universe entry honestly", async () => {
   const result = await verifiedMarkets(["VIX"], request);
   assert.equal(result.verified[0].isDelisted, true);
 });
+
+test("an unreviewed market is refused even when Hyperliquid lists it", async () => {
+  const request = async type => type === "meta"
+    ? { universe: [{ name: "xyz:UNKNOWN" }] }
+    : type === "perpCategories" ? [["xyz:UNKNOWN", "indices"]] : null;
+  const result = await verifiedMarkets(["UNKNOWN"], request);
+  assert.match(result.refused[0].why, /no reviewed/);
+});

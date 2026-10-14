@@ -248,6 +248,11 @@
       "name": "Rigetti Computing",
       "class": "equity-by-home",
       "home": "US"
+    },
+    "MRVL": {
+      "name": "Marvell Technology",
+      "class": "equity-by-home",
+      "home": "US"
     }
   }
 }

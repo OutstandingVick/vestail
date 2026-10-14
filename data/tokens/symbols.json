@@ -232,6 +232,11 @@
       "class": "equity-by-home",
       "home": "US",
       "mapping_note": "Mapped by ownership of the United States-listed equity fund unit, not as a share in one company."
+    },
+    "HIMS": {
+      "name": "Hims & Hers Health",
+      "class": "equity-by-home",
+      "home": "US"
     }
   }
 }

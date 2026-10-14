@@ -10,8 +10,56 @@
     "trade_url": "https://app.trade.xyz/trade/"
   },
   "markets": [
-    { "id": "xyz:GOLD", "coin": "GOLD", "name": "Gold", "category": "commodities", "related_asset": "gold_bullion", "aliases": ["gold", "xau", "gold bullion"] },
-    { "id": "xyz:CL", "coin": "CL", "name": "WTI crude oil", "category": "commodities", "related_asset": null, "aliases": ["oil", "crude", "crude oil", "wti", "petroleum"] },
-    { "id": "xyz:COPPER", "coin": "COPPER", "name": "Copper", "category": "commodities", "related_asset": null, "aliases": ["copper", "hg"] }
+    {
+      "id": "xyz:GOLD",
+      "coin": "GOLD",
+      "name": "Gold",
+      "category": "commodities",
+      "related_asset": "gold_bullion",
+      "aliases": [
+        "gold",
+        "xau",
+        "gold bullion"
+      ]
+    },
+    {
+      "id": "xyz:CL",
+      "coin": "CL",
+      "name": "WTI crude oil",
+      "category": "commodities",
+      "related_asset": null,
+      "aliases": [
+        "oil",
+        "crude",
+        "crude oil",
+        "wti",
+        "petroleum"
+      ]
+    },
+    {
+      "id": "xyz:COPPER",
+      "coin": "COPPER",
+      "name": "Copper",
+      "category": "commodities",
+      "related_asset": null,
+      "aliases": [
+        "copper",
+        "hg"
+      ]
+    },
+    {
+      "id": "xyz:SP500",
+      "coin": "SP500",
+      "name": "S&P 500 Index",
+      "category": "indices",
+      "related_asset": null,
+      "aliases": [
+        "s&p",
+        "s&p 500",
+        "sp500",
+        "spx",
+        "us 500"
+      ]
+    }
   ]
 }

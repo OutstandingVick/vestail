@@ -178,6 +178,11 @@
       "name": "Circle Internet Group",
       "class": "equity-by-home",
       "home": "US"
+    },
+    "GME": {
+      "name": "GameStop",
+      "class": "equity-by-home",
+      "home": "US"
     }
   }
 }

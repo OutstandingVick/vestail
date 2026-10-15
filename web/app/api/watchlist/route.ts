@@ -9,7 +9,7 @@ import { readUser, writeUser } from "@/lib/server/store";
 /** POST /api/watchlist { asset, symbol?, on } — add or remove an asset (or one ticker under it). */
 const Body = z.object({
   asset: z.string().trim().min(1).max(64),
-  symbol: z.string().trim().max(12).transform(value => value.toUpperCase()).optional(),
+  symbol: z.string().trim().min(1).max(12).transform(value => value.toUpperCase()).optional(),
   on: z.boolean(),
 });
 

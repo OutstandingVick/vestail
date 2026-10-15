@@ -7,6 +7,7 @@ import {
   Compass,
   Gear,
   List,
+  Star,
   Wallet,
   X,
 } from "@phosphor-icons/react";
@@ -25,6 +26,7 @@ import type { Country, Profile } from "@/lib/types";
 const NAV = [
   { href: "/app/discover", label: "Discover", icon: Compass },
   { href: "/app/portfolio", label: "Portfolio", icon: Wallet },
+  { href: "/app/watchlist", label: "Watchlist", icon: Star },
   { href: "/app/markets", label: "Markets", icon: ChartLineUp },
   { href: "/app/activity", label: "Activity", icon: ClockCounterClockwise },
   { href: "/app/compare", label: "Compare", icon: ArrowsLeftRight },

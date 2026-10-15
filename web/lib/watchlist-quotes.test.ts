@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { parseJupiterSnapshots, selectWatchQuote } from "./watchlist-quotes.ts";
+import { parseJupiterSnapshots, selectWatchQuote, sortWatchlist } from "./watchlist-quotes.ts";
 
 test("keeps finite live prices from Jupiter", () => {
   const quotes = parseJupiterSnapshots([{ id: "mint-a", symbol: "AAA", usdPrice: 12.5, liquidity: 900, stats24h: { priceChange: 2.4 } }]);
@@ -42,4 +42,13 @@ test("keeps a price when the 24 hour move is unavailable", () => {
 test("returns no quote when no tracked mint is priced", () => {
   const quote = selectWatchQuote([{ mint: "missing", tokenSymbol: "AAA", provider: "issuer" }], new Map(), "now");
   assert.equal(quote, null);
+});
+
+test("orders gainers by strongest 24 hour move", () => {
+  const quote = (change_24h_pct: number) => ({ price_usd: 10, change_24h_pct, liquidity_usd: 20, token_symbol: "AAA", provider: "issuer", mint: "mint", as_of: "now" });
+  const rows = [
+    { added: "2026-10-15", quote: quote(-2) },
+    { added: "2026-10-14", quote: quote(4) },
+  ];
+  assert.equal(sortWatchlist(rows, "gainers")[0].quote?.change_24h_pct, 4);
 });

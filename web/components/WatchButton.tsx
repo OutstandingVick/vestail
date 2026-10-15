@@ -17,7 +17,7 @@ export function WatchButton({ asset, symbol }: { asset: string; symbol?: string 
         setWatching(list.some(w => w.asset === asset && (w.symbol ?? null) === (symbol ?? null)));
       }
       setBusy(false);
-    });
+    }).catch(() => { setError("Unable to read your watchlist."); setBusy(false); });
   }, [asset, symbol]);
   async function toggle() {
     setBusy(true);

@@ -73,7 +73,10 @@ export function WatchlistPage({ countryName }: { countryName: string }) {
         <section aria-labelledby="watched-stocks-title" className="flex flex-col gap-4">
           <div className="flex flex-wrap items-end justify-between gap-3">
             <div><h2 id="watched-stocks-title" className="text-xl font-bold">Watched stocks</h2><p className="mt-1 text-sm text-muted">{summary.items.length} {summary.items.length === 1 ? "stock" : "stocks"} saved</p></div>
-            <Link href="/app/discover" className="inline-flex min-h-11 items-center rounded-full border border-field bg-surface px-4 text-sm font-semibold hover:bg-tint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emphasis">Add another stock</Link>
+            <div className="flex flex-wrap gap-2">
+              <button type="button" onClick={() => load(true)} disabled={refreshing} className="min-h-11 rounded-full border border-field bg-surface px-4 text-sm font-semibold hover:bg-tint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emphasis disabled:cursor-wait disabled:opacity-60">{refreshing ? "Refreshing…" : "Refresh prices"}</button>
+              <Link href="/app/discover" className="inline-flex min-h-11 items-center rounded-full border border-field bg-surface px-4 text-sm font-semibold hover:bg-tint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emphasis">Add another stock</Link>
+            </div>
           </div>
           <div role="group" aria-label="Sort watched stocks" className="flex flex-wrap gap-2">
             {(["recent", "gainers", "decliners"] as WatchSort[]).map(option => <button key={option} type="button" onClick={() => setSort(option)} aria-pressed={sort === option} className={`min-h-11 rounded-full border px-4 text-sm font-semibold capitalize focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emphasis ${sort === option ? "border-ink-strong bg-ink-strong text-page" : "border-line bg-surface hover:bg-tint"}`}>{option}</button>)}

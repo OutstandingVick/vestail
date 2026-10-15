@@ -7,7 +7,11 @@ import { readProfile } from "@/lib/server/profile";
 import { readUser, writeUser } from "@/lib/server/store";
 
 /** POST /api/watchlist { asset, symbol?, on } — add or remove an asset (or one ticker under it). */
-const Body = z.object({ asset: z.string().min(1).max(64), symbol: z.string().max(12).optional(), on: z.boolean() });
+const Body = z.object({
+  asset: z.string().trim().min(1).max(64),
+  symbol: z.string().trim().max(12).transform(value => value.toUpperCase()).optional(),
+  on: z.boolean(),
+});
 
 export async function POST(request: Request) {
   const userId = await userFrom(request);

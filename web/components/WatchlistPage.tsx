@@ -46,6 +46,7 @@ export function WatchlistPage({ countryName }: { countryName: string }) {
         <p className="mt-3 max-w-2xl leading-7 text-muted">Follow stocks you&apos;re considering and see how their tokenized versions are moving before you decide to buy in {countryName}.</p>
       </header>
       {error && <p role="alert" className="rounded-field bg-cond-wash px-4 py-3 text-sm text-cond-ink">{error}</p>}
+      {summary?.errors.map(message => <p key={message} role="status" className="rounded-field bg-cond-wash px-4 py-3 text-sm text-cond-ink">{message}</p>)}
       {!summary && !error && <div className="h-56 animate-pulse rounded-panel bg-surface" aria-busy="true"><span className="sr-only">Loading your watchlist…</span></div>}
       {summary && summary.items.length === 0 && (
         <section className="flex min-h-72 flex-col items-center justify-center rounded-panel bg-surface px-6 py-14 text-center">

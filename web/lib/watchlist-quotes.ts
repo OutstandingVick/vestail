@@ -39,4 +39,23 @@ export function parseJupiterSnapshots(value: unknown): QuoteByMint {
   return result;
 }
 
+export function selectWatchQuote(candidates: QuoteCandidate[], quotes: QuoteByMint, asOf: string): WatchQuote | null {
+  const available = candidates.flatMap(candidate => {
+    const quote = quotes.get(candidate.mint);
+    return quote?.usdPrice ? [{ candidate, quote }] : [];
+  });
+  available.sort((a, b) => (b.quote.liquidity ?? -1) - (a.quote.liquidity ?? -1));
+  const selected = available[0];
+  if (!selected) return null;
+  return {
+    price_usd: selected.quote.usdPrice!,
+    change_24h_pct: selected.quote.stats24h?.priceChange ?? null,
+    liquidity_usd: selected.quote.liquidity,
+    token_symbol: selected.candidate.tokenSymbol,
+    provider: selected.candidate.provider,
+    mint: selected.candidate.mint,
+    as_of: asOf,
+  };
+}
+
 export type { WatchQuote };

@@ -10,6 +10,15 @@ test("keeps finite live prices from Jupiter", () => {
   });
 });
 
+test("drops malformed and non-finite price rows", () => {
+  const quotes = parseJupiterSnapshots([
+    null,
+    { id: "missing-symbol", usdPrice: 10 },
+    { id: "nan", symbol: "NAN", usdPrice: Number.NaN },
+  ]);
+  assert.equal(quotes.size, 0);
+});
+
 test("selects the most liquid watched representation", () => {
   const quotes = parseJupiterSnapshots([
     { id: "thin", symbol: "AAA1", usdPrice: 10, liquidity: 50, stats24h: { priceChange: 1 } },

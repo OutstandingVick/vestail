@@ -9,6 +9,7 @@ import type { WatchlistRow } from "@/lib/types";
 interface Summary { items: WatchlistRow[]; errors: string[] }
 const usd = (value: number) => value.toLocaleString(undefined, { style: "currency", currency: "USD", minimumFractionDigits: value < 1 ? 4 : 2, maximumFractionDigits: value < 1 ? 6 : 2 });
 const movement = (value: number) => `${value > 0 ? "+" : ""}${value.toFixed(2)}%`;
+const compactUsd = (value: number) => new Intl.NumberFormat(undefined, { style: "currency", currency: "USD", notation: "compact", maximumFractionDigits: 1 }).format(value);
 
 export function WatchlistPage({ countryName }: { countryName: string }) {
   const [summary, setSummary] = useState<Summary | null>(null);
@@ -51,6 +52,7 @@ export function WatchlistPage({ countryName }: { countryName: string }) {
                 {item.quote?.change_24h_pct != null && <p className={`mt-1 text-sm font-semibold tabular-nums ${item.quote.change_24h_pct >= 0 ? "text-can" : "text-cannot"}`}><span aria-hidden="true">{item.quote.change_24h_pct >= 0 ? "↑" : "↓"}</span> {movement(item.quote.change_24h_pct)} over 24 hours</p>}
                 {item.quote && item.quote.change_24h_pct == null && <p className="mt-1 text-sm text-muted">24-hour movement unavailable</p>}
                 {item.quote && <p className="mt-4 text-xs leading-5 text-muted">Tracking {item.quote.token_symbol} by {item.quote.provider}. Price and movement come from Jupiter&apos;s live Solana market data.</p>}
+                {item.quote?.liquidity_usd != null && <p className="mt-1 text-xs text-muted">Tracked market liquidity: <span className="tabular-nums">{compactUsd(item.quote.liquidity_usd)}</span></p>}
               </li>
             ))}
           </ul>

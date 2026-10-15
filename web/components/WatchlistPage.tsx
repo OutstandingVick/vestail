@@ -14,7 +14,7 @@ const movement = (value: number) => `${value > 0 ? "+" : ""}${value.toFixed(2)}%
 const compactUsd = (value: number) => new Intl.NumberFormat(undefined, { style: "currency", currency: "USD", notation: "compact", maximumFractionDigits: 1 }).format(value);
 const SORT_LABEL: Record<WatchSort, string> = { recent: "Recently added", gainers: "Gainers", decliners: "Decliners" };
 
-export function WatchlistPage({ countryName }: { countryName: string }) {
+export function WatchlistPage() {
   const [summary, setSummary] = useState<Summary | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [removing, setRemoving] = useState<string | null>(null);
@@ -59,8 +59,7 @@ export function WatchlistPage({ countryName }: { countryName: string }) {
       <header>
         <p className="mb-2 font-accent text-xs font-bold uppercase tracking-[0.13em] text-action-ink">Saved for later</p>
         <h1 className="text-[clamp(36px,5vw,64px)] font-extrabold leading-[1.02] tracking-[-0.05em]">Watchlist</h1>
-        <p className="mt-3 max-w-2xl leading-7 text-muted">Follow stocks you&apos;re considering and see how their tokenized versions are moving before you decide to buy in {countryName}.</p>
-        <p className="mt-2 max-w-2xl text-sm leading-6 text-muted">Market data describes a tracked token version, not the underlying company&apos;s official share price. It is information, not investment advice.</p>
+        <p className="mt-3 max-w-2xl leading-7 text-muted">Track tokenized stocks before you buy. Prices are indicative, not investment advice.</p>
       </header>
       {error && <p role="alert" className="rounded-field bg-cond-wash px-4 py-3 text-sm text-cond-ink">{error}</p>}
       {summary?.errors.map(message => <p key={message} role="status" className="rounded-field bg-cond-wash px-4 py-3 text-sm text-cond-ink">{message}</p>)}

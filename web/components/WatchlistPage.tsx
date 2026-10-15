@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 
 import { authedFetch, errorOf } from "@/lib/client";
@@ -17,14 +17,25 @@ export function WatchlistPage({ countryName }: { countryName: string }) {
   const [summary, setSummary] = useState<Summary | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [removing, setRemoving] = useState<string | null>(null);
+  const [refreshing, setRefreshing] = useState(false);
   const [sort, setSort] = useState<WatchSort>("recent");
   const visible = useMemo(() => sortWatchlist(summary?.items ?? [], sort), [summary, sort]);
 
-  useEffect(() => {
-    authedFetch("/api/watchlist/summary")
-      .then(async response => response.ok ? setSummary(await response.json()) : setError(await errorOf(response, "Unable to load your watchlist.")))
-      .catch(() => setError("Unable to reach Vestail. Check your connection and try again."));
+  const load = useCallback(async (refresh = false) => {
+    if (refresh) setRefreshing(true);
+    setError(null);
+    try {
+      const response = await authedFetch("/api/watchlist/summary");
+      if (!response.ok) throw new Error(await errorOf(response, "Unable to load your watchlist."));
+      setSummary(await response.json());
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : "Unable to reach Vestail. Check your connection and try again.");
+    } finally {
+      setRefreshing(false);
+    }
   }, []);
+
+  useEffect(() => { void load(); }, [load]);
 
   async function remove(item: WatchlistRow) {
     const key = `${item.asset}:${item.symbol ?? "asset"}`;

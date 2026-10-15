@@ -30,7 +30,7 @@ export function WatchButton({ asset, symbol }: { asset: string; symbol?: string 
   return (
     <span className="inline-flex flex-col items-end gap-1">
     <button type="button" onClick={toggle} disabled={busy} aria-pressed={watching}
-      className={`inline-flex min-h-10 items-center gap-2 rounded-full px-4 text-sm font-semibold ${watching ? "bg-tint text-emphasis" : "border-[1.5px] border-field"}`}>
+      className={`inline-flex min-h-11 items-center gap-2 rounded-full px-4 text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emphasis disabled:cursor-wait disabled:opacity-60 ${watching ? "bg-tint text-emphasis" : "border-[1.5px] border-field"}`}>
       <Star size={16} weight={watching ? "fill" : "regular"} aria-hidden="true" />
       {watching ? "Watching" : "Watch"}
     </button>

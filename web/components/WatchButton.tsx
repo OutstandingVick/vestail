@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { authedFetch, errorOf } from "@/lib/client";
 
 /** Add this asset (or one ticker under it) to the watchlist on the portfolio. */
-export function WatchButton({ asset, symbol }: { asset: string; symbol?: string }) {
+export function WatchButton({ asset, symbol, label }: { asset: string; symbol?: string; label: string }) {
   const [watching, setWatching] = useState(false);
   const [busy, setBusy] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -29,7 +29,7 @@ export function WatchButton({ asset, symbol }: { asset: string; symbol?: string 
   }
   return (
     <span className="inline-flex flex-col items-end gap-1">
-    <button type="button" onClick={toggle} disabled={busy} aria-pressed={watching}
+    <button type="button" onClick={toggle} disabled={busy} aria-pressed={watching} aria-label={watching ? `Remove ${label} from watchlist` : `Add ${label} to watchlist`}
       className={`inline-flex min-h-11 items-center gap-2 rounded-full px-4 text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emphasis disabled:cursor-wait disabled:opacity-60 ${watching ? "bg-tint text-emphasis" : "border-[1.5px] border-field"}`}>
       <Star size={16} weight={watching ? "fill" : "regular"} aria-hidden="true" />
       {watching ? "Watching" : "Watch"}

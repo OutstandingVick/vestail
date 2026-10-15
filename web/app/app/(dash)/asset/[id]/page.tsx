@@ -58,7 +58,7 @@ export default async function AssetPage({ params, searchParams }: {
             <div className="flex flex-wrap items-center justify-between gap-3">
               <h1 className="text-[28px] font-bold">{asset.name} in {country.name}</h1>
               <div className="flex items-center gap-2">
-                <WatchButton asset={id} symbol={board?.symbol} />
+                <WatchButton asset={id} symbol={board?.symbol} label={board?.name ?? asset.name} />
                 <VerdictBadge status={rule.status} size="lg" />
               </div>
             </div>

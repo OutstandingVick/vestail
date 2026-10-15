@@ -15,12 +15,28 @@ const compactUsd = (value: number) => new Intl.NumberFormat(undefined, { style: 
 export function WatchlistPage({ countryName }: { countryName: string }) {
   const [summary, setSummary] = useState<Summary | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [removing, setRemoving] = useState<string | null>(null);
 
   useEffect(() => {
     authedFetch("/api/watchlist/summary")
       .then(async response => response.ok ? setSummary(await response.json()) : setError(await errorOf(response, "Unable to load your watchlist.")))
       .catch(() => setError("Unable to reach Vestail. Check your connection and try again."));
   }, []);
+
+  async function remove(item: WatchlistRow) {
+    const key = `${item.asset}:${item.symbol ?? "asset"}`;
+    setRemoving(key);
+    setError(null);
+    try {
+      const response = await authedFetch("/api/watchlist", { method: "POST", body: JSON.stringify({ asset: item.asset, symbol: item.symbol, on: false }) });
+      if (!response.ok) throw new Error(await errorOf(response, "Unable to remove this stock."));
+      setSummary(current => current ? { ...current, items: current.items.filter(row => `${row.asset}:${row.symbol ?? "asset"}` !== key) } : current);
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : "Unable to remove this stock. Try again.");
+    } finally {
+      setRemoving(null);
+    }
+  }
 
   return (
     <div className="flex flex-col gap-7 pt-4">

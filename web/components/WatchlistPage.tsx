@@ -20,6 +20,7 @@ export function WatchlistPage({ countryName }: { countryName: string }) {
   const [refreshing, setRefreshing] = useState(false);
   const [sort, setSort] = useState<WatchSort>("recent");
   const visible = useMemo(() => sortWatchlist(summary?.items ?? [], sort), [summary, sort]);
+  const lastUpdated = summary?.items.find(item => item.quote)?.quote?.as_of;
 
   const load = useCallback(async (refresh = false) => {
     if (refresh) setRefreshing(true);
@@ -72,7 +73,7 @@ export function WatchlistPage({ countryName }: { countryName: string }) {
       {summary && summary.items.length > 0 && (
         <section aria-labelledby="watched-stocks-title" className="flex flex-col gap-4">
           <div className="flex flex-wrap items-end justify-between gap-3">
-            <div><h2 id="watched-stocks-title" className="text-xl font-bold">Watched stocks</h2><p className="mt-1 text-sm text-muted">{summary.items.length} {summary.items.length === 1 ? "stock" : "stocks"} saved</p></div>
+            <div><h2 id="watched-stocks-title" className="text-xl font-bold">Watched stocks</h2><p className="mt-1 text-sm text-muted">{summary.items.length} {summary.items.length === 1 ? "stock" : "stocks"} saved{lastUpdated ? ` · prices checked ${new Date(lastUpdated).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })}` : ""}</p></div>
             <div className="flex flex-wrap gap-2">
               <button type="button" onClick={() => load(true)} disabled={refreshing} className="min-h-11 rounded-full border border-field bg-surface px-4 text-sm font-semibold hover:bg-tint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emphasis disabled:cursor-wait disabled:opacity-60">{refreshing ? "Refreshing…" : "Refresh prices"}</button>
               <Link href="/app/discover" className="inline-flex min-h-11 items-center rounded-full border border-field bg-surface px-4 text-sm font-semibold hover:bg-tint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emphasis">Add another stock</Link>

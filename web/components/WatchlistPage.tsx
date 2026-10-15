@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 
 import { authedFetch, errorOf } from "@/lib/client";
 import { VerdictBadge } from "@/components/VerdictBadge";
 import type { WatchlistRow } from "@/lib/types";
+import { sortWatchlist, type WatchSort } from "@/lib/watchlist-quotes";
 
 interface Summary { items: WatchlistRow[]; errors: string[] }
 const usd = (value: number) => value.toLocaleString(undefined, { style: "currency", currency: "USD", minimumFractionDigits: value < 1 ? 4 : 2, maximumFractionDigits: value < 1 ? 6 : 2 });
@@ -16,6 +17,8 @@ export function WatchlistPage({ countryName }: { countryName: string }) {
   const [summary, setSummary] = useState<Summary | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [removing, setRemoving] = useState<string | null>(null);
+  const [sort, setSort] = useState<WatchSort>("recent");
+  const visible = useMemo(() => sortWatchlist(summary?.items ?? [], sort), [summary, sort]);
 
   useEffect(() => {
     authedFetch("/api/watchlist/summary")
@@ -62,7 +65,7 @@ export function WatchlistPage({ countryName }: { countryName: string }) {
             <Link href="/app/discover" className="inline-flex min-h-11 items-center rounded-full border border-field bg-surface px-4 text-sm font-semibold hover:bg-tint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emphasis">Add another stock</Link>
           </div>
           <ul className="grid gap-4 md:grid-cols-2">
-            {summary.items.map(item => (
+            {visible.map(item => (
               <li key={`${item.asset}:${item.symbol ?? "asset"}`} className="rounded-panel bg-surface p-5 sm:p-6">
                 <div className="flex items-start justify-between gap-3">
                   <div><p className="text-xs font-bold uppercase tracking-[0.12em] text-action-ink">{item.symbol ?? "Asset class"}</p><h3 className="mt-1 text-xl font-bold">{item.name}</h3></div>

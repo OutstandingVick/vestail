@@ -52,3 +52,9 @@ test("orders gainers by strongest 24 hour move", () => {
   ];
   assert.equal(sortWatchlist(rows, "gainers")[0].quote?.change_24h_pct, 4);
 });
+
+test("orders decliners by weakest 24 hour move", () => {
+  const quote = (change_24h_pct: number) => ({ price_usd: 10, change_24h_pct, liquidity_usd: 20, token_symbol: "AAA", provider: "issuer", mint: "mint", as_of: "now" });
+  const rows = [{ added: "2026-10-15", quote: quote(3) }, { added: "2026-10-14", quote: quote(-5) }];
+  assert.equal(sortWatchlist(rows, "decliners")[0].quote?.change_24h_pct, -5);
+});

@@ -64,3 +64,8 @@ test("keeps unavailable movement after priced rows", () => {
   const rows = [{ added: "2026-10-15", quote: null }, { added: "2026-10-14", quote }];
   assert.equal(sortWatchlist(rows, "gainers")[1].quote, null);
 });
+
+test("recent sorting follows the saved timestamp", () => {
+  const rows = [{ added: "2026-10-14", quote: null }, { added: "2026-10-15", quote: null }];
+  assert.equal(sortWatchlist(rows, "recent")[0].added, "2026-10-15");
+});

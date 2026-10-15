@@ -31,3 +31,10 @@ test("selects the most liquid watched representation", () => {
   assert.equal(quote?.mint, "deep");
   assert.equal(quote?.provider, "second");
 });
+
+test("keeps a price when the 24 hour move is unavailable", () => {
+  const quotes = parseJupiterSnapshots([{ id: "mint-a", symbol: "AAA", usdPrice: 8, liquidity: null, stats24h: null }]);
+  const quote = selectWatchQuote([{ mint: "mint-a", tokenSymbol: "AAA", provider: "issuer" }], quotes, "now");
+  assert.equal(quote?.price_usd, 8);
+  assert.equal(quote?.change_24h_pct, null);
+});

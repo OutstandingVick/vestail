@@ -38,3 +38,8 @@ test("keeps a price when the 24 hour move is unavailable", () => {
   assert.equal(quote?.price_usd, 8);
   assert.equal(quote?.change_24h_pct, null);
 });
+
+test("returns no quote when no tracked mint is priced", () => {
+  const quote = selectWatchQuote([{ mint: "missing", tokenSymbol: "AAA", provider: "issuer" }], new Map(), "now");
+  assert.equal(quote, null);
+});

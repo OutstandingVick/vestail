@@ -97,6 +97,11 @@ export interface WatchQuote {
   mint: string;
   as_of: string;
 }
+export interface WatchlistRow extends WatchItem {
+  name: string;
+  status: Status;
+  quote: WatchQuote | null;
+}
 export interface Portfolio {
   wallets: string[];
   evm_wallets: string[];

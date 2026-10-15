@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 
 import { authedFetch, errorOf } from "@/lib/client";
 
-/** Add this asset (or one ticker under it) to the watchlist on the portfolio. */
+/** Save this asset or ticker for later review on the user's watchlist. */
 export function WatchButton({ asset, symbol, label }: { asset: string; symbol?: string; label: string }) {
   const [watching, setWatching] = useState(false);
   const [busy, setBusy] = useState(true);

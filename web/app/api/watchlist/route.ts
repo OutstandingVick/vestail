@@ -32,12 +32,12 @@ export async function POST(request: Request) {
   const watchlist = data.watchlist.filter(w => !same(w));
   if (on) watchlist.unshift({ asset, ...(symbol ? { symbol } : {}), added: new Date().toISOString() });
   await writeUser(userId, { ...data, watchlist: watchlist.slice(0, 50) });
-  return NextResponse.json({ watching: on });
+  return NextResponse.json({ watching: on }, { headers: { "Cache-Control": "private, no-store" } });
 }
 
 /** GET /api/watchlist — the user's watched items, for the Watch buttons. */
 export async function GET(request: Request) {
   const userId = await userFrom(request);
   if (!userId) return NextResponse.json({ error: "Sign in first." }, { status: 401 });
-  return NextResponse.json((await readUser(userId)).watchlist);
+  return NextResponse.json((await readUser(userId)).watchlist, { headers: { "Cache-Control": "private, no-store" } });
 }

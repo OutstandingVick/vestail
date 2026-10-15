@@ -47,7 +47,7 @@ export function WatchlistPage({ countryName }: { countryName: string }) {
       </header>
       {error && <p role="alert" className="rounded-field bg-cond-wash px-4 py-3 text-sm text-cond-ink">{error}</p>}
       {summary?.errors.map(message => <p key={message} role="status" className="rounded-field bg-cond-wash px-4 py-3 text-sm text-cond-ink">{message}</p>)}
-      {!summary && !error && <div className="h-56 animate-pulse rounded-panel bg-surface" aria-busy="true"><span className="sr-only">Loading your watchlist…</span></div>}
+      {!summary && !error && <div className="h-56 rounded-panel bg-surface motion-safe:animate-pulse" aria-busy="true"><span className="sr-only">Loading your watchlist…</span></div>}
       {summary && summary.items.length === 0 && (
         <section className="flex min-h-72 flex-col items-center justify-center rounded-panel bg-surface px-6 py-14 text-center">
           <h2 className="text-xl font-bold">No stocks saved yet</h2>

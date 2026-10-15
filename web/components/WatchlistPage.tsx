@@ -64,6 +64,9 @@ export function WatchlistPage({ countryName }: { countryName: string }) {
             <div><h2 id="watched-stocks-title" className="text-xl font-bold">Watched stocks</h2><p className="mt-1 text-sm text-muted">{summary.items.length} {summary.items.length === 1 ? "stock" : "stocks"} saved</p></div>
             <Link href="/app/discover" className="inline-flex min-h-11 items-center rounded-full border border-field bg-surface px-4 text-sm font-semibold hover:bg-tint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emphasis">Add another stock</Link>
           </div>
+          <div role="group" aria-label="Sort watched stocks" className="flex flex-wrap gap-2">
+            {(["recent", "gainers", "decliners"] as WatchSort[]).map(option => <button key={option} type="button" onClick={() => setSort(option)} aria-pressed={sort === option} className={`min-h-11 rounded-full border px-4 text-sm font-semibold capitalize focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emphasis ${sort === option ? "border-ink-strong bg-ink-strong text-page" : "border-line bg-surface hover:bg-tint"}`}>{option}</button>)}
+          </div>
           <ul className="grid gap-4 md:grid-cols-2">
             {visible.map(item => (
               <li key={`${item.asset}:${item.symbol ?? "asset"}`} className="rounded-panel bg-surface p-5 sm:p-6">

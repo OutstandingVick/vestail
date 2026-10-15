@@ -59,6 +59,7 @@ export function WatchlistPage({ countryName }: { countryName: string }) {
         <p className="mb-2 font-accent text-xs font-bold uppercase tracking-[0.13em] text-action-ink">Saved for later</p>
         <h1 className="text-[clamp(36px,5vw,64px)] font-extrabold leading-[1.02] tracking-[-0.05em]">Watchlist</h1>
         <p className="mt-3 max-w-2xl leading-7 text-muted">Follow stocks you&apos;re considering and see how their tokenized versions are moving before you decide to buy in {countryName}.</p>
+        <p className="mt-2 max-w-2xl text-sm leading-6 text-muted">Market data describes a tracked token version, not the underlying company&apos;s official share price. It is information, not investment advice.</p>
       </header>
       {error && <p role="alert" className="rounded-field bg-cond-wash px-4 py-3 text-sm text-cond-ink">{error}</p>}
       {summary?.errors.map(message => <p key={message} role="status" className="rounded-field bg-cond-wash px-4 py-3 text-sm text-cond-ink">{message}</p>)}

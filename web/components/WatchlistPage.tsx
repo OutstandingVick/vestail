@@ -34,6 +34,22 @@ export function WatchlistPage({ countryName }: { countryName: string }) {
           <Link href="/app/discover" className="mt-5 inline-flex min-h-11 items-center rounded-full bg-action px-5 font-bold text-on-action">Find stocks to watch</Link>
         </section>
       )}
+      {summary && summary.items.length > 0 && (
+        <section aria-labelledby="watched-stocks-title" className="flex flex-col gap-4">
+          <div className="flex flex-wrap items-end justify-between gap-3">
+            <div><h2 id="watched-stocks-title" className="text-xl font-bold">Watched stocks</h2><p className="mt-1 text-sm text-muted">{summary.items.length} {summary.items.length === 1 ? "stock" : "stocks"} saved</p></div>
+            <Link href="/app/discover" className="inline-flex min-h-11 items-center rounded-full border border-field bg-surface px-4 text-sm font-semibold hover:bg-tint">Add another stock</Link>
+          </div>
+          <ul className="grid gap-4 md:grid-cols-2">
+            {summary.items.map(item => (
+              <li key={`${item.asset}:${item.symbol ?? "asset"}`} className="rounded-panel bg-surface p-5 sm:p-6">
+                <p className="text-xs font-bold uppercase tracking-[0.12em] text-action-ink">{item.symbol ?? "Asset class"}</p>
+                <h3 className="mt-1 text-xl font-bold">{item.name}</h3>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
     </div>
   );
 }

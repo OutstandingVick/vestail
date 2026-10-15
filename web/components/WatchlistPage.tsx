@@ -49,6 +49,7 @@ export function WatchlistPage({ countryName }: { countryName: string }) {
                 <h3 className="mt-1 text-xl font-bold">{item.name}</h3>
                 <p className="mt-5 font-display text-3xl font-bold tabular-nums">{item.quote ? usd(item.quote.price_usd) : "Price unavailable"}</p>
                 {item.quote?.change_24h_pct != null && <p className={`mt-1 text-sm font-semibold tabular-nums ${item.quote.change_24h_pct >= 0 ? "text-can" : "text-cannot"}`}><span aria-hidden="true">{item.quote.change_24h_pct >= 0 ? "↑" : "↓"}</span> {movement(item.quote.change_24h_pct)} over 24 hours</p>}
+                {item.quote && item.quote.change_24h_pct == null && <p className="mt-1 text-sm text-muted">24-hour movement unavailable</p>}
               </li>
             ))}
           </ul>

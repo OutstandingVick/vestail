@@ -15,6 +15,7 @@ export interface QuoteCandidate {
 }
 
 export type QuoteByMint = Map<string, JupiterTokenSnapshot>;
+export type WatchSort = "recent" | "gainers" | "decliners";
 
 export function isFiniteNumber(value: unknown): value is number {
   return typeof value === "number" && Number.isFinite(value);
@@ -56,6 +57,20 @@ export function selectWatchQuote(candidates: QuoteCandidate[], quotes: QuoteByMi
     mint: selected.candidate.mint,
     as_of: asOf,
   };
+}
+
+export function sortWatchlist<T extends { added: string; quote: WatchQuote | null }>(items: T[], sort: WatchSort): T[] {
+  const rows = [...items];
+  if (sort === "recent") return rows.sort((a, b) => b.added.localeCompare(a.added));
+  const direction = sort === "gainers" ? -1 : 1;
+  return rows.sort((a, b) => {
+    const aChange = a.quote?.change_24h_pct;
+    const bChange = b.quote?.change_24h_pct;
+    if (aChange == null && bChange == null) return b.added.localeCompare(a.added);
+    if (aChange == null) return 1;
+    if (bChange == null) return -1;
+    return (aChange - bChange) * direction;
+  });
 }
 
 export type { WatchQuote };

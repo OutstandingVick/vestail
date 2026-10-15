@@ -7,6 +7,7 @@ import { authedFetch, errorOf } from "@/lib/client";
 import type { WatchlistRow } from "@/lib/types";
 
 interface Summary { items: WatchlistRow[]; errors: string[] }
+const usd = (value: number) => value.toLocaleString(undefined, { style: "currency", currency: "USD", minimumFractionDigits: value < 1 ? 4 : 2, maximumFractionDigits: value < 1 ? 6 : 2 });
 
 export function WatchlistPage({ countryName }: { countryName: string }) {
   const [summary, setSummary] = useState<Summary | null>(null);
@@ -45,6 +46,7 @@ export function WatchlistPage({ countryName }: { countryName: string }) {
               <li key={`${item.asset}:${item.symbol ?? "asset"}`} className="rounded-panel bg-surface p-5 sm:p-6">
                 <p className="text-xs font-bold uppercase tracking-[0.12em] text-action-ink">{item.symbol ?? "Asset class"}</p>
                 <h3 className="mt-1 text-xl font-bold">{item.name}</h3>
+                <p className="mt-5 font-display text-3xl font-bold tabular-nums">{item.quote ? usd(item.quote.price_usd) : "Price unavailable"}</p>
               </li>
             ))}
           </ul>

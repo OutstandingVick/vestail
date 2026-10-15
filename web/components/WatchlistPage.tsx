@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 
 import { authedFetch, errorOf } from "@/lib/client";
+import { VerdictBadge } from "@/components/VerdictBadge";
 import type { WatchlistRow } from "@/lib/types";
 
 interface Summary { items: WatchlistRow[]; errors: string[] }
@@ -46,8 +47,10 @@ export function WatchlistPage({ countryName }: { countryName: string }) {
           <ul className="grid gap-4 md:grid-cols-2">
             {summary.items.map(item => (
               <li key={`${item.asset}:${item.symbol ?? "asset"}`} className="rounded-panel bg-surface p-5 sm:p-6">
-                <p className="text-xs font-bold uppercase tracking-[0.12em] text-action-ink">{item.symbol ?? "Asset class"}</p>
-                <h3 className="mt-1 text-xl font-bold">{item.name}</h3>
+                <div className="flex items-start justify-between gap-3">
+                  <div><p className="text-xs font-bold uppercase tracking-[0.12em] text-action-ink">{item.symbol ?? "Asset class"}</p><h3 className="mt-1 text-xl font-bold">{item.name}</h3></div>
+                  <VerdictBadge status={item.status} />
+                </div>
                 <p className="mt-5 font-display text-3xl font-bold tabular-nums">{item.quote ? usd(item.quote.price_usd) : "Price unavailable"}</p>
                 {item.quote?.change_24h_pct != null && <p className={`mt-1 text-sm font-semibold tabular-nums ${item.quote.change_24h_pct >= 0 ? "text-can" : "text-cannot"}`}><span aria-hidden="true">{item.quote.change_24h_pct >= 0 ? "↑" : "↓"}</span> {movement(item.quote.change_24h_pct)} over 24 hours</p>}
                 {item.quote && item.quote.change_24h_pct == null && <p className="mt-1 text-sm text-muted">24-hour movement unavailable</p>}

@@ -88,6 +88,15 @@ export interface Holding {
   amount: number; usd: number | null; status: Status | null; asset: string;
 }
 export interface WatchItem { asset: string; symbol?: string; added: string }
+export interface WatchQuote {
+  price_usd: number;
+  change_24h_pct: number | null;
+  liquidity_usd: number | null;
+  token_symbol: string;
+  provider: string;
+  mint: string;
+  as_of: string;
+}
 export interface Portfolio {
   wallets: string[];
   evm_wallets: string[];

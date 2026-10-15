@@ -52,14 +52,14 @@ export function WatchlistPage({ countryName }: { countryName: string }) {
         <section className="flex min-h-72 flex-col items-center justify-center rounded-panel bg-surface px-6 py-14 text-center">
           <h2 className="text-xl font-bold">No stocks saved yet</h2>
           <p className="mt-2 max-w-md text-sm leading-6 text-muted">Save a stock when you want more time to compare its versions, ownership rules, and market movement.</p>
-          <Link href="/app/discover" className="mt-5 inline-flex min-h-11 items-center rounded-full bg-action px-5 font-bold text-on-action">Find stocks to watch</Link>
+          <Link href="/app/discover" className="mt-5 inline-flex min-h-11 items-center rounded-full bg-action px-5 font-bold text-on-action focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emphasis">Find stocks to watch</Link>
         </section>
       )}
       {summary && summary.items.length > 0 && (
         <section aria-labelledby="watched-stocks-title" className="flex flex-col gap-4">
           <div className="flex flex-wrap items-end justify-between gap-3">
             <div><h2 id="watched-stocks-title" className="text-xl font-bold">Watched stocks</h2><p className="mt-1 text-sm text-muted">{summary.items.length} {summary.items.length === 1 ? "stock" : "stocks"} saved</p></div>
-            <Link href="/app/discover" className="inline-flex min-h-11 items-center rounded-full border border-field bg-surface px-4 text-sm font-semibold hover:bg-tint">Add another stock</Link>
+            <Link href="/app/discover" className="inline-flex min-h-11 items-center rounded-full border border-field bg-surface px-4 text-sm font-semibold hover:bg-tint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emphasis">Add another stock</Link>
           </div>
           <ul className="grid gap-4 md:grid-cols-2">
             {summary.items.map(item => (
@@ -74,8 +74,8 @@ export function WatchlistPage({ countryName }: { countryName: string }) {
                 {item.quote && <p className="mt-4 text-xs leading-5 text-muted">Tracking {item.quote.token_symbol} by {item.quote.provider}. Price and movement come from Jupiter&apos;s live Solana market data.</p>}
                 {item.quote?.liquidity_usd != null && <p className="mt-1 text-xs text-muted">Tracked market liquidity: <span className="tabular-nums">{compactUsd(item.quote.liquidity_usd)}</span></p>}
                 <div className="mt-5 flex flex-wrap gap-2">
-                  <Link href={`/app/asset/${item.asset}${item.symbol ? `?symbol=${encodeURIComponent(item.symbol)}` : ""}`} className="inline-flex min-h-11 items-center rounded-full bg-action px-4 text-sm font-bold text-on-action">Review this stock</Link>
-                  <button type="button" onClick={() => remove(item)} disabled={removing === `${item.asset}:${item.symbol ?? "asset"}`} className="min-h-11 rounded-full border border-field px-4 text-sm font-semibold hover:bg-tint disabled:cursor-wait disabled:opacity-60">{removing === `${item.asset}:${item.symbol ?? "asset"}` ? "Removing…" : "Remove"}</button>
+                  <Link href={`/app/asset/${item.asset}${item.symbol ? `?symbol=${encodeURIComponent(item.symbol)}` : ""}`} className="inline-flex min-h-11 items-center rounded-full bg-action px-4 text-sm font-bold text-on-action focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emphasis">Review this stock</Link>
+                  <button type="button" onClick={() => remove(item)} disabled={removing === `${item.asset}:${item.symbol ?? "asset"}`} className="min-h-11 rounded-full border border-field px-4 text-sm font-semibold hover:bg-tint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emphasis disabled:cursor-wait disabled:opacity-60">{removing === `${item.asset}:${item.symbol ?? "asset"}` ? "Removing…" : "Remove"}</button>
                 </div>
               </li>
             ))}

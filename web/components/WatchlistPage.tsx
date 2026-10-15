@@ -72,7 +72,10 @@ export function WatchlistPage({ countryName }: { countryName: string }) {
                 {item.quote && item.quote.change_24h_pct == null && <p className="mt-1 text-sm text-muted">24-hour movement unavailable</p>}
                 {item.quote && <p className="mt-4 text-xs leading-5 text-muted">Tracking {item.quote.token_symbol} by {item.quote.provider}. Price and movement come from Jupiter&apos;s live Solana market data.</p>}
                 {item.quote?.liquidity_usd != null && <p className="mt-1 text-xs text-muted">Tracked market liquidity: <span className="tabular-nums">{compactUsd(item.quote.liquidity_usd)}</span></p>}
-                <Link href={`/app/asset/${item.asset}${item.symbol ? `?symbol=${encodeURIComponent(item.symbol)}` : ""}`} className="mt-5 inline-flex min-h-11 items-center rounded-full bg-action px-4 text-sm font-bold text-on-action">Review this stock</Link>
+                <div className="mt-5 flex flex-wrap gap-2">
+                  <Link href={`/app/asset/${item.asset}${item.symbol ? `?symbol=${encodeURIComponent(item.symbol)}` : ""}`} className="inline-flex min-h-11 items-center rounded-full bg-action px-4 text-sm font-bold text-on-action">Review this stock</Link>
+                  <button type="button" onClick={() => remove(item)} disabled={removing === `${item.asset}:${item.symbol ?? "asset"}`} className="min-h-11 rounded-full border border-field px-4 text-sm font-semibold hover:bg-tint disabled:cursor-wait disabled:opacity-60">{removing === `${item.asset}:${item.symbol ?? "asset"}` ? "Removing…" : "Remove"}</button>
+                </div>
               </li>
             ))}
           </ul>

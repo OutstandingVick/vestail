@@ -3,6 +3,7 @@ import { z } from "zod";
 
 import { api } from "@/lib/server/api";
 import { userFrom } from "@/lib/server/privy";
+import { readProfile } from "@/lib/server/profile";
 import { readUser, writeUser } from "@/lib/server/store";
 
 /** POST /api/watchlist { asset, symbol?, on } — add or remove an asset (or one ticker under it). */
@@ -15,6 +16,12 @@ export async function POST(request: Request) {
   if (!parsed.success) return NextResponse.json({ error: "Invalid watchlist change." }, { status: 400 });
   const { asset, symbol, on } = parsed.data;
   if (!(await api.assets()).some(a => a.id === asset)) return NextResponse.json({ error: "Unknown asset." }, { status: 400 });
+  if (symbol) {
+    const profile = await readProfile();
+    if (!profile) return NextResponse.json({ error: "Choose your country first." }, { status: 400 });
+    const board = await api.tokens(symbol.toUpperCase(), profile.country, profile.who).catch(() => null);
+    if (!board || board.asset !== asset) return NextResponse.json({ error: "That stock does not belong to this asset class." }, { status: 400 });
+  }
 
   const data = await readUser(userId);
   const same = (w: { asset: string; symbol?: string }) => w.asset === asset && (w.symbol ?? null) === (symbol ?? null);

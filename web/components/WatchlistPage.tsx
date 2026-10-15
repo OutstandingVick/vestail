@@ -12,6 +12,7 @@ interface Summary { items: WatchlistRow[]; errors: string[] }
 const usd = (value: number) => value.toLocaleString(undefined, { style: "currency", currency: "USD", minimumFractionDigits: value < 1 ? 4 : 2, maximumFractionDigits: value < 1 ? 6 : 2 });
 const movement = (value: number) => `${value > 0 ? "+" : ""}${value.toFixed(2)}%`;
 const compactUsd = (value: number) => new Intl.NumberFormat(undefined, { style: "currency", currency: "USD", notation: "compact", maximumFractionDigits: 1 }).format(value);
+const SORT_LABEL: Record<WatchSort, string> = { recent: "Recently added", gainers: "Gainers", decliners: "Decliners" };
 
 export function WatchlistPage({ countryName }: { countryName: string }) {
   const [summary, setSummary] = useState<Summary | null>(null);
@@ -81,7 +82,7 @@ export function WatchlistPage({ countryName }: { countryName: string }) {
             </div>
           </div>
           <div role="group" aria-label="Sort watched stocks" className="flex flex-wrap gap-2">
-            {(["recent", "gainers", "decliners"] as WatchSort[]).map(option => <button key={option} type="button" onClick={() => setSort(option)} aria-pressed={sort === option} className={`min-h-11 rounded-full border px-4 text-sm font-semibold capitalize focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emphasis ${sort === option ? "border-ink-strong bg-ink-strong text-page" : "border-line bg-surface hover:bg-tint"}`}>{option}</button>)}
+            {(["recent", "gainers", "decliners"] as WatchSort[]).map(option => <button key={option} type="button" onClick={() => setSort(option)} aria-pressed={sort === option} className={`min-h-11 rounded-full border px-4 text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emphasis ${sort === option ? "border-ink-strong bg-ink-strong text-page" : "border-line bg-surface hover:bg-tint"}`}>{SORT_LABEL[option]}</button>)}
           </div>
           <ul className="grid gap-4 md:grid-cols-2">
             {visible.map(item => (

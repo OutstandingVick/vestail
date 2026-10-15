@@ -179,7 +179,7 @@ export function Dashboard({ assets, countryName, who }: { assets: Asset[]; count
             </div>
           ) : <Empty>You don&apos;t hold any tokenised stocks Vestail tracks yet. <Link href="/app/discover?q=NVIDIA" className="text-emphasis underline">See what you can buy</Link>.</Empty>}
         </Card>
-        <Card title="Watchlist">
+        <Card title="Watchlist" aside={<Link href="/app/watchlist" className="text-xs font-semibold text-emphasis underline underline-offset-2">View all</Link>}>
           {data.watchlist.length ? (
             <ul className="flex flex-col gap-2">
               {data.watchlist.map(w => (
@@ -191,7 +191,7 @@ export function Dashboard({ assets, countryName, who }: { assets: Asset[]; count
                 </li>
               ))}
             </ul>
-          ) : <Empty>Nothing watched yet. Use “Watch” on any asset page.</Empty>}
+          ) : <Empty>Nothing watched yet. <Link href="/app/discover" className="font-semibold text-emphasis underline">Find stocks to watch</Link>.</Empty>}
         </Card>
       </div>
     </>

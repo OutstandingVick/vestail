@@ -591,7 +591,7 @@
   .showall:focus-visible { outline: 2px solid var(--purple); outline-offset: 3px; border-radius: 3px; }
   .board.country-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
   .country-card { position: relative; min-width: 0; }
-  .country-card-trigger { width: 100%; min-height: 150px; display: flex; align-items: center; justify-content: center; gap: 12px; border: 0; border-radius: 20px; background: var(--surface-2); color: var(--ink-3); padding: 24px; font: inherit; cursor: pointer; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 5%, transparent); transition: background-color 150ms var(--ease), color 150ms var(--ease), box-shadow 150ms var(--ease), scale 150ms var(--ease); }
+  .country-card-trigger { width: 100%; min-height: 150px; display: flex; align-items: center; justify-content: center; gap: 12px; border: 0; border-radius: 20px; background: var(--country-card); color: var(--ink-3); padding: 24px; font: inherit; cursor: pointer; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 5%, transparent); transition: background-color 150ms var(--ease), color 150ms var(--ease), box-shadow 150ms var(--ease), scale 150ms var(--ease); }
   .country-card-trigger:focus-visible, .country-card.is-open .country-card-trigger { background: var(--surface); color: var(--ink); box-shadow: var(--card-raised); }
   @media (hover: hover) { .country-card:hover .country-card-trigger { background: var(--surface); color: var(--ink); box-shadow: var(--card-raised); } }
   .country-card-trigger:focus-visible { outline: 2px solid var(--purple); outline-offset: 3px; }

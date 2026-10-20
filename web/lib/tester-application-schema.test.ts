@@ -20,3 +20,9 @@ test("requires every selection and contact field", () => {
   assert.equal(result.success, false);
   if (!result.success) assert.deepEqual(Object.keys(result.error.flatten().fieldErrors).sort(), ["country", "email", "experience", "relationship", "telegram", "xHandle"]);
 });
+
+test("accepts only a 32-byte base58 Solana public key", () => {
+  assert.equal(testerApplicationSchema.safeParse(valid).success, true);
+  assert.equal(testerApplicationSchema.safeParse({ ...valid, wallet: "not-a-wallet" }).success, false);
+  assert.equal(testerApplicationSchema.safeParse({ ...valid, wallet: "1111111111111111111111111111111" }).success, false);
+});

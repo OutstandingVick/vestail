@@ -579,47 +579,34 @@
   .country-showcase-copy .eyebrow { margin: 0 0 10px; color: var(--purple-ink); font-size: 12px; font-weight: 750; letter-spacing: .14em; text-transform: uppercase; }
   .country-showcase-copy h2 { margin: 0; font-family: var(--font-manrope); font-size: clamp(36px, 4.7vw, 68px); line-height: .98; letter-spacing: -.055em; text-wrap: balance; }
   .country-showcase-copy > p:last-child { max-width: 620px; margin: 18px 0 0; color: var(--ink-2); font-size: 17px; line-height: 1.55; text-wrap: pretty; }
-  .country-stage { position: relative; min-height: 430px; overflow: hidden; display: flex; align-items: end; border-radius: clamp(26px, 3vw, 46px); padding: clamp(22px, 4vw, 56px); isolation: isolate;
-    background: linear-gradient(90deg, rgb(13 13 15 / .88), rgb(13 13 15 / .32)), url("assets/atlantic-earth-globe.png") center 43% / cover no-repeat, #171720;
-    box-shadow: 0 30px 70px -42px rgb(13 13 15 / .55); }
-  .country-stage::after { content: ""; position: absolute; z-index: -1; inset: 0; background: linear-gradient(180deg, transparent 35%, rgb(13 13 15 / .45)); pointer-events: none; }
-  .country-feature { width: min(860px, 76%); display: grid; grid-template-columns: minmax(0, 1fr) minmax(180px, .32fr); overflow: hidden; border-radius: 26px; background: var(--surface); color: var(--ink); box-shadow: 0 24px 60px rgb(0 0 0 / .24), inset 0 0 0 1px rgb(13 13 15 / .08); }
-  .country-feature-main { min-width: 0; padding: clamp(24px, 3.5vw, 42px); }
-  .country-feature-heading { display: flex; align-items: center; gap: 16px; }
-  .country-feature-flag { font-size: 42px; line-height: 1; }
-  .country-feature-kicker { margin: 0 0 4px; color: var(--ink-3); font-size: 11px; font-weight: 750; letter-spacing: .12em; text-transform: uppercase; }
-  .country-feature h3 { margin: 0; font-family: var(--font-manrope); font-size: clamp(25px, 3vw, 38px); letter-spacing: -.035em; }
-  .country-feature-summary { margin: 23px 0 14px; color: var(--ink-2); font-size: 15px; line-height: 1.5; }
-  .country-assets { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
-  .country-assets li { border-radius: var(--r-pill); background: var(--lavender-surface); padding: 8px 12px; color: var(--ink); font-size: 13px; font-weight: 600; }
-  .country-assets-more { color: var(--ink-2) !important; }
-  .country-feature-stat { display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 4px; min-width: 0; background: var(--surface-2); padding: clamp(24px, 3vw, 38px); }
-  .country-feature-stat span { display: inline-flex; align-items: center; gap: 8px; color: var(--ink-2); font-size: 14px; }
-  .country-feature-stat span::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--yes); }
-  .country-feature-stat strong { font-family: var(--font-manrope); font-size: clamp(48px, 6vw, 76px); font-weight: 500; line-height: 1; letter-spacing: -.06em; }
-  .country-feature-stat small { color: var(--ink-3); font-size: 13px; line-height: 1.4; }
-  .country-grid-label { margin: 30px 0 12px; color: var(--ink-3); font-size: 11px; font-weight: 750; letter-spacing: .13em; text-transform: uppercase; }
+  .country-grid-label { margin: 0 0 12px; color: var(--ink-3); font-size: 11px; font-weight: 750; letter-spacing: .13em; text-transform: uppercase; }
   .board.country-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
-  .country-card { position: relative; display: flex; min-height: 150px; align-items: center; justify-content: center; gap: 12px; border: 0; border-radius: 20px; background: var(--surface-2); color: var(--ink-3); padding: 24px; font: inherit; cursor: pointer; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 5%, transparent); transition: background-color 150ms var(--ease), color 150ms var(--ease), box-shadow 150ms var(--ease), scale 150ms var(--ease); }
-  .country-card:focus-visible, .country-card[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: var(--card-raised); }
-  @media (hover: hover) { .country-card:hover { background: var(--surface); color: var(--ink); box-shadow: var(--card-raised); } }
-  .country-card:focus-visible { outline: 2px solid var(--purple); outline-offset: 3px; }
-  .country-card:active { scale: .96; }
-  .country-card .flag { width: auto; height: auto; border: 0; border-radius: 0; background: none; box-shadow: none; font-size: 31px; }
+  .country-card { position: relative; min-width: 0; }
+  .country-card-trigger { width: 100%; min-height: 150px; display: flex; align-items: center; justify-content: center; gap: 12px; border: 0; border-radius: 20px; background: var(--surface-2); color: var(--ink-3); padding: 24px; font: inherit; cursor: pointer; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 5%, transparent); transition: background-color 150ms var(--ease), color 150ms var(--ease), box-shadow 150ms var(--ease), scale 150ms var(--ease); }
+  .country-card-trigger:focus-visible, .country-card.is-open .country-card-trigger { background: var(--surface); color: var(--ink); box-shadow: var(--card-raised); }
+  @media (hover: hover) { .country-card:hover .country-card-trigger { background: var(--surface); color: var(--ink); box-shadow: var(--card-raised); } }
+  .country-card-trigger:focus-visible { outline: 2px solid var(--purple); outline-offset: 3px; }
+  .country-card-trigger:active { scale: .96; }
+  .country-card-trigger .flag { width: auto; height: auto; border: 0; border-radius: 0; background: none; box-shadow: none; font-size: 31px; }
   .country-card-name { font-family: var(--font-manrope); font-size: 18px; font-weight: 700; letter-spacing: -.02em; }
-  .country-empty { border-radius: 26px; background: var(--surface-2); padding: 40px; color: var(--ink-2); }
+  .country-popover { position: absolute; z-index: 12; inset-block-start: calc(100% - 18px); inset-inline-start: 50%; width: min(320px, calc(100vw - 40px)); visibility: hidden; opacity: 0; translate: -50% 8px; border-radius: 18px; background: var(--surface); color: var(--ink); padding: 18px; text-align: start; box-shadow: var(--card-hover); pointer-events: none; transition: opacity 120ms var(--ease), translate 120ms var(--ease), visibility 0s linear 120ms; }
+  .country-card-trigger:focus-visible + .country-popover, .country-card.is-open .country-popover { visibility: visible; opacity: 1; translate: -50% 0; pointer-events: auto; transition-delay: 0s; }
+  @media (hover: hover) { .country-card:hover .country-popover { visibility: visible; opacity: 1; translate: -50% 0; pointer-events: auto; transition-delay: 0s; } }
+  .country-popover-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+  .country-popover-head strong { font-family: var(--font-manrope); font-size: 22px; letter-spacing: -.03em; }
+  .country-popover-head span { color: var(--ink-2); font-size: 12px; white-space: nowrap; }
+  .country-popover p { margin: 8px 0 12px; color: var(--ink-2); font-size: 13px; line-height: 1.45; }
+  .country-popover-assets { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
+  .country-popover-assets li { border-radius: var(--r-pill); background: var(--lavender-surface); padding: 6px 9px; color: var(--ink); font-size: 11px; font-weight: 650; }
+  .country-popover-assets .more { color: var(--ink-2); }
+  .country-empty { grid-column: 1 / -1; border-radius: 20px; background: var(--surface-2); padding: 32px; color: var(--ink-2); }
   @media (max-width: 900px) {
     .country-showcase-head { align-items: flex-start; flex-direction: column; }
-    .country-feature { width: 92%; }
     .board.country-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   }
   @media (max-width: 640px) {
-    .country-stage { min-height: 520px; align-items: end; padding: 18px; background-position: 58% center; }
-    .country-feature { width: 100%; grid-template-columns: 1fr; }
-    .country-feature-stat { flex-direction: row; align-items: baseline; justify-content: flex-start; flex-wrap: wrap; }
-    .country-feature-stat small { width: 100%; }
     .board.country-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
-    .country-card { min-height: 124px; flex-direction: column; gap: 9px; padding: 18px 12px; text-align: center; }
+    .country-card-trigger { min-height: 124px; flex-direction: column; gap: 9px; padding: 18px 12px; text-align: center; }
     .country-card-name { font-size: 15px; }
   }
 
@@ -1248,10 +1235,6 @@
         <button role="radio" aria-checked="true" aria-selected="true" data-who="citizen">Citizens</button>
         <button role="radio" aria-checked="false" aria-selected="false" data-who="foreigner">Foreigners</button>
       </div>
-    </div>
-    <div class="trail" id="trail" aria-live="polite"></div>
-    <div class="country-stage">
-      <article class="country-feature" id="countryFeature" aria-live="polite"></article>
     </div>
     <p class="country-grid-label">Supported countries</p>
     <div class="board country-grid" id="rows"></div>
@@ -1884,10 +1867,8 @@ const hrefOf = v => v.tagged ? v.url : withRef(v.url);
    4. STATE + RENDER
    ============================================================ */
 const $ = id => document.getElementById(id);
-const rows = $("rows"), q = $("q"), clearBtn = $("clear"), trailEl = $("trail"), countryFeature = $("countryFeature");
+const rows = $("rows"), q = $("q"), clearBtn = $("clear");
 let view = "status", who = "citizen", selected = null; // selected = asset index chosen for the buy column
-let activeCountryCode = null;
-let currentBoardData = [];
 let firstPaint = true;
 
 // With no search, each card shows ten of its twenty assets, split so both groups appear:
@@ -2000,68 +1981,41 @@ async function render() {
 function paint({ res, data }) {
   clearBtn.classList.toggle("on", q.value.trim().length > 0);
 
-  // trail
-  trailEl.innerHTML = "";
-  if (res.trail.length) {
-    res.trail.forEach((t, i) => {
-      if (i) { const a = document.createElement("span"); a.className = "arrow"; a.textContent = "→"; trailEl.appendChild(a); }
-      const s = document.createElement("span"); s.className = "step"; s.style.animationDelay = (i * 60) + "ms"; s.textContent = t.label; trailEl.appendChild(s);
-    });
-    if (res.note) { const w = document.createElement("span"); w.className = "why"; w.textContent = res.note; trailEl.appendChild(w); }
-  } else if (q.value.trim()) {
-    trailEl.innerHTML = `<span class="why">Nothing matched. Try the class it belongs to, like <b>equities</b>, <b>land</b> or <b>crypto</b>, or a name like <b>Google</b>.</span>`;
-  } else {
-    trailEl.innerHTML = `<span class="why">Hover, focus, or tap a country to compare what ${who === "citizen" ? "citizens" : "foreigners"} can own.</span>`;
-  }
-
   rows.innerHTML = "";
-  currentBoardData = data;
   if (!res.assets.length || !data.length) {
-    countryFeature.innerHTML = `<div class="country-empty">No countries match this search yet. Try an asset class such as equities, land, or crypto.</div>`;
+    rows.innerHTML = `<div class="country-empty">No countries match this search yet. Try an asset class such as equities, land, or crypto.</div>`;
     return;
   }
 
-  const active = data.find(c => c.code === activeCountryCode) || data[0];
-  activeCountryCode = active.code;
   data.forEach((c, index) => {
-    const card = document.createElement("button");
+    const card = document.createElement("div");
     card.className = "country-card";
-    card.type = "button";
     card.dataset.country = c.code;
-    card.setAttribute("aria-controls", "countryFeature");
-    card.setAttribute("aria-pressed", String(c.code === activeCountryCode));
-    card.setAttribute("aria-label", `Show what ${who === "citizen" ? "citizens" : "foreigners"} can own in ${c.name}`);
     if (firstPaint) { card.classList.add("in"); card.style.animationDelay = (index * 35) + "ms"; }
-    card.innerHTML = `<span class="flag" aria-hidden="true">${esc(c.flag)}</span><span class="country-card-name">${esc(c.name)}</span>`;
+    card.innerHTML = countryCardHTML(c);
     rows.appendChild(card);
   });
-  showCountry(active.code);
   firstPaint = false;
 }
 
-function countryFeatureHTML(country) {
+function countryCardHTML(country) {
   const open = country.tiles.filter(tile => tile.s === 2);
   const names = open.map(tile => ASSETS[tile.i]);
-  const shown = names.slice(0, 8);
+  const shown = names.slice(0, 4);
   const profile = who === "citizen" ? "Citizens" : "Foreigners";
   const scope = country.tiles.length === ASSETS.length ? "supported asset classes" : "matching asset classes";
   const assets = shown.length
-    ? shown.map(name => `<li>${esc(name)}</li>`).join("") + (names.length > shown.length ? `<li class="country-assets-more">+${names.length - shown.length} more</li>` : "")
-    : `<li class="country-assets-more">No outright ownership results for this search</li>`;
-  return `<div class="country-feature-main">
-      <div class="country-feature-heading"><span class="country-feature-flag" aria-hidden="true">${esc(country.flag)}</span><div><p class="country-feature-kicker">Country access</p><h3>${esc(country.name)}</h3></div></div>
-      <p class="country-feature-summary">${profile} can own ${open.length} of ${country.tiles.length} ${scope} outright.</p>
-      <ul class="country-assets" aria-label="Assets ${profile.toLowerCase()} can own in ${esc(country.name)}">${assets}</ul>
-    </div>
-    <div class="country-feature-stat"><span>Can own</span><strong>${open.length}</strong><small>of ${country.tiles.length} ${scope}</small></div>`;
-}
-
-function showCountry(code) {
-  const country = currentBoardData.find(item => item.code === code);
-  if (!country) return;
-  activeCountryCode = code;
-  countryFeature.innerHTML = countryFeatureHTML(country);
-  rows.querySelectorAll(".country-card").forEach(card => card.setAttribute("aria-pressed", String(card.dataset.country === code)));
+    ? shown.map(name => `<li>${esc(name)}</li>`).join("") + (names.length > shown.length ? `<li class="more">+${names.length - shown.length} more</li>` : "")
+    : `<li class="more">No outright ownership results</li>`;
+  const popoverId = `country-info-${country.code.toLowerCase()}`;
+  return `<button class="country-card-trigger" type="button" aria-expanded="false" aria-describedby="${popoverId}" aria-label="Show what ${profile.toLowerCase()} can own in ${esc(country.name)}">
+      <span class="flag" aria-hidden="true">${esc(country.flag)}</span><span class="country-card-name">${esc(country.name)}</span>
+    </button>
+    <div class="country-popover" id="${popoverId}" role="tooltip">
+      <div class="country-popover-head"><strong>${open.length} can own</strong><span>of ${country.tiles.length}</span></div>
+      <p>${profile} can own these ${scope} outright.</p>
+      <ul class="country-popover-assets">${assets}</ul>
+    </div>`;
 }
 
 /* --- buy: record the press with the API, then follow its redirect --- */
@@ -2089,17 +2043,26 @@ async function buyViaApi(link) {
 }
 
 /* --- interactions --- */
-rows.addEventListener("pointerover", e => {
-  const card = e.target.closest(".country-card");
-  if (card && e.pointerType !== "touch") showCountry(card.dataset.country);
-});
-rows.addEventListener("focusin", e => {
-  const card = e.target.closest(".country-card");
-  if (card) showCountry(card.dataset.country);
-});
 rows.addEventListener("click", e => {
-  const card = e.target.closest(".country-card");
-  if (card) showCountry(card.dataset.country);
+  const trigger = e.target.closest(".country-card-trigger");
+  if (!trigger) return;
+  const card = trigger.closest(".country-card");
+  const opening = !card.classList.contains("is-open");
+  rows.querySelectorAll(".country-card.is-open").forEach(item => {
+    item.classList.remove("is-open");
+    item.querySelector(".country-card-trigger").setAttribute("aria-expanded", "false");
+  });
+  if (opening) {
+    card.classList.add("is-open");
+    trigger.setAttribute("aria-expanded", "true");
+  }
+});
+document.addEventListener("click", e => {
+  if (e.target.closest(".country-card")) return;
+  rows.querySelectorAll(".country-card.is-open").forEach(card => {
+    card.classList.remove("is-open");
+    card.querySelector(".country-card-trigger").setAttribute("aria-expanded", "false");
+  });
 });
 document.querySelectorAll("[role=tab]").forEach(b => b.addEventListener("click", () => {
   view = b.dataset.view; document.querySelectorAll("[role=tab]").forEach(x => x.setAttribute("aria-selected", x === b)); render();
@@ -2113,7 +2076,16 @@ document.querySelectorAll("[role=radio]").forEach(b => b.addEventListener("click
 q.addEventListener("input", () => { selected = null; render(); });
 clearBtn.addEventListener("click", () => { q.value = ""; selected = null; render(); q.focus(); });
 document.querySelectorAll(".chip").forEach(ch => ch.addEventListener("click", () => { q.value = ch.dataset.q; selected = null; render(); q.focus(); }));
-document.addEventListener("keydown", e => { if (e.key === "Escape" && selected !== null) { selected = null; render(); } });
+document.addEventListener("keydown", e => {
+  if (e.key !== "Escape") return;
+  const open = rows.querySelector(".country-card.is-open");
+  if (open) {
+    open.classList.remove("is-open");
+    const trigger = open.querySelector(".country-card-trigger");
+    trigger.setAttribute("aria-expanded", "false");
+    trigger.focus();
+  }
+});
 
 /* ---------- Coverage figures ---------- */
 /*

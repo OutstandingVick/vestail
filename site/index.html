@@ -574,11 +574,7 @@
 
   /* ---------- Country access showcase ---------- */
   .country-showcase { margin-block: clamp(34px, 5vw, 72px) clamp(72px, 9vw, 132px); }
-  .country-showcase-head { display: flex; align-items: end; justify-content: space-between; gap: 28px; margin-block-end: 26px; }
-  .country-showcase-copy { max-width: 720px; }
-  .country-showcase-copy .eyebrow { margin: 0 0 10px; color: var(--purple-ink); font-size: 12px; font-weight: 750; letter-spacing: .14em; text-transform: uppercase; }
-  .country-showcase-copy h2 { margin: 0; font-family: var(--font-manrope); font-size: clamp(36px, 4.7vw, 68px); line-height: .98; letter-spacing: -.055em; text-wrap: balance; }
-  .country-showcase-copy > p:last-child { max-width: 620px; margin: 18px 0 0; color: var(--ink-2); font-size: 17px; line-height: 1.55; text-wrap: pretty; }
+  .country-showcase-controls { display: flex; justify-content: flex-start; margin-block-end: 26px; }
   .country-grid-label { margin: 0 0 12px; color: var(--ink-3); font-size: 11px; font-weight: 750; letter-spacing: .13em; text-transform: uppercase; }
   .board.country-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
   .country-card { position: relative; min-width: 0; }
@@ -601,7 +597,6 @@
   .country-popover-assets .more { color: var(--ink-2); }
   .country-empty { grid-column: 1 / -1; border-radius: 20px; background: var(--surface-2); padding: 32px; color: var(--ink-2); }
   @media (max-width: 900px) {
-    .country-showcase-head { align-items: flex-start; flex-direction: column; }
     .board.country-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   }
   @media (max-width: 640px) {
@@ -1224,13 +1219,8 @@
     </div>
   </section>
 
-  <section class="country-showcase" id="board" aria-labelledby="country-showcase-title">
-    <div class="country-showcase-head">
-      <div class="country-showcase-copy">
-        <p class="eyebrow">Country access</p>
-        <h2 id="country-showcase-title">What ownership looks like around the world.</h2>
-        <p>Choose a buyer type, then hover, focus, or tap a country to see the assets its rules currently open.</p>
-      </div>
+  <section class="country-showcase" id="board" aria-label="Country access">
+    <div class="country-showcase-controls">
       <div class="seg" role="radiogroup" aria-label="Who is buying" data-pos="0">
         <button role="radio" aria-checked="true" aria-selected="true" data-who="citizen">Citizens</button>
         <button role="radio" aria-checked="false" aria-selected="false" data-who="foreigner">Foreigners</button>

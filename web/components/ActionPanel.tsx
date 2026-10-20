@@ -4,12 +4,10 @@ import { ArrowSquareOut } from "@phosphor-icons/react";
 import { useState } from "react";
 
 import { EvmSwapForm } from "@/components/EvmSwapForm";
-import { SimulationForm } from "@/components/SimulationForm";
 import { SwapForm } from "@/components/SwapForm";
 import { authedFetch, errorOf } from "@/lib/client";
 import type { Status, Token, Venue } from "@/lib/types";
 import { safeHttps } from "@/lib/safeUrl";
-import { TEST_MODE } from "@/lib/test-mode";
 
 /**
  * Where the buyer acts. The rules, enforced here and again on the server:

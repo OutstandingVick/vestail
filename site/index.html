@@ -2098,14 +2098,20 @@ document.addEventListener("click", e => {
   });
 });
 document.querySelectorAll("[role=tab]").forEach(b => b.addEventListener("click", () => {
-  view = b.dataset.view; document.querySelectorAll("[role=tab]").forEach(x => x.setAttribute("aria-selected", x === b)); render();
+  view = b.dataset.view;
+  b.closest(".seg").dataset.pos = view === "status" ? "0" : "1";
+  document.querySelectorAll("[role=tab]").forEach(x => x.setAttribute("aria-selected", x === b));
+  render();
 }));
 document.querySelectorAll("[role=radio]").forEach(b => b.addEventListener("click", () => {
-  who = b.dataset.who; document.querySelectorAll("[role=radio]").forEach(x => {
+  who = b.dataset.who;
+  b.closest(".seg").dataset.pos = who === "citizen" ? "0" : "1";
+  document.querySelectorAll("[role=radio]").forEach(x => {
     x.setAttribute("aria-selected", x === b);
     x.setAttribute("aria-checked", x === b);
   }); render();
 }));
+showAllBtn.addEventListener("click", () => { showAll = !showAll; render(); });
 q.addEventListener("input", () => { selected = null; render(); });
 clearBtn.addEventListener("click", () => { q.value = ""; selected = null; render(); q.focus(); });
 document.querySelectorAll(".chip").forEach(ch => ch.addEventListener("click", () => { q.value = ch.dataset.q; selected = null; render(); q.focus(); }));

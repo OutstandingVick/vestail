@@ -2182,6 +2182,35 @@ document.addEventListener("keydown", e => {
   }
 });
 
+const problemSteps = [...document.querySelectorAll("[data-problem-step]")];
+const problemImages = [...document.querySelectorAll("[data-problem-image]")];
+const problemCaption = $("problem-stage-caption");
+function activateProblem(step, moveFocus = false) {
+  const index = Number(step.dataset.problemStep);
+  problemSteps.forEach(item => {
+    const active = item === step;
+    item.classList.toggle("is-active", active);
+    item.setAttribute("aria-selected", String(active));
+    item.tabIndex = active ? 0 : -1;
+  });
+  problemImages.forEach((image, imageIndex) => image.classList.toggle("is-active", imageIndex === index));
+  problemCaption.textContent = step.dataset.caption;
+  if (moveFocus) step.focus();
+}
+problemSteps.forEach((step, index) => {
+  step.addEventListener("click", () => activateProblem(step));
+  step.addEventListener("pointerenter", () => activateProblem(step));
+  step.addEventListener("focus", () => activateProblem(step));
+  step.addEventListener("keydown", event => {
+    if (!["ArrowDown", "ArrowUp", "ArrowRight", "ArrowLeft", "Home", "End"].includes(event.key)) return;
+    event.preventDefault();
+    const next = event.key === "Home" ? 0 : event.key === "End" ? problemSteps.length - 1
+      : (index + (["ArrowDown", "ArrowRight"].includes(event.key) ? 1 : -1) + problemSteps.length) % problemSteps.length;
+    activateProblem(problemSteps[next], true);
+  });
+});
+if (problemSteps[0]) activateProblem(problemSteps[0]);
+
 /* ---------- Coverage figures ---------- */
 /*
  * These three count up on first paint and nothing else touches them. They are

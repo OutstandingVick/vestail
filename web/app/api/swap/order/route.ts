@@ -11,7 +11,6 @@ import { orderSigningReady, signOrder } from "@/lib/server/orderToken";
 import { userFrom } from "@/lib/server/privy";
 import { readProfile } from "@/lib/server/profile";
 import { inspectSwapTransaction, maxLamportsFor } from "@/lib/swap/inspect";
-import { testModeEnabled } from "@/lib/test-mode";
 
 /**
  * POST /api/swap/order { symbol, mint, amount, taker?, acknowledged? }

@@ -71,12 +71,6 @@ export function ActionPanel({ assetId, assetName, classStatus, venues, symbol, t
         </div>
       )}
 
-      {TEST_MODE && symbol && buyable.length > 0 && (
-        <section className="flex flex-col gap-2">
-          <h3 className="text-[13px] font-semibold tracking-wide text-muted uppercase">Test purchase</h3>
-          <SimulationForm symbol={symbol} tokens={buyable} acknowledged={ack} />
-        </section>
-      )}
       {!TEST_MODE && symbol && buyable.some(t => t.chain === "solana") && (
         <section className="flex flex-col gap-2">
           <h3 className="text-[13px] font-semibold tracking-wide text-muted uppercase">Solana · via Jupiter</h3>

@@ -5,6 +5,7 @@ import {
   ChartLineUp,
   ClockCounterClockwise,
   Compass,
+  Flask,
   Gear,
   List,
   Star,
@@ -21,12 +22,14 @@ import { useEffect, useState } from "react";
 
 import { Logo } from "@/components/Logo";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { TEST_MODE } from "@/lib/test-mode";
 import type { Country, Profile } from "@/lib/types";
 
 const NAV = [
   { href: "/app/discover", label: "Discover", icon: Compass },
   { href: "/app/portfolio", label: "Portfolio", icon: Wallet },
   { href: "/app/watchlist", label: "Watchlist", icon: Star },
+  ...(TEST_MODE ? [{ href: "/app/test-portfolio", label: "Test portfolio", icon: Flask }] : []),
   { href: "/app/markets", label: "Markets", icon: ChartLineUp },
   { href: "/app/activity", label: "Activity", icon: ClockCounterClockwise },
   { href: "/app/compare", label: "Compare", icon: ArrowsLeftRight },

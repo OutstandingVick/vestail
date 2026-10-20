@@ -77,7 +77,7 @@ export function ActionPanel({ assetId, assetName, classStatus, venues, symbol, t
           <SwapForm symbol={symbol} tokens={buyable.filter(t => t.chain === "solana")} acknowledged={ack} locked={swapLocked} />
         </section>
       )}
-      {!TEST_MODE && symbol && buyable.some(t => t.chain === "base" || t.chain === "robinhood") && (
+      {symbol && buyable.some(t => t.chain === "base" || t.chain === "robinhood") && (
         <section className="flex flex-col gap-2 border-t border-line pt-3.5">
           <h3 className="text-[13px] font-semibold tracking-wide text-muted uppercase">Base and Robinhood Chain · via KyberSwap</h3>
           <EvmSwapForm symbol={symbol} tokens={buyable.filter(t => t.chain === "base" || t.chain === "robinhood")} acknowledged={ack} locked={swapLocked} />

@@ -14,3 +14,9 @@ test("normalizes a valid tester application", () => {
   assert.equal(row.xHandle, "@tester");
   assert.equal(row.email, "tester@example.com");
 });
+
+test("requires every selection and contact field", () => {
+  const result = testerApplicationSchema.safeParse({ ...valid, xHandle: "", email: "bad", country: "", relationship: "", experience: "", telegram: "" });
+  assert.equal(result.success, false);
+  if (!result.success) assert.deepEqual(Object.keys(result.error.flatten().fieldErrors).sort(), ["country", "email", "experience", "relationship", "telegram", "xHandle"]);
+});

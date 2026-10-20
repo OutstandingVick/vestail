@@ -1894,6 +1894,7 @@ const $ = id => document.getElementById(id);
 const rows = $("rows"), q = $("q"), clearBtn = $("clear");
 let view = "status", who = "citizen", selected = null; // selected = asset index chosen for the buy column
 let firstPaint = true;
+const showAllBtn = $("showAll");
 
 // With no search, each card shows ten of its twenty assets, split so both groups appear:
 // its conditional and closed assets first, then open ones to fill the rest. A selected

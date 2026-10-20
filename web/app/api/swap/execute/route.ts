@@ -42,7 +42,6 @@ function fail(status: number, error: string) {
 }
 
 export async function POST(request: Request) {
-  if (testModeEnabled()) return fail(403, "Real swaps are disabled in test mode.");
   if (!(await userFrom(request))) return fail(401, "Sign in first.");
   if (!orderSigningReady()) {
     return fail(503, "Swaps are not configured on this server: VESTAIL_ORDER_SECRET is missing.");

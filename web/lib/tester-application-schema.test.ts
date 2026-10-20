@@ -26,3 +26,8 @@ test("accepts only a 32-byte base58 Solana public key", () => {
   assert.equal(testerApplicationSchema.safeParse({ ...valid, wallet: "not-a-wallet" }).success, false);
   assert.equal(testerApplicationSchema.safeParse({ ...valid, wallet: "1111111111111111111111111111111" }).success, false);
 });
+
+test("keeps tester motivation within 280 characters", () => {
+  assert.equal(testerApplicationSchema.safeParse({ ...valid, reason: "x".repeat(280) }).success, true);
+  assert.equal(testerApplicationSchema.safeParse({ ...valid, reason: "x".repeat(281) }).success, false);
+});

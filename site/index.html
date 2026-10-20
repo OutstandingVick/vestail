@@ -876,6 +876,12 @@
   .problem-step-icon svg { width: 28px; height: 28px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
   .problem-step.is-active .problem-step-icon { background: var(--orange); color: var(--problem-text); }
   .problem-step.is-active::before { content: ""; position: absolute; inset-block: 18px; inset-inline-start: -25px; width: 4px; border-radius: 4px; background: var(--orange); }
+  .problem-step-number { align-self: start; color: var(--problem-muted); font-size: 11px; font-weight: 750; letter-spacing: .12em; }
+  .problem .problem-step .qbody { min-width: 0; padding: 0; }
+  .problem .problem-step h3 { margin: 0; color: var(--problem-text); font-size: clamp(20px, 2vw, 27px); line-height: 1.12; }
+  .problem .problem-step .qsub { margin-top: 7px; color: var(--problem-muted); font-size: 15px; }
+  .problem .problem-step .qmeta { grid-column: 2 / -1; margin: 14px 0 0; padding: 0; gap: 8px 16px; }
+  .problem .problem-step .qmeta li { color: var(--problem-muted); font-size: 12px; }
 
   /* Verdict chip, shared with the how-it-works mock. */
   .vtag { display: inline-flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 600; color: var(--ink); white-space: nowrap; }

@@ -9,7 +9,6 @@ import { userFrom } from "@/lib/server/privy";
 import { readProfile } from "@/lib/server/profile";
 import { walletsOf } from "@/lib/server/wallets";
 import { inspectEvmBuy, KYBER_ROUTER } from "@/lib/swap/inspectEvm";
-import { testModeEnabled } from "@/lib/test-mode";
 
 /**
  * POST /api/evm/order { symbol, address, amountWei, taker?, acknowledged? }

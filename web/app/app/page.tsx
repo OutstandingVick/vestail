@@ -3,7 +3,7 @@
 import { Wallet } from "@phosphor-icons/react";
 import { useLogin, useLoginWithEmail, usePrivy } from "@privy-io/react-auth";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { Logo } from "@/components/Logo";
 import { authedFetch } from "@/lib/client";
@@ -32,6 +32,7 @@ export default function SignInPage() {
   const [accessVerified, setAccessVerified] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const accessCodeRef = useRef<HTMLInputElement>(null);
   const awaitingCode = state.status === "awaiting-code-input" || state.status === "submitting-code";
 
   useEffect(() => {
@@ -51,6 +52,10 @@ export default function SignInPage() {
 
   async function verifyEarlyAccess() {
     if (accessVerified) return true;
+    if (!accessCode.trim()) {
+      accessCodeRef.current?.focus();
+      throw new Error("Enter your early access code before signing up.");
+    }
     const response = await fetch("/api/early-access/verify", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -121,7 +126,7 @@ export default function SignInPage() {
             <form className="flex flex-col gap-3" onSubmit={e => { e.preventDefault(); run(beginEmailSignIn, mode === "signup" ? "That early access code is not valid." : "We couldn't send a code. Check the email and try again."); }}>
               {mode === "signup" && <>
                 <label htmlFor="access-code" className="text-sm font-semibold">Early access code</label>
-                <input id="access-code" type="text" required autoComplete="off" value={accessCode} onChange={e => { setAccessCode(e.target.value); setAccessVerified(false); }} placeholder="Enter your invitation code"
+                <input ref={accessCodeRef} id="access-code" type="text" required autoComplete="off" value={accessCode} onChange={e => { setAccessCode(e.target.value); setAccessVerified(false); setError(null); }} placeholder="Enter your invitation code"
                   className="min-h-12 rounded-field border-[1.5px] border-field bg-wash px-4 text-[16px]" />
               </>}
               <label htmlFor="email" className="text-sm font-semibold">Email</label>
@@ -152,7 +157,7 @@ export default function SignInPage() {
             <Wallet size={18} weight="regular" aria-hidden="true" />
             {mode === "signup" ? "Sign up with a wallet" : "Continue with a wallet"}
           </button>
-          <p className="mt-3 text-center text-xs text-muted">Phantom, Solflare, MetaMask, Rabby or Coinbase Wallet.</p>
+          <p className="mt-3 text-center text-xs text-muted">{mode === "signup" ? "Enter your early access code above, then connect Phantom, Solflare, MetaMask, Rabby or Coinbase Wallet." : "Phantom, Solflare, MetaMask, Rabby or Coinbase Wallet."}</p>
 
           {error && <p role="alert" className="mt-4 text-center text-sm text-cannot">{error}</p>}
         </section>

@@ -38,7 +38,6 @@ const Body = z.object({
 const fail = (status: number, error: string) => NextResponse.json({ error }, { status, headers: { "Cache-Control": "no-store" } });
 
 export async function POST(request: Request) {
-  if (testModeEnabled()) return fail(403, "Real swaps are disabled in test mode.");
   const userId = await userFrom(request);
   if (!userId) return fail(401, "Sign in first.");
   const profile = await readProfile();

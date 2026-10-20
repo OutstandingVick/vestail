@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 
 import { EarlyAccessShell } from "@/components/early-access/EarlyAccessShell";
 import { TesterApplicationForm } from "@/components/testers/TesterApplicationForm";
+import { TESTER_STEPS } from "@/lib/testers";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.vestail.fun"),
@@ -13,5 +14,5 @@ export const metadata: Metadata = {
 };
 
 export default function TestersPage() {
-  return <EarlyAccessShell><section className="mx-auto w-full max-w-[760px] px-4 pt-5 pb-8 sm:px-8 sm:pt-7"><div className="mb-8 text-center"><p className="text-xs font-bold uppercase tracking-[.16em] text-action-ink">Vestail testing programme</p><h1 className="mt-3 text-[clamp(2.5rem,7vw,4.5rem)] leading-[1.02] font-extrabold tracking-[-.045em] text-ink-strong text-wrap-balance">Call for Testers</h1><p className="mx-auto mt-4 max-w-[520px] text-lg leading-7 text-muted text-wrap-pretty">Limited spots. The first 10 get funded.</p></div><TesterApplicationForm /></section></EarlyAccessShell>;
+  return <EarlyAccessShell><section className="mx-auto w-full max-w-[760px] px-4 pt-5 pb-8 sm:px-8 sm:pt-7"><div className="mb-8 text-center"><p className="text-xs font-bold uppercase tracking-[.16em] text-action-ink">Vestail testing programme</p><h1 className="mt-3 text-[clamp(2.5rem,7vw,4.5rem)] leading-[1.02] font-extrabold tracking-[-.045em] text-ink-strong text-wrap-balance">Call for Testers</h1><p className="mx-auto mt-4 max-w-[520px] text-lg leading-7 text-muted text-wrap-pretty">Limited spots. The first 10 get funded.</p></div><ol className="mb-8 grid gap-3 sm:grid-cols-2">{TESTER_STEPS.map(([title, detail], index) => <li key={title} className="flex gap-3 rounded-card border border-line bg-surface/75 p-4"><span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-action font-bold text-on-action">{index + 1}</span><span><strong className="block">{title}</strong><span className="mt-1 block text-sm leading-5 text-muted">{detail}</span></span></li>)}</ol><TesterApplicationForm /></section></EarlyAccessShell>;
 }

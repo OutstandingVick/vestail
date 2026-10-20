@@ -26,6 +26,19 @@ export function TesterApplicationForm() {
       setErrors(Object.fromEntries(Object.entries(fields).map(([key, messages]) => [key, messages?.[0] ?? "Check this field."])));
       return;
     }
+    setSubmitting(true); setErrors({});
+    try {
+      const response = await fetch("/api/testers", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(parsed.data) });
+      const body = await response.json().catch(() => null);
+      if (!response.ok) {
+        const fields = body?.fields ? Object.fromEntries(Object.entries(body.fields).map(([key, messages]) => [key, (messages as string[])?.[0]])) : {};
+        setErrors({ ...fields, form: body?.error ?? "Please try again." });
+        return;
+      }
+      setComplete(true);
+    } catch {
+      setErrors({ form: "We couldn't reach Vestail. Check your connection and try again." });
+    } finally { setSubmitting(false); }
   }
 
   return (
@@ -44,7 +57,8 @@ export function TesterApplicationForm() {
         </div>
         <TextField label="Telegram username" name="telegram" value={form.telegram} error={errors.telegram} required autoComplete="off" onChange={value => set("telegram", value)} />
         <div className="absolute -left-[10000px]" aria-hidden="true"><label htmlFor="tester-website">Website</label><input id="tester-website" tabIndex={-1} autoComplete="off" value={form.website} onChange={event => set("website", event.target.value)} /></div>
-        <button type="submit" disabled={submitting || complete} className="min-h-13 w-full rounded-full bg-action px-5 font-bold text-on-action disabled:opacity-65">Apply to test Vestail</button>
+        {errors.form && <p role="alert" className="rounded-field border border-cannot px-4 py-3 text-sm text-cannot">{errors.form}</p>}
+        <button type="submit" disabled={submitting || complete} className="min-h-13 w-full rounded-full bg-action px-5 font-bold text-on-action disabled:cursor-wait disabled:opacity-65">{submitting ? "Sending application…" : "Apply to test Vestail"}</button>
       </div>
     </form>
   );

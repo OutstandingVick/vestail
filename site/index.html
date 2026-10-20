@@ -613,6 +613,11 @@
     .board.country-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   }
   @media (max-width: 640px) {
+    .country-showcase-controls { align-items: flex-start; flex-direction: column; }
+    .legend { justify-content: flex-start; }
+    .country-grid-head { align-items: flex-start; flex-wrap: wrap; gap: 8px 14px; }
+    .country-grid-label { flex-basis: 100%; }
+    .showall { margin-inline-start: 0; }
     .board.country-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
     .country-card-trigger { min-height: 124px; flex-direction: column; gap: 9px; padding: 18px 12px; text-align: center; }
     .country-card-name { font-size: 15px; }

@@ -15,3 +15,8 @@ export function decodeBase58(value: string): Uint8Array | null {
   for (let index = 0; value[index] === "1" && index < value.length - 1; index += 1) bytes.push(0);
   return Uint8Array.from(bytes.reverse());
 }
+
+export function isSolanaPublicKey(value: string): boolean {
+  const decoded = decodeBase58(value.trim());
+  return decoded?.length === 32;
+}

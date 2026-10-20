@@ -87,7 +87,7 @@ export function ActionPanel({ assetId, assetName, classStatus, venues, symbol, t
         <p className="text-sm text-muted">None of the onchain versions can be bought from your country right now.</p>
       )}
 
-      {!TEST_MODE && onlineVenues.length > 0 && (
+      {onlineVenues.length > 0 && (
         <section className={`flex flex-col gap-2 ${symbol ? "border-t border-line pt-3.5" : ""}`}>
           <h3 className="text-[13px] font-semibold tracking-wide text-muted uppercase">Brokers and venues</h3>
           {onlineVenues.map(v => (

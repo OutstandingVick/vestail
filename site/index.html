@@ -1282,14 +1282,13 @@
         <p class="problem-stage-caption" id="problem-stage-caption">A price is visible. The ownership rule is not.</p>
       </div>
       <div class="problem-steps" role="tablist" aria-label="Common ownership problems">
-      <article class="qcard tilt-l">
+      <button class="qcard problem-step is-active" type="button" role="tab" aria-selected="true" aria-controls="problem-stage-caption" data-problem-step="0" data-caption="A price is visible. The ownership rule is not.">
         <!--
           Lazy, and sized. These three sit far below the fold but were fetched
           eagerly: 870KB of JPEG on the critical path of a page whose hero is
           text, which is most of a six-second mobile LCP. The intrinsic size is
           declared so the browser can reserve the box before the bytes arrive.
         -->
-        <div class="qmedia qmedia-human"><img src="assets/problem/trading-app.jpg" width="720" height="1000" loading="lazy" decoding="async" alt="A man holding a phone with a trading application open"></div>
         <div class="qbody">
           <h3>Apps that show you a price, but never the rule</h3>
           <p class="qsub">Every listing, every app</p>
@@ -1298,7 +1297,7 @@
             <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12S6 5.8 12 5.8 21.5 12 21.5 12 18 18.2 12 18.2 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.6"/><path d="M4.5 19.5 19.5 4.5"/></svg>Rule hidden</li>
           </ul>
         </div>
-      </article>
+      </button>
       <article class="qcard lead-card">
         <div class="qmedia qmedia-portfolio"><img src="assets/problem/crypto-portfolio.jpg" width="666" height="1000" loading="lazy" decoding="async" alt="A close-up phone interface showing a detailed cryptocurrency portfolio"></div>
         <div class="qbody">

@@ -54,3 +54,24 @@ async function kvCommand<T>(url: string, token: string, command: string[]): Prom
 async function reserveKey(url: string, token: string, key: string): Promise<boolean> {
   return (await kvCommand<"OK" | null>(url, token, ["SET", key, "1", "NX"])) === "OK";
 }
+
+export async function saveTesterApplication(application: TesterApplication): Promise<SaveTesterResult> {
+  const url = process.env.KV_REST_API_URL;
+  const token = process.env.KV_REST_API_TOKEN;
+  if (!url || !token) return saveLocal(application);
+
+  const email = emailKey(application.email);
+  const wallet = walletKey(application.wallet);
+  if (!(await reserveKey(url, token, email))) return "duplicate_email";
+  if (!(await reserveKey(url, token, wallet))) {
+    await kvCommand(url, token, ["DEL", email]);
+    return "duplicate_wallet";
+  }
+  try {
+    await kvCommand(url, token, ["SET", rowKey(application), JSON.stringify(application)]);
+    return "created";
+  } catch (error) {
+    await Promise.allSettled([kvCommand(url, token, ["DEL", email]), kvCommand(url, token, ["DEL", wallet])]);
+    throw error;
+  }
+}

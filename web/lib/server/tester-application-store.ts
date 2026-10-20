@@ -21,3 +21,7 @@ async function readLocal(): Promise<TesterApplication[]> {
     catch { return []; }
   });
 }
+
+function localDuplicateEmail(rows: TesterApplication[], email: string): boolean {
+  return rows.some(row => row.email.toLowerCase() === email.toLowerCase());
+}

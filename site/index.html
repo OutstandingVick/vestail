@@ -2005,6 +2005,12 @@ async function render() {
 
 function paint({ res, data }) {
   clearBtn.classList.toggle("on", q.value.trim().length > 0);
+  const fullCoverage = res.assets.length === ASSETS.length;
+  $("countryGridLabel").textContent = fullCoverage
+    ? `${showAll ? "20" : "10"} assets per country, restrictions included · counts cover all 20`
+    : `${res.assets.length} matching asset ${res.assets.length === 1 ? "class" : "classes"}`;
+  $("hWho").textContent = who === "citizen" ? "Citizens" : "Foreigners";
+  showAllBtn.hidden = !fullCoverage;
 
   rows.innerHTML = "";
   if (!res.assets.length || !data.length) {

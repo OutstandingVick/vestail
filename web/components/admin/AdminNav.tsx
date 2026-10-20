@@ -1,12 +1,13 @@
 "use client";
 
-import { ChartDonut, Gauge, Heartbeat, Pulse, Ticket, Users } from "@phosphor-icons/react";
+import { ChartDonut, Gauge, Heartbeat, Pulse, Ticket, UserFocus, Users } from "@phosphor-icons/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const items = [
   { href: "/admin", label: "Overview", icon: Gauge },
   { href: "/admin/users", label: "Users", icon: Users },
+  { href: "/admin/testers", label: "Testers", icon: UserFocus },
   { href: "/admin/invites", label: "Invites", icon: Ticket },
   { href: "/admin/activity", label: "Activity", icon: Pulse },
   { href: "/admin/coverage", label: "Coverage", icon: ChartDonut },

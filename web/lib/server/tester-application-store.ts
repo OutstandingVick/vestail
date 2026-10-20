@@ -75,3 +75,30 @@ export async function saveTesterApplication(application: TesterApplication): Pro
     throw error;
   }
 }
+
+/** Read applications for the private owner dashboard. Never expose this from a public route. */
+export async function listTesterApplications(limit = 500): Promise<TesterApplication[]> {
+  const url = process.env.KV_REST_API_URL;
+  const token = process.env.KV_REST_API_TOKEN;
+  if (!url || !token) {
+    return (await readLocal())
+      .sort((a, b) => b.created_at.localeCompare(a.created_at))
+      .slice(0, limit);
+  }
+
+  const keys: string[] = [];
+  let cursor = "0";
+  do {
+    const result = await kvCommand<[string, string[]]>(url, token, [
+      "SCAN", cursor, "MATCH", "vestail:tester_applications:row:*", "COUNT", "100",
+    ]);
+    cursor = String(result[0]);
+    keys.push(...result[1]);
+  } while (cursor !== "0" && keys.length < limit);
+
+  const rows = await Promise.all(keys.slice(0, limit).map(key => kvCommand<string | null>(url, token, ["GET", key])));
+  return rows.flatMap(value => {
+    try { return value ? [JSON.parse(value) as TesterApplication] : []; }
+    catch { return []; }
+  }).sort((a, b) => b.created_at.localeCompare(a.created_at));
+}

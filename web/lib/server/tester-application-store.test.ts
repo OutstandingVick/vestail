@@ -5,7 +5,7 @@ import path from "node:path";
 import test from "node:test";
 
 import type { TesterApplication } from "../tester-application-schema.ts";
-import { saveTesterApplication } from "./tester-application-store.ts";
+import { listTesterApplications, saveTesterApplication } from "./tester-application-store.ts";
 
 const row: TesterApplication = {
   xHandle: "@tester", email: "tester@example.com", country: "Nigeria", relationship: "Citizen",
@@ -41,5 +41,18 @@ test("rejects a wallet already used by another applicant", async () => {
   try {
     assert.equal(await saveTesterApplication(row), "created");
     assert.equal(await saveTesterApplication({ ...row, email: "another@example.com" }), "duplicate_wallet");
+  } finally { delete process.env.VESTAIL_TESTER_APPLICATIONS_FILE; await rm(directory, { recursive: true, force: true }); }
+});
+
+test("lists the newest tester applications for the owner dashboard", async () => {
+  const directory = await mkdtemp(path.join(os.tmpdir(), "vestail-testers-"));
+  process.env.VESTAIL_TESTER_APPLICATIONS_FILE = path.join(directory, "applications.jsonl");
+  delete process.env.KV_REST_API_URL; delete process.env.KV_REST_API_TOKEN;
+  try {
+    await saveTesterApplication(row);
+    await saveTesterApplication({ ...row, email: "later@example.com", wallet: "Vote111111111111111111111111111111111111111", created_at: "2026-10-21T12:00:00.000Z" });
+    const applications = await listTesterApplications();
+    assert.equal(applications.length, 2);
+    assert.equal(applications[0].email, "later@example.com");
   } finally { delete process.env.VESTAIL_TESTER_APPLICATIONS_FILE; await rm(directory, { recursive: true, force: true }); }
 });

@@ -41,6 +41,14 @@ export function TesterApplicationForm() {
     } finally { setSubmitting(false); }
   }
 
+  if (complete) return (
+    <section role="status" className="rounded-panel border border-line bg-surface/90 p-8 text-center shadow-[0_30px_80px_-30px_rgba(124,92,255,0.35)] backdrop-blur">
+      <p className="text-xs font-bold uppercase tracking-[.16em] text-action-ink">Application received</p>
+      <h2 className="mt-3 text-3xl font-extrabold tracking-[-.03em]">Thanks!</h2>
+      <p className="mx-auto mt-3 max-w-md leading-7 text-muted">We&apos;ll review applications and message selected testers on Telegram.</p>
+    </section>
+  );
+
   return (
     <form onSubmit={submit} noValidate className="rounded-panel border border-line bg-surface/90 p-6 shadow-[0_30px_80px_-30px_rgba(124,92,255,0.35)] backdrop-blur sm:p-8">
       <div className="space-y-6">

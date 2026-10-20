@@ -13,8 +13,8 @@ const ISSUER: Record<string, string> = {
 const usd = (value: number) => value.toLocaleString(undefined, { style: "currency", currency: "USD", maximumFractionDigits: 2 });
 
 /** A price-backed rehearsal that never requests, signs, records, or sends a transaction. */
-export function SimulationForm({ symbol, tokens, acknowledged, locked }: {
-  symbol: string; tokens: Token[]; acknowledged: boolean; locked: boolean;
+export function SimulationForm({ symbol, tokens, acknowledged }: {
+  symbol: string; tokens: Token[]; acknowledged: boolean;
 }) {
   const [address, setAddress] = useState(tokens[0]?.address ?? "");
   const [amount, setAmount] = useState("100");
@@ -22,6 +22,7 @@ export function SimulationForm({ symbol, tokens, acknowledged, locked }: {
   const [error, setError] = useState<string | null>(null);
   const [confirmation, setConfirmation] = useState<SimulationQuote | null>(null);
   const token = tokens.find(item => item.address === address);
+  const locked = token?.status === "conditional" && !acknowledged;
 
   async function simulate() {
     setError(null);

@@ -4,10 +4,12 @@ import { ArrowSquareOut } from "@phosphor-icons/react";
 import { useState } from "react";
 
 import { EvmSwapForm } from "@/components/EvmSwapForm";
+import { SimulationForm } from "@/components/SimulationForm";
 import { SwapForm } from "@/components/SwapForm";
 import { authedFetch, errorOf } from "@/lib/client";
 import type { Status, Token, Venue } from "@/lib/types";
 import { safeHttps } from "@/lib/safeUrl";
+import { TEST_MODE } from "@/lib/test-mode";
 
 /**
  * Where the buyer acts. The rules, enforced here and again on the server:
@@ -69,13 +71,19 @@ export function ActionPanel({ assetId, assetName, classStatus, venues, symbol, t
         </div>
       )}
 
-      {symbol && buyable.some(t => t.chain === "solana") && (
+      {TEST_MODE && symbol && buyable.length > 0 && (
+        <section className="flex flex-col gap-2">
+          <h3 className="text-[13px] font-semibold tracking-wide text-muted uppercase">Test purchase</h3>
+          <SimulationForm symbol={symbol} tokens={buyable} acknowledged={ack} />
+        </section>
+      )}
+      {!TEST_MODE && symbol && buyable.some(t => t.chain === "solana") && (
         <section className="flex flex-col gap-2">
           <h3 className="text-[13px] font-semibold tracking-wide text-muted uppercase">Solana · via Jupiter</h3>
           <SwapForm symbol={symbol} tokens={buyable.filter(t => t.chain === "solana")} acknowledged={ack} locked={swapLocked} />
         </section>
       )}
-      {symbol && buyable.some(t => t.chain === "base" || t.chain === "robinhood") && (
+      {!TEST_MODE && symbol && buyable.some(t => t.chain === "base" || t.chain === "robinhood") && (
         <section className="flex flex-col gap-2 border-t border-line pt-3.5">
           <h3 className="text-[13px] font-semibold tracking-wide text-muted uppercase">Base and Robinhood Chain · via KyberSwap</h3>
           <EvmSwapForm symbol={symbol} tokens={buyable.filter(t => t.chain === "base" || t.chain === "robinhood")} acknowledged={ack} locked={swapLocked} />
@@ -85,7 +93,7 @@ export function ActionPanel({ assetId, assetName, classStatus, venues, symbol, t
         <p className="text-sm text-muted">None of the onchain versions can be bought from your country right now.</p>
       )}
 
-      {onlineVenues.length > 0 && (
+      {!TEST_MODE && onlineVenues.length > 0 && (
         <section className={`flex flex-col gap-2 ${symbol ? "border-t border-line pt-3.5" : ""}`}>
           <h3 className="text-[13px] font-semibold tracking-wide text-muted uppercase">Brokers and venues</h3>
           {onlineVenues.map(v => (
@@ -103,7 +111,7 @@ export function ActionPanel({ assetId, assetName, classStatus, venues, symbol, t
       )}
 
       {error && <p role="alert" className="text-sm text-cannot">{error}</p>}
-      <p className="text-xs text-muted">Every Buy is recorded and tagged ref=vestail. The server refuses it if the acknowledgement is missing.</p>
+      <p className="text-xs text-muted">{TEST_MODE ? "Test purchases stay in this browser. Vestail sends no transaction and records no purchase." : "Every Buy is recorded and tagged ref=vestail. The server refuses it if the acknowledgement is missing."}</p>
     </aside>
   );
 }

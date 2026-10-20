@@ -576,6 +576,12 @@
   .country-showcase { margin-block: clamp(34px, 5vw, 72px) clamp(72px, 9vw, 132px); }
   .country-showcase-controls { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-block-end: 14px; }
   .country-control-groups { display: flex; flex-wrap: wrap; gap: 10px; }
+  .legend { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 6px 16px; color: var(--ink-2); font-size: 12px; }
+  .legend span { display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; }
+  .sw { width: 9px; height: 9px; display: inline-block; border-radius: 50%; }
+  .sw.yes { background: var(--yes); }
+  .sw.cond { background: var(--cond); }
+  .sw.no { background: var(--no); background-image: repeating-linear-gradient(135deg, var(--no-hatch) 0 2px, transparent 2px 4px); }
   .country-grid-label { margin: 0 0 12px; color: var(--ink-3); font-size: 11px; font-weight: 750; letter-spacing: .13em; text-transform: uppercase; }
   .board.country-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
   .country-card { position: relative; min-width: 0; }

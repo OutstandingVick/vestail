@@ -2011,6 +2011,8 @@ function paint({ res, data }) {
     : `${res.assets.length} matching asset ${res.assets.length === 1 ? "class" : "classes"}`;
   $("hWho").textContent = who === "citizen" ? "Citizens" : "Foreigners";
   showAllBtn.hidden = !fullCoverage;
+  showAllBtn.textContent = showAll ? "Show compact view" : "Show all 20";
+  showAllBtn.setAttribute("aria-pressed", String(showAll));
 
   rows.innerHTML = "";
   if (!res.assets.length || !data.length) {
@@ -2032,7 +2034,7 @@ function paint({ res, data }) {
 function countryCardHTML(country) {
   const open = country.tiles.filter(tile => tile.s === 2);
   const names = open.map(tile => ASSETS[tile.i]);
-  const shown = names.slice(0, 4);
+  const shown = names.slice(0, showAll ? names.length : 4);
   const profile = who === "citizen" ? "Citizens" : "Foreigners";
   const scope = country.tiles.length === ASSETS.length ? "supported asset classes" : "matching asset classes";
   const assets = shown.length

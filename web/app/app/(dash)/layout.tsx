@@ -3,7 +3,6 @@ import { redirect } from "next/navigation";
 import { AppFooter } from "@/components/AppFooter";
 import { AppGate } from "@/components/AppGate";
 import { Sidebar } from "@/components/Sidebar";
-import { TestModeBanner } from "@/components/TestModeBanner";
 import { api } from "@/lib/server/api";
 import { readProfile } from "@/lib/server/profile";
 

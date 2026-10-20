@@ -1,7 +1,7 @@
 import "server-only";
 
 import { createHash } from "node:crypto";
-import { readFile } from "node:fs/promises";
+import { appendFile, mkdir, readFile } from "node:fs/promises";
 import path from "node:path";
 
 import type { TesterApplication } from "@/lib/tester-application-schema";
@@ -28,4 +28,14 @@ function localDuplicateEmail(rows: TesterApplication[], email: string): boolean 
 
 function localDuplicateWallet(rows: TesterApplication[], wallet: string): boolean {
   return rows.some(row => row.wallet === wallet);
+}
+
+async function saveLocal(application: TesterApplication): Promise<SaveTesterResult> {
+  const rows = await readLocal();
+  if (localDuplicateEmail(rows, application.email)) return "duplicate_email";
+  if (localDuplicateWallet(rows, application.wallet)) return "duplicate_wallet";
+  const file = localFile();
+  await mkdir(path.dirname(file), { recursive: true });
+  await appendFile(file, `${JSON.stringify(application)}\n`, { encoding: "utf8", mode: 0o600 });
+  return "created";
 }

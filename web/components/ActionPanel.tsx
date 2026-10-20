@@ -105,7 +105,7 @@ export function ActionPanel({ assetId, assetName, classStatus, venues, symbol, t
       )}
 
       {error && <p role="alert" className="text-sm text-cannot">{error}</p>}
-      <p className="text-xs text-muted">{TEST_MODE ? "Test purchases stay in this browser. Vestail sends no transaction and records no purchase." : "Every Buy is recorded and tagged ref=vestail. The server refuses it if the acknowledgement is missing."}</p>
+      <p className="text-xs text-muted">Every Buy is recorded and tagged ref=vestail. The server refuses it if the acknowledgement is missing.</p>
     </aside>
   );
 }

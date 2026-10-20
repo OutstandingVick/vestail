@@ -868,6 +868,7 @@
   .problem-stage-frame { position: relative; overflow: hidden; aspect-ratio: 4 / 4.5; border-radius: clamp(28px, 4vw, 52px); background: linear-gradient(145deg, #ff7d47, #ffd8c7); box-shadow: inset 0 0 0 1px rgb(255 255 255 / .16), 0 40px 100px -48px rgb(0 0 0 / .9); }
   .problem-stage-image { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; scale: 1.04; transition: opacity 320ms var(--ease), scale 600ms var(--ease); }
   .problem-stage-image.is-active { opacity: 1; scale: 1; }
+  .problem-stage-caption { min-height: 1.5em; margin: 18px 4px 0; color: var(--problem-muted); font-size: 14px; line-height: 1.5; }
 
   /* Verdict chip, shared with the how-it-works mock. */
   .vtag { display: inline-flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 600; color: var(--ink); white-space: nowrap; }

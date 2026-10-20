@@ -12,4 +12,6 @@ export const testerApplicationSchema = z.object({
   wallet: z.string().trim().refine(isSolanaPublicKey, "Enter a valid Solana wallet address."),
   experience: z.enum(CRYPTO_EXPERIENCE, { message: "Choose your crypto experience." }),
   reason: z.string().trim().max(280, "Keep this to 280 characters or fewer.").optional().default(""),
+  telegram: z.string().trim().min(1, "Enter your Telegram username.").max(50, "Keep your Telegram username to 50 characters or fewer."),
+  website: z.string().max(0).optional().default(""),
 });

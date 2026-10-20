@@ -39,3 +39,18 @@ async function saveLocal(application: TesterApplication): Promise<SaveTesterResu
   await appendFile(file, `${JSON.stringify(application)}\n`, { encoding: "utf8", mode: 0o600 });
   return "created";
 }
+
+async function kvCommand<T>(url: string, token: string, command: string[]): Promise<T> {
+  const response = await fetch(url, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+    body: JSON.stringify(command),
+    cache: "no-store",
+  });
+  if (!response.ok) throw new Error("Tester application storage is unavailable.");
+  return ((await response.json()) as { result: T }).result;
+}
+
+async function reserveKey(url: string, token: string, key: string): Promise<boolean> {
+  return (await kvCommand<"OK" | null>(url, token, ["SET", key, "1", "NX"])) === "OK";
+}

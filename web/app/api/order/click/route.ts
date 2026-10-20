@@ -4,7 +4,6 @@ import { z } from "zod";
 import { api, ApiError } from "@/lib/server/api";
 import { userFrom } from "@/lib/server/privy";
 import { readProfile } from "@/lib/server/profile";
-import { testModeEnabled } from "@/lib/test-mode";
 
 /**
  * POST /api/order/click { asset, venue, acknowledged } — a Buy press on a

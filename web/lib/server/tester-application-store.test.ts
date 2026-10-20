@@ -23,3 +23,13 @@ test("stores a pending tester application without extra fields", async () => {
     assert.deepEqual(stored, row);
   } finally { delete process.env.VESTAIL_TESTER_APPLICATIONS_FILE; await rm(directory, { recursive: true, force: true }); }
 });
+
+test("rejects a duplicate email case-insensitively", async () => {
+  const directory = await mkdtemp(path.join(os.tmpdir(), "vestail-testers-"));
+  process.env.VESTAIL_TESTER_APPLICATIONS_FILE = path.join(directory, "applications.jsonl");
+  delete process.env.KV_REST_API_URL; delete process.env.KV_REST_API_TOKEN;
+  try {
+    assert.equal(await saveTesterApplication(row), "created");
+    assert.equal(await saveTesterApplication({ ...row, email: "TESTER@example.com", wallet: "Vote111111111111111111111111111111111111111" }), "duplicate_email");
+  } finally { delete process.env.VESTAIL_TESTER_APPLICATIONS_FILE; await rm(directory, { recursive: true, force: true }); }
+});

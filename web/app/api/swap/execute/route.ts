@@ -4,6 +4,7 @@ import { z } from "zod";
 import { executeOrder } from "@/lib/server/jupiterSwap";
 import { orderSigningReady, verifyOrder } from "@/lib/server/orderToken";
 import { userFrom } from "@/lib/server/privy";
+import { testModeEnabled } from "@/lib/test-mode";
 
 
 /**
@@ -41,6 +42,7 @@ function fail(status: number, error: string) {
 }
 
 export async function POST(request: Request) {
+  if (testModeEnabled()) return fail(403, "Real swaps are disabled in test mode.");
   if (!(await userFrom(request))) return fail(401, "Sign in first.");
   if (!orderSigningReady()) {
     return fail(503, "Swaps are not configured on this server: VESTAIL_ORDER_SECRET is missing.");

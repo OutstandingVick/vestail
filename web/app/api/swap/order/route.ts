@@ -11,6 +11,7 @@ import { orderSigningReady, signOrder } from "@/lib/server/orderToken";
 import { userFrom } from "@/lib/server/privy";
 import { readProfile } from "@/lib/server/profile";
 import { inspectSwapTransaction, maxLamportsFor } from "@/lib/swap/inspect";
+import { testModeEnabled } from "@/lib/test-mode";
 
 /**
  * POST /api/swap/order { symbol, mint, amount, taker?, acknowledged? }
@@ -48,6 +49,7 @@ const fail = (status: number, error: string, extra: object = {}) =>
   NextResponse.json({ error, ...extra }, { status, headers: { "Cache-Control": "no-store" } });
 
 export async function POST(request: Request) {
+  if (testModeEnabled()) return fail(403, "Real swaps are disabled in test mode.");
   const userId = await userFrom(request);
   if (!userId) return fail(401, "Sign in first.");
   const profile = await readProfile();

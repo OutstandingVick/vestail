@@ -9,6 +9,7 @@ import { userFrom } from "@/lib/server/privy";
 import { readProfile } from "@/lib/server/profile";
 import { walletsOf } from "@/lib/server/wallets";
 import { inspectEvmBuy, KYBER_ROUTER } from "@/lib/swap/inspectEvm";
+import { testModeEnabled } from "@/lib/test-mode";
 
 /**
  * POST /api/evm/order { symbol, address, amountWei, taker?, acknowledged? }
@@ -37,6 +38,7 @@ const Body = z.object({
 const fail = (status: number, error: string) => NextResponse.json({ error }, { status, headers: { "Cache-Control": "no-store" } });
 
 export async function POST(request: Request) {
+  if (testModeEnabled()) return fail(403, "Real swaps are disabled in test mode.");
   const userId = await userFrom(request);
   if (!userId) return fail(401, "Sign in first.");
   const profile = await readProfile();

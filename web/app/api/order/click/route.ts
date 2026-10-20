@@ -4,6 +4,7 @@ import { z } from "zod";
 import { api, ApiError } from "@/lib/server/api";
 import { userFrom } from "@/lib/server/privy";
 import { readProfile } from "@/lib/server/profile";
+import { testModeEnabled } from "@/lib/test-mode";
 
 /**
  * POST /api/order/click { asset, venue, acknowledged } — a Buy press on a
@@ -17,6 +18,7 @@ const Body = z.object({ asset: z.string().min(1).max(64), venue: z.string().min(
 const fail = (status: number, error: string) => NextResponse.json({ error }, { status, headers: { "Cache-Control": "no-store" } });
 
 export async function POST(request: Request) {
+  if (testModeEnabled()) return fail(403, "External purchases are disabled in test mode.");
   const userId = await userFrom(request);
   if (!userId) return fail(401, "Sign in first.");
   const profile = await readProfile();

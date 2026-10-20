@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { TESTER_COUNTRIES, TESTER_RELATIONSHIPS } from "./testers.ts";
+import { CRYPTO_EXPERIENCE, TESTER_COUNTRIES, TESTER_RELATIONSHIPS } from "./testers.ts";
 import { isSolanaPublicKey } from "./solana-address.ts";
 
 const COUNTRY_NAMES = TESTER_COUNTRIES.map(([, name]) => name) as [string, ...string[]];
@@ -10,4 +10,6 @@ export const testerApplicationSchema = z.object({
   country: z.enum(COUNTRY_NAMES, { message: "Choose a supported country." }),
   relationship: z.enum(TESTER_RELATIONSHIPS, { message: "Choose citizen or foreigner." }),
   wallet: z.string().trim().refine(isSolanaPublicKey, "Enter a valid Solana wallet address."),
+  experience: z.enum(CRYPTO_EXPERIENCE, { message: "Choose your crypto experience." }),
+  reason: z.string().trim().max(280, "Keep this to 280 characters or fewer.").optional().default(""),
 });

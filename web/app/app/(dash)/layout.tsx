@@ -14,7 +14,6 @@ export default async function DashLayout({ children }: { children: React.ReactNo
   const country = (await api.countries()).find(c => c.code === profile.country);
   return (
     <AppGate profile={profile}>
-    <TestModeBanner />
     <div className="flex flex-wrap gap-4 p-3 sm:p-4">
       <Sidebar profile={profile} country={country ?? null} />
       <main className="flex min-h-[calc(100vh-2rem)] min-w-0 flex-[999_1_640px] flex-col gap-8 px-1 sm:px-6">

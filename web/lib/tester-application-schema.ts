@@ -15,3 +15,9 @@ export const testerApplicationSchema = z.object({
   telegram: z.string().trim().min(1, "Enter your Telegram username.").max(50, "Keep your Telegram username to 50 characters or fewer."),
   website: z.string().max(0).optional().default(""),
 });
+
+export type TesterApplicationInput = z.input<typeof testerApplicationSchema>;
+export type TesterApplication = Omit<z.output<typeof testerApplicationSchema>, "website"> & {
+  status: "pending";
+  created_at: string;
+};

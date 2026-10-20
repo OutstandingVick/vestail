@@ -71,7 +71,7 @@ export function ActionPanel({ assetId, assetName, classStatus, venues, symbol, t
         </div>
       )}
 
-      {!TEST_MODE && symbol && buyable.some(t => t.chain === "solana") && (
+      {symbol && buyable.some(t => t.chain === "solana") && (
         <section className="flex flex-col gap-2">
           <h3 className="text-[13px] font-semibold tracking-wide text-muted uppercase">Solana · via Jupiter</h3>
           <SwapForm symbol={symbol} tokens={buyable.filter(t => t.chain === "solana")} acknowledged={ack} locked={swapLocked} />

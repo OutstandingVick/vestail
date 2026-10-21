@@ -13,6 +13,10 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  if (validEarlyAccessCookie(request.cookies.get(EARLY_ACCESS_COOKIE)?.value)) {
+    return NextResponse.json({ verified: true });
+  }
+
   const body = await request.json().catch(() => null) as { code?: unknown } | null;
   const code = typeof body?.code === "string" ? body.code : "";
 

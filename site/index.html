@@ -472,11 +472,11 @@
   .trail .why b { color: var(--ink); font-weight: 600; }
 
   /* ---------- Board: a responsive grid of country cards ---------- */
-  .board-head { display: flex; justify-content: space-between; padding: 0 4px 12px; font-size: 11.5px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); }
+  .board-head { display: flex; justify-content: space-between; padding: 0 4px 12px; font-size: 0.71875rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); }
   .board-head span:first-child { display: none; }
   .board-head.hide { display: none; }
   .board-head { align-items: center; }
-  .showall { margin-left: auto; margin-right: 18px; border: 0; background: none; padding: 4px 0; font: inherit; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; font-weight: 600; color: var(--purple-ink); cursor: pointer; }
+  .showall { margin-left: auto; margin-right: 18px; border: 0; background: none; padding: 4px 0; font: inherit; font-size: 0.75rem; letter-spacing: .08em; text-transform: uppercase; font-weight: 600; color: var(--purple-ink); cursor: pointer; }
   .showall:hover { text-decoration: underline; }
   .showall[hidden] { display: none; }
   .board { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; align-items: start; }
@@ -501,7 +501,7 @@
   .row:hover { box-shadow: 0 26px 50px -24px rgba(13,13,15,.26); }
   .row.has-sel { box-shadow: 0 20px 40px -26px rgba(13,13,15,.22); }
   /* The flag stands on its own: no tile behind it. */
-  .row .flag { background: none; box-shadow: none; border-radius: 0; width: auto; height: auto; font-size: 38px; }
+  .row .flag { background: none; box-shadow: none; border-radius: 0; width: auto; height: auto; font-size: 2.375rem; }
   .row .grid.bars { background: none; box-shadow: none; }
   .row .grid.labeled { background: var(--orange); box-shadow: none; }
   .row .grid.labeled { padding: 12px; border-radius: var(--r-md); }
@@ -509,8 +509,8 @@
   .row .grid.labeled .tile.sel { box-shadow: 0 0 0 2px var(--ink-0); }
   /* Header, like the reference's icon and title: the flag in a soft tile, the name, then a counted summary. */
   .who { display: flex; flex-direction: column; align-items: flex-start; gap: 40px; min-width: 0; }
-  .flag { font-size: 26px; line-height: 1; width: 52px; height: 52px; display: grid; place-items: center; background: var(--surface-2); box-shadow: var(--ring); border-radius: var(--r-md); flex: none; }
-  .name { font-family: var(--font-manrope); font-weight: 700; color: var(--ink); font-size: 20px; letter-spacing: -.015em; margin: 0; }
+  .flag { font-size: 1.625rem; line-height: 1; width: 52px; height: 52px; display: grid; place-items: center; background: var(--surface-2); box-shadow: var(--ring); border-radius: var(--r-md); flex: none; }
+  .name { font-family: var(--font-manrope); font-weight: 700; color: var(--ink); font-size: 1.25rem; letter-spacing: -.015em; margin: 0; }
 
   /*
    * Verdicts as circles: ten across (twenty in two rows when every asset is shown).

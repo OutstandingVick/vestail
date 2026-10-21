@@ -32,7 +32,20 @@ export function Providers({ children }: { children: React.ReactNode }) {
           accentColor: "#FF580A",
           logo: "/vestail-logo.svg",
           walletChainType: "ethereum-and-solana",
-          walletList: ["phantom", "solflare", "metamask", "rabby_wallet", "coinbase_wallet", "detected_wallets"],
+          /*
+           * Named wallets get their own row and logo; anything else falls into
+           * detected_wallets, a generic list. Backpack and Jupiter were in that
+           * list, which is the wrong first impression for the people most
+           * likely to arrive with them — Vestail carries Backpack Securities
+           * tokens, and Jupiter is where its Solana routing goes.
+           *
+           * Solana first, since that is where the tokenised stocks are.
+           */
+          walletList: [
+            "phantom", "solflare", "backpack", "jupiter",
+            "metamask", "rabby_wallet", "coinbase_wallet",
+            "detected_wallets",
+          ],
           landingHeader: "Open Vestail",
           loginMessage: "Sign in to save your country and buy. No ID, no KYC.",
         },

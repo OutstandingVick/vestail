@@ -1668,6 +1668,7 @@ navMenus.forEach(menu => {
   menu.querySelectorAll('a').forEach(link => link.addEventListener('click', () => { menu.open = false; }));
 });
 document.addEventListener('click', event => {
+  if (!event.target.closest('.top')) closeMobileNav();
   if (!event.target.closest('.nav-menu')) navMenus.forEach(menu => { menu.open = false; });
 });
 document.addEventListener('keydown', event => {

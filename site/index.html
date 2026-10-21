@@ -878,7 +878,8 @@
   .problem-steps::before { content: ""; position: absolute; inset-block: 8px; inset-inline-start: 2px; width: 2px; border-radius: 2px; background: rgb(23 23 26 / .14); }
   .problem-stage { width: 100%; min-width: 0; }
   .problem-stage-frame { position: relative; overflow: hidden; aspect-ratio: 4 / 4.5; border-radius: clamp(28px, 4vw, 52px); background: linear-gradient(145deg, #ff7d47, #ffd8c7); box-shadow: inset 0 0 0 1px rgb(255 255 255 / .16), 0 40px 100px -48px rgb(0 0 0 / .9); }
-  .problem-stage-image { position: absolute; z-index: 0; inset: 0; width: 100%; height: 100%; object-fit: cover; visibility: hidden; opacity: 0; scale: 1.04; transition: opacity 320ms var(--ease), scale 600ms var(--ease), visibility 0s linear 320ms; }
+  .problem-stage-image { position: absolute; z-index: 0; inset: 0; display: grid; place-items: center; width: 100%; height: 100%; background: radial-gradient(ellipse at 70% 12%, #ffe1d5 0%, transparent 65%), linear-gradient(35deg, #ffd1be 0%, #ff5900 38%, #ff9a70 72%, #ffc5ad 100%); color: #b83b00; visibility: hidden; opacity: 0; scale: 1.04; transition: opacity 320ms var(--ease), scale 600ms var(--ease), visibility 0s linear 320ms; }
+  .problem-stage-image svg { width: 36%; height: 36%; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
   .problem-stage-image.is-active { z-index: 1; visibility: visible; opacity: 1; scale: 1; transition-delay: 0s; }
   .problem-stage-caption { min-height: 1.5em; margin: 18px 4px 0; color: var(--muted); font-size: 0.875rem; line-height: 1.5; }
   .problem .problem-step { position: relative; display: grid; grid-template-columns: 64px minmax(0, 1fr) auto; gap: 18px; align-items: center; width: 100%; min-height: 132px; overflow: visible; border: 0; border-radius: 24px; padding: 18px; background: transparent; color: var(--paper); box-shadow: none; text-align: left; font: inherit; cursor: pointer; transform: none; }
@@ -904,16 +905,16 @@
   /* 02 · How it works */
   .how-process { display: grid; grid-template-columns: minmax(240px, .72fr) minmax(0, 1.5fr); gap: clamp(56px, 9vw, 148px); align-items: start; }
   .how-process .how-intro { margin: 0; position: sticky; top: 112px; }
-  .how-intro h2 { max-width: 8ch; font-family: var(--font-manrope); font-size: clamp(44px, 5.8vw, 76px); line-height: .94; font-weight: 800; letter-spacing: -.04em; }
-  .how-intro .lead { max-width: 31ch; margin-top: 24px; font-size: 16px; line-height: 1.55; }
-  .how-link { display: inline-flex; flex-direction: row-reverse; align-items: center; gap: 9px; margin-top: 28px; color: var(--ink); font-size: 14px; font-weight: 600; text-decoration: none; }
-  .how-link span { color: var(--orange); font-size: 18px; transition: transform .15s var(--ease); }
+  .how-intro h2 { max-width: 8ch; font-family: var(--font-manrope); font-size: clamp(2.75rem, 5.8vw, 4.75rem); line-height: .94; font-weight: 800; letter-spacing: -.04em; }
+  .how-intro .lead { max-width: 31ch; margin-top: 24px; font-size: 1rem; line-height: 1.55; }
+  .how-link { display: inline-flex; flex-direction: row-reverse; align-items: center; gap: 9px; margin-top: 28px; color: var(--ink); font-size: 0.875rem; font-weight: 600; text-decoration: none; }
+  .how-link span { color: var(--orange); font-size: 1.125rem; transition: transform .15s var(--ease); }
   .how-link:hover span, .how-link:focus-visible span { transform: translate(2px, 2px); }
   .process-list { border-top: 1px solid var(--line); }
   .process-step { position: relative; display: grid; grid-template-columns: 48px minmax(0, 1fr); column-gap: 24px; row-gap: 8px; padding: 36px 48px 36px 0; border-bottom: 1px solid var(--line); }
-  .process-step h3 { grid-column: 2; margin: 0; font-family: var(--font-manrope); font-size: clamp(22px, 2.2vw, 30px); line-height: 1.1; font-weight: 700; color: var(--ink); }
-  .process-step p { grid-column: 2; margin: 0; max-width: 58ch; color: var(--ink-2); font-size: 15px; line-height: 1.55; }
-  .process-step .num { grid-row: 1 / span 2; width: 40px; height: 40px; display: grid; place-items: center; background: var(--surface-2); color: var(--ink-2); font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .process-step h3 { grid-column: 2; margin: 0; font-family: var(--font-manrope); font-size: clamp(1.375rem, 2.2vw, 1.875rem); line-height: 1.1; font-weight: 700; color: var(--ink); }
+  .process-step p { grid-column: 2; margin: 0; max-width: 58ch; color: var(--ink-2); font-size: 0.9375rem; line-height: 1.55; }
+  .process-step .num { grid-row: 1 / span 2; width: 40px; height: 40px; display: grid; place-items: center; background: var(--surface-2); color: var(--ink-2); font-size: 0.75rem; font-weight: 700; font-variant-numeric: tabular-nums; }
   .process-corner { position: absolute; top: 15px; right: 3px; width: 16px; height: 16px; border-top: 3px solid var(--purple); border-right: 3px solid var(--purple); }
   @media (max-width: 900px) {
     .how-process { grid-template-columns: 1fr; gap: 44px; }
@@ -922,10 +923,10 @@
   }
   @media (max-width: 480px) {
     .how-process { gap: 34px; }
-    .how-intro h2 { font-size: 44px; }
+    .how-intro h2 { font-size: 2.75rem; }
     .process-step { grid-template-columns: 40px minmax(0, 1fr); column-gap: 16px; padding: 28px 28px 28px 0; }
-    .process-step h3 { font-size: 21px; }
-    .process-step p { font-size: 14px; }
+    .process-step h3 { font-size: 1.3125rem; }
+    .process-step p { font-size: 0.875rem; }
     .process-step .num { width: 36px; height: 36px; }
     .process-corner { top: 12px; width: 13px; height: 13px; }
   }
@@ -1342,9 +1343,9 @@
     <div class="problem-workflow">
       <div class="problem-stage" aria-live="polite">
         <div class="problem-stage-frame">
-          <img class="problem-stage-image is-active" data-problem-image="0" src="assets/problem/trading-app.jpg" width="720" height="1000" loading="lazy" decoding="async" alt="A man holding a phone with a trading application open">
-          <img class="problem-stage-image" data-problem-image="1" src="assets/problem/crypto-portfolio.jpg" width="666" height="1000" loading="lazy" decoding="async" alt="A close-up phone interface showing a detailed cryptocurrency portfolio">
-          <img class="problem-stage-image" data-problem-image="2" src="assets/problem/market-risk.jpg" width="1000" height="666" loading="lazy" decoding="async" alt="A red financial market chart showing a sharp decline and risk area">
+          <div class="problem-stage-image is-active" data-problem-image="0" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M11 3H4.5A1.5 1.5 0 0 0 3 4.5V11l9 9 8-8z"/><circle cx="7.4" cy="7.4" r="1.3"/></svg></div>
+          <div class="problem-stage-image" data-problem-image="1" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 8a2 2 0 0 1 2-2h13v3M3 8v9a2 2 0 0 0 2 2h14v-3"/><path d="M20 11h-4a2 2 0 0 0 0 4h4z"/></svg></div>
+          <div class="problem-stage-image" data-problem-image="2" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7.4 10.2V7.6a4.6 4.6 0 0 1 9.2 0v2.6"/><path d="M5.4 10.2h13.2v9.4H5.4z"/></svg></div>
         </div>
         <p class="problem-stage-caption" id="problem-stage-caption">A price is visible. The ownership rule is not.</p>
       </div>

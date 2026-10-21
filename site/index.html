@@ -799,9 +799,6 @@
   /* The lead-in sits light and large, a beat between the headline and the deck. */
   .problem .asking { margin: 30px 0 0; font-family: var(--font-syne); font-weight: 600; font-size: clamp(20px, 2.6vw, 34px); color: var(--ink-3); letter-spacing: -.015em; }
 
-  /* The line the deck lands on, centred under it like the reference's. */
-  .problem .aftermath { margin: 44px auto 0; max-width: 48ch; font-size: 17px; line-height: 1.5; color: var(--ink-3); }
-
   /* Three complaint cards abreast; the middle one leads. */
   /* Capped so the cards keep the reference's upright proportion on a wide screen
      instead of stretching into letterboxes. */
@@ -855,14 +852,14 @@
   .problem { margin-top: 104px; padding: clamp(64px, 7vw, 96px) clamp(24px, 6vw, 92px) clamp(54px, 7vw, 88px); background: #F8F7FF; color: var(--paper); border-radius: var(--r-xl); }
   .problem::before { background-image: linear-gradient(to right, rgb(23 23 26 / .06) 1px, transparent 1px), linear-gradient(to bottom, rgb(23 23 26 / .06) 1px, transparent 1px); -webkit-mask-image: radial-gradient(120% 90% at 50% 44%, #000 24%, transparent 82%); mask-image: radial-gradient(120% 90% at 50% 44%, #000 24%, transparent 82%); }
   .problem-intro { text-align: center; }
-  .problem h2 { max-width: 17ch; color: var(--paper); font-size: clamp(40px, 5.4vw, 72px); }
+  .problem h2 { max-width: 17ch; color: var(--paper); font-size: clamp(32.8px, 4.428vw, 59.04px); }
   .problem h2 .ln, html[data-theme="dark"] .problem h2 .ln { color: var(--paper); }
   .problem h2 .hit, html[data-theme="dark"] .problem h2 .hit { color: var(--purple-ink); }
   .problem .asking { margin-top: 26px; color: var(--muted); font-size: clamp(18px, 2vw, 28px); }
   .problem-workflow { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(340px, .85fr); gap: clamp(44px, 7vw, 112px); align-items: center; max-width: 1260px; margin: clamp(52px, 7vw, 90px) auto 0; text-align: left; }
   .problem-steps { position: relative; display: grid; gap: 20px; padding-inline-start: 26px; }
   .problem-steps::before { content: ""; position: absolute; inset-block: 8px; inset-inline-start: 2px; width: 2px; border-radius: 2px; background: rgb(23 23 26 / .14); }
-  .problem-stage { width: 75%; min-width: 0; justify-self: center; }
+  .problem-stage { width: 52.5%; min-width: 0; justify-self: center; }
   .problem-stage-frame { position: relative; overflow: hidden; aspect-ratio: 4 / 4.5; border-radius: clamp(28px, 4vw, 52px); background: linear-gradient(145deg, #ff7d47, #ffd8c7); box-shadow: inset 0 0 0 1px rgb(255 255 255 / .16), 0 40px 100px -48px rgb(0 0 0 / .9); }
   .problem-stage-image { position: absolute; z-index: 0; inset: 0; width: 100%; height: 100%; object-fit: cover; visibility: hidden; opacity: 0; scale: 1.04; transition: opacity 320ms var(--ease), scale 600ms var(--ease), visibility 0s linear 320ms; }
   .problem-stage-image.is-active { z-index: 1; visibility: visible; opacity: 1; scale: 1; transition-delay: 0s; }
@@ -1099,7 +1096,6 @@
     .problem::before { background-size: 72px 72px; }
     .problem .asking { margin-top: 22px; }
     .problem .deck { margin-top: 32px; }
-    .problem .aftermath { margin-top: 32px; font-size: 16px; }
     .qcard { padding: 12px 12px 24px; border-radius: 28px; }
     .qmedia { border-radius: 18px; }
     .qbody { padding: 0 8px; }
@@ -1136,7 +1132,6 @@
     .foot-social-links a { justify-content: center; width: 48px; min-height: 48px; padding: 0; border-radius: 50%; font-size: 13px; }
     .foot-mark { inset-inline: 32px auto; bottom: 34px; width: calc(100% - 64px); }
   }
-  .problem .aftermath { color: var(--muted); }
   @media (max-width: 980px) {
     .problem-workflow { grid-template-columns: 1fr; max-width: 760px; }
     .problem-stage-frame { aspect-ratio: 16 / 11; }
@@ -1380,8 +1375,6 @@
       </button>
       </div>
     </div>
-
-    <p class="aftermath">So people buy the version they were never allowed to hold, and only find out when they try to get out.</p>
   </section>
 
   <!-- 02 · How it works -->

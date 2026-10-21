@@ -1638,6 +1638,15 @@ function syncMobileNav() {
 }
 mobileNavQuery.addEventListener('change', syncMobileNav);
 syncMobileNav();
+function closeMobileNav() {
+  mobileNavToggle.setAttribute('aria-expanded', 'false');
+  mobileNavHome.classList.remove('mobile-nav-open');
+}
+mobileNavToggle.addEventListener('click', () => {
+  const open = mobileNavToggle.getAttribute('aria-expanded') !== 'true';
+  mobileNavToggle.setAttribute('aria-expanded', String(open));
+  mobileNavHome.classList.toggle('mobile-nav-open', open);
+});
 const navMenus = [...document.querySelectorAll('.nav-menu')];
 navMenus.forEach(menu => {
   menu.addEventListener('toggle', () => {

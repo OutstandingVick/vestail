@@ -6,6 +6,7 @@ import { Logo } from "@/components/Logo";
 import { absolute } from "@/lib/seo";
 
 import styles from "./docs.module.css";
+import { DocsNavigation } from "./DocsNavigation";
 
 export const metadata: Metadata = {
   title: "Developer docs",
@@ -117,11 +118,7 @@ export default function DocsPage() {
       <div className={styles.layout}>
         <aside className={styles.sidebar}>
           <p className={styles.navLabel}>Developer documentation</p>
-          <nav aria-label="Documentation sections">
-            {navigation.map((item, index) => (
-              <a className={index === 0 ? styles.activeLink : undefined} key={item.href} href={item.href}>{item.label}</a>
-            ))}
-          </nav>
+          <DocsNavigation items={navigation} />
           <div className={styles.sidebarNote}>
             <strong>Need the contract?</strong>
             <p>The running API serves its OpenAPI document at <code>/api/v1/openapi.json</code>.</p>

@@ -1655,6 +1655,7 @@ mobileNavToggle.addEventListener('click', () => {
   mobileNavToggle.setAttribute('aria-expanded', String(open));
   mobileNavHome.classList.toggle('mobile-nav-open', open);
 });
+mobileNav.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMobileNav));
 const navMenus = [...document.querySelectorAll('.nav-menu')];
 navMenus.forEach(menu => {
   menu.addEventListener('toggle', () => {

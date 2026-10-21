@@ -1026,25 +1026,25 @@
   /* 06 · FAQ: a clean help directory that keeps every answer native and expandable. */
   #faq { margin-top: 104px; padding: 0; overflow: hidden; border-radius: 34px; background: var(--surface); box-shadow: var(--card-raised); }
   #faq .sec-head { margin: 0; padding: clamp(48px, 6vw, 76px) clamp(24px, 5vw, 64px) 36px; text-align: center; background: var(--lavender-surface); }
-  #faq h2 { max-width: none; color: var(--ink); font-family: var(--font-manrope); font-weight: 800; font-size: clamp(42px, 5vw, 64px); line-height: 1; letter-spacing: -.04em; }
+  #faq h2 { max-width: none; color: var(--ink); font-family: var(--font-manrope); font-weight: 800; font-size: clamp(2.625rem, 5vw, 4rem); line-height: 1; letter-spacing: -.04em; }
   #faq .lead { margin: 18px auto 0; max-width: 62ch; }
-  .faq-options { display: inline-flex; align-items: center; min-height: 40px; margin-top: 26px; padding: 0 16px; border: 0; border-radius: var(--r-pill); background: rgb(13 13 15 / .07); color: var(--ink); font: inherit; font-size: 13px; font-weight: 650; cursor: pointer; }
+  .faq-options { display: inline-flex; align-items: center; min-height: 40px; margin-top: 26px; padding: 0 16px; border: 0; border-radius: var(--r-pill); background: rgb(13 13 15 / .07); color: var(--ink); font: inherit; font-size: 0.8125rem; font-weight: 650; cursor: pointer; }
   .faq-options:focus-visible { outline: 2px solid var(--purple); outline-offset: 3px; }
   .faq { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(34px, 5vw, 72px) clamp(28px, 5vw, 64px); padding: clamp(52px, 7vw, 86px) clamp(28px, 6vw, 84px); }
   .faq details { min-width: 0; color: var(--ink); }
-  .faq summary { min-height: 142px; list-style: none; display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto 1fr; align-content: start; column-gap: 9px; cursor: pointer; font-family: var(--font-manrope); font-size: 20px; line-height: 1.2; font-weight: 700; letter-spacing: -.025em; color: var(--ink); }
+  .faq summary { min-height: 142px; list-style: none; display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto 1fr; align-content: start; column-gap: 9px; cursor: pointer; font-family: var(--font-manrope); font-size: 1.25rem; line-height: 1.2; font-weight: 700; letter-spacing: -.025em; color: var(--ink); }
   .faq summary::-webkit-details-marker { display: none; }
   .faq-icon { grid-row: 1; width: 22px; color: var(--orange); line-height: 1; }
   .faq-icon svg { display: block; width: 20px; height: 20px; fill: currentColor; }
-  .faq summary small { grid-column: 1 / -1; margin-top: 9px; color: var(--ink-2); font-family: var(--font-inter); font-size: 14px; font-weight: 400; line-height: 1.45; letter-spacing: 0; }
-  .faq summary::after { content: "View answer"; grid-column: 1 / -1; align-self: end; justify-self: start; display: inline-flex; align-items: center; min-height: 40px; margin-top: 20px; padding: 0 18px; border-radius: var(--r-pill); background: var(--orange); color: #0d0d0f; font-size: 12px; font-weight: 700; letter-spacing: .02em; text-transform: uppercase; transition: transform .15s var(--ease), background .15s; }
+  .faq summary small { grid-column: 1 / -1; margin-top: 9px; color: var(--ink-2); font-family: var(--font-inter); font-size: 0.875rem; font-weight: 400; line-height: 1.45; letter-spacing: 0; }
+  .faq summary::after { content: "View answer"; grid-column: 1 / -1; align-self: end; justify-self: start; display: inline-flex; align-items: center; min-height: 40px; margin-top: 20px; padding: 0 18px; border-radius: var(--r-pill); background: var(--orange); color: #0d0d0f; font-size: 0.75rem; font-weight: 700; letter-spacing: .02em; text-transform: uppercase; transition: transform .15s var(--ease), background .15s; }
   .faq summary:hover::after { background: #ff7130; color: #0d0d0f; }
   .faq summary:active::after { transform: scale(.96); }
   .faq summary:focus-visible { outline: none; }
   .faq summary:focus-visible::after { outline: 2px solid var(--purple); outline-offset: 3px; }
   .faq details[open] summary { min-height: auto; }
   .faq details[open] summary::after { content: "Close answer"; }
-  .faq details p { margin: 18px 0 0; padding-top: 18px; box-shadow: inset 0 1px 0 rgb(13 13 15 / .1); color: var(--ink-2); font-size: 14px; line-height: 1.55; }
+  .faq details p { margin: 18px 0 0; padding-top: 18px; box-shadow: inset 0 1px 0 rgb(13 13 15 / .1); color: var(--ink-2); font-size: 0.875rem; line-height: 1.55; }
   @media (max-width: 900px) {
     .trust-layout { grid-template-columns: 1fr; gap: 46px; }
     .trust-intro { position: static; }

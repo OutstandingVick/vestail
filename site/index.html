@@ -728,7 +728,8 @@
 
   /* ---------- Responsive ---------- */
   /* ---------- Top nav (v1 pattern: text links, then one orange pill) ---------- */
-  .mobile-nav-toggle { display: none; }
+  .mobile-nav-toggle { display: none; min-height: 44px; padding: 8px 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); color: var(--ink); font: inherit; cursor: pointer; }
+  .mobile-nav-toggle:focus-visible { outline: 2px solid var(--purple); outline-offset: 3px; }
   .nav { display: flex; align-items: center; gap: clamp(18px, 2vw, 30px); }
   .nav > a, .nav-menu > summary { font-family: var(--font-inter); font-size: 1.3rem; font-weight: 500; color: var(--ink); text-decoration: none; white-space: nowrap; transition: color .15s; }
   .nav > a:hover, .nav-menu > summary:hover { color: var(--ink-3); }

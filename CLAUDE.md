@@ -23,6 +23,7 @@ Vestail is a country × asset-class ownership matrix with venue routing. This re
 - No build step for `site/`; it stays a single self-contained HTML file. The API and any framework app live beside it, not instead of it.
 - Data edits go in `data/*.json`; regenerate the inline data in `site/index.html` from them (or, better, make the app fetch them).
 - Motion respects `prefers-reduced-motion`. Keep entrance animation to first paint only.
+- Font sizes in `site/index.html` are `rem`, never `px`. The root is 100% and drops to 80% below 600px, so the phone type scale is one number rather than a hundred and forty. Only font-size uses rem: padding, gaps, radii and borders stay in px so the scale moves the text and leaves the layout's proportions alone.
 - Keep `docs/GLOSSARY.html` build log current when a phase lands.
 
 ## Commands

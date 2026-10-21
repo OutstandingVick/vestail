@@ -9,14 +9,17 @@ import path from "node:path";
 const SITE = path.resolve(process.cwd(), "../site/index.html");
 
 /*
- * Read once per instance. The file is baked into the deployment and cannot
- * change under a running server, so re-reading it per request buys nothing.
+ * Cache the deployed file in production. In development, read on every
+ * request so edits to site/index.html appear without restarting Next.js.
  */
 let cached: Promise<string> | null = null;
 
 export async function GET() {
-  cached ??= readFile(SITE, "utf8");
-  return new Response(await cached, {
+  const development = process.env.NODE_ENV !== "production";
+  const html = development
+    ? await readFile(SITE, "utf8")
+    : await (cached ??= readFile(SITE, "utf8"));
+  return new Response(html, {
     headers: {
       "Content-Type": "text/html; charset=utf-8",
       /*
@@ -29,7 +32,9 @@ export async function GET() {
        * while it revalidates. Browsers still revalidate every time (max-age=0),
        * which keeps a returning visitor from pinning an old page.
        */
-      "Cache-Control": "public, max-age=0, s-maxage=86400, stale-while-revalidate=604800",
+      "Cache-Control": development
+        ? "no-store"
+        : "public, max-age=0, s-maxage=86400, stale-while-revalidate=604800",
     },
   });
 }

@@ -404,13 +404,13 @@
     .hero > .hero-globe { top: 61%; right: 16px; width: calc(100% - 32px); max-width: 520px; height: auto; opacity: .72; }
   }
   .hero::after { background: var(--hero-overlay); }
-  .hero h1 { font-family: var(--font-manrope); font-weight: 800; color: var(--hero-heading); font-size: clamp(52.5px, 9.5vw, 115px); line-height: 1; letter-spacing: -.04em; margin: 0 auto 22px; text-shadow: 0 2px 28px rgb(0 0 0 / .12); }
+  .hero h1 { font-family: var(--font-manrope); font-weight: 800; color: var(--hero-heading); font-size: clamp(3.28125rem, 9.5vw, 7.1875rem); line-height: 1; letter-spacing: -.04em; margin: 0 auto 22px; text-shadow: 0 2px 28px rgb(0 0 0 / .12); }
   /* Two weights of one face: a light set-up line, a bold payoff. */
   .hero h1 .ln { display: block; }
   .hero h1 .ln.light { font-family: var(--font-syne); font-weight: 700; letter-spacing: -.03em; }
   .hero h1 .w { display: inline-block; animation: rise .7s var(--ease) both; }
   .hero h1 .w:nth-child(2) { animation-delay: .06s } .hero h1 .w:nth-child(3) { animation-delay: .12s } .hero h1 .w:nth-child(4) { animation-delay: .18s } .hero h1 .w:nth-child(5) { animation-delay: .24s } .hero h1 .w:nth-child(6) { animation-delay: .30s }
-  .hero > p { margin: 0 auto; max-width: 54ch; color: var(--hero-copy); font-family: var(--font-inter); font-size: 22.5px; line-height: 1.55; animation: rise .7s .3s var(--ease) both; }
+  .hero > p { margin: 0 auto; max-width: 54ch; color: var(--hero-copy); font-family: var(--font-inter); font-size: 1.40625rem; line-height: 1.55; animation: rise .7s .3s var(--ease) both; }
 
   /* The search is the hero's call to action: one pill holding the field, Clear, and the orange action. */
   .searchbar { display: flex; align-items: center; gap: 8px; max-width: 700px; margin: 34px auto 0; padding: 8px 8px 8px 22px;
@@ -419,13 +419,13 @@
   .searchbar:hover { box-shadow: 0 0 0 1px color-mix(in srgb, var(--paper) 18%, transparent), 0 24px 48px -24px rgba(13,13,15,.22); }
   .searchbar:focus-within { box-shadow: 0 0 0 2px var(--purple), 0 0 0 7px color-mix(in srgb, var(--purple) 18%, transparent), 0 24px 48px -24px rgba(13,13,15,.18); }
   .searchbar > svg { flex: none; width: 20px; height: 20px; color: var(--ink-3); fill: currentColor; pointer-events: none; }
-  .searchbar input { flex: 1; min-width: 0; font-family: var(--font-inter); font-size: 21.25px; color: var(--ink); background: transparent; border: 0; padding: 12px 4px; outline: 0; }
+  .searchbar input { flex: 1; min-width: 0; font-family: var(--font-inter); font-size: 1.328125rem; color: var(--ink); background: transparent; border: 0; padding: 12px 4px; outline: 0; }
   .searchbar input::-webkit-search-cancel-button, .searchbar input::-webkit-search-decoration { -webkit-appearance: none; display: none; }
   .searchbar input::placeholder { color: var(--ink-3); }
-  .searchbar #clear { flex: none; border: 0; background: var(--surface-2); color: var(--ink-2); font-size: 16.25px; font-weight: 600; cursor: pointer; padding: 8px 14px; border-radius: var(--r-pill); display: none; }
+  .searchbar #clear { flex: none; border: 0; background: var(--surface-2); color: var(--ink-2); font-size: 1.015625rem; font-weight: 600; cursor: pointer; padding: 8px 14px; border-radius: var(--r-pill); display: none; }
   .searchbar #clear.on { display: inline-block; }
   .searchbar #clear:hover { background: var(--surface-3); color: var(--ink); }
-  .searchbar .go { flex: none; border: 0; cursor: pointer; background: var(--orange); color: var(--navy); font-family: var(--font-inter); font-weight: 700; font-size: 18.75px; padding: 13px 22px; border-radius: var(--r-pill); text-decoration: none;
+  .searchbar .go { flex: none; border: 0; cursor: pointer; background: var(--orange); color: var(--navy); font-family: var(--font-inter); font-weight: 700; font-size: 1.171875rem; padding: 13px 22px; border-radius: var(--r-pill); text-decoration: none;
     box-shadow: 0 10px 26px -10px rgb(255 88 10 / .75); transition: transform .15s var(--ease), box-shadow .2s var(--ease); }
   .searchbar .go:hover { transform: translateY(-1px); box-shadow: 0 14px 30px -10px rgb(255 88 10 / .85); }
   .searchbar .go:active { transform: scale(.97); }

@@ -1620,6 +1620,23 @@ themeToggle.addEventListener('click', () => {
 /* Reuse the canonical full-colour lockup already rendered in the footer. */
 document.querySelector('.foot-mark').append(document.querySelector('.foot-logo svg').cloneNode(true));
 
+const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
+const mobileNav = document.querySelector('#mobile-navigation');
+const mobileNavHome = mobileNav.parentElement;
+const mobileTheme = document.querySelector('.theme-toggle');
+const mobileResources = document.querySelector('.resources-menu');
+const mobileActionsHome = mobileTheme.parentElement;
+const mobileNavQuery = window.matchMedia('(max-width: 980px)');
+function syncMobileNav() {
+  if (mobileNavQuery.matches) mobileNav.append(mobileTheme, mobileResources);
+  else {
+    mobileActionsHome.prepend(mobileTheme, mobileResources);
+    mobileNavToggle.setAttribute('aria-expanded', 'false');
+    mobileNavHome.classList.remove('mobile-nav-open');
+  }
+}
+mobileNavQuery.addEventListener('change', syncMobileNav);
+syncMobileNav();
 const navMenus = [...document.querySelectorAll('.nav-menu')];
 navMenus.forEach(menu => {
   menu.addEventListener('toggle', () => {

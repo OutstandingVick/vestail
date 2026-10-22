@@ -1,0 +1,7 @@
+[
+  {
+    "id": "about",
+    "title": "Cookies and browser storage",
+    "body": "Cookies travel with requests; localStorage stays in your browser until cleared. The table below lists storage set directly by this code, including the consent preference added with this policy. Necessary storage supports requested features. Analytics and marketing are optional and off until you choose."
+  }
+]

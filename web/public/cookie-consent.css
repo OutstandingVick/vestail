@@ -1,0 +1,12 @@
+.vc-banner,.vc-dialog { font-family: var(--font-inter, sans-serif); color: var(--ink, var(--color-ink-strong, #17171a)); background: var(--surface, var(--color-surface, #f8f7ff)); border: 1px solid #85858f; border-radius: 18px; padding: 20px; box-shadow: 0 8px 32px #0002; font-size: 1rem; line-height: 1.5; }
+.vc-banner { position: fixed; inset: auto 16px 16px; z-index: 1000; max-width: 700px; margin-inline: auto; }
+.vc-banner[hidden] { display: none; }
+.vc-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+.vc-actions button { font: inherit; min-height: 44px; padding: 8px 14px; color: inherit; background: transparent; border: 1px solid currentColor; border-radius: 999px; cursor: pointer; }
+.vc-actions button:focus-visible,.vc-dialog input:focus-visible { outline: 3px solid #ff580a; outline-offset: 3px; }
+.vc-dialog { max-width: min(520px, calc(100vw - 32px)); width: 100%; max-height: calc(100dvh - 32px); overflow: auto; }
+.vc-dialog::backdrop { background: #0008; }
+.vc-dialog h2 { font-size: 1.4rem; font-weight: 700; }
+.vc-dialog label { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 14px; }
+.vc-dialog input { width: 22px; height: 22px; accent-color: #ff580a; }
+.vc-banner a,.vc-dialog a { color: inherit; text-decoration: underline; }

@@ -38,5 +38,10 @@
     "id": "retention",
     "title": "Retention",
     "body": "Profile and early-access cookies expire after one year and one day respectively; the access cookie is removed on completion. Portfolio history keeps at most 366 daily entries. Signup, tester, account, watchlist, API usage and click stores have no automatic deletion schedule in the code. We retain these for the feature or operational need and handle deletion requests; [RETENTION SCHEDULE] needs approval. Provider logs and backups have provider-specific retention that must be confirmed."
+  },
+  {
+    "id": "rights",
+    "title": "Your choices and rights",
+    "body": "Email hello@vestail.fun to request access, correction or deletion and to withdraw consent. We may need to verify the request. Depending on applicable law you may also have rights to restriction, objection, portability and a complaint to your regulator. Cookie settings let you change optional storage choices. Removing browser storage does not delete server-side account records or public blockchain history."
   }
 ]

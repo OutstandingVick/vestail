@@ -21,6 +21,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: absolute("/testers"), lastModified: now, changeFrequency: "weekly", priority: 0.8 },
     { url: absolute("/privacy"), lastModified: now, changeFrequency: "yearly", priority: 0.3 },
     { url: absolute("/terms"), lastModified: now, changeFrequency: "yearly", priority: 0.3 },
+    { url: absolute("/cookies"), lastModified: now, changeFrequency: "yearly", priority: 0.3 },
   ];
 
   const marketing: MetadataRoute.Sitemap = Object.keys(MARKETING_PAGES).map(key => ({

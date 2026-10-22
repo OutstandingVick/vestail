@@ -43,5 +43,10 @@
     "id": "rights",
     "title": "Your choices and rights",
     "body": "Email hello@vestail.fun to request access, correction or deletion and to withdraw consent. We may need to verify the request. Depending on applicable law you may also have rights to restriction, objection, portability and a complaint to your regulator. Cookie settings let you change optional storage choices. Removing browser storage does not delete server-side account records or public blockchain history."
+  },
+  {
+    "id": "transfers",
+    "title": "Transfers, children and changes",
+    "body": "Providers may process data in other countries; [TRANSFER LOCATIONS AND SAFEGUARDS] must be confirmed. Vestail is not for children; do not use it if you are below the age of majority where you live. Contact us about a child's data. We will publish material privacy changes here with an updated date."
   }
 ]

@@ -17,4 +17,22 @@
     window.dispatchEvent(new CustomEvent('vestail:consent', { detail: { ...choice } }));
   }
   window.VestailConsent = { allowed, save, get: () => choice && ({ ...choice }) };
+  // Optional integrations register a start callback returning its cleanup callback.
+  // No analytics or marketing provider is registered in this version.
+  const integrations = new Map();
+  function sync() {
+    integrations.forEach(item => {
+      if (allowed(item.category) && !item.running) {
+        item.stop = item.start(); item.running = true;
+      } else if (!allowed(item.category) && item.running) {
+        if (typeof item.stop === 'function') item.stop();
+        item.running = false;
+      }
+    });
+  }
+  window.VestailConsent.register = (id, category, start) => {
+    if (!['analytics', 'marketing'].includes(category) || integrations.has(id) || typeof start !== 'function') return;
+    integrations.set(id, { category, start, running: false }); sync();
+  };
+  window.addEventListener('vestail:consent', sync);
 })();

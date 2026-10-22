@@ -43,5 +43,10 @@
     "id": "third-parties",
     "title": "Third-party services",
     "body": "Links and routes do not mean we endorse a venue or issuer. Check their eligibility restrictions, terms and privacy notices. Networks, wallets and external services can fail or change."
+  },
+  {
+    "id": "liability",
+    "title": "Warranties and liability",
+    "body": "The service is provided as available without promises of accuracy, availability or fitness for your purpose. To the extent permitted by applicable law, [LEGAL ENTITY NAME] is not liable for indirect losses, lost profits or losses from reliance on information or third-party transactions. Nothing excludes rights or liability that cannot lawfully be excluded."
   }
 ]

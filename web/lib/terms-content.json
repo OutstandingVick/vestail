@@ -38,5 +38,10 @@
     "id": "prohibited",
     "title": "Prohibited use",
     "body": "Do not misuse accounts, scrape to resell raw data, bypass access controls, interfere with systems, impersonate others or use Vestail for unlawful activity. We may restrict access to protect the service."
+  },
+  {
+    "id": "third-parties",
+    "title": "Third-party services",
+    "body": "Links and routes do not mean we endorse a venue or issuer. Check their eligibility restrictions, terms and privacy notices. Networks, wallets and external services can fail or change."
   }
 ]

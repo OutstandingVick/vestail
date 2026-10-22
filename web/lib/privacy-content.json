@@ -13,5 +13,10 @@
     "id": "testers",
     "title": "Tester applications",
     "body": "We store X handle, email, country, citizen/foreigner relationship, public wallet address, Telegram username, crypto experience, optional motivation, pending status and submission time. We use these to review applications and contact testers about participation."
+  },
+  {
+    "id": "accounts",
+    "title": "Accounts, wallets and watchlists",
+    "body": "Privy handles email or wallet sign-in. Account data includes user identifier, linked public wallets and profile metadata such as declared country, buyer type, display name and avatar preferences. Uploaded avatars are saved on the server. Watchlists are stored server-side by user ID, including asset, optional symbol and added date. Daily portfolio value snapshots are also stored. We use these to provide the features you request. Vestail never asks for seed phrases or private keys."
   }
 ]

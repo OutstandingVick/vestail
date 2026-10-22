@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { DM_Sans, Geist, Inter, Manrope, Outfit, Syne } from "next/font/google";
 import { Providers } from "@/components/Providers";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/seo";
@@ -56,11 +57,13 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en" className={`${inter.variable} ${manrope.variable} ${syne.variable} ${geist.variable} ${dmSans.variable} ${outfit.variable}`} suppressHydrationWarning>
       <head>
+        <link rel="stylesheet" href="/cookie-consent.css" />
         {/* Set the theme before first paint, the same way and under the same key as the marketing site. */}
         <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
       </head>
       <body className="font-sans antialiased" suppressHydrationWarning>
         <Providers>{children}</Providers>
+        <Script src="/cookie-consent.js" strategy="afterInteractive" />
       </body>
     </html>
   );

@@ -8,7 +8,9 @@
   function read() {
     try { return JSON.parse(localStorage.getItem(KEY)); } catch (_) { return null; }
   }
-  choice = read();
+  const valid = value => Boolean(value && value.version === 1 && value.necessary === true && typeof value.analytics === 'boolean' && typeof value.marketing === 'boolean' && Number.isFinite(value.savedAt) && value.savedAt <= Date.now() && Date.now() - value.savedAt < TTL);
+  const stored = read();
+  choice = valid(stored) ? stored : null;
   function save(analytics, marketing) {
     choice = { version: 1, necessary: true, analytics: Boolean(analytics), marketing: Boolean(marketing), savedAt: Date.now() };
     try { localStorage.setItem(KEY, JSON.stringify(choice)); } catch (_) {}

@@ -13,5 +13,10 @@
     "id": "declarations",
     "title": "Your declarations",
     "body": "Country, region and residency are self-declared. Vestail does not perform KYC. You must provide accurate information and follow the laws that apply to you."
+  },
+  {
+    "id": "wallets",
+    "title": "Your wallet and transactions",
+    "body": "Vestail is non-custodial. You approve and sign transactions with your own wallet. Vestail never holds your funds or private keys. Swaps and purchases route through third parties, including Jupiter and issuers; their fees, risks and terms apply."
   }
 ]

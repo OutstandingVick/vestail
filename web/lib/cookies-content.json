@@ -18,5 +18,10 @@
     "id": "optional",
     "title": "Optional categories",
     "body": "No first-party analytics or marketing cookies or localStorage keys were found in the inspected version. There are no configured analytics or marketing scripts to enable today. Operational server-side records are described in Privacy. Future optional scripts must use the consent gate; accepting a category does not itself contact an analytics provider."
+  },
+  {
+    "id": "choices",
+    "title": "Changing your choice",
+    "body": "Accept all enables optional categories. Reject non-essential leaves them off. Settings lets you choose separately; necessary is always on. Use Cookie settings in the footer to reopen settings and withdraw consent. If storage is unavailable we keep the choice for this page only and ask again on a later load. Your browser can also clear storage. Contact hello@vestail.fun."
   }
 ]

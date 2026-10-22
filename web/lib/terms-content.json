@@ -3,5 +3,10 @@
     "id": "service",
     "title": "What Vestail provides",
     "body": "Vestail is operated by [LEGAL ENTITY NAME], [ADDRESS]. These terms cover our site, app and API. By using them you agree to these terms."
+  },
+  {
+    "id": "verdicts",
+    "title": "Eligibility information",
+    "body": "Verdicts are eligible, conditional, restricted or unverified. They explain published ownership conditions. This is disclosure, not legal, tax or investment advice, a compliance guarantee or permission from a regulator. Get independent advice when needed."
   }
 ]

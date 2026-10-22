@@ -18,5 +18,10 @@
     "id": "accounts",
     "title": "Accounts, wallets and watchlists",
     "body": "Privy handles email or wallet sign-in. Account data includes user identifier, linked public wallets and profile metadata such as declared country, buyer type, display name and avatar preferences. Uploaded avatars are saved on the server. Watchlists are stored server-side by user ID, including asset, optional symbol and added date. Daily portfolio value snapshots are also stored. We use these to provide the features you request. Vestail never asks for seed phrases or private keys."
+  },
+  {
+    "id": "api",
+    "title": "API and activity records",
+    "body": "API records contain only hashes of API key secrets, plus identifiers, labels, prefixes, rate limits, creation/revocation times and per-key daily usage counts. Buy-click records can include time, route, asset, acknowledgement, partner and session identifier. These are operational and attribution records, not guaranteed anonymous events. We found no separate anonymous product analytics integration in this version."
   }
 ]

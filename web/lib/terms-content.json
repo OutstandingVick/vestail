@@ -48,5 +48,10 @@
     "id": "liability",
     "title": "Warranties and liability",
     "body": "The service is provided as available without promises of accuracy, availability or fitness for your purpose. To the extent permitted by applicable law, [LEGAL ENTITY NAME] is not liable for indirect losses, lost profits or losses from reliance on information or third-party transactions. Nothing excludes rights or liability that cannot lawfully be excluded."
+  },
+  {
+    "id": "changes",
+    "title": "Governing law, changes and contact",
+    "body": "[GOVERNING LAW / JURISDICTION] applies, subject to mandatory rights. We may update these terms and show the new date here; review changes before continuing to use Vestail. Contact hello@vestail.fun."
   }
 ]

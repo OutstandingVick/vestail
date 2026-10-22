@@ -23,5 +23,10 @@
     "id": "api",
     "title": "API and activity records",
     "body": "API records contain only hashes of API key secrets, plus identifiers, labels, prefixes, rate limits, creation/revocation times and per-key daily usage counts. Buy-click records can include time, route, asset, acknowledgement, partner and session identifier. These are operational and attribution records, not guaranteed anonymous events. We found no separate anonymous product analytics integration in this version."
+  },
+  {
+    "id": "security",
+    "title": "Security and purposes",
+    "body": "Signup and tester rate limiting temporarily keeps IP addresses and attempt timestamps in server memory, using a ten-minute lookback. Hosting and network providers may also process request information. We use operational records to provide, secure and troubleshoot Vestail and prevent abuse, based on service delivery and legitimate interests where applicable. Optional analytics or marketing would require your consent."
   }
 ]

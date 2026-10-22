@@ -3,6 +3,7 @@
 import { PrivyProvider } from "@privy-io/react-auth";
 import { toSolanaWalletConnectors } from "@privy-io/react-auth/solana";
 import { base, robinhood } from "viem/chains";
+import { usePathname } from "next/navigation";
 
 const solanaConnectors = toSolanaWalletConnectors({ shouldAutoConnect: true });
 
@@ -14,6 +15,9 @@ const solanaConnectors = toSolanaWalletConnectors({ shouldAutoConnect: true });
  * No identity checks: this is login, not KYC.
  */
 export function Providers({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  // Public documents do not need authentication SDK storage or an app ID.
+  if (pathname === "/terms" || pathname === "/privacy" || pathname === "/cookies") return <>{children}</>;
   const appId = process.env.NEXT_PUBLIC_PRIVY_APP_ID;
   if (!appId) {
     return (

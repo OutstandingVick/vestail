@@ -33,5 +33,10 @@
     "id": "sharing",
     "title": "Who receives data",
     "body": "The code integrates Privy for authentication and profile metadata, Upstash / Vercel KV when configured for storage, and a local-file fallback in development. Deployment configuration supports Vercel hosting. Wallet, RPC, price and routing services including Jupiter receive requests necessary for the features you use; public blockchain transactions remain public. Google Fonts are requested by the marketing site. No separate analytics provider or marketing tracker is configured in the inspected code. We do not sell personal data."
+  },
+  {
+    "id": "retention",
+    "title": "Retention",
+    "body": "Profile and early-access cookies expire after one year and one day respectively; the access cookie is removed on completion. Portfolio history keeps at most 366 daily entries. Signup, tester, account, watchlist, API usage and click stores have no automatic deletion schedule in the code. We retain these for the feature or operational need and handle deletion requests; [RETENTION SCHEDULE] needs approval. Provider logs and backups have provider-specific retention that must be confirmed."
   }
 ]

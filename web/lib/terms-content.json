@@ -8,5 +8,10 @@
     "id": "verdicts",
     "title": "Eligibility information",
     "body": "Verdicts are eligible, conditional, restricted or unverified. They explain published ownership conditions. This is disclosure, not legal, tax or investment advice, a compliance guarantee or permission from a regulator. Get independent advice when needed."
+  },
+  {
+    "id": "declarations",
+    "title": "Your declarations",
+    "body": "Country, region and residency are self-declared. Vestail does not perform KYC. You must provide accurate information and follow the laws that apply to you."
   }
 ]

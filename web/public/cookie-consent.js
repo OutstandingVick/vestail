@@ -58,6 +58,21 @@
       if (event.target.closest('[data-cookie-settings]')) { event.preventDefault(); openSettings(); }
     });
     window.VestailConsent.openSettings = openSettings;
+    const banner = document.createElement('section');
+    banner.className = 'vc-banner';
+    banner.setAttribute('aria-label', 'Cookie choices');
+    banner.hidden = Boolean(choice);
+    banner.innerHTML = '<p>We use necessary storage to run Vestail. You choose whether to allow optional analytics and marketing. <a href="/cookies">Cookie Policy</a></p><div class="vc-actions"><button type="button" data-vc-accept>Accept all</button><button type="button" data-vc-reject>Reject non-essential</button><button type="button" data-vc-settings>Settings</button></div>';
+    banner.querySelector('[data-vc-accept]').addEventListener('click', () => save(true, true));
+    banner.querySelector('[data-vc-reject]').addEventListener('click', () => save(false, false));
+    banner.querySelector('[data-vc-settings]').addEventListener('click', openSettings);
+    window.addEventListener('vestail:consent', () => { banner.hidden = true; });
+    window.addEventListener('storage', event => {
+      if (event.key !== KEY && event.key !== null) return;
+      const updated = read(); choice = valid(updated) ? updated : null;
+      banner.hidden = Boolean(choice); sync();
+    });
+    document.body.append(banner);
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mount, { once: true });
   else mount();

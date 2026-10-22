@@ -8,5 +8,10 @@
     "id": "early-access",
     "title": "Early access",
     "body": "We store first name, email, country, declared citizenship/residency relationship, ownership interests, optional blocked-purchase explanation and submission time. We use these to manage access and respond to interest, on the basis of your request and consent where required. Invitation records also track code hashes, reservations and redemption."
+  },
+  {
+    "id": "testers",
+    "title": "Tester applications",
+    "body": "We store X handle, email, country, citizen/foreigner relationship, public wallet address, Telegram username, crypto experience, optional motivation, pending status and submission time. We use these to review applications and contact testers about participation."
   }
 ]

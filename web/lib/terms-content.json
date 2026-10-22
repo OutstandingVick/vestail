@@ -23,5 +23,10 @@
     "id": "sources",
     "title": "Rules and sources",
     "body": "Rules come from issuer and other published sources and may be incomplete or outdated. Unverified means the relevant rule has not yet been sourced; it does not mean eligible. Read the source and conditions before acting."
+  },
+  {
+    "id": "prices",
+    "title": "Prices",
+    "body": "Displayed stock-token prices track the most liquid Solana token representation available to the app. They can differ from the underlying share price and your execution price."
   }
 ]

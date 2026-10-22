@@ -18,5 +18,10 @@
     "id": "wallets",
     "title": "Your wallet and transactions",
     "body": "Vestail is non-custodial. You approve and sign transactions with your own wallet. Vestail never holds your funds or private keys. Swaps and purchases route through third parties, including Jupiter and issuers; their fees, risks and terms apply."
+  },
+  {
+    "id": "sources",
+    "title": "Rules and sources",
+    "body": "Rules come from issuer and other published sources and may be incomplete or outdated. Unverified means the relevant rule has not yet been sourced; it does not mean eligible. Read the source and conditions before acting."
   }
 ]

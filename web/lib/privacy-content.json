@@ -3,5 +3,10 @@
     "id": "controller",
     "title": "Who is responsible",
     "body": "[LEGAL ENTITY NAME], [ADDRESS], operates Vestail. Contact hello@vestail.fun about personal data. The grounds below describe our intended uses where applicable; jurisdiction-specific grounds need review before publication."
+  },
+  {
+    "id": "early-access",
+    "title": "Early access",
+    "body": "We store first name, email, country, declared citizenship/residency relationship, ownership interests, optional blocked-purchase explanation and submission time. We use these to manage access and respond to interest, on the basis of your request and consent where required. Invitation records also track code hashes, reservations and redemption."
   }
 ]

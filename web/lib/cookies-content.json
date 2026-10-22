@@ -13,5 +13,10 @@
     "id": "providers",
     "title": "Sign-in provider storage",
     "body": "Privy manages authentication storage when its provider loads. Confirmed SDK localStorage names include privy:token, privy:refresh_token, privy:id_token, privy:pat, privy:connections, privy:caid, privy:code_verifier, privy:state_code, privy:headless_oauth and privy:oauth_disable_signup. Their purpose is sign-in, session continuity, connected wallets and OAuth; they are necessary when using those features. Lifetimes are SDK-managed, not fixed by Vestail. privy:__session_storage__test is a transient capability check removed immediately. SDK and wallet-provider storage varies by login path; this is not a claim that every visitor receives every key."
+  },
+  {
+    "id": "optional",
+    "title": "Optional categories",
+    "body": "No first-party analytics or marketing cookies or localStorage keys were found in the inspected version. There are no configured analytics or marketing scripts to enable today. Operational server-side records are described in Privacy. Future optional scripts must use the consent gate; accepting a category does not itself contact an analytics provider."
   }
 ]

@@ -28,5 +28,10 @@
     "id": "security",
     "title": "Security and purposes",
     "body": "Signup and tester rate limiting temporarily keeps IP addresses and attempt timestamps in server memory, using a ten-minute lookback. Hosting and network providers may also process request information. We use operational records to provide, secure and troubleshoot Vestail and prevent abuse, based on service delivery and legitimate interests where applicable. Optional analytics or marketing would require your consent."
+  },
+  {
+    "id": "sharing",
+    "title": "Who receives data",
+    "body": "The code integrates Privy for authentication and profile metadata, Upstash / Vercel KV when configured for storage, and a local-file fallback in development. Deployment configuration supports Vercel hosting. Wallet, RPC, price and routing services including Jupiter receive requests necessary for the features you use; public blockchain transactions remain public. Google Fonts are requested by the marketing site. No separate analytics provider or marketing tracker is configured in the inspected code. We do not sell personal data."
   }
 ]

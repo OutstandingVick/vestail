@@ -3,13 +3,15 @@ import "server-only";
 import { createHash, randomBytes, randomUUID } from "node:crypto";
 import { mkdir, readFile, readdir, rename, unlink, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { decryptInviteCode, encryptInviteCode } from "./invite-code-crypto";
 
 const CODE_TTL_MS = 30 * 24 * 60 * 60 * 1000;
 const RESERVATION_TTL_MS = 15 * 60 * 1000;
 const PREFIX = "vestail:invite";
 
 export type InviteStatus = "active" | "redeemed" | "revoked" | "expired";
-export type InviteRecord = { id: string; hint: string; createdAt: string; expiresAt: string; status: InviteStatus; redeemedAt?: string; revokedAt?: string };
+export type InviteRecord = { id: string; hint: string; code?: string; createdAt: string; expiresAt: string; status: InviteStatus; redeemedAt?: string; revokedAt?: string };
+type StoredInvite = InviteRecord & { encryptedCode?: string };
 
 const hashCode = (code: string) => createHash("sha256").update(code.trim().toUpperCase()).digest("hex");
 const localRoot = () => path.resolve(process.env.VESTAIL_INVITES_DIR || ".data/invites");
@@ -51,8 +53,11 @@ export async function generateInvites(count: number) {
     const code = generateCode();
     const hash = hashCode(code);
     const createdAt = new Date();
-    const record: InviteRecord = { id: randomUUID(), hint: `••••-${code.slice(-4)}`, createdAt: createdAt.toISOString(), expiresAt: new Date(createdAt.getTime() + CODE_TTL_MS).toISOString(), status: "active" };
-    if (await saveActive(hash, record)) invites.push({ ...record, code });
+    const record: StoredInvite = { id: randomUUID(), hint: `••••-${code.slice(-4)}`, encryptedCode: encryptInviteCode(code), createdAt: createdAt.toISOString(), expiresAt: new Date(createdAt.getTime() + CODE_TTL_MS).toISOString(), status: "active" };
+    if (await saveActive(hash, record)) {
+      const { encryptedCode: _encrypted, ...publicRecord } = record;
+      invites.push({ ...publicRecord, code });
+    }
   }
   return invites;
 }
@@ -124,7 +129,10 @@ async function recordsFor(status: "active" | "redeemed" | "revoked") {
 
 export async function listInvites() {
   const records = (await Promise.all([recordsFor("active"), recordsFor("redeemed"), recordsFor("revoked")])).flat();
-  return records.map(withComputedStatus).sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+  return records.map(record => {
+    const { encryptedCode, ...publicRecord } = record as StoredInvite;
+    return withComputedStatus({ ...publicRecord, code: decryptInviteCode(encryptedCode) });
+  }).sort((a, b) => b.createdAt.localeCompare(a.createdAt));
 }
 
 export async function revokeInvite(id: string) {

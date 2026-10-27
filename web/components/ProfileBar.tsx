@@ -27,8 +27,22 @@ export function ProfileBar({ countries, profile, onSaved }: { countries: Country
     start(async () => {
       const res = await authedFetch("/api/profile", { method: "POST", body: JSON.stringify(next) });
       if (!res.ok) return setError(await errorOf(res, "Couldn't save that."));
+      /*
+       * Refresh before navigating, always.
+       *
+       * Saving sets the profile cookie on the response, which changes what
+       * every server component on the next page renders. The client Router
+       * Cache does not know that: it can still be holding the payload it
+       * prefetched for /app/portfolio while there was no profile, and that
+       * payload is the layout's redirect back to /app/start — which now
+       * redirects to /app/portfolio, and the two bounce off each other and
+       * render nothing. A blank screen, right after choosing a country.
+       *
+       * refresh() throws that cache away so the push fetches the page as it
+       * is now rather than as it was before the buyer existed.
+       */
+      router.refresh();
       if (onSaved) router.push(onSaved);
-      else router.refresh();
     });
   }
 

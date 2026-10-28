@@ -3,10 +3,9 @@
 import { Wallet } from "@phosphor-icons/react";
 import { useLogin, useLoginWithEmail, usePrivy } from "@privy-io/react-auth";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Logo } from "@/components/Logo";
-import { authedFetch } from "@/lib/client";
 
 type Mode = "signup" | "login";
 
@@ -19,20 +18,14 @@ type Mode = "signup" | "login";
 export default function SignInPage() {
   const router = useRouter();
   const { ready, authenticated } = usePrivy();
-  const done = async () => {
-    if (mode === "signup") await authedFetch("/api/early-access/complete", { method: "POST" }).catch(() => undefined);
-    router.replace("/app/portfolio");
-  };
+  const done = () => router.replace("/app/portfolio");
   const { login } = useLogin({ onComplete: done });
   const { sendCode, loginWithCode, state } = useLoginWithEmail({ onComplete: done });
   const [mode, setMode] = useState<Mode>("signup");
   const [email, setEmail] = useState("");
   const [code, setCode] = useState("");
-  const [accessCode, setAccessCode] = useState("");
-  const [accessVerified, setAccessVerified] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
-  const accessCodeRef = useRef<HTMLInputElement>(null);
   const awaitingCode = state.status === "awaiting-code-input" || state.status === "submitting-code";
 
   useEffect(() => {
@@ -50,38 +43,13 @@ export default function SignInPage() {
     setBusy(false);
   }
 
-  async function verifyEarlyAccess() {
-    if (accessVerified) return true;
-    if (!accessCode.trim()) {
-      accessCodeRef.current?.focus();
-      throw new Error("Enter your early access code before signing up.");
-    }
-    const response = await fetch("/api/early-access/verify", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ code: accessCode }),
-    });
-    const body = await response.json().catch(() => null) as { error?: string } | null;
-    if (!response.ok) throw new Error(body?.error ?? "We couldn't verify that early access code.");
-    setAccessVerified(true);
-    return true;
-  }
-
   async function beginEmailSignIn() {
-    if (mode === "signup") await verifyEarlyAccess();
     await sendCode({ email: email.trim(), disableSignup: mode === "login" });
   }
 
-  async function beginWalletSignIn() {
-    setBusy(true); setError(null);
-    try {
-      if (mode === "signup") await verifyEarlyAccess();
-      login({ loginMethods: ["wallet"] });
-    } catch (e) {
-      setError((e as Error).message || "We couldn't verify that early access code.");
-    } finally {
-      setBusy(false);
-    }
+  function beginWalletSignIn() {
+    setError(null);
+    login({ loginMethods: ["wallet"] });
   }
 
   const tab = (m: Mode, label: string) => (
@@ -123,12 +91,7 @@ export default function SignInPage() {
           </div>
 
           {!awaitingCode ? (
-            <form className="flex flex-col gap-3" onSubmit={e => { e.preventDefault(); run(beginEmailSignIn, mode === "signup" ? "That early access code is not valid." : "We couldn't send a code. Check the email and try again."); }}>
-              {mode === "signup" && <>
-                <label htmlFor="access-code" className="text-sm font-semibold">Early access code</label>
-                <input ref={accessCodeRef} id="access-code" type="text" required autoComplete="off" value={accessCode} onChange={e => { setAccessCode(e.target.value); setAccessVerified(false); setError(null); }} placeholder="Enter your invitation code"
-                  className="min-h-12 rounded-field border-[1.5px] border-field bg-wash px-4 text-[16px]" />
-              </>}
+            <form className="flex flex-col gap-3" onSubmit={e => { e.preventDefault(); run(beginEmailSignIn, "We couldn't send a code. Check the email and try again."); }}>
               <label htmlFor="email" className="text-sm font-semibold">Email</label>
               <input id="email" type="email" required autoComplete="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="you@example.com"
                 className="min-h-12 rounded-field border-[1.5px] border-field bg-wash px-4 text-[16px]" />
@@ -157,7 +120,7 @@ export default function SignInPage() {
             <Wallet size={18} weight="regular" aria-hidden="true" />
             {mode === "signup" ? "Sign up with a wallet" : "Continue with a wallet"}
           </button>
-          <p className="mt-3 text-center text-xs text-muted">{mode === "signup" ? "Enter your early access code above, then connect Phantom, Solflare, MetaMask, Rabby or Coinbase Wallet." : "Phantom, Solflare, MetaMask, Rabby or Coinbase Wallet."}</p>
+          <p className="mt-3 text-center text-xs text-muted">Phantom, Solflare, MetaMask, Rabby or Coinbase Wallet.</p>
 
           {error && <p role="alert" className="mt-4 text-center text-sm text-cannot">{error}</p>}
         </section>

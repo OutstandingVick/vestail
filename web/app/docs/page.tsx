@@ -235,6 +235,7 @@ export default function DocsPage() {
               <h2>Small surface, composable responses.</h2>
               <p>All responses are JSON. Reference data is designed to be cacheable; activity data is live.</p>
             </div>
+            <div className={styles.warning}><strong>Not yet publicly hosted</strong><p>The API runs inside Vestail&apos;s own application and is not exposed on a public URL yet: <code>vestail.fun/api/v1/*</code> returns 404. Everything below describes the interface you will get, and is what Vestail runs against today. Ask us for a test key and a base URL before you build against it.</p></div>
             <div className={styles.baseUrl}><span>Base path</span><code>/api/v1</code><small>The running service publishes its generated OpenAPI 3.1 document at <code>/api/v1/openapi.json</code>.</small></div>
             <div className={styles.endpointList}>
               {endpoints.map(([method, path, description]) => (

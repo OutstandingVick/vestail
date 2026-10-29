@@ -21,6 +21,9 @@ Load-bearing facts, stated once:
 ## Docs
 
 - [Index and status](README.md): the map, and why nothing is reachable yet
+- [Quickstart](quickstart.md): five commands from nothing to an answer
+- [Data model](data-model.md): 12 countries x 20 asset classes x 2 buyer types = 480 rules
+- [Corrections](corrections.md): how to report a wrong rule; a cited document beats an argument
 - [Ten-minute guide](API.md): the internal API's shape and three worked questions
 - [Partner API](partner-api.md): /check, batching, what a key gets you
 - [Conventions](conventions.md): base URLs, casing, dates, nulls, the verdict scale

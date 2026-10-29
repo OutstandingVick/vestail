@@ -33,6 +33,7 @@ mistake to make in this repo.
 
 | | |
 |---|---|
+| [quickstart.md](./quickstart.md) | Five minutes from nothing to an answer. Start here. |
 | [API.md](./API.md) | The internal API in ten minutes: the mental model and the endpoints the app uses. |
 | [partner-api.md](./partner-api.md) | The partner API: `/check`, batching, and what a key gets you. |
 | [conventions.md](./conventions.md) | Base URL, methods, naming, dates, nulls. Read once. |
@@ -41,6 +42,10 @@ mistake to make in this repo.
 | [request-limits.md](./request-limits.md) | Rate limits, the numbers, and how to behave on a 429. |
 | [versioning.md](./versioning.md) | What `/v1` promises and what would bump it. |
 | [openapi.yaml](./openapi.yaml) | The machine-readable contract for the internal API. |
+| [data-model.md](./data-model.md) | What the API is reading: 12 × 20 × 2, and the files behind it. |
+| [corrections.md](./corrections.md) | How to report a rule that is wrong. |
+| [reference/](./reference/README.md) | A page per endpoint. |
+| [llms.txt](./llms.txt) | A machine-readable index of all of the above. |
 
 ## A note on how these pages are kept true
 

@@ -12,8 +12,15 @@ info:
     * **Route** – for a permitted (asset, country) pair, the venues where it can be bought, tagged for attribution.
 
     All responses are JSON. Reference data endpoints are cacheable for 24h; `/activity` is live.
+externalDocs:
+  description: Prose documentation — conventions, errors, rate limits, per-endpoint pages
+  url: https://github.com/OutstandingVick/vestail/blob/main/docs/api/README.md
 servers:
-  - url: https://api.vestail.example/v1
+  # There is no public server. The API runs in-process inside the Next.js app
+  # (web/lib/server/local-api.ts); vestail.fun/v1/* returns 404. This is the
+  # local development address, which is the only one that answers today.
+  - url: http://localhost:8787/v1
+    description: Local — npm start -w @vestail/api
 tags:
   - { name: resolve, description: Turn text into asset classes }
   - { name: matrix,  description: Status grid across countries }

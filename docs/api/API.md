@@ -1,8 +1,14 @@
-# Vestail API — builder guide
+# The internal API in ten minutes
 
-The machine-readable contract is `openapi.yaml`. This page is the ten-minute version.
+`/v1` — what Vestail's own web app calls. For the third-party surface see
+[partner-api.md](./partner-api.md); for the map of both, [README.md](./README.md).
 
-## Mental model
+Shared rules are not repeated here: [conventions.md](./conventions.md),
+[errors.md](./errors.md), [request-limits.md](./request-limits.md),
+[versioning.md](./versioning.md). Per-endpoint detail is in
+[reference/](./reference/README.md).
+
+## The shape of it
 
 ```
 text ──▶ /resolve ──▶ asset classes ──▶ /matrix ──▶ status per country ──▶ /venues ──▶ buy link
@@ -12,74 +18,69 @@ text ──▶ /resolve ──▶ asset classes ──▶ /matrix ──▶ stat
 
 Three verbs, three nouns:
 
-| Verb    | Noun     | Endpoint                          |
-|---------|----------|-----------------------------------|
-| Resolve | query    | `GET /resolve?q=`                 |
-| Look up | rule     | `GET /rules/{country}/{asset}`    |
-| Route   | venue    | `GET /venues/{asset}?country=`    |
+| Verb | Noun | Endpoint |
+|---|---|---|
+| Resolve | query | [`GET /resolve?q=`](./reference/resolve.md) |
+| Look up | rule | [`GET /rules/{country}/{asset}`](./reference/rules.md) |
+| Route | venue | [`GET /venues/{asset}?country=`](./reference/venues.md) |
 
-`GET /matrix` composes all three for a whole board in one call and is what the frontend uses.
+[`GET /matrix`](./reference/matrix.md) composes all three for a whole board in one call,
+and is what the frontend actually uses. Reach for it first.
 
-## Buyer types
-Every rule has two values. Pass `who=citizen` (default) or `who=foreigner`. A third type, `resident`, is planned; clients should treat unknown values as `foreigner` (the conservative case).
+## Start here
 
-## The resolver contract
-`/resolve` never guesses silently. Every response carries `stage` (which layer matched) and `trail` (the human-readable chain). Surface the trail; it is what makes a "Google → foreign equities" answer trustworthy.
+```bash
+npm start -w @vestail/api        # http://localhost:8787/v1
+curl "http://localhost:8787/v1/health"
+curl "http://localhost:8787/v1/matrix?q=farmland&who=foreigner&sort=status"
+```
 
-Stages, in priority order:
-
-1. `entity` – a named thing: company, coin, aircraft model, bond series. Companies carry `home`, and the response includes `perCountry` so callers know the asset differs by row.
-2. `alias` – an everyday word: *house*, *stocks*, *gilts*.
-3. `category` – a group name: *commodities*, *fixed income*.
-4. `asset` – an asset class name, with prefix/typo tolerance.
-5. `none` – nothing matched. Show the user the categories.
-
-Multi-word queries are cleaned of filler ("can I buy…") and, if the phrase fails, retried per word with entities first, so *tesla shares* resolves to Tesla rather than the generic *shares* bucket.
-
-## Examples
+## Three worked questions
 
 **Where can a Nigerian buy Google?**
+
 ```
-GET /rules/NG/foreign_equities?who=citizen
-→ { "status": "conditional", "venues": [{ "name": "Bamboo", "url": "https://investbamboo.com?ref=vestail" }, …] }
+GET /v1/rules/NG/foreign_equities?who=citizen
+→ { "status": "conditional",
+    "venues": [{ "name": "Bamboo", "url": "https://investbamboo.com?ref=vestail" }, …] }
 ```
 
 **A foreigner wants farmland, anywhere**
+
 ```
-GET /matrix?q=farmland&who=foreigner&sort=status
+GET /v1/matrix?q=farmland&who=foreigner&sort=status
 → rows ranked most-open first; each row has one cell and a populated cta
 ```
 
-**Your own venue tag**
-```
-GET /venues/cryptocurrency?country=IN&ref=ref=partner_xyz
-```
-
-## Tokenised versions (Solana)
-One ticker exists onchain as several legal claims. `GET /tokens` lists the symbols; `GET /tokens/{symbol}?country=&who=` judges each token:
-
-1. The issuer's own policy for the country (carried over from Vestail v1, every gate sourced).
-2. Capped by the asset-class rule (NVDA is foreign equities outside the US). The stricter decides; `decided_by` says which.
-3. No issuer rule for the country → `assessed: false`, `status: null`. **Not assessed is not eligible** and must not be bought.
+**Which version of NVDA may a Nigerian hold?**
 
 ```
-GET /tokens/NVDA?country=NG&who=foreigner
-→ { "asset": "foreign_equities", "class_status": "can_own",
-    "tokens": [{ "token_symbol": "NVDAx", "status": "conditional", "decided_by": "issuer", "issuer": { "acknowledgement": {…}, "evidence": [ … ] } }, …] }
+GET /v1/tokens/NVDA?country=NG&who=foreigner
+→ one ticker, several legal claims, each judged
 ```
 
-Data lives in `data/tokens/` (registry, issuer policies, and `symbols.json`, which maps each symbol to its asset class).
+## The four things to get right
+
+1. **Three verdicts, never two.** `can_own`, `conditional`, `cannot_own`. The middle one
+   is the product — see [conventions.md](./conventions.md).
+2. **Surface the trail.** `/resolve` returns `stage` and `trail` so a user can check how
+   their words became an asset class. Showing it is what makes the answer trustworthy.
+3. **The acknowledgement is server-enforced.** A conditional buy without
+   `acknowledged: true` is refused at
+   [`POST /orders/click`](./reference/orders-click.md). The checkbox is convenience; the
+   server check is the guarantee.
+4. **`sources` is empty and `verified_at` is null on all 480 rules.** Build the interface
+   that shows provenance now, while there is none to show.
 
 ## Attribution
-Every Buy press should `POST /orders/click` before redirecting. The response returns the final redirect url so the tag logic lives server-side. This is the hook for referral revenue and payment-for-order-flow accounting; it also feeds the live ticker.
 
-## Versioning and caching
-- Path-versioned (`/v1`). Breaking changes to the status scale or buyer types bump the version.
-- Reference endpoints (`/assets`, `/categories`, `/countries`, `/entities`, `/venues`) set `Cache-Control: max-age=86400`.
-- `/matrix` and `/rules` may be cached for an hour; `/activity` must not be cached.
+Every Buy press should go through [`POST /orders/click`](./reference/orders-click.md)
+before redirecting. It returns the final tagged url, so the tag logic stays on the server
+rather than drifting across clients. It is the hook for referral revenue, which is why it
+needs a key.
 
-## Errors
-Standard shape: `{ "error": { "code": "unknown_country", "message": "…" } }`. Codes: `unknown_country`, `unknown_asset`, `bad_buyer_type`, `validation`.
+## The contract
 
-## Auth
-Public read for reference and matrix endpoints, rate-limited by IP. `POST /orders/click` requires an API key (`Authorization: Bearer …`) so click volume can be attributed to a partner.
+[`openapi.yaml`](./openapi.yaml) is machine-readable and authoritative. The service
+validates every request against it at runtime, and `test/contract.test.js` calls every
+operation in it — so adding a path to the spec without implementing it fails the build.

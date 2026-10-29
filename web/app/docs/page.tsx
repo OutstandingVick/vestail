@@ -280,7 +280,7 @@ export default function DocsPage() {
               <article><h3>Buyer context is declared</h3><p>Vestail does not infer citizenship, residency, or identity. Results depend on the values supplied by the buyer or integrating product.</p></article>
               <article><h3>Provenance is mandatory</h3><p>A result without a source is returned as <code>unverified</code>, regardless of the internal rule status.</p></article>
               <article><h3>Disclosure, not enforcement</h3><p>Every response includes a disclaimer. Vestail informs; it does not certify compliance or guarantee a transaction.</p></article>
-              <article><h3>Usage is privacy-minimal</h3><p>Vestail counts requests per API key per day for limits and future billing. Request bodies are not retained.</p></article>
+              <article><h3>Usage is privacy-minimal</h3><p>Rate limits are counted per API key per minute; usage is counted per day for billing. Request bodies are not retained.</p></article>
             </div>
             <div className={styles.warning}><strong>Residency coverage</strong><p>The current rule set distinguishes citizens and foreigners. Requests for residents return <code>unverified</code> until resident-specific sourced rules are added.</p></div>
           </section>

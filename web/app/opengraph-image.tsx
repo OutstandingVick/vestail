@@ -25,9 +25,13 @@ export default function OpengraphImage() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          padding: "72px 80px",
-          background: "linear-gradient(135deg, #F8F7FF 0%, #EBEBFF 100%)",
+          padding: "56px 64px",
+          backgroundColor: "#F8F7FF",
+          backgroundImage:
+            "linear-gradient(rgba(124,92,255,0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(124,92,255,0.07) 1px, transparent 1px), radial-gradient(circle at 88% 18%, rgba(255,88,10,0.16), transparent 28%)",
+          backgroundSize: "72px 72px, 72px 72px, 100% 100%",
           fontFamily: "sans-serif",
+          border: "1px solid rgba(124,92,255,0.16)",
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>

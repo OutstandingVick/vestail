@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Script from "next/script";
 import { DM_Sans, Geist, Inter, Manrope, Outfit, Syne } from "next/font/google";
 import { Providers } from "@/components/Providers";
-import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/seo";
+import { SITE_DESCRIPTION, SITE_NAME, SITE_URL, SOCIAL_DESCRIPTION, SOCIAL_TITLE } from "@/lib/seo";
 import "./globals.css";
 
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
@@ -35,16 +35,16 @@ export const metadata: Metadata = {
     type: "website",
     siteName: SITE_NAME,
     url: SITE_URL,
-    title: "Vestail — What Can You Own in Your Country?",
-    description: SITE_DESCRIPTION,
+    title: SOCIAL_TITLE,
+    description: SOCIAL_DESCRIPTION,
     locale: "en",
   },
   twitter: {
     card: "summary_large_image",
     site: "@usevestail",
     creator: "@usevestail",
-    title: "Vestail — What Can You Own in Your Country?",
-    description: SITE_DESCRIPTION,
+    title: SOCIAL_TITLE,
+    description: SOCIAL_DESCRIPTION,
   },
   robots: {
     index: true,

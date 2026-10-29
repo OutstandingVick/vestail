@@ -17,6 +17,7 @@ const API = new URL("../docs/api/", import.meta.url);
 const SPEC = new URL("./openapi.yaml", API);
 const REFERENCE = new URL("./reference/", API);
 const PUBLIC_ROUTES = new URL("../services/api/src/public/routes.js", import.meta.url);
+const APP = new URL("../services/api/src/app.js", import.meta.url);
 
 /*
  * Only headings count.
@@ -46,6 +47,18 @@ export function partnerPaths(source) {
   return [...source.matchAll(/api\.(?:get|post)\(\s*"([^"]+)"/g)].map(m => m[1]);
 }
 
+/*
+ * Routes registered directly on the internal router, e.g. v1.get("/health", …).
+ *
+ * Reading only the spec missed these: /v1/health and /v1/openapi.json exist in
+ * app.js and appear nowhere in openapi.yaml, so a guard that trusted the spec
+ * reported full coverage while two endpoints were documented nowhere at all.
+ * The router is the thing that is true; the spec is a description of it.
+ */
+export function routerPaths(source) {
+  return [...source.matchAll(/v1\.(?:get|post)\(\s*"([^"]+)"/g)].map(m => m[1]);
+}
+
 /**
  * A path is covered when some reference page mentions it. Parameter names
  * differ between a spec ({country}) and prose ({country} or :id), so both the
@@ -68,7 +81,14 @@ test("every partner endpoint has a reference page", () => {
   assert.deepEqual(missing, [], `no reference page mentions: ${missing.join(", ")}`);
 });
 
+test("every route registered on the internal router has a reference page", () => {
+  const text = headings();
+  const missing = routerPaths(readFileSync(APP, "utf8")).filter(p => !covered(p, text));
+  assert.deepEqual(missing, [], `no reference page mentions: ${missing.join(", ")}`);
+});
+
 test("the matchers find something, so neither check can pass vacuously", () => {
   assert.ok(specPaths(readFileSync(SPEC, "utf8")).length >= 10);
   assert.ok(partnerPaths(readFileSync(PUBLIC_ROUTES, "utf8")).length >= 4);
+  assert.ok(routerPaths(readFileSync(APP, "utf8")).length >= 2);
 });

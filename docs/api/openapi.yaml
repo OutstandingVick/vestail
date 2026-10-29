@@ -122,23 +122,23 @@ paths:
         "429": { $ref: "#/components/responses/RateLimited" }
         "400": { $ref: "#/components/responses/BadRequest" }
   /assets:
-    get: { tags: [reference], summary: The asset classes, responses: { "200": { description: List, content: { application/json: { schema: { type: array, items: { $ref: "#/components/schemas/Asset" } } } } } } }
+    get: { tags: [reference], summary: The asset classes, responses: { "429": { $ref: "#/components/responses/RateLimited" }, "200": { description: List, content: { application/json: { schema: { type: array, items: { $ref: "#/components/schemas/Asset" } } } } } } }
   /categories:
-    get: { tags: [reference], summary: Category fan-outs, responses: { "200": { description: List, content: { application/json: { schema: { type: array, items: { $ref: "#/components/schemas/Category" } } } } } } }
+    get: { tags: [reference], summary: Category fan-outs, responses: { "429": { $ref: "#/components/responses/RateLimited" }, "200": { description: List, content: { application/json: { schema: { type: array, items: { $ref: "#/components/schemas/Category" } } } } } } }
   /countries:
-    get: { tags: [reference], summary: Countries covered, responses: { "200": { description: List, content: { application/json: { schema: { type: array, items: { $ref: "#/components/schemas/Country" } } } } } } }
+    get: { tags: [reference], summary: Countries covered, responses: { "429": { $ref: "#/components/responses/RateLimited" }, "200": { description: List, content: { application/json: { schema: { type: array, items: { $ref: "#/components/schemas/Country" } } } } } } }
   /entities:
     get:
       tags: [reference]
       summary: Search the named-entity dictionary
       parameters: [{ name: q, in: query, schema: { type: string } }, { name: kind, in: query, schema: { type: string } }]
-      responses: { "200": { description: Matches, content: { application/json: { schema: { type: array, items: { $ref: "#/components/schemas/Entity" } } } } } }
+      responses: { "429": { $ref: "#/components/responses/RateLimited" }, "200": { description: Matches, content: { application/json: { schema: { type: array, items: { $ref: "#/components/schemas/Entity" } } } } } }
 
   /tokens:
     get:
       tags: [tokens]
       summary: Symbols that have tokenised versions
-      responses: { "200": { description: List, content: { application/json: { schema: { type: array, items: { $ref: "#/components/schemas/TokenSymbol" } } } } } }
+      responses: { "429": { $ref: "#/components/responses/RateLimited" }, "200": { description: List, content: { application/json: { schema: { type: array, items: { $ref: "#/components/schemas/TokenSymbol" } } } } } }
 
   /tokens/{symbol}:
     get:
@@ -165,7 +165,7 @@ paths:
     get:
       tags: [activity]
       summary: Traction stats and recent buys for the HUD
-      responses: { "200": { description: Feed, content: { application/json: { schema: { $ref: "#/components/schemas/Activity" } } } } }
+      responses: { "429": { $ref: "#/components/responses/RateLimited" }, "200": { description: Feed, content: { application/json: { schema: { $ref: "#/components/schemas/Activity" } } } } }
 
   /orders:
     get:

@@ -39,6 +39,15 @@ Either a literal asset name, or the sentinel `"equity-by-home"` meaning: domesti
 ```
 Every country needs a rule for every asset id, for both buyer types; the core refuses to load a missing, unknown or invalid one. `sources` lists the documents the status rests on and `verified_at` is the date it was last checked against them. Both start empty (`[]`, `null`): an unsourced rule is illustrative. `schemas.json` validates the shape, and the API tests run it over `countries.json`.
 
+## Reading this through the API
+
+The same model, from a caller's side, is in
+[`docs/api/data-model.md`](../../docs/api/data-model.md) — and the endpoints that expose
+it are documented one page each under [`docs/api/reference/`](../../docs/api/reference/README.md).
+
+If you are adding an asset class or a country, both need updating: the core refuses to
+load when a rule is missing, and a guard refuses the build when an endpoint has no page.
+
 ## Tokenised symbols
 
 `tokens/representations.json` (Solana) and `tokens/evm.json` (Robinhood Chain,

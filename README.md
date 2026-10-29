@@ -20,7 +20,9 @@ Open `site/index.html` in a browser to see it. Open `docs/GLOSSARY.html` to unde
 │   ├── index.js  package.json  test.js   (node test.js)
 └── docs/
     ├── GLOSSARY.html            ← vocabulary, architecture, build log, open questions
-    ├── api/  openapi.yaml · API.md
+    ├── api/  README.md (start here) · quickstart.md · conventions.md · errors.md ·
+    │          request-limits.md · versioning.md · authentication.md · partner-api.md ·
+    │          data-model.md · corrections.md · reference/ · openapi.yaml · llms.txt
     └── diagrams/  resolver-pipeline.svg · system-flow.svg
 ```
 

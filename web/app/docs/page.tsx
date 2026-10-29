@@ -199,7 +199,7 @@ export default function DocsPage() {
               <h2>Three states. Never a misleading boolean.</h2>
             </div>
             <div className={styles.verdictGrid}>
-              <article className={styles.can}><span className={styles.verdictIcon}><CheckCircle size={22} weight="duotone" aria-hidden="true" /></span><h3>Eligible</h3><code>eligible</code><p>The sourced rules indicate ownership is available for this declared context.</p></article>
+              <article className={styles.can}><span className={styles.verdictIcon}><CheckCircle size={22} weight="duotone" aria-hidden="true" /></span><h3>Eligible</h3><code>eligible</code><p>The rules indicate ownership is available for this declared context.</p></article>
               <article className={styles.conditional}><span className={styles.verdictIcon}><WarningCircle size={22} weight="duotone" aria-hidden="true" /></span><h3>Conditional</h3><code>conditional · 1</code><p>A licence, cap, approval, residency rule, or other condition applies.</p></article>
               <article className={styles.cannot}><span className={styles.verdictIcon}><XCircle size={22} weight="duotone" aria-hidden="true" /></span><h3>Restricted</h3><code>restricted</code><p>The sourced rules indicate ownership is restricted for this declared context.</p></article>
             </div>

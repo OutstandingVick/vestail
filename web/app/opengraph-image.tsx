@@ -92,6 +92,24 @@ export default function OpengraphImage() {
                 V
               </div>
             </div>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 9,
+                alignSelf: "flex-start",
+                marginTop: 20,
+                padding: "10px 14px",
+                borderRadius: 999,
+                background: "#FFF1D5",
+                color: "#7A4A00",
+                fontSize: 17,
+                fontWeight: 750,
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 20, height: 20, borderRadius: 10, background: "#D38B00", color: "white", fontSize: 13 }}>!</div>
+              Conditional · Read before buying
+            </div>
           </div>
         </div>
 

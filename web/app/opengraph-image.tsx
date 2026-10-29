@@ -63,8 +63,8 @@ export default function OpengraphImage() {
           <div style={{ fontSize: 72, fontWeight: 800, color: "#17171A", lineHeight: 0.98, letterSpacing: "-0.055em" }}>
             Know what you can own. Before you buy.
           </div>
-          <div style={{ fontSize: 30, color: "rgba(23,23,26,0.68)", lineHeight: 1.35, maxWidth: 900 }}>
-            Stocks, land, gold and more — what you may hold where you live, for citizens and foreigners.
+          <div style={{ fontSize: 25, color: "#5B5B66", lineHeight: 1.35, maxWidth: 650 }}>
+            Country-aware answers for tokenized stocks, property, gold and more — with the conditions and sources made clear.
           </div>
         </div>
 

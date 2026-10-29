@@ -82,6 +82,16 @@ export default function OpengraphImage() {
           >
             <div style={{ display: "flex", color: "#70707C", fontSize: 16, fontWeight: 600 }}>YOUR CONTEXT</div>
             <div style={{ display: "flex", marginTop: 10, color: "#17171A", fontSize: 27, fontWeight: 750 }}>Nigeria · Foreigner</div>
+            <div style={{ display: "flex", height: 1, background: "#E7E4F7", margin: "20px 0" }} />
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+                <div style={{ display: "flex", color: "#17171A", fontSize: 22, fontWeight: 750 }}>Tokenized stock</div>
+                <div style={{ display: "flex", color: "#70707C", fontSize: 16 }}>Issuer terms checked</div>
+              </div>
+              <div style={{ display: "flex", width: 48, height: 48, borderRadius: 16, alignItems: "center", justifyContent: "center", background: "#F0ECFF", color: "#6D4AFF", fontSize: 24, fontWeight: 800 }}>
+                V
+              </div>
+            </div>
           </div>
         </div>
 

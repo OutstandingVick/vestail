@@ -1,0 +1,51 @@
+# Vestail API
+
+> Vestail answers whether a person may own a given asset in a given country, and where
+> they can buy it. Twelve countries, twenty asset classes, two buyer types, three
+> verdicts.
+
+Status: neither API surface is exposed publicly. vestail.fun/v1/* and /api/v1/* both
+return 404. The service runs in-process inside the Next.js app.
+
+Two surfaces with different vocabularies:
+- Internal `/v1`, snake_case, `who` = citizen|foreigner, verdicts can_own|conditional|cannot_own
+- Partner `/api/v1`, camelCase, `residency` = citizen|resident|foreigner, verdicts eligible|conditional|restricted|unverified
+
+Load-bearing facts, stated once:
+- `conditional` means holdable but encumbered. Never collapse three verdicts into two.
+- `unverified` and `assessed: false` mean no answer. Never render as a lenient yes.
+- All 480 rules have `sources: []` and `verified_at: null`. Nothing is sourced yet.
+- Country is declared by the caller, never inferred from IP or locale.
+- Asset ids are the contract; display names are not.
+
+## Docs
+
+- [Index and status](README.md): the map, and why nothing is reachable yet
+- [Ten-minute guide](API.md): the internal API's shape and three worked questions
+- [Partner API](partner-api.md): /check, batching, what a key gets you
+- [Conventions](conventions.md): base URLs, casing, dates, nulls, the verdict scale
+- [Authentication](authentication.md): two bearer-token systems and how they differ
+- [Errors](errors.md): all seventeen codes, which to retry, and the duplicate pairs
+- [Request limits](request-limits.md): 60/min per partner key, 120/min per IP, batching
+- [Versioning](versioning.md): what bumps /v1, cache ages, the stale-verdict problem
+
+## Reference
+
+- [All endpoints](reference/README.md)
+- [GET /resolve](reference/resolve.md): text to asset classes, with the trail
+- [GET /matrix](reference/matrix.md): the whole board in one call
+- [GET /rules](reference/rules.md): verdicts with their sources
+- [GET /venues](reference/venues.md): where to buy, with the ref tag
+- [GET /tokens](reference/tokens.md): one ticker, several legal claims
+- [Reference lists](reference/reference-data.md): assets, categories, countries, entities
+- [GET /activity](reference/activity.md): sample data outside production
+- [GET /orders](reference/orders.md): clicks for one session
+- [POST /orders/click](reference/orders-click.md): record a buy, get the redirect
+- [POST /check](reference/check.md): the partner API's one question
+- [POST /check/batch](reference/check-batch.md): up to 100 for one request
+- [Partner lists](reference/partner-reference.md): assets, countries, rules, openapi.json
+
+## Optional
+
+- [openapi.yaml](openapi.yaml): machine-readable contract for the internal API
+- [Methodology](https://www.vestail.fun/company/methodology): how the rules are made

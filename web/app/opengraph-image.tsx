@@ -59,9 +59,9 @@ export default function OpengraphImage() {
           </div>
         </div>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-          <div style={{ fontSize: 76, fontWeight: 800, color: "#17171A", lineHeight: 1.05, letterSpacing: "-0.04em" }}>
-            What can you actually own here?
+        <div style={{ display: "flex", flexDirection: "column", gap: 22, maxWidth: 690 }}>
+          <div style={{ fontSize: 72, fontWeight: 800, color: "#17171A", lineHeight: 0.98, letterSpacing: "-0.055em" }}>
+            Know what you can own. Before you buy.
           </div>
           <div style={{ fontSize: 30, color: "rgba(23,23,26,0.68)", lineHeight: 1.35, maxWidth: 900 }}>
             Stocks, land, gold and more — what you may hold where you live, for citizens and foreigners.

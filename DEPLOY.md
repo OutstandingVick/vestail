@@ -40,6 +40,44 @@ The data in `data/*.json` is read once at startup, so restart the API after edit
 
 Recorded clicks, which feed `/activity`, and the rate-limit counters are held in memory. They reset on restart and aren't shared between processes. Run exactly one instance until they move to a database; with two or more, each would count its own clicks and its own limits.
 
+## Exposing the API, which has not been done
+
+The API is not reachable from the internet. `vestail.fun/v1/*` and `/api/v1/*` both
+return 404, because `web/lib/server/local-api.ts` calls the Hono app in-process and
+nothing routes to it from outside.
+
+That is the right default — the web app needs no network hop, no CORS and no key on the
+wire — and it is a gap the moment a partner needs to call `/check`.
+
+Two ways to close it, with different costs:
+
+**Mount it inside the Next app.** A catch-all route handler under `web/app/api/v1/` that
+hands the request to `app.fetch`. One deployment, one domain, the partner key checked by
+the same code as today. The cost is that the API's lifetime is the web app's, and a
+redeploy of the marketing site restarts the API.
+
+**Deploy `services/api` as its own service.** `npm start -w @vestail/api` on any Node
+host, behind `api.vestail.fun`. Independent lifetime, and the honest shape if partners
+are paying for it. The cost is a second thing to run and monitor, plus CORS, plus the
+single-instance limit below.
+
+### Whichever you pick, these have to move first
+
+The click log and both rate-limit counters are **in memory**. They reset on restart and
+are not shared between processes, so **only one instance can run** — two would each
+count their own clicks and enforce their own limits. See `services/api/src/clicks.js`
+and `ratelimit.js`, and the open issues in [HANDOFF.md](HANDOFF.md).
+
+The repo already has KV wired up for invitations, early access and watchlists, and
+`web/lib/server/kv.ts` holds a shared helper. The click log is the obvious next user of
+it.
+
+### Then update the documentation
+
+`docs/api/README.md`, `docs/api/openapi.yaml`'s `servers` block and the notice on the
+`/docs` page all say the API is unreachable. They should stop saying it on the day it
+stops being true, and not before.
+
 ## The page
 
 `site/index.html` is self-contained: serve it from any static host or open it as a file. On its own it uses its inline data, and Buy links go straight to the venue with `ref=vestail`.

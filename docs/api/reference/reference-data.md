@@ -3,12 +3,22 @@
 The lists everything else is keyed by. All public, all cached for a day, none of them
 take parameters.
 
-| Endpoint | Returns |
-|---|---|
-| `GET /v1/assets` | The 20 asset classes, with their ids. |
-| `GET /v1/categories` | Category groupings, and what each fans out to. |
-| `GET /v1/countries` | The 12 covered countries. |
-| `GET /v1/entities` | Named things the resolver knows: companies, coins, bond series. |
+### `GET /v1/assets`
+
+The 20 asset classes, each with its id and display name.
+
+### `GET /v1/categories`
+
+Category groupings, and the asset classes each one fans out to. *Commodities* and *fixed
+income* are categories; they resolve to several classes rather than one.
+
+### `GET /v1/countries`
+
+The 12 covered countries: code, name and flag.
+
+### `GET /v1/entities`
+
+Named things the resolver knows — companies, coins, bond series, aircraft models.
 
 ## Fetch these once
 

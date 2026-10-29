@@ -113,10 +113,17 @@ export default function OpengraphImage() {
           </div>
         </div>
 
-        <div style={{ display: "flex", gap: 40, fontSize: 24, color: "rgba(23,23,26,0.55)" }}>
-          <div style={{ display: "flex" }}>12 countries</div>
-          <div style={{ display: "flex" }}>20 asset classes</div>
-          <div style={{ display: "flex" }}>480 ownership rules</div>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", color: "#5B5B66" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 16, fontSize: 18, fontWeight: 650 }}>
+            <div style={{ display: "flex" }}>Verdicts</div>
+            <div style={{ display: "flex", color: "#B7B2CA" }}>•</div>
+            <div style={{ display: "flex" }}>Conditions</div>
+            <div style={{ display: "flex", color: "#B7B2CA" }}>•</div>
+            <div style={{ display: "flex" }}>Sources</div>
+          </div>
+          <div style={{ display: "flex", padding: "12px 18px", borderRadius: 999, background: "#17171A", color: "white", fontSize: 18, fontWeight: 750 }}>
+            vestail.fun →
+          </div>
         </div>
       </div>
     ),

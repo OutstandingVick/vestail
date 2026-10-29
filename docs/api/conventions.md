@@ -28,7 +28,20 @@ and a body that parses, or it gets `400 validation` — `A JSON body is required
 
 ## Naming
 
-`snake_case` everywhere — in query parameters, in request bodies and in response fields.
+**The two surfaces disagree, and you have to know which one you are on.**
+
+| | Internal `/v1` | Partner `/api/v1` |
+|---|---|---|
+| Fields | `snake_case` — `token_symbol`, `decided_by`, `verified_at` | `camelCase` — `ruleId`, `lastVerified`, `ruleVersion` |
+| Buyer type | `who` | `residency` |
+| Values | `citizen`, `foreigner` | `citizen`, `resident`, `foreigner` |
+| Verdicts | `can_own`, `conditional`, `cannot_own` | `eligible`, `conditional`, `restricted`, `unverified` |
+
+This is not a style preference; they are different vocabularies for the same ideas, and
+the partner surface kept v1's names. Mapping between them is in
+[partner-api.md](./partner-api.md).
+
+Do not write a client that assumes one casing and points at both.
 
 Identifiers are `snake_case` too, and they are stable: `gold_bullion`,
 `residential_property`, `foreign_equities`. **Ids are the contract; names are not.**

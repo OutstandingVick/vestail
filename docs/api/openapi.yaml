@@ -80,7 +80,7 @@ paths:
         "200":
           description: Rules
           content: { application/json: { schema: { $ref: "#/components/schemas/CountryRules" } } }
-        "404": { description: Unknown country }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /rules/{country}/{asset}:
     get:
@@ -147,7 +147,7 @@ paths:
         "200":
           description: Token board
           content: { application/json: { schema: { $ref: "#/components/schemas/TokenBoard" } } }
-        "404": { description: Unknown symbol }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /activity:
     get:
@@ -202,7 +202,47 @@ components:
       type: http
       scheme: bearer
       description: One of the comma-separated keys in VESTAIL_API_KEYS. With none configured, every click is refused.
+  responses:
+    # The error shape is identical everywhere, so it is declared once and
+    # referenced. Full code list in docs/api/errors.md, which a test keeps in
+    # step with the codes the service actually raises.
+    BadRequest:
+      description: The request was understood and refused. Same request, same answer — do not retry.
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+          example: { error: { code: invalid_country, message: "country: Unsupported country 'ZZ'." } }
+    Unauthorized:
+      description: Missing or invalid API key.
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+          example: { error: { code: unauthorized, message: "A valid API key is required: Authorization: Bearer <key>." } }
+    NotFound:
+      description: No such route, or no such rule.
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+          example: { error: { code: unknown_country, message: "Unknown country: ZZ." } }
+    RateLimited:
+      description: Over the per-IP budget. Carries Retry-After, in seconds.
+      headers:
+        Retry-After: { description: Seconds to wait before retrying, schema: { type: integer } }
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+          example: { error: { code: rate_limited, message: "Too many requests. Try again in 42s." } }
   schemas:
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: object
+          required: [code, message]
+          properties:
+            code: { type: string, description: "Stable, snake_case. Branch on this." }
+            message: { type: string, description: "Written for a person reading a log. May change wording; never match on it." }
     BuyerType: { type: string, enum: [citizen, foreigner], default: citizen }
     Status: { type: string, enum: [can_own, conditional, cannot_own] }
     Asset: { type: object, properties: { id: { type: string }, index: { type: integer }, name: { type: string } } }

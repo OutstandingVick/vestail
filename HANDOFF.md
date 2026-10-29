@@ -159,6 +159,33 @@ else. And every symbol added needs an asset-class mapping in
 and Coinbase are the point: one ticker, held several ways, with different
 answers about what you own.
 
+## 8c. The API documentation
+
+`docs/api/` is structured after Notion's reference: shared rules in one page each,
+one page per endpoint, nothing repeated.
+
+- [`README.md`](docs/api/README.md) — the map, and the fact that **neither API surface is
+  publicly reachable**: `vestail.fun/v1/*` and `/api/v1/*` both 404, because the service
+  runs in-process inside the Next app.
+- [`conventions.md`](docs/api/conventions.md) — and the trap it exists to flag: the two
+  surfaces use different casing, a different name for the buyer type, and different names
+  for the verdicts.
+- [`errors.md`](docs/api/errors.md) — all seventeen codes. The old list had four.
+- [`request-limits.md`](docs/api/request-limits.md), [`versioning.md`](docs/api/versioning.md),
+  [`authentication.md`](docs/api/authentication.md), [`partner-api.md`](docs/api/partner-api.md).
+- [`reference/`](docs/api/reference/README.md) — a page per endpoint.
+
+Three guards keep it true, and all run in `npm test`:
+
+| Guard | Fails when |
+|---|---|
+| `scripts/error-codes.test.mjs` | the service raises a code `errors.md` does not list |
+| `scripts/docs-coverage.test.mjs` | a spec or partner route has no heading in `reference/` |
+| `scripts/spec-errors.test.mjs` | an operation does not declare how it fails |
+
+They check that pages and declarations exist, never wording. That is deliberate: a guard
+on prose would be ignored, and these are the parts that actually rot.
+
 ## 9. Conventions
 
 - Commit messages: plain sentences explaining *why*, not just what. Look at `git log` on `v2-own` for the register.

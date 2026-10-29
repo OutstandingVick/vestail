@@ -19,6 +19,7 @@ Used by Vestail's own web app. Public reads, one keyed write.
 | `GET /activity` | [activity.md](./activity.md) | Aggregate figures. Sample data outside production. |
 | `GET /orders` | [orders.md](./orders.md) | Clicks for one session. Keyed. |
 | `POST /orders/click` | [orders-click.md](./orders-click.md) | Record a buy and get the redirect. Keyed. |
+| `GET /health` `GET /openapi.json` | [health.md](./health.md) | Liveness, and the contract the service enforces. |
 
 ## Partner API — `/api/v1`
 

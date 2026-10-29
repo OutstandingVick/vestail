@@ -25,6 +25,7 @@ Vestail is a country × asset-class ownership matrix with venue routing. This re
 - Motion respects `prefers-reduced-motion`. Keep entrance animation to first paint only.
 - Font sizes in `site/index.html` are `rem`, never `px`. The root is 100% and drops to 80% below 600px, so the phone type scale is one number rather than a hundred and forty. Only font-size uses rem: padding, gaps, radii and borders stay in px so the scale moves the text and leaves the layout's proportions alone.
 - Keep `docs/GLOSSARY.html` build log current when a phase lands.
+- API documentation lives in `docs/api/` and is checked, not asserted. Shared rules go in `conventions.md`, `errors.md`, `request-limits.md` or `versioning.md` — once, not repeated per endpoint. Every endpoint gets a heading in `docs/api/reference/`. Two guards enforce it: `scripts/error-codes.test.mjs` fails if a raised error code is undocumented, and `scripts/docs-coverage.test.mjs` fails if a spec or partner route has no reference heading. Neither checks wording; both check that the page exists.
 
 ## Commands
 - `npm test` — every test (core and API)

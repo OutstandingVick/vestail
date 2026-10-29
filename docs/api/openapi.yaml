@@ -28,7 +28,7 @@ tags:
   - { name: venues,  description: Where to buy }
   - { name: reference, description: Static lists }
   - { name: tokens,  description: Tokenised versions of an asset onchain (Solana) and their verdicts }
-  - { name: activity, description: Traction feed for the HUD }
+  - { name: activity, description: Aggregate figures. Serves invented sample data unless NODE_ENV=production }
   - { name: orders,  description: Outbound click / order-flow attribution }
 
 paths:

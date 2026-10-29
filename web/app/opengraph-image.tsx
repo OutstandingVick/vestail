@@ -34,9 +34,29 @@ export default function OpengraphImage() {
           border: "1px solid rgba(124,92,255,0.16)",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-          <div style={{ width: 20, height: 20, borderRadius: 10, background: "#FF580A" }} />
-          <div style={{ fontSize: 34, fontWeight: 700, color: "#17171A", letterSpacing: "-0.02em" }}>vestail</div>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 3, transform: "rotate(-8deg)" }}>
+              <div style={{ width: 15, height: 37, borderRadius: 10, background: "#FF580A" }} />
+              <div style={{ width: 18, height: 54, borderRadius: 12, background: "#FF580A", transform: "rotate(28deg)" }} />
+            </div>
+            <div style={{ fontSize: 38, fontWeight: 800, color: "#FF580A", letterSpacing: "-0.04em" }}>vestail</div>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              padding: "10px 18px",
+              borderRadius: 999,
+              background: "rgba(255,255,255,0.82)",
+              border: "1px solid rgba(23,23,26,0.12)",
+              color: "#52525B",
+              fontSize: 15,
+              fontWeight: 700,
+              letterSpacing: "0.12em",
+            }}
+          >
+            OWNERSHIP, EXPLAINED
+          </div>
         </div>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>

@@ -172,7 +172,18 @@ paths:
     post:
       tags: [orders]
       summary: Record an outbound click to a venue
-      description: Called when a Buy button is pressed. Returns a redirect url carrying the partner tag. Feeds `/activity` and the attribution ledger.
+      description: |
+        Called when a Buy button is pressed. Returns a redirect url carrying the partner
+        tag, so the tag logic stays on the server rather than drifting across clients.
+        Feeds `/activity` and the attribution ledger.
+
+        Not idempotent: a retry records a second click. Retry on 429 and 500 only.
+
+        A conditional cell requires `acknowledged: true`; without it the call is refused
+        with `acknowledgement_required`. The checkbox in an interface is convenience, this
+        check is the guarantee.
+      security:
+        - partnerKey: []
       requestBody:
         required: true
         content:
@@ -184,6 +195,13 @@ paths:
           content: { application/json: { schema: { type: object, properties: { id: { type: string }, redirect: { type: string, format: uri } } } } }
 
 components:
+  securitySchemes:
+    # POST /orders/click and GET /orders are key-gated so a click can be
+    # attributed to whoever sent it. Reads are public. See docs/api/authentication.md.
+    partnerKey:
+      type: http
+      scheme: bearer
+      description: One of the comma-separated keys in VESTAIL_API_KEYS. With none configured, every click is refused.
   schemas:
     BuyerType: { type: string, enum: [citizen, foreigner], default: citizen }
     Status: { type: string, enum: [can_own, conditional, cannot_own] }

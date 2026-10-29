@@ -59,12 +59,29 @@ export default function OpengraphImage() {
           </div>
         </div>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: 22, maxWidth: 690 }}>
-          <div style={{ fontSize: 72, fontWeight: 800, color: "#17171A", lineHeight: 0.98, letterSpacing: "-0.055em" }}>
-            Know what you can own. Before you buy.
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 42 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 22, width: 650 }}>
+            <div style={{ fontSize: 72, fontWeight: 800, color: "#17171A", lineHeight: 0.98, letterSpacing: "-0.055em" }}>
+              Know what you can own. Before you buy.
+            </div>
+            <div style={{ fontSize: 25, color: "#5B5B66", lineHeight: 1.35 }}>
+              Country-aware answers for tokenized stocks, property, gold and more — with the conditions and sources made clear.
+            </div>
           </div>
-          <div style={{ fontSize: 25, color: "#5B5B66", lineHeight: 1.35, maxWidth: 650 }}>
-            Country-aware answers for tokenized stocks, property, gold and more — with the conditions and sources made clear.
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              width: 380,
+              padding: 24,
+              borderRadius: 28,
+              background: "rgba(255,255,255,0.92)",
+              border: "1px solid rgba(124,92,255,0.2)",
+              boxShadow: "0 24px 64px rgba(62,45,120,0.14)",
+            }}
+          >
+            <div style={{ display: "flex", color: "#70707C", fontSize: 16, fontWeight: 600 }}>YOUR CONTEXT</div>
+            <div style={{ display: "flex", marginTop: 10, color: "#17171A", fontSize: 27, fontWeight: 750 }}>Nigeria · Foreigner</div>
           </div>
         </div>
 

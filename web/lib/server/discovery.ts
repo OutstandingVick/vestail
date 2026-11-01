@@ -6,7 +6,6 @@ import { CHAIN_LABEL, INSTRUMENT_LABEL } from "@/lib/instrument";
 import { api } from "@/lib/server/api";
 import type { Profile, Status, Token } from "@/lib/types";
 
-/** Build the Discover directory from the same rules used everywhere else. */
 export async function loadDiscovery(profile: Profile) {
   const [countries, assets, matrix, symbols] = await Promise.all([
     api.countries(), api.assets(), api.matrix({ who: profile.who, sort: "asset" }), api.tokenSymbols(),

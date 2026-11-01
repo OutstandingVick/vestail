@@ -2,14 +2,7 @@ import assert from "node:assert/strict";
 import { readdirSync, readFileSync } from "node:fs";
 import test from "node:test";
 
-/*
- * A page nobody links to is a page nobody reads.
- *
- * Three pages were written after the index and neither README.md nor llms.txt
- * mentioned them, so they existed only to someone listing the directory. That
- * is the normal fate of documentation added in a hurry, and it is cheap to
- * prevent.
- */
+// Public API pages must be reachable from the documentation index.
 const API = new URL("../docs/api/", import.meta.url);
 const REFERENCE = new URL("./reference/", API);
 

@@ -10,7 +10,6 @@ const STAGE: Record<Resolution["stage"], string> = {
   none: "nothing",
 };
 
-/** How the resolver read the query. Every hit shows its trail; nothing resolves silently. */
 export function Trail({ q, resolution }: { q: string; resolution: Resolution }) {
   return (
     <div className="flex flex-col gap-2">

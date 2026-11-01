@@ -1,8 +1,3 @@
-/**
- * Shapes of the v2 API's responses (docs/api/openapi.yaml). Only the fields
- * the app reads are typed.
- */
-
 export type Status = "can_own" | "conditional" | "cannot_own";
 export type BuyerType = "citizen" | "foreigner";
 export const BUYER_TYPES: readonly BuyerType[] = ["citizen", "foreigner"];
@@ -82,7 +77,6 @@ export interface TokenBoard {
 
 export interface Profile { country: string; who: BuyerType }
 
-/** A tokenised stock the user holds, with its value and its verdict for their declared country. */
 export interface Holding {
   mint: string; symbol: string; token_symbol: string; name: string; provider: string; chain: Chain;
   amount: number; usd: number | null; status: Status | null; asset: string;

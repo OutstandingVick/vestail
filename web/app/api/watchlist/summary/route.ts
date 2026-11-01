@@ -4,7 +4,6 @@ import { userFrom } from "@/lib/server/privy";
 import { readProfile } from "@/lib/server/profile";
 import { loadWatchlist } from "@/lib/server/watchlist";
 
-/** GET /api/watchlist/summary — saved choices with verdicts and live performance. */
 export async function GET(request: Request) {
   const userId = await userFrom(request);
   if (!userId) return NextResponse.json({ error: "Sign in first." }, { status: 401 });

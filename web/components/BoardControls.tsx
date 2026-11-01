@@ -2,11 +2,7 @@ import Link from "next/link";
 
 import type { BuyerType } from "@/lib/types";
 
-/**
- * Citizens / Foreigners and By status / By asset. Plain links that rewrite the
- * search URL, so every view of the board can be shared or reloaded. Viewing as
- * a foreigner here doesn't change the buyer's own declared profile.
- */
+// These controls change the view URL, not the buyer's saved profile.
 export function BoardControls({ q, who, sort, basePath = "/app/discover" }: { q: string; who: BuyerType; sort: "status" | "asset"; basePath?: string }) {
   const href = (p: { who?: BuyerType; sort?: string }) => {
     const params = new URLSearchParams({ who: p.who ?? who, sort: p.sort ?? sort });

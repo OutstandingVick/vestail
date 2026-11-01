@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 
 import { authedFetch, errorOf } from "@/lib/client";
 
-/** Save this asset or ticker for later review on the user's watchlist. */
 export function WatchButton({ asset, symbol, label }: { asset: string; symbol?: string; label: string }) {
   const [watching, setWatching] = useState(false);
   const [busy, setBusy] = useState(true);

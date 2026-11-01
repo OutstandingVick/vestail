@@ -76,7 +76,6 @@ export async function saveTesterApplication(application: TesterApplication): Pro
   }
 }
 
-/** Read applications for the private owner dashboard. Never expose this from a public route. */
 export async function listTesterApplications(limit = 500): Promise<TesterApplication[]> {
   const url = process.env.KV_REST_API_URL;
   const token = process.env.KV_REST_API_TOKEN;

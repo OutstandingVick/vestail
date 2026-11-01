@@ -5,7 +5,6 @@ import { api } from "@/lib/server/api";
 import { userFrom } from "@/lib/server/privy";
 import type { ActivityItem, TokenBoard } from "@/lib/types";
 
-/** GET /api/activity — the verified user's recorded Vestail buy presses. */
 export async function GET(request: Request) {
   const userId = await userFrom(request);
   if (!userId) return NextResponse.json({ error: "Sign in first." }, { status: 401 });

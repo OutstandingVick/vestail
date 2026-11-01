@@ -29,11 +29,9 @@ check(us.tokens.every(t => t.status === "cannot_own" && t.decided_by === "issuer
 const gb = tokens.board("NVDA", "GB", "citizen", core);
 check(gb.tokens.every(t => t.assessed === false && t.status === null), "no policy for GB: not assessed, never eligible");
 
-// A foreigner in NG has can_own on foreign equities, but the issuer is conditional: stricter wins.
 const fNG = tokens.board("NVDA", "NG", "foreigner", core);
 check(fNG.class_status === "can_own" && fNG.tokens.every(t => t.status === "conditional" && t.decided_by === "issuer"), "issuer caps a looser class rule");
 
-// A forbidding class rule wins even where no issuer gate exists.
 const fake = structuredClone(load("countries.json"));
 fake.countries.find(c => c.code === "GB").rules.citizen.foreign_equities.status = 0;
 const core2 = createVestail({ assets: load("assets.json").assets, categories: load("categories.json"), aliases: load("aliases.json"),

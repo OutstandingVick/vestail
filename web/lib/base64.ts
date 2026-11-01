@@ -1,8 +1,3 @@
-/**
- * Base64 <-> bytes without Node's Buffer, which the browser does not have.
- * Used to hand Jupiter's transaction to the wallet and the signed result back.
- */
-
 export function base64ToBytes(b64: string): Uint8Array {
   const binary = atob(b64);
   const bytes = new Uint8Array(binary.length);

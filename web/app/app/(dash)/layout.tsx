@@ -6,7 +6,6 @@ import { Sidebar } from "@/components/Sidebar";
 import { api } from "@/lib/server/api";
 import { readProfile } from "@/lib/server/profile";
 
-/** The signed-in app: a sidebar and the page. No declared country yet means onboarding first. */
 export default async function DashLayout({ children }: { children: React.ReactNode }) {
   const profile = await readProfile();
   if (!profile) redirect("/app/start");

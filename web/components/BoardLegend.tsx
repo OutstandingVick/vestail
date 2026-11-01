@@ -1,4 +1,3 @@
-/** What the circles mean. Shapes, not only colours: cannot-own is hatched. */
 export function BoardLegend() {
   const item = (cls: string, label: string) => (
     <li className="flex items-center gap-1.5">

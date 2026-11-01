@@ -9,7 +9,6 @@ for (const [q, stage] of cases) { const r = core.resolve(q); const ok = r.stage 
 const m = core.matrix("Google", "citizen");
 console.log("matrix rows:", m.rows.length, "| US cell:", m.rows.find(r => r.code === "US").cells[0].asset, "| NG cta:", m.rows.find(r => r.code === "NG").cta.venues[0].url);
 
-// Keyed rules: provenance comes through, and a bad rule set fails at load.
 const check = (ok, label) => { if (!ok) fail++; console.log(ok ? "ok  " : "FAIL", label); };
 const r = core.rule("NG", "citizen", "Cryptocurrency");
 check(r && r.statusKey === "conditional" && Array.isArray(r.sources) && r.verified_at === null, "rule() returns status and provenance");

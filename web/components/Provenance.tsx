@@ -1,10 +1,6 @@
 import type { Source } from "@/lib/types";
 import { safeHttps } from "@/lib/safeUrl";
 
-/**
- * Where a class verdict comes from. All 480 class rules are unsourced today,
- * and this says so plainly: no invented source, no invented date.
- */
 export function Provenance({ sources, verifiedAt }: { sources: Source[]; verifiedAt: string | null }) {
   if (!sources.length) {
     return (

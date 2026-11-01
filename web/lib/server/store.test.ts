@@ -15,7 +15,6 @@ afterEach(() => {
   globalThis.fetch = realFetch;
 });
 
-/** A KV stand-in that answers GET and SET over the REST shape the helper uses. */
 function fakeKv(store = new Map<string, string>(), failing = false) {
   const calls: string[][] = [];
   process.env.KV_REST_API_URL = "https://kv.test";

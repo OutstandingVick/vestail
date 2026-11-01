@@ -3,10 +3,7 @@ import Link from "next/link";
 
 const EXAMPLES = ["NVIDIA", "Tesla", "SpaceX", "Gold", "Crude oil", "Copper", "Farmland"];
 
-/**
- * The app's first thing: one very large search box. A plain GET form, so a
- * search is a URL (/app/discover/buy?q=…) that can be shared, reloaded and gone back to.
- */
+// GET keeps searches shareable and restores them on reload or back navigation.
 export function GiantSearch({ q, action = "/app/discover/buy" }: { q: string; action?: string }) {
   return (
     <div className="flex w-full flex-col items-center gap-5">

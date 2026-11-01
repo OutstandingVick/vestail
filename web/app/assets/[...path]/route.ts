@@ -1,7 +1,6 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 
-/** GET /assets/* — the marketing site's images, from site/assets. Nothing outside that folder is served. */
 const ROOT = path.resolve(process.cwd(), "../site/assets");
 const TYPES: Record<string, string> = {
   ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".webp": "image/webp", ".svg": "image/svg+xml", ".gif": "image/gif",

@@ -1,4 +1,3 @@
-/** Avatar colours a user can pick. Not verdict colours: those mean something. */
 export const AVATAR_COLORS = ["purple", "orange", "blue", "pink", "teal", "slate"] as const;
 export type AvatarColor = (typeof AVATAR_COLORS)[number];
 export const AVATAR_HEX: Record<AvatarColor, string> = {
@@ -7,7 +6,6 @@ export const AVATAR_HEX: Record<AvatarColor, string> = {
 
 export interface Account { name: string; avatar: AvatarColor; avatarUrl: string | null; email: string | null; label: string }
 
-/** What to call the user: their chosen name, else their email's first part, else their wallet. */
 export function accountOf(user: { customMetadata?: Record<string, unknown>; email?: { address: string }; wallet?: { address: string } } | null): Account {
   const meta = (user?.customMetadata ?? {}) as { name?: string; avatar?: string; avatarImage?: string };
   const email = user?.email?.address ?? null;

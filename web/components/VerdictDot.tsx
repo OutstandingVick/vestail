@@ -7,11 +7,7 @@ const FILL: Record<Status, string> = {
   cannot_own: "bg-cannot hatch",
 };
 
-/**
- * One asset in one country, as a circle. The colour is the verdict, cannot-own
- * is hatched so it never relies on colour alone, and the accessible name says
- * both the asset and the verdict.
- */
+// Cannot-own stays hatched so the verdict never depends on colour.
 export function VerdictDot({ status, asset, selected, onSelect }: {
   status: Status; asset: string; selected?: boolean; onSelect?: () => void;
 }) {

@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation";
 import { Logo } from "@/components/Logo";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
-/** Who is signed in, shortened: their email, else their wallet. */
 function who(user: ReturnType<typeof usePrivy>["user"]): string {
   if (user?.email?.address) return user.email.address;
   const w = user?.wallet?.address;

@@ -1,4 +1,3 @@
-/** The Vestail mark and wordmark, as on the landing page. */
 export function Logo({ className = "h-7 w-auto" }: { className?: string }) {
   return (
     <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="298.4 324.6 786.5 179.1" aria-hidden="true" focusable="false">

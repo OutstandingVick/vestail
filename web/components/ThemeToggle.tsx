@@ -3,7 +3,6 @@
 import { CircleHalf } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 
-/** Light or dark, remembered on this device under the marketing site's key. */
 export function ThemeToggle({ className = "" }: { className?: string }) {
   const [dark, setDark] = useState(false);
   useEffect(() => setDark(document.documentElement.dataset.theme === "dark"), []);

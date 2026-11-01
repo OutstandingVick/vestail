@@ -1,10 +1,6 @@
 import type { Instrument } from "@/lib/types";
 
-/**
- * What each instrument is, in plain words. Shown beside every verdict so a
- * green "Can own" on a debt note or a perpetual never reads as owning the share
- * or the commodity.
- */
+// Instrument labels keep a positive verdict from implying ownership of the underlying asset.
 export const INSTRUMENT_LABEL: Record<Instrument, { label: string; explain: string }> = {
   tokenized_equity: { label: "Tokenized share", explain: "A claim on a real share held 1:1 by a custodian." },
   tokenized_debt: { label: "Debt token", explain: "A note that tracks the price. No rights in the share." },

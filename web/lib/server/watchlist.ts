@@ -8,7 +8,6 @@ import { parseJupiterSnapshots, selectWatchQuote, type QuoteByMint } from "@/lib
 
 const JUPITER_SEARCH = "https://api.jup.ag/tokens/v2/search";
 
-/** Read current token prices and 24-hour movement directly from Jupiter. */
 export async function readWatchQuotes(mints: string[]): Promise<QuoteByMint> {
   const unique = [...new Set(mints)].slice(0, 100);
   if (!unique.length) return new Map();
@@ -25,7 +24,6 @@ export interface WatchlistSummary {
   errors: string[];
 }
 
-/** Build the user's watchlist from saved choices, ownership rules and live token prices. */
 export async function loadWatchlist(userId: string, profile: Profile): Promise<WatchlistSummary> {
   const [stored, assets] = await Promise.all([readUser(userId), api.assets()]);
   const names = new Map(assets.map(asset => [asset.id, asset.name]));

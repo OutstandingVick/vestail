@@ -1,6 +1,5 @@
 import Link from "next/link";
 
-/** Quiet legal context that follows the product without competing with it. */
 export function AppFooter() {
   return (
     <footer className="mt-auto border-t border-field py-6 text-sm text-muted" aria-label="Vestail footer">

@@ -96,7 +96,7 @@ export function TesterApplications() {
           </p>
         </div>
       </div>
-      <div>
+      <div className="relative max-w-xl">
         <label htmlFor="tester-search" className="sr-only">
           Search tester applications
         </label>
@@ -106,8 +106,9 @@ export function TesterApplications() {
           value={query}
           onChange={(event) => setQuery(event.target.value)}
           placeholder="Search name, email, Telegram, country or wallet"
-          className="min-h-11 w-full max-w-xl rounded-field border border-field bg-surface px-4 text-sm outline-none focus:ring-2 focus:ring-ink/15"
+          className="min-h-11 w-full rounded-field border border-field bg-surface py-2 pl-11 pr-4 text-sm outline-none transition focus:border-action focus:ring-2 focus:ring-action/15"
         />
+        <MagnifyingGlass className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-muted" size={18} aria-hidden="true" />
       </div>
       {visible.length ? (
         <div className="overflow-x-auto rounded-card border border-line bg-surface">

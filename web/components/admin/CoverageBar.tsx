@@ -24,7 +24,7 @@ export function CoverageBar({ totals }: { totals: Record<Status, number> }) {
         totals[status] ? (
           <span
             key={status}
-            className={tone[status]}
+            className={`${tone[status]} first:rounded-l-full last:rounded-r-full`}
             style={{ width: `${(totals[status] / all) * 100}%` }}
           />
         ) : null,

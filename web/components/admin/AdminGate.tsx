@@ -50,7 +50,7 @@ function AccessCard({ title, detail, children }: { title: string; detail: string
   return (
     <main className="grid min-h-screen place-items-center bg-tint p-6">
       <section className="w-full max-w-md rounded-panel bg-surface p-7 shadow-[0_24px_80px_rgb(90_61_240/0.14)] ring-1 ring-emphasis/10">
-        <p className="text-xs font-bold uppercase tracking-[.18em] text-action">Vestail admin</p>
+        <p className="text-xs font-bold uppercase tracking-[.18em] text-action-ink">Vestail admin</p>
         <h1 className="mt-3 text-3xl font-bold">{title}</h1>
         <p className="mb-6 mt-3 leading-7 text-muted">{detail}</p>
         {children}

@@ -111,7 +111,7 @@ export function TesterApplications() {
         <MagnifyingGlass className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-muted" size={18} aria-hidden="true" />
       </div>
       {visible.length ? (
-        <div className="overflow-x-auto rounded-card border border-line bg-surface">
+        <div className="overflow-x-auto rounded-card bg-surface shadow-[0_8px_28px_rgb(34_25_78/0.05)] ring-1 ring-line">
           <table className="w-full min-w-[1100px] text-left text-sm">
             <caption className="sr-only">Tester applications</caption>
             <thead className="bg-wash text-xs uppercase tracking-wide text-muted">

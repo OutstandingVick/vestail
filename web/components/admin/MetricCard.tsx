@@ -7,7 +7,7 @@ export function MetricCard({ label, value, detail, icon: Icon, featured = false 
         <p className={`text-sm font-semibold ${featured ? "text-white/78" : "text-muted"}`}>{label}</p>
         <span className={`grid size-9 place-items-center rounded-full ${featured ? "bg-white/16 text-white" : "bg-action-wash text-action-ink"}`}><Icon size={18} weight="bold" aria-hidden="true" /></span>
       </div>
-      <p className="mt-6 text-4xl font-bold tracking-tight tabular-nums">{value}</p>
+      <p className="mt-6 text-4xl font-bold tracking-[-0.04em] tabular-nums">{value}</p>
       <p className={`mt-1 text-xs leading-5 ${featured ? "text-white/75" : "text-muted"}`}>{detail}</p>
     </article>
   );

@@ -31,7 +31,7 @@ export function AdminGate({ children }: { children: React.ReactNode }) {
 }
 
 function AdminLoading() {
-  return <div className="grid min-h-screen place-items-center bg-page" role="status"><p className="text-sm font-semibold text-muted">Loading owner dashboard…</p></div>;
+  return <div className="grid min-h-screen place-items-center bg-tint p-6" role="status"><p className="text-sm font-semibold text-muted">Loading owner dashboard…</p></div>;
 }
 
 function AccessCard({ title, detail, children }: { title: string; detail: string; children: React.ReactNode }) {

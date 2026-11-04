@@ -31,7 +31,7 @@ export function AdminGate({ children }: { children: React.ReactNode }) {
   );
   if (error) return (
     <AccessCard title="Owner access required" detail={error}>
-      <Link href="/app" className="inline-flex min-h-11 items-center rounded-full border border-field bg-surface px-5 font-semibold">Back to Vestail</Link>
+      <Link href="/app" className="inline-flex min-h-11 items-center rounded-full border border-field bg-surface px-5 font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emphasis">Back to Vestail</Link>
     </AccessCard>
   );
   if (!data) return <AdminLoading />;

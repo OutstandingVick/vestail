@@ -32,7 +32,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <p className="mt-2 text-xs leading-5 text-muted">Buyer declarations are self-reported and are not identity verification.</p>
             </div>
           </aside>
-          <main id="admin-content" className="min-w-0 p-4 sm:p-6 lg:p-8 xl:p-10">{children}</main>
+          <main id="admin-content" className="min-w-0 bg-page p-4 sm:p-6 lg:p-8 xl:p-10">{children}</main>
         </div>
       </div>
     </AdminGate>

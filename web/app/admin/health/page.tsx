@@ -19,7 +19,7 @@ export default function AdminHealthPage() {
           </article>
         ))}
       </section>
-      <aside className="flex gap-3 rounded-card bg-action-wash p-5 text-sm leading-6 text-muted ring-1 ring-action/15"><Info className="mt-0.5 shrink-0 text-action-ink" size={20} weight="bold" aria-hidden="true" /><p><strong className="text-ink">A snapshot, not uptime monitoring.</strong> These checks only confirm that data could be read while this page loaded. They do not verify downstream trade execution.</p></aside>
+      <aside className="flex max-w-4xl gap-3 rounded-card bg-action-wash p-5 text-sm leading-6 text-muted ring-1 ring-action/15"><Info className="mt-0.5 shrink-0 text-action-ink" size={20} weight="bold" aria-hidden="true" /><p><strong className="text-ink">A snapshot, not uptime monitoring.</strong> These checks only confirm that data could be read while this page loaded. They do not verify downstream trade execution.</p></aside>
     </div>
   );
 }

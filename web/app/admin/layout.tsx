@@ -22,7 +22,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <aside className="border-b border-line bg-surface p-4 lg:sticky lg:top-0 lg:flex lg:h-screen lg:flex-col lg:border-b-0 lg:border-e lg:p-5">
             <div className="flex items-center justify-between gap-4">
               <Link href="/admin" aria-label="Vestail owner dashboard" className="rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emphasis">
-                <Logo className="h-7 w-auto" />
+                <Logo className="h-8 w-auto" />
               </Link>
               <ThemeToggle />
             </div>

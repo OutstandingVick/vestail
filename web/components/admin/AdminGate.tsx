@@ -26,7 +26,7 @@ export function AdminGate({ children }: { children: React.ReactNode }) {
   if (!ready) return <AdminLoading />;
   if (!authenticated) return (
     <AccessCard title="Sign in to continue" detail="The owner dashboard requires your Vestail account.">
-      <button onClick={login} className="min-h-11 rounded-full bg-action px-5 font-bold text-on-action shadow-[0_10px_24px_rgb(255_88_10/0.2)] transition-transform duration-150 active:scale-96">Sign in</button>
+      <button onClick={login} className="min-h-11 rounded-full bg-action px-5 font-bold text-on-action shadow-[0_10px_24px_rgb(255_88_10/0.2)] transition-transform duration-150 active:scale-96 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emphasis">Sign in</button>
     </AccessCard>
   );
   if (error) return (

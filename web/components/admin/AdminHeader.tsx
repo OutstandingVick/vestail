@@ -21,7 +21,7 @@ export function AdminHeader({ title, description }: { title: string; description
         <div className="flex items-center gap-2">
           <time dateTime={generatedAt} className="hidden px-2 text-xs text-muted sm:inline">Updated {new Date(generatedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</time>
           <button type="button" onClick={() => location.reload()} aria-label="Refresh dashboard" className="grid size-10 place-items-center rounded-full bg-wash text-ink transition duration-150 hover:bg-tint active:scale-96 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emphasis"><ArrowClockwise size={17} aria-hidden="true" /></button>
-          <Link href="/app" className="inline-flex min-h-10 items-center gap-2 rounded-full bg-ink-strong px-4 text-sm font-semibold text-on-ink transition-transform duration-150 active:scale-96 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emphasis">Open app<ArrowSquareOut size={16} aria-hidden="true" /></Link>
+          <Link href="/app" className="inline-flex min-h-10 items-center gap-2 rounded-full bg-ink-strong px-4 text-sm font-semibold text-on-ink transition duration-150 hover:-translate-y-0.5 active:scale-96 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emphasis">Open app<ArrowSquareOut size={16} aria-hidden="true" /></Link>
         </div>
       </div>
       <div className="mt-8 flex flex-wrap items-end justify-between gap-5">

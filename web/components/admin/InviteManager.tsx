@@ -131,7 +131,7 @@ export function InviteManager() {
             <button
               type="button"
               onClick={copyCodes}
-              className="inline-flex min-h-11 items-center gap-2 rounded-full border border-field bg-surface px-4 text-sm font-bold"
+              className="inline-flex min-h-11 items-center gap-2 rounded-full border border-field bg-surface px-4 text-sm font-bold transition hover:bg-wash focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-action"
             >
               {copied ? (
                 <Check size={18} weight="bold" />

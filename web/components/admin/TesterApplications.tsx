@@ -54,7 +54,7 @@ export function TesterApplications() {
     return (
       <div
         role="alert"
-        className="rounded-card border border-cannot bg-surface p-6"
+        className="rounded-card bg-surface p-6 ring-1 ring-cannot/30"
       >
         <p className="font-semibold text-cannot">{error}</p>
         <button

@@ -127,7 +127,7 @@ export function TesterApplications() {
             </thead>
             <tbody className="divide-y divide-line">
               {visible.map((row) => (
-                <tr key={`${row.email}-${row.wallet}`} className="align-top">
+                <tr key={`${row.email}-${row.wallet}`} className="align-top transition-colors hover:bg-wash/70">
                   <td className="px-4 py-4">
                     <p className="font-semibold">{row.xHandle}</p>
                     <a

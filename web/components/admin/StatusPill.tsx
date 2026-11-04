@@ -2,7 +2,7 @@ import { CheckCircle, WarningCircle, XCircle } from "@phosphor-icons/react/dist/
 
 import type { AdminHealthCheck } from "@/lib/admin-types";
 
-const styles = { healthy: "bg-[#e8f4e4] text-[#285b1e]", attention: "bg-cond-wash text-cond-ink", unavailable: "bg-[#f9e5e1] text-[#7a2c20]" };
+const styles = { healthy: "bg-can-wash text-can-ink", attention: "bg-cond-wash text-cond-ink", unavailable: "bg-[#f9e5e1] text-[#7a2c20]" };
 const icons = { healthy: CheckCircle, attention: WarningCircle, unavailable: XCircle };
 
 export function StatusPill({ status }: { status: AdminHealthCheck["status"] }) {

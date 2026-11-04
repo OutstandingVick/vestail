@@ -19,7 +19,7 @@ export default function AdminError({
       <button
         type="button"
         onClick={reset}
-        className="mt-6 min-h-11 rounded-full bg-action px-5 font-bold text-on-action"
+        className="mt-6 min-h-11 rounded-full bg-action px-5 font-bold text-on-action transition hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-action focus-visible:ring-offset-2"
       >
         Try again
       </button>

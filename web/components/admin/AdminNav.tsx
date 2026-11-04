@@ -25,7 +25,7 @@ export function AdminNav() {
             key={href}
             href={href}
             aria-current={active ? "page" : undefined}
-            className={`group flex min-h-11 shrink-0 items-center gap-3 rounded-field px-3.5 text-sm font-semibold transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emphasis ${active ? "bg-tint text-ink shadow-[inset_0_0_0_1px_rgb(90_61_240/0.08)]" : "text-muted hover:bg-wash hover:text-ink"}`}
+            className={`group flex min-h-11 min-w-max shrink-0 items-center gap-3 rounded-field px-3.5 text-sm font-semibold transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emphasis ${active ? "bg-tint text-ink shadow-[inset_0_0_0_1px_rgb(90_61_240/0.08)]" : "text-muted hover:bg-wash hover:text-ink"}`}
           >
             <span className={`grid size-8 place-items-center rounded-xl ${active ? "bg-surface text-emphasis shadow-sm" : "text-muted group-hover:text-ink"}`}>
               <Icon size={18} weight={active ? "fill" : "regular"} aria-hidden="true" />

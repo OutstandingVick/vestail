@@ -195,7 +195,7 @@ export function InviteManager() {
                         <button
                           type="button"
                           onClick={() => revoke(invite.id)}
-                          className="inline-flex min-h-11 items-center gap-2 rounded-full px-3 font-semibold text-cannot hover:bg-wash"
+                          className="inline-flex min-h-11 items-center gap-2 rounded-full px-3 font-semibold text-cannot transition hover:bg-cannot-wash focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cannot"
                         >
                           <Trash size={17} aria-hidden="true" />
                           Revoke

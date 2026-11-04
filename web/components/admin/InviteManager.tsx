@@ -171,7 +171,7 @@ export function InviteManager() {
               </thead>
               <tbody className="divide-y divide-line">
                 {invites.map((invite) => (
-                  <tr key={invite.id}>
+                  <tr key={invite.id} className="transition-colors hover:bg-wash/70">
                     <td className="px-5 py-4 font-mono">
                       <span className="select-all break-all">
                         {invite.code ?? invite.hint}

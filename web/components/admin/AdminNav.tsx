@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const items = [
-  { href: "/admin", label: "Overview", icon: Gauge },
+  { href: "/admin", label: "Dashboard", icon: Gauge },
   { href: "/admin/users", label: "Users", icon: Users },
   { href: "/admin/testers", label: "Testers", icon: UserFocus },
   { href: "/admin/invites", label: "Invites", icon: Ticket },
@@ -16,8 +16,24 @@ const items = [
 
 export function AdminNav() {
   const pathname = usePathname();
-  return <nav aria-label="Owner dashboard" className="flex gap-1 overflow-x-auto lg:flex-col">{items.map(({ href, label, icon: Icon }) => {
-    const active = href === "/admin" ? pathname === href : pathname.startsWith(href);
-    return <Link key={href} href={href} aria-current={active ? "page" : undefined} className={`flex min-h-11 shrink-0 items-center gap-3 rounded-field px-3.5 text-sm font-semibold ${active ? "bg-ink-strong text-on-ink" : "text-muted hover:bg-wash hover:text-ink"}`}><Icon size={19} weight={active ? "fill" : "regular"} aria-hidden="true" />{label}</Link>;
-  })}</nav>;
+  return (
+    <nav aria-label="Owner dashboard" className="flex gap-1 overflow-x-auto pb-1 lg:flex-col lg:overflow-visible lg:pb-0">
+      {items.map(({ href, label, icon: Icon }) => {
+        const active = href === "/admin" ? pathname === href : pathname.startsWith(href);
+        return (
+          <Link
+            key={href}
+            href={href}
+            aria-current={active ? "page" : undefined}
+            className={`group flex min-h-11 shrink-0 items-center gap-3 rounded-field px-3.5 text-sm font-semibold transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emphasis ${active ? "bg-tint text-ink shadow-[inset_0_0_0_1px_rgb(90_61_240/0.08)]" : "text-muted hover:bg-wash hover:text-ink"}`}
+          >
+            <span className={`grid size-8 place-items-center rounded-xl ${active ? "bg-surface text-emphasis shadow-sm" : "text-muted group-hover:text-ink"}`}>
+              <Icon size={18} weight={active ? "fill" : "regular"} aria-hidden="true" />
+            </span>
+            {label}
+          </Link>
+        );
+      })}
+    </nav>
+  );
 }

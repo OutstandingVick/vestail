@@ -12,7 +12,7 @@ export default function AdminError({
         Dashboard error
       </p>
       <h1 className="mt-3 text-3xl font-bold">This view could not render</h1>
-      <p className="mt-3 text-muted">
+      <p className="mt-3 max-w-prose leading-6 text-muted">
         Your access has not changed. Retry the page, then check Product health
         if the issue continues.
       </p>

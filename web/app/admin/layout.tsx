@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
     <AdminGate>
-      <div className="min-h-screen bg-tint p-3 sm:p-5 lg:p-6">
+      <div className="min-h-screen bg-tint p-2 sm:p-5 lg:p-6">
         <a href="#admin-content" className="sr-only z-50 rounded-full bg-ink-strong px-4 py-2 text-on-ink focus:not-sr-only focus:fixed focus:start-4 focus:top-4">
           Skip to dashboard
         </a>

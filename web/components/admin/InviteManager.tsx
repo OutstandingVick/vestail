@@ -95,7 +95,7 @@ export function InviteManager() {
               max={100}
               value={count}
               onChange={(event) => setCount(Number(event.target.value))}
-              className="mt-2 min-h-11 w-36 rounded-field border border-field bg-wash px-3 text-base"
+              className="mt-2 min-h-11 w-36 rounded-field border border-field bg-wash px-3 text-base outline-none transition focus:border-action focus:ring-2 focus:ring-action/15"
             />
           </div>
           <button

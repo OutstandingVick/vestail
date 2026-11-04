@@ -28,7 +28,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             </div>
             <div className="mt-5 lg:mt-10"><AdminNav /></div>
             <div className="mt-auto hidden rounded-field bg-wash p-4 lg:block">
-              <p className="text-xs font-bold uppercase tracking-[.14em] text-action-ink">Owner only</p>
+              <p className="text-xs font-bold uppercase tracking-[.14em] text-action-ink">Private workspace</p>
               <p className="mt-2 text-xs leading-5 text-muted">Buyer declarations are self-reported and are not identity verification.</p>
             </div>
           </aside>

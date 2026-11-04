@@ -10,7 +10,7 @@ export default function AdminLoading() {
         {Array.from({ length: 6 }, (_, index) => (
           <div
             key={index}
-            className="h-36 animate-pulse rounded-card bg-tint"
+            className="h-36 animate-pulse rounded-card bg-surface ring-1 ring-line"
           />
         ))}
       </div>

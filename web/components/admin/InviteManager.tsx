@@ -102,7 +102,7 @@ export function InviteManager() {
             type="button"
             onClick={generate}
             disabled={busy || count < 1 || count > 100}
-            className="inline-flex min-h-11 items-center gap-2 rounded-full bg-action px-5 font-bold text-on-action disabled:opacity-60"
+            className="inline-flex min-h-11 items-center gap-2 rounded-full bg-action px-5 font-bold text-on-action shadow-[0_8px_18px_rgb(255_88_10/0.22)] transition hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-action focus-visible:ring-offset-2 disabled:translate-y-0 disabled:opacity-60"
           >
             <Ticket size={19} weight="bold" aria-hidden="true" />
             {busy ? "Generating…" : "Generate codes"}

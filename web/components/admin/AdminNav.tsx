@@ -12,7 +12,7 @@ const items = [
   { href: "/admin/activity", label: "Activity", icon: Pulse },
   { href: "/admin/coverage", label: "Coverage", icon: ChartDonut },
   { href: "/admin/health", label: "Health", icon: Heartbeat },
-];
+] as const;
 
 export function AdminNav() {
   const pathname = usePathname();

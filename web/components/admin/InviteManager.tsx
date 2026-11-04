@@ -158,7 +158,7 @@ export function InviteManager() {
           </div>
         </div>
         {invites.length ? (
-          <div className="overflow-x-auto rounded-card border border-line bg-surface">
+          <div className="overflow-x-auto rounded-card bg-surface shadow-[0_8px_28px_rgb(34_25_78/0.05)] ring-1 ring-line">
             <table className="w-full min-w-[720px] text-left text-sm">
               <thead className="bg-wash text-xs uppercase tracking-wide text-muted">
                 <tr>

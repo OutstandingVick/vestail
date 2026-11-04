@@ -35,5 +35,5 @@ function AdminLoading() {
 }
 
 function AccessCard({ title, detail, children }: { title: string; detail: string; children: React.ReactNode }) {
-  return <main className="grid min-h-screen place-items-center bg-page p-6"><section className="w-full max-w-md rounded-panel border border-line bg-surface p-7"><p className="text-xs font-bold uppercase tracking-[.18em] text-action">Vestail admin</p><h1 className="mt-3 text-3xl font-bold">{title}</h1><p className="mt-3 mb-6 leading-7 text-muted">{detail}</p>{children}</section></main>;
+  return <main className="grid min-h-screen place-items-center bg-tint p-6"><section className="w-full max-w-md rounded-panel border border-line bg-surface p-7"><p className="text-xs font-bold uppercase tracking-[.18em] text-action">Vestail admin</p><h1 className="mt-3 text-3xl font-bold">{title}</h1><p className="mt-3 mb-6 leading-7 text-muted">{detail}</p>{children}</section></main>;
 }

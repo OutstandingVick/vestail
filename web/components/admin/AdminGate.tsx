@@ -41,7 +41,7 @@ export function AdminGate({ children }: { children: React.ReactNode }) {
 function AdminLoading() {
   return (
     <div className="grid min-h-screen place-items-center bg-tint p-6" role="status">
-      <p className="text-sm font-semibold text-muted">Loading owner dashboard…</p>
+      <p className="animate-pulse text-sm font-semibold text-muted">Loading owner dashboard…</p>
     </div>
   );
 }

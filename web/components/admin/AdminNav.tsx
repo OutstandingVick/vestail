@@ -17,7 +17,7 @@ const items = [
 export function AdminNav() {
   const pathname = usePathname();
   return (
-    <nav aria-label="Owner dashboard" className="flex gap-1 overflow-x-auto pb-1 lg:flex-col lg:overflow-visible lg:pb-0">
+    <nav aria-label="Owner dashboard" className="flex gap-1 overflow-x-auto pb-1 [scrollbar-width:none] lg:flex-col lg:overflow-visible lg:pb-0">
       {items.map(({ href, label, icon: Icon }) => {
         const active = href === "/admin" ? pathname === href : pathname.startsWith(href);
         return (

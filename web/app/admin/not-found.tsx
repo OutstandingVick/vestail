@@ -10,7 +10,7 @@ export default function AdminNotFound() {
       <p className="mt-3 max-w-prose leading-6 text-muted">That owner view does not exist. Return to the overview to continue reviewing Vestail.</p>
       <Link
         href="/admin"
-        className="mt-6 inline-flex min-h-11 items-center rounded-full bg-action px-5 font-bold text-on-action"
+        className="mt-6 inline-flex min-h-11 items-center rounded-full bg-action px-5 font-bold text-on-action transition hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-action focus-visible:ring-offset-2"
       >
         Return to overview
       </Link>

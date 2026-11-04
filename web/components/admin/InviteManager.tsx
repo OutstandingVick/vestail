@@ -119,7 +119,7 @@ export function InviteManager() {
       </section>
 
       {generated.length > 0 && (
-        <section className="rounded-card border border-action bg-action-wash p-5 sm:p-6">
+        <section className="rounded-card bg-action-wash p-5 ring-1 ring-action/25 sm:p-6">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
               <h2 className="text-lg font-bold">Save these codes now</h2>

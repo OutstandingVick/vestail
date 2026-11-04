@@ -60,7 +60,7 @@ export function TesterApplications() {
         <button
           type="button"
           onClick={load}
-          className="mt-4 min-h-10 rounded-full border border-field px-4 text-sm font-semibold"
+          className="mt-4 min-h-10 rounded-full border border-field px-4 text-sm font-semibold transition hover:bg-wash focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-action"
         >
           Try again
         </button>

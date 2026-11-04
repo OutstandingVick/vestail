@@ -17,7 +17,7 @@ export function CoverageBar({ totals }: { totals: Record<Status, number> }) {
     );
   return (
     <div
-      className="flex h-2 overflow-hidden rounded-full bg-line"
+      className="flex h-2.5 overflow-hidden rounded-full bg-line"
       aria-label={`${totals.can_own} can own, ${totals.conditional} conditional, ${totals.cannot_own} cannot own`}
     >
       {(["can_own", "conditional", "cannot_own"] as Status[]).map((status) =>

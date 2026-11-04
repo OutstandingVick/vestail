@@ -46,8 +46,8 @@ export function TesterApplications() {
 
   if (loading)
     return (
-      <div className="rounded-card border border-line bg-surface p-8 text-center text-muted">
-        Loading applications…
+      <div className="grid min-h-52 place-items-center rounded-card bg-surface p-8 text-center text-muted ring-1 ring-line">
+        <span className="inline-flex items-center gap-2"><SpinnerGap className="animate-spin" size={18} aria-hidden="true" />Loading applications…</span>
       </div>
     );
   if (error)

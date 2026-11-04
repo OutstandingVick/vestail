@@ -29,5 +29,5 @@ export default function AdminCoveragePage() {
 }
 
 function Verdict({ label, value, tone }: { label: string; value: number; tone: string }) {
-  return <div><dt className="text-[11px] text-muted">{label}</dt><dd className={`mt-1 font-bold tabular-nums ${tone}`}>{value}</dd></div>;
+  return <div><dt className="text-[11px] font-medium text-muted">{label}</dt><dd className={`mt-1 text-lg font-bold tabular-nums ${tone}`}>{value}</dd></div>;
 }

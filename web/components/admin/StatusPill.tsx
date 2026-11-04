@@ -7,5 +7,5 @@ const icons = { healthy: CheckCircle, attention: WarningCircle, unavailable: XCi
 
 export function StatusPill({ status }: { status: AdminHealthCheck["status"] }) {
   const Icon = icons[status];
-  return <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-bold capitalize ${styles[status]}`}><Icon size={14} weight="fill" aria-hidden="true" />{status}</span>;
+  return <span className={`inline-flex min-h-7 items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-bold capitalize ${styles[status]}`}><Icon size={14} weight="fill" aria-hidden="true" />{status}</span>;
 }

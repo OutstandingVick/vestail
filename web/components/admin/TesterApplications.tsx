@@ -132,7 +132,7 @@ export function TesterApplications() {
                     <p className="font-semibold">{row.xHandle}</p>
                     <a
                       href={`mailto:${row.email}`}
-                      className="mt-1 block text-xs text-muted hover:text-ink"
+                      className="mt-1 block text-xs text-muted underline-offset-2 hover:text-ink hover:underline focus-visible:rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-action"
                     >
                       {row.email}
                     </a>

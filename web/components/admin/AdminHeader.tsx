@@ -1,6 +1,10 @@
 "use client";
 
-import { ArrowClockwise, ArrowSquareOut, MagnifyingGlass } from "@phosphor-icons/react";
+import {
+  ArrowClockwise,
+  ArrowSquareOut,
+  MagnifyingGlass,
+} from "@phosphor-icons/react";
 import Link from "next/link";
 
 import { useAdminOverview } from "@/components/admin/AdminContext";

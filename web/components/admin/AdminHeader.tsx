@@ -27,7 +27,7 @@ export function AdminHeader({ title, description }: { title: string; description
       <div className="mt-8 flex flex-wrap items-end justify-between gap-5">
         <div>
           <p className="text-xs font-bold uppercase tracking-[.18em] text-action-ink">Owner dashboard</p>
-          <h1 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">{title}</h1>
+          <h1 className="mt-2 max-w-3xl text-balance text-3xl font-bold tracking-tight sm:text-4xl">{title}</h1>
           <p className="mt-2 max-w-2xl text-sm leading-6 text-muted">{description}</p>
         </div>
       </div>

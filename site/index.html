@@ -618,6 +618,13 @@
   .country-popover-assets { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
   .country-popover-assets li { border-radius: var(--r-pill); background: var(--lavender-surface); padding: 6px 9px; color: var(--ink); font-size: 0.6875rem; font-weight: 650; }
   .country-popover-assets .more { color: var(--ink-2); }
+  @media (max-width: 480px) {
+    .country-card:nth-child(odd) .country-popover { inset-inline-start: 0; translate: 0 8px; }
+    .country-card:nth-child(even) .country-popover { inset-inline: auto 0; translate: 0 8px; }
+    .country-card:nth-child(odd) .country-card-trigger:focus-visible + .country-popover,
+    .country-card:nth-child(even) .country-card-trigger:focus-visible + .country-popover,
+    .country-card.is-open .country-popover { translate: 0 0; }
+  }
   .country-empty { grid-column: 1 / -1; border-radius: 20px; background: var(--surface-2); padding: 32px; color: var(--ink-2); }
   @media (max-width: 900px) {
     .board.country-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }

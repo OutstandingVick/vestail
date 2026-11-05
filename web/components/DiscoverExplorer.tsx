@@ -7,7 +7,7 @@ import { useMemo, useState } from "react";
 import { VerdictBadge } from "@/components/VerdictBadge";
 import type { Status } from "@/lib/types";
 
-const KINDS = ["All", "Local advantage", "Buy onchain", "Within reach", "Price exposure", "Open elsewhere"] as const;
+const KINDS = ["All", "Local advantage", "Buy onchain", "Within reach", "Open elsewhere"] as const;
 const VERDICTS: { label: string; value: "all" | Status }[] = [
   { label: "All verdicts", value: "all" }, { label: "Can own", value: "can_own" },
   { label: "Conditional", value: "conditional" }, { label: "Cannot own here", value: "cannot_own" },
@@ -18,7 +18,7 @@ export interface DiscoverRow { id: string; name: string; symbol: string; kind: D
 
 const KIND_TONE: Record<DiscoverKind, string> = {
   "Local advantage": "bg-action-wash text-action-ink", "Buy onchain": "bg-tint text-emphasis",
-  "Within reach": "bg-cond-wash text-cond-ink", "Price exposure": "bg-wash text-muted", "Open elsewhere": "bg-wash text-muted",
+  "Within reach": "bg-cond-wash text-cond-ink", "Open elsewhere": "bg-wash text-muted",
 };
 
 export function DiscoverExplorer({ rows, country, buyer, countryCode }: { rows: DiscoverRow[]; country: string; buyer: string; countryCode: string }) {
@@ -39,7 +39,7 @@ export function DiscoverExplorer({ rows, country, buyer, countryCode }: { rows: 
           <div className="max-w-[760px]">
             <p className="mb-2 font-accent text-xs font-bold uppercase tracking-[0.13em] text-action-ink">Discover</p>
             <h2 id="discover-title" className="text-[clamp(32px,4vw,54px)] font-extrabold leading-[1.05] tracking-[-0.05em] text-balance">Explore what&apos;s open to you.</h2>
-            <p className="mt-4 max-w-[680px] text-base leading-7 text-muted sm:text-lg">Browse assets, onchain versions, and price exposure assessed for a <span className="font-semibold text-ink">{buyer}</span> in <span className="font-semibold text-ink">{country}</span>.</p>
+            <p className="mt-4 max-w-[680px] text-base leading-7 text-muted sm:text-lg">Browse assets and onchain versions assessed for a <span className="font-semibold text-ink">{buyer}</span> in <span className="font-semibold text-ink">{country}</span>.</p>
           </div>
           <Link href="/app/settings" className="inline-flex min-h-11 items-center rounded-full border border-line bg-surface px-4 text-sm font-semibold hover:bg-tint">Change buyer profile</Link>
         </div>

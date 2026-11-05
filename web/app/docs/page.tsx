@@ -30,9 +30,6 @@ const navigation = [
 const glossary = [
   ["Price exposure only", "The product follows a reference price, but you do not own the company, index constituents, currency basket, commodity, or other underlying asset."],
   ["Underlying asset", "The share, commodity, currency, index, or other reference whose value a product follows or claims to represent."],
-  ["Perpetual future", "A leveraged contract that tracks a reference price and has no expiry date. It is settled in money rather than by delivering the underlying."],
-  ["Liquidation", "The forced closing of a leveraged position when the account no longer has enough collateral to support it."],
-  ["Margin and collateral", "Collateral supports a trade; margin is the amount required to open and maintain a leveraged position."],
   ["Tokenised asset", "An onchain token connected to an offchain asset. Its legal rights come from the issuer’s terms, not from its ticker or blockchain."],
   ["Tokenised share", "A token whose issuer says a real share backs it or that it carries a claim on one. Voting, dividends, transfer, and redemption still depend on the terms."],
   ["Debt token", "An issuer obligation that may follow a share’s price without making its holder a shareholder."],

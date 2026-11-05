@@ -1233,15 +1233,14 @@
           <summary>Assets</summary>
           <div class="nav-panel nav-panel-grid">
             <a href="#board">All 20 asset classes</a>
-            <a href="#board">Equities</a>
-            <a href="#board">Property</a>
-            <a href="#board">Farmland</a>
-            <a href="#board">Bonds</a>
-            <a href="#board">Crypto</a>
-            <a href="#board">Gold</a>
-            <a href="#board">Private equity</a>
-            <a href="#board">Aircraft</a>
-            <a href="#board">More asset classes</a>
+            <a href="#board" data-board-query="stocks">Equities</a>
+            <a href="#board" data-board-query="property">Property</a>
+            <a href="#board" data-board-query="farmland">Farmland</a>
+            <a href="#board" data-board-query="bonds">Bonds</a>
+            <a href="#board" data-board-query="crypto">Crypto</a>
+            <a href="#board" data-board-query="gold">Gold</a>
+            <a href="#board" data-board-query="private equity">Private equity</a>
+            <a href="#board" data-board-query="aircraft">Aircraft</a>
             <p>Each asset page explains where ownership is open, conditional, or restricted.</p>
           </div>
         </details>
@@ -1283,9 +1282,9 @@
             <a href="#trust">Methodology</a>
             <a href="#trust">Sources and provenance</a>
             <a href="#board">Ownership guides</a>
-            <a href="#faq">Glossary</a>
+            <a href="/docs#glossary">Glossary</a>
             <a href="#faq">FAQ</a>
-            <a href="#faq">Legal and disclaimer</a>
+            <a href="/terms">Legal and disclaimer</a>
           </div>
         </details>
         <a class="btn solid" href="/app" data-app-link>Open App</a>
@@ -2253,6 +2252,11 @@ showAllBtn.addEventListener("click", () => { showAll = !showAll; render(); });
 q.addEventListener("input", () => { selected = null; render(); });
 clearBtn.addEventListener("click", () => { q.value = ""; selected = null; render(); q.focus(); });
 document.querySelectorAll(".chip").forEach(ch => ch.addEventListener("click", () => { q.value = ch.dataset.q; selected = null; render(); q.focus(); }));
+document.querySelectorAll("[data-board-query]").forEach(link => link.addEventListener("click", () => {
+  q.value = link.dataset.boardQuery;
+  selected = null;
+  render();
+}));
 document.addEventListener("keydown", e => {
   if (e.key !== "Escape") return;
   const open = rows.querySelector(".country-card.is-open");

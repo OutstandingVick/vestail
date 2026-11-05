@@ -36,22 +36,13 @@ export default async function MarketingPageRoute({ params }: PageProps) {
 
   if (!page) notFound();
 
-  /*
-   * A breadcrumb trail, so a result shows "vestail.fun › Supported countries"
-   * rather than a bare URL.
-   *
-   * Two levels, not three. The obvious trail would be Home › Countries › this
-   * page, but /countries, /company and /explore are not routes — they answer
-   * 404. Every step but the last must carry a URL that resolves, and naming a
-   * dead one teaches a crawler the markup cannot be trusted. The section
-   * returns as a third level when those index pages exist.
-   */
   const breadcrumbs = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home", item: absolute("/") },
-      { "@type": "ListItem", position: 2, name: page.title, item: absolute(`/${section}/${slug}`) },
+      { "@type": "ListItem", position: 2, name: page.section, item: absolute(`/${section}`) },
+      { "@type": "ListItem", position: 3, name: page.title, item: absolute(`/${section}/${slug}`) },
     ],
   };
 

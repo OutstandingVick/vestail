@@ -14,9 +14,9 @@ export function MarketingContentPage({ page }: { page: MarketingPage }) {
           </Link>
           <div className="flex items-center gap-2 sm:gap-5">
             <nav aria-label="Public pages" className="hidden items-center gap-5 text-sm font-semibold text-muted md:flex">
-              <Link href="/explore/all" className="hover:text-ink">Explore</Link>
-              <Link href="/countries/supported" className="hover:text-ink">Countries</Link>
-              <Link href="/company/about" className="hover:text-ink">Company</Link>
+              <Link href="/explore" className="hover:text-ink">Explore</Link>
+              <Link href="/countries" className="hover:text-ink">Countries</Link>
+              <Link href="/company" className="hover:text-ink">Company</Link>
             </nav>
             <Link href="/app" className="inline-flex min-h-11 items-center rounded-full bg-action px-5 font-semibold text-on-action">
               Open App

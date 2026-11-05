@@ -6,7 +6,7 @@ export function AppFooter() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <p>Vestail is an informational guide. Not legal, tax, or investment advice.</p>
         <nav aria-label="Legal and product information" className="flex flex-wrap items-center gap-x-6 gap-y-3">
-          <Link href="/#methodology" className="min-h-11 content-center hover:text-ink">Methodology</Link>
+          <Link href="/company/methodology" className="min-h-11 content-center hover:text-ink">Methodology</Link>
           <Link href="/testers" className="min-h-11 content-center hover:text-ink">Become a tester</Link>
           <Link href="/privacy" className="min-h-11 content-center hover:text-ink">Privacy</Link>
           <Link href="/terms" className="min-h-11 content-center hover:text-ink">Terms</Link>

@@ -182,16 +182,10 @@
     --ink-0: #0d0d0f;                    /* darkest ink: labels on amber, ticks */
     --navy: #0d0d0f;                     /* label colour on orange */
     --orange: #ff580a;                   /* actions */
-    --faq-card: color-mix(in srgb, var(--orange) 10%, #fff); /* pale orange surface */
     --purple: #7c5cff;                   /* brand emphasis */
     --purple-ink: #5a3df0;               /* purple for small text on light */
     --country-card: #EBEBFF;              /* country-card surface */
-    --problem-bg: #0d0d0f;
-    --problem-text: #f7f5ff;
-    --problem-muted: #aaa7b4;
-    --problem-panel: #171821;
     --lavender-surface: #EBEBFF;
-    --lavender-strong: #e3deef;
     --paper: #17171a;                    /* text */
     --muted: #636069;                    /* labels; dark enough to hold 4.5:1 on the page and white */
 
@@ -244,7 +238,6 @@
     --card-raised: var(--card), 0 20px 40px -24px rgba(13,13,15,.18);
     --card-hover: 0 0 0 1px color-mix(in srgb, var(--purple) 40%, transparent), 0 1px 2px rgba(13,13,15,.04), 0 26px 50px -24px rgba(13,13,15,.22);
     --shadow-1: var(--card);
-    --shadow-2: var(--card-raised);
     /* Corner scale, and only these: panels 28, cards 20, fields 16, buttons and small tiles 12, verdict tiles and swatches 6, pills. */
     --r-tile: 6px; --r-xl: 28px; --r-lg: 28px; --r-card: 20px; --r-md: 16px; --r-sm: 12px; --r-pill: 999px;
     --font-manrope: "Manrope", ui-sans-serif, system-ui, sans-serif;
@@ -253,8 +246,6 @@
     --font-geist: "Geist", ui-sans-serif, system-ui, sans-serif;
     --font-dm-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
     --font-satoshi: "Satoshi", ui-sans-serif, system-ui, sans-serif;
-    --font-display: var(--font-manrope);
-    --font-body: var(--font-inter);
     --ease: cubic-bezier(.2,.8,.2,1);
     --tip-bg: var(--paper); --tip-fg: var(--bg);
     color-scheme: light;
@@ -289,12 +280,7 @@
     --globe-pin: #ff7a3c;
     --globe-pin-halo: rgb(255 122 60 / .2);
     --country-card: #1b1c29;
-    --problem-bg: #09090b;
-    --problem-text: #f7f5ff;
-    --problem-muted: #aaa7b4;
-    --problem-panel: #171821;
     --lavender-surface: #181925;
-    --lavender-strong: #212233;
     --paper: #f5f3fb;
     --muted: #aaa7b4;
     --ink: #f7f5ff;
@@ -302,7 +288,6 @@
     --ink-3: #aaa7b4;
     --line: rgb(247 245 255 / .13);
     --purple-ink: #ad9cff;
-    --faq-card: color-mix(in srgb, var(--orange) 12%, var(--surface));
     --ring: 0 0 0 1px var(--line);
     --card: var(--ring), 0 1px 2px rgb(0 0 0 / .28);
     --card-raised: var(--card), 0 20px 40px -24px rgb(0 0 0 / .72);

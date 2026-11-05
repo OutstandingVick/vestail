@@ -33,15 +33,6 @@ export const MARKETING_PAGES: Record<string, MarketingPage> = {
       { title: "What comes back", body: "Results separate direct ownership, conditional access and restrictions for the country and buyer type you declare.", items: ["A visible ownership verdict", "The rule and its source", "A route to buy only when one is appropriate"] },
     ],
   },
-  "explore/trending": {
-    section: "Explore",
-    title: "Trending assets",
-    summary: "See the assets people are checking most often without treating attention as a recommendation.",
-    sections: [
-      { title: "Interest is not eligibility", body: "A popular asset may still be conditional or restricted for you. Vestail keeps the ownership verdict beside the trend instead of implying that popularity means access." },
-      { title: "How to use this view", body: "Use trends to discover questions worth checking, then confirm the rule for your declared country and buyer type before taking action.", items: ["Compare asset classes", "Open the country rule", "Review the source and verification date"] },
-    ],
-  },
   "explore/questions": {
     section: "Explore",
     title: "Popular ownership questions",
@@ -61,16 +52,6 @@ export const MARKETING_PAGES: Record<string, MarketingPage> = {
       { title: "Read the middle carefully", body: "Conditional access carries the detail that simple comparison tools usually lose.", items: ["Foreign ownership caps", "Licences and approvals", "Product or issuer restrictions", "Exit and redemption gates"] },
     ],
   },
-  "explore/all": {
-    section: "Explore",
-    title: "Explore Vestail",
-    summary: "Browse the full ownership map: countries, asset classes and onchain versions.",
-    sections: [
-      { title: "Ownership rules", body: "Check twenty asset classes for citizens and foreigners across the countries Vestail currently covers." },
-      { title: "Onchain versions", body: "Compare tokenized versions by chain, issuer and legal instrument rather than ticker alone." },
-      { title: "Price exposure", body: "Commodity perpetuals are labelled as exposure, not ownership, so the product is never confused with holding the underlying asset." },
-    ],
-  },
   "countries/supported": {
     section: "Countries",
     title: "All supported countries",
@@ -78,15 +59,6 @@ export const MARKETING_PAGES: Record<string, MarketingPage> = {
     sections: [
       { title: "Current coverage", body: "Each country includes citizen and foreigner views across the same twenty asset classes.", items: ["Brazil", "China", "Germany", "India", "Japan", "Nigeria", "Saudi Arabia", "South Africa", "South Korea", "United Arab Emirates", "United Kingdom", "United States"] },
       { title: "What supported means", body: "A supported country has structured rules, sources and verification dates. It does not mean every asset or product is available there." },
-    ],
-  },
-  "countries/overview": {
-    section: "Countries",
-    title: "Country overview pages",
-    summary: "Understand a market before opening an individual asset rule.",
-    sections: [
-      { title: "One country, one consistent view", body: "Country overviews group the current buyer profiles, asset verdicts and common conditions in one place." },
-      { title: "From overview to evidence", body: "Open any asset to move from the summary verdict to the specific rule, source and last-verified date.", items: ["Citizen view", "Foreigner view", "Asset-by-asset matrix", "Source provenance"] },
     ],
   },
   "countries/citizen-rules": {
@@ -123,25 +95,8 @@ export const MARKETING_PAGES: Record<string, MarketingPage> = {
     sections: [
       { title: "The problem", body: "Most platforms show price and availability first. The ownership rule, product structure and exit conditions are scattered elsewhere." },
       { title: "The Vestail approach", body: "Resolve the asset, check the declared buyer profile, show one of three verdicts and reveal the evidence behind it." },
-    ],
-  },
-  "company/mission": {
-    section: "Company",
-    title: "Our mission",
-    summary: "Help people understand what they can own, under which conditions and through which legitimate route.",
-    sections: [
-      { title: "Rules before routing", body: "A purchase path should follow the ownership verdict, never replace it." },
-      { title: "Clarity over false certainty", body: "Vestail preserves the conditional middle instead of forcing complex rules into a convenient yes or no.", items: ["Make the buyer profile explicit", "Name the condition", "Show the source", "Stop restricted routes"] },
-    ],
-  },
-  "company/difference": {
-    section: "Company",
-    title: "How Vestail is different",
-    summary: "Vestail starts with ownership eligibility, not a catalogue, price chart or sponsored venue.",
-    sections: [
-      { title: "Three verdicts, not a loose boolean", body: "Can own, conditional and cannot own are distinct outcomes. Not assessed is never presented as buyable." },
-      { title: "Evidence stays visible", body: "Rules carry provenance and verification dates so users can judge how an answer was formed." },
-      { title: "Commercial incentives do not change the verdict", body: "Routing can happen only after the rule allows it, and cannot-own results stop before a venue." },
+      { title: "Rules before routing", body: "A purchase path follows the ownership verdict; it never replaces it." },
+      { title: "What makes Vestail different", body: "Vestail preserves can own, conditional, cannot own and not assessed as distinct outcomes. Sources stay visible, and commercial routing never changes the verdict.", items: ["Declare the buyer profile", "Name the condition", "Show the source", "Stop restricted routes"] },
     ],
   },
   "company/partners": {
@@ -153,18 +108,18 @@ export const MARKETING_PAGES: Record<string, MarketingPage> = {
         title: "Token issuers and providers",
         description: "The companies behind the tokenized versions Vestail currently maps. Inclusion describes product coverage, not a formal partnership or endorsement.",
         entries: [
-          { name: "xStocks by Backed Finance", symbol: "XSTOCKS", detail: "Collateral-backed tracker certificates for public equities, funds and SpaceX", tags: ["Solana", "9 symbols"] },
-          { name: "Ondo Global Markets", symbol: "ONDO", detail: "Total-return notes linked to public equities, funds and SpaceX", tags: ["Solana", "9 symbols"] },
-          { name: "Backpack Securities", symbol: "BACKPACK", detail: "Security-entitlement exposure to SpaceX", tags: ["Solana", "1 symbol"] },
-          { name: "Tessera", symbol: "TESSERA", detail: "Loan-participation tokens linked to private companies", tags: ["Solana", "3 symbols"] },
-          { name: "PreStocks", symbol: "PRESTOCKS", detail: "SPV-based economic exposure to private companies", tags: ["Solana", "3 symbols"] },
-          { name: "Robinhood", symbol: "ROBINHOOD", detail: "Tokenized debt linked to NVIDIA and Tesla", tags: ["Robinhood Chain", "2 symbols"] },
-          { name: "Coinbase", symbol: "COINBASE", detail: "A tokenized share claim linked to NVIDIA", tags: ["Base", "1 symbol"] },
+          { name: "xStocks by Backed Finance", symbol: "XSTOCKS", detail: "Collateral-backed tracker certificates for public equities, funds and SpaceX", tags: ["Solana"] },
+          { name: "Ondo Global Markets", symbol: "ONDO", detail: "Total-return notes linked to public equities, funds and SpaceX", tags: ["Solana"] },
+          { name: "Backpack Securities", symbol: "BACKPACK", detail: "Security-entitlement exposure to SpaceX", tags: ["Solana"] },
+          { name: "Tessera", symbol: "TESSERA", detail: "Loan-participation tokens linked to private companies", tags: ["Solana"] },
+          { name: "PreStocks", symbol: "PRESTOCKS", detail: "SPV-based economic exposure to private companies", tags: ["Solana"] },
+          { name: "Robinhood", symbol: "ROBINHOOD", detail: "Tokenized debt linked to NVIDIA and Tesla", tags: ["Robinhood Chain"] },
+          { name: "Coinbase", symbol: "COINBASE", detail: "A tokenized share claim linked to NVIDIA", tags: ["Base"] },
         ],
       },
       {
         title: "Companies and funds",
-        description: "Public-company tokens, private-market exposure and fund-linked instruments currently mapped by Vestail.",
+        description: "Examples of public-company tokens, private-market exposure and fund-linked instruments mapped by Vestail.",
         entries: [
           { name: "NVIDIA", symbol: "NVDA", detail: "Public equity", tags: ["Solana", "Base", "Robinhood Chain"] },
           { name: "Tesla", symbol: "TSLA", detail: "Public equity", tags: ["Solana", "Robinhood Chain"] },
@@ -177,15 +132,6 @@ export const MARKETING_PAGES: Record<string, MarketingPage> = {
           { name: "Kalshi", symbol: "KALSHI", detail: "Private-market exposure", tags: ["Solana"] },
           { name: "S&P 500 ETF", symbol: "SPY", detail: "Fund-linked instrument", tags: ["Solana"] },
           { name: "Nasdaq-100 ETF", symbol: "QQQ", detail: "Fund-linked instrument", tags: ["Solana"] },
-        ],
-      },
-      {
-        title: "Chains and markets",
-        description: "Where Vestail currently maps an onchain representation or a routed market.",
-        entries: [
-          { name: "Solana", symbol: "SOL", detail: "Tokenized equities, funds and private-market exposure", tags: ["11 assets"] },
-          { name: "Base", symbol: "BASE", detail: "Tokenized NVIDIA exposure", tags: ["1 asset"] },
-          { name: "Robinhood Chain", symbol: "RHC", detail: "NVIDIA and Tesla stock tokens", tags: ["2 assets"] },
         ],
       },
     ],

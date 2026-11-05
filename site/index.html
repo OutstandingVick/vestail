@@ -664,11 +664,6 @@
   .foot-col a:focus-visible, .foot-cta:focus-visible, .foot-logo:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; border-radius: 2px; }
   .foot-connect { margin-top: 0; }
 
-  .foot-signup { display: flex; width: 100%; max-width: 420px; min-height: 48px; border: 1.5px solid var(--ink); border-radius: var(--r-pill); overflow: hidden; }
-  .foot-signup input { min-width: 0; flex: 1; border: 0; outline: 0; padding-inline: 16px 10px; background: transparent; color: var(--ink); font: inherit; font-size: 0.875rem; }
-  .foot-signup input::placeholder { color: var(--ink-3); }
-  .foot-signup button { flex: none; border: 0; border-radius: var(--r-pill); padding-inline: 20px; background: var(--orange); color: #0d0d0f; font: inherit; font-weight: 650; cursor: pointer; transition: background .15s; }
-  .foot-signup button:hover { background: #ff7130; }
   .foot-email { display: inline-flex; min-height: 44px; align-items: center; gap: 10px; margin-top: 0; color: var(--ink); font-size: 0.875rem; font-weight: 650; text-decoration: none; }
   .foot-email svg { width: 20px; height: 20px; fill: currentColor; }
   .foot-email:hover { color: var(--ink-2); }
@@ -678,7 +673,7 @@
   .foot-social-links a { display: inline-flex; align-items: center; justify-content: center; width: 42px; min-height: 42px; padding: 0; border-radius: 50%; background: var(--orange); color: #0d0d0f; font-size: 0.8125rem; font-weight: 650; text-decoration: none; transition: background .15s, color .15s; }
   .foot-social-links svg { display: block; width: 20px; height: 20px; fill: currentColor; }
   .foot-social-links a:hover { background: #ff7130; color: #0d0d0f; }
-  .foot-signup input:focus-visible, .foot-signup button:focus-visible, .foot-email:focus-visible, .foot-social-links a:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+  .foot-email:focus-visible, .foot-social-links a:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
   .foot-base { margin-top: 18px; color: var(--ink-3); font-size: 0.8125rem; }
   .foot-legal { margin: 0 0 10px; max-width: 78ch; line-height: 1.55; }
   .foot-legal a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
@@ -1142,9 +1137,6 @@
     .foot-col ul { gap: 16px; }
     .foot-col a, .foot-col li span { font-size: 0.9375rem; }
     .foot-connect { width: 100%; }
-    .foot-signup { max-width: 100%; min-height: 54px; }
-    .foot-signup input { padding-inline: 16px 8px; }
-    .foot-signup button { padding-inline: 18px; }
     .foot-social { margin-top: 28px; }
     .foot-social-links { gap: 10px; }
     .foot-social-links a { justify-content: center; width: 48px; min-height: 48px; padding: 0; border-radius: 50%; font-size: 0.8125rem; }
@@ -1566,10 +1558,6 @@
       <a class="foot-cta" href="/app" data-app-link><i aria-hidden="true"></i>Open App</a>
       <div class="foot-connect">
           <a class="foot-email" href="mailto:hello@vestail.fun" aria-label="Email Vestail at hello@vestail.fun"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M224,48H32A16,16,0,0,0,16,64V192a16,16,0,0,0,16,16H224a16,16,0,0,0,16-16V64A16,16,0,0,0,224,48Zm-20.57,16L128,133.15,52.57,64ZM32,192V74.19l85.18,78.08a16,16,0,0,0,21.64,0L224,74.19V192Z"/></svg><span>hello@vestail.fun</span></a>
-        <form class="foot-signup" aria-label="Vestail updates">
-          <input type="email" name="email" autocomplete="email" placeholder="Email address" aria-label="Email address">
-          <button type="button">Subscribe</button>
-        </form>
         <div class="foot-social">
           <div class="foot-social-links" aria-label="Vestail social channels">
             <a href="https://x.com/usevestail" target="_blank" rel="noopener noreferrer" aria-label="Vestail on X" title="Follow Vestail on X"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M214.75,211.71l-62.6-98.38,61.77-67.95a8,8,0,0,0-11.84-10.76L143.24,99.34,102.75,35.71A8,8,0,0,0,96,32H48a8,8,0,0,0-6.75,12.3l62.6,98.37-61.77,68a8,8,0,1,0,11.84,10.76l58.84-64.72,40.49,63.63A8,8,0,0,0,160,224h48a8,8,0,0,0,6.75-12.29ZM164.39,208,62.57,48h29L193.43,208Z"/></svg></a>

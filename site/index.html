@@ -2287,29 +2287,17 @@ problemSteps.forEach((step, index) => {
 if (problemSteps[0]) activateProblem(problemSteps[0]);
 
 /* ---------- Coverage figures ---------- */
-/*
- * These three count up on first paint and nothing else touches them. They are
- * facts about the rule set — twelve countries, twenty asset classes, and the
- * 480 rules those make for citizens and foreigners — so they can be checked
- * against data/ rather than taken on trust.
- *
- * What used to sit here was a traction HUD: dollars bought, orders routed,
- * active buyers, and a pulsing LIVE feed of purchases. All of it was invented,
- * and it went out on the public site. Vestail's whole claim is that it tells
- * you the truth about what you may own; a made-up number on the front page
- * costs more than it could ever buy. Real order data can earn a place here,
- * and until there is some there is nothing to show.
- */
 const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 const fmt = (n, f, pre) => pre + (f === "compact" ? (n >= 1e6 ? (n / 1e6).toFixed(1) + "M" : n >= 1e3 ? Math.round(n / 1e3) + "k" : n) : Math.round(n).toLocaleString());
-// Counts up once on first paint; later updates set the number without replaying the motion.
 let statsShown = false;
-/*
- * The figures are already in the HTML, so a crawler, a reader with JavaScript
- * off and a tab that never becomes visible all see 12, 20 and 480 rather than
- * three zeros. This only animates from zero up to them, and only once.
- */
+function syncCoverageFigures() {
+  const values = [COUNTRIES.length, ASSETS.length, COUNTRIES.length * ASSETS.length * 2];
+  document.querySelectorAll(".stat .v").forEach((el, index) => {
+    el.dataset.count = String(values[index]);
+    el.textContent = values[index].toLocaleString();
+  });
+}
 function showStats() {
   const animate = !statsShown && !reduce;
   statsShown = true;
@@ -2341,6 +2329,7 @@ async function start() {
       apiLive = true;
     } catch (err) { console.warn("Vestail API unavailable, using inline data.", err); }
   }
+  syncCoverageFigures();
   render();
   showStats();
 }

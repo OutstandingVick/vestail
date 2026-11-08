@@ -2,18 +2,6 @@
 
 import { useEffect } from "react";
 
-/**
- * What the signed-in app shows when something throws.
- *
- * There was nothing here before, and in the App Router that means a thrown
- * error renders an empty document — a black screen with a cursor on it. The
- * first person outside the team to sign up hit exactly that after choosing
- * their country, and had no way to tell a crash from a page that never loaded.
- *
- * A boundary cannot stop the error, but it can stop the silence: say something
- * happened, offer the two things that actually help, and log the digest so the
- * report that reaches us names the failure.
- */
 export default function AppError({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
   useEffect(() => {
     console.error("Vestail app error", { message: error.message, digest: error.digest });
@@ -36,12 +24,7 @@ export default function AppError({ error, reset }: { error: Error & { digest?: s
         >
           Try again
         </button>
-        {/*
-          * A plain anchor on purpose, not next/link. This is the escape hatch
-          * from a broken client, and a client-side navigation would reuse the
-          * same router cache that may be the thing at fault. A full load
-          * throws all of it away.
-          */}
+        {/* A full load also clears a router cache that may be broken. */}
         {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
         <a href="/app/start" className="min-h-11 rounded-full px-5 py-3 font-semibold underline">
           Start over

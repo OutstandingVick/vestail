@@ -12,24 +12,7 @@ import { userFrom } from "@/lib/server/privy";
 import { readProfile } from "@/lib/server/profile";
 import { inspectSwapTransaction, maxLamportsFor } from "@/lib/swap/inspect";
 
-/**
- * POST /api/swap/order { symbol, mint, amount, taker?, acknowledged? }
- *
- * Builds a USDC -> token order through Jupiter, for a token the buyer's
- * declared country and buyer type allow. The verdict is the token's own
- * (issuer capped by class), read fresh from the API:
- *
- *   can_own       always
- *   conditional   only with acknowledged: true (a price estimate needs none)
- *   cannot_own    never
- *   not assessed  never: missing research is not permission
- *
- * Without taker it returns a price only. With taker it records the Buy press
- * through POST /orders/click (which checks the verdict again) and returns a
- * transaction, inspected before it is sent, plus an order token that
- * /api/swap/execute requires. The slippage, price-impact and inspection rules
- * are v1's, unchanged; see the comments there for why each number is what it is.
- */
+// Quotes need no acknowledgement; executable conditional orders do.
 const REQUESTED_SLIPPAGE_BPS = 100;
 const MAX_SLIPPAGE_BPS = 300;
 const MAX_PRICE_IMPACT_PCT = 10;
@@ -105,7 +88,6 @@ export async function POST(request: Request) {
     return fail(422, reason);
   }
 
-  // The Buy press, recorded and re-checked by the API before anything is signed.
   try {
     await api.click({
       country: profile.country, asset: board.asset, who: profile.who, venue: "Jupiter", mint, session: userId,

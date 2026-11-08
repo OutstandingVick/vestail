@@ -32,11 +32,6 @@ const NAV = [
   { href: "/app/compare", label: "Compare", icon: ArrowsLeftRight },
 ];
 
-/**
- * The dashboard's frame: navigation, the buyer's declared country (always
- * visible, always changeable), the theme, and who is signed in. On a phone it
- * sits above the page as a wrapped bar.
- */
 export function Sidebar({ profile, country }: { profile: Profile; country: Country | null }) {
   const path = usePathname();
   const router = useRouter();
@@ -44,8 +39,6 @@ export function Sidebar({ profile, country }: { profile: Profile; country: Count
   const account = accountOf(user);
   const active = (href: string) => path.startsWith(href);
 
-  // On a phone the sidebar folds into a menu button; it closes again when
-  // the page changes or Escape is pressed.
   const [open, setOpen] = useState(false);
   useEffect(() => setOpen(false), [path]);
   useEffect(() => {

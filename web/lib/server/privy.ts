@@ -2,11 +2,7 @@ import "server-only";
 
 import { PrivyClient } from "@privy-io/node";
 
-/**
- * Server-side Privy. The browser sends its Privy access token as a bearer
- * header; every route that acts for a user (saving a profile, recording a buy,
- * building a swap) verifies it here first.
- */
+// Verify bearer tokens before any route acts for a Privy user.
 
 let client: PrivyClient | null = null;
 function privy(): PrivyClient {
@@ -26,7 +22,6 @@ export async function listPrivyUsers(limit = 500) {
   return rows;
 }
 
-/** The signed-in user's id, or null when the request carries no valid token. */
 export async function userFrom(request: Request): Promise<string | null> {
   const header = request.headers.get("authorization") ?? "";
   const token = header.startsWith("Bearer ") ? header.slice(7) : null;
@@ -39,11 +34,7 @@ export async function userFrom(request: Request): Promise<string | null> {
   }
 }
 
-/**
- * Merge fields into the Privy user's custom metadata. Privy replaces the whole
- * object on every save, so read it first: changing country must not erase the
- * user's name, and the reverse.
- */
+// Privy replaces custom metadata, so preserve unrelated fields on every update.
 export async function updateMetadata(userId: string, patch: Record<string, string>) {
   const user = await privy().users()._get(userId);
   const current = (user.custom_metadata ?? {}) as Record<string, string | number | boolean>;
@@ -51,7 +42,6 @@ export async function updateMetadata(userId: string, patch: Record<string, strin
   return current;
 }
 
-/** Store the self-declared profile on the Privy user, so it follows them across devices. */
 export async function saveProfileFor(userId: string, profile: { country: string; who: string }) {
   await updateMetadata(userId, { country: profile.country, who: profile.who });
 }

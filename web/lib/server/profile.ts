@@ -3,14 +3,7 @@ import "server-only";
 import { cookies } from "next/headers";
 import { BUYER_TYPES, type BuyerType, type Profile } from "@/lib/types";
 
-/**
- * The buyer's self-declared country and buyer type. Never inferred: no IP
- * lookup, no Accept-Language guess. Until they choose, there is no profile and
- * the app asks rather than assumes.
- *
- * Kept in a cookie so server components render the right verdicts on first
- * load; the same values are mirrored to the Privy user (see /api/profile).
- */
+// The buyer declares this profile; never infer it from network or locale.
 export const PROFILE_COOKIE = "vestail_profile";
 
 export function parseProfile(raw: string | undefined | null): Profile | null {

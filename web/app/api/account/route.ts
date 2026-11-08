@@ -4,11 +4,6 @@ import { z } from "zod";
 import { updateMetadata, userFrom } from "@/lib/server/privy";
 import { AVATAR_COLORS } from "@/lib/account";
 
-/**
- * POST /api/account { name?, avatar? } — the user's display name and avatar
- * colour, kept on their Privy record. Optional and cosmetic: Vestail never
- * asks for a legal name, and nothing here is identity verification.
- */
 const Body = z.object({
   name: z.string().trim().max(40).optional(),
   avatar: z.enum(AVATAR_COLORS).optional(),

@@ -1,11 +1,5 @@
 import type { MatrixRow, Status } from "@/lib/types";
 
-/**
- * Discovery from the matrix alone: what a buyer can own at home that most
- * countries don't allow, what is within reach (conditional), and what they
- * can't own at home but could elsewhere. No invented facts: every item is a
- * verdict the API already gives, compared across countries.
- */
 export interface Discovery {
   rare: { asset: string; status: Status; openIn: number }[];
   withinReach: { asset: string; openIn: number }[];
@@ -18,8 +12,6 @@ export function discover(rows: MatrixRow[], home: string): Discovery {
   const openCount = (asset: string) => rows.filter(r => r.cells.find(c => c.asset === asset)?.status === "can_own").length;
   const cells = mine.cells;
 
-  // Can own here but not everywhere: the fewer countries that allow it, the
-  // bigger the surprise. The six least common lead.
   const rare = cells.filter(c => c.status === "can_own")
     .map(c => ({ asset: c.asset, status: c.status, openIn: openCount(c.asset) }))
     .filter(c => c.openIn < rows.length)

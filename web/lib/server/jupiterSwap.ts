@@ -3,15 +3,8 @@ import "server-only";
 import { JUPITER_EXECUTE_ENDPOINT, JUPITER_ORDER_ENDPOINT } from "@/lib/constants";
 import { jupiterHeaders } from "@/lib/server/jupiter";
 
-/**
- * Jupiter Swap API V2, Meta-Aggregator path: GET /order -> sign -> POST
- * /execute. Only the fields Vestail reads are typed; the rest pass through
- * unused.
- */
-
 export interface JupiterOrder {
   requestId: string;
-  /** Base64 v0 transaction; "" when the swap cannot be built (see errorCode). */
   transaction: string | null;
   inputMint: string;
   outputMint: string;
@@ -21,7 +14,6 @@ export interface JupiterOrder {
   router?: string;
   feeBps?: number;
   slippageBps?: number;
-  /** Percent, e.g. 2.37 means 2.37%. (priceImpactPct is the same as a fraction.) */
   priceImpact?: number;
   gasless?: boolean;
   signatureFeeLamports?: number;
@@ -50,7 +42,6 @@ export type JupiterCall<T> =
       ok: false;
       status: number;
       message: string;
-      /** Jupiter's error body when it sent JSON, e.g. { code: -1003, error }. */
       body?: unknown;
     };
 
@@ -85,19 +76,13 @@ async function call<T>(url: string, init: RequestInit): Promise<JupiterCall<T>> 
   }
 }
 
-/**
- * Without `taker`, Jupiter returns a price but no transaction.
- *
- * `slippageBps` is always sent. Left off, Jupiter picks the slippage itself,
- * and whatever it picks is what the user ends up signing for.
- */
+// Without a taker Jupiter returns only a quote; always pin slippage either way.
 export function getOrder(params: {
   inputMint: string;
   outputMint: string;
   amount: string;
   taker?: string;
   slippageBps: number;
-  /** Routers to keep out of the answer, e.g. "jupiterz". */
   excludeRouters?: string;
 }): Promise<JupiterCall<JupiterOrder>> {
   const query = new URLSearchParams({
@@ -113,11 +98,6 @@ export function getOrder(params: {
   });
 }
 
-/**
- * Whether a failed /order call means "no route". Jupiter answers HTTP 400
- * { "error": "Failed to get quotes" } when nothing can fill the swap
- * (checked against dust-sized orders); a 500 is something else going wrong.
- */
 export function isNoRoute(result: JupiterCall<JupiterOrder>): boolean {
   if (result.ok) return result.data.outAmount === "0";
   const body = result.body as { error?: unknown } | undefined;

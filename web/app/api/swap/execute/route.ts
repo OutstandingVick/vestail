@@ -6,16 +6,7 @@ import { orderSigningReady, verifyOrder } from "@/lib/server/orderToken";
 import { userFrom } from "@/lib/server/privy";
 
 
-/**
- * POST /api/swap/execute { signedTransaction, requestId, orderToken }
- *
- * Forwards a transaction the user signed in their own wallet to Jupiter for
- * landing. Only orders issued by /api/swap/order — and therefore already
- * checked for eligibility — are accepted: orderToken proves it.
- */
-
 const BodySchema = z.object({
-  // A v0 transaction is at most 1232 bytes; base64 of that is under 1700.
   signedTransaction: z.string().min(1).max(2000).regex(/^[A-Za-z0-9+/]+=*$/),
   requestId: z.string().min(1).max(100),
   orderToken: z.string().min(1).max(200),
@@ -56,10 +47,7 @@ export async function POST(request: Request) {
 
   const result = await executeOrder({ signedTransaction, requestId });
 
-  // Jupiter reports some execute failures as HTTP 4xx with a JSON body such
-  // as { code: -1003, error: "Transaction not fully signed" }. Those are swap
-  // outcomes, not transport errors, so they get the same shape as a landed
-  // failure and the same user-facing message table.
+  // Jupiter's 4xx JSON errors are swap outcomes, not transport failures.
   if (!result.ok) {
     const b = result.body as { code?: unknown; error?: unknown } | undefined;
     if (result.status !== 429 && typeof b?.code === "number") {

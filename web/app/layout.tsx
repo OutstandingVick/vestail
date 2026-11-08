@@ -14,14 +14,6 @@ const outfit = Outfit({ variable: "--font-outfit", subsets: ["latin"] });
 
 const THEME_SCRIPT = `try{var t=localStorage.getItem("vestail-theme");document.documentElement.dataset.theme=t||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")}catch(e){}`;
 
-/*
- * The defaults every page inherits.
- *
- * metadataBase makes the relative URLs below absolute, which Open Graph
- * requires — a relative og:image is simply dropped by most crawlers. The title
- * template appends the brand to each page's own title rather than each page
- * repeating it, and `default` covers routes that set none.
- */
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
@@ -60,7 +52,6 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="en" className={`${inter.variable} ${manrope.variable} ${syne.variable} ${geist.variable} ${dmSans.variable} ${outfit.variable}`} suppressHydrationWarning>
       <head>
         <link rel="stylesheet" href="/cookie-consent.css" />
-        {/* Set the theme before first paint, the same way and under the same key as the marketing site. */}
         <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
       </head>
       <body className="font-sans antialiased" suppressHydrationWarning>

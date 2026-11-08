@@ -9,12 +9,6 @@ import { Logo } from "@/components/Logo";
 
 type Mode = "signup" | "login";
 
-/**
- * /app: the way into Vestail. Sign up or log in with an emailed code, or with
- * a Solana or EVM wallet. Login only, never KYC. Signed-in visitors go
- * straight to their portfolio (or to onboarding, if they haven't declared a
- * country yet; the dashboard layout handles that).
- */
 export default function SignInPage() {
   const router = useRouter();
   const { ready, authenticated } = usePrivy();

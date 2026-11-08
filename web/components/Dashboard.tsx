@@ -31,11 +31,6 @@ function Empty({ children }: { children: React.ReactNode }) {
   return <p className="rounded-field bg-wash px-4 py-6 text-center text-sm text-muted">{children}</p>;
 }
 
-/**
- * The returning user's home: what they hold, what each holding is allowed to
- * be where they live, what they bought, and what they're watching. Every
- * number comes from /api/portfolio; while it loads, nothing is invented.
- */
 export function Dashboard({ assets, countryName, who }: { assets: Asset[]; countryName: string; who: string }) {
   const { user } = useUser();
   const account = accountOf(user);
@@ -49,8 +44,6 @@ export function Dashboard({ assets, countryName, who }: { assets: Asset[]; count
       .catch(() => setError("Couldn't reach Vestail. Check your connection and reload."));
   }, []);
 
-  // The portfolio always renders: while loading it shows placeholders, and if
-  // loading fails it shows the same layout, empty, with the reason on top.
   if (!data) {
     return (
       <>

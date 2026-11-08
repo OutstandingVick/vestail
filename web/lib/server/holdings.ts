@@ -3,12 +3,6 @@ import "server-only";
 import { USDC_MINT } from "@/lib/constants";
 import { jupiterHeaders } from "@/lib/server/jupiter";
 
-/**
- * What a set of Solana wallets actually hold, read onchain, priced by Jupiter.
- * Nothing here is estimated or sampled: a balance the RPC doesn't return is
- * not shown, and a token Jupiter can't price shows no value rather than a guess.
- */
-
 const RPC = process.env.SOLANA_RPC_URL || "https://api.mainnet-beta.solana.com";
 const TOKEN_PROGRAMS = ["TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA", "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"];
 const SOL_MINT = "So11111111111111111111111111111111111111112";
@@ -27,7 +21,6 @@ async function rpc<T>(method: string, params: unknown[]): Promise<T> {
 
 type ParsedAccount = { account: { data: { parsed: { info: { mint: string; tokenAmount: { uiAmount: number | null } } } } } };
 
-/** Token balances by mint (summed across wallets), plus SOL. */
 export async function balancesOf(wallets: string[]): Promise<{ sol: number; tokens: Map<string, number> }> {
   const tokens = new Map<string, number>();
   let lamports = 0;
@@ -44,7 +37,6 @@ export async function balancesOf(wallets: string[]): Promise<{ sol: number; toke
   return { sol: lamports / 1e9, tokens };
 }
 
-/** USD prices from Jupiter's token API, for up to 100 mints. Missing means unpriced. */
 export async function pricesOf(mints: string[]): Promise<Map<string, number>> {
   const prices = new Map<string, number>();
   if (!mints.length) return prices;
@@ -58,12 +50,7 @@ export async function pricesOf(mints: string[]): Promise<Map<string, number>> {
 
 export { SOL_MINT, USDC_MINT };
 
-/**
- * Dry-run a base64 transaction before anyone signs it. Signatures aren't
- * checked (the buyer hasn't signed yet; a gasless order also awaits the
- * market maker's), so this asks only: would it run? Returns null if so, or
- * the failure. Uses this server's own RPC.
- */
+// Neither signer has signed yet, so simulation checks execution without signatures.
 export async function simulateBase64(transaction: string): Promise<string | null> {
   try {
     const result = await rpc<{ value: { err: unknown; logs: string[] | null } }>("simulateTransaction", [

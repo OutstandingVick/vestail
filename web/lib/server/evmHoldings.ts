@@ -2,11 +2,6 @@ import "server-only";
 
 import { EVM_CHAINS, NATIVE_ETH, type EvmChainKey } from "@/lib/chains";
 
-/**
- * What EVM wallets hold on Base and Robinhood Chain: ETH and the tracked stock
- * tokens, read with plain JSON-RPC (balanceOf). Priced by asking KyberSwap
- * what one unit is worth; a token with no route stays unpriced, never guessed.
- */
 const RPC: Record<EvmChainKey, string> = {
   base: process.env.BASE_RPC_URL || "https://mainnet.base.org",
   robinhood: process.env.ROBINHOOD_RPC_URL || "https://rpc.mainnet.chain.robinhood.com",
@@ -33,7 +28,6 @@ export async function tokenBalance(chain: EvmChainKey, token: string, owner: str
   return Number(BigInt(raw === "0x" ? "0x0" : raw)) / 10 ** decimals;
 }
 
-/** USD value of one whole unit of `token` on `chain`, from KyberSwap's route valuation. */
 export async function usdPrice(chain: EvmChainKey, token: string, decimals: number): Promise<number | null> {
   const one = (BigInt(10) ** BigInt(decimals)).toString();
   const tokenOut = token === NATIVE_ETH ? "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913" : NATIVE_ETH;
@@ -48,11 +42,7 @@ export async function usdPrice(chain: EvmChainKey, token: string, decimals: numb
   }
 }
 
-/**
- * Dry-run a transaction from `from` with eth_call. Returns null when it would
- * succeed, or the node's reason when it would revert, so a swap that can't
- * land (not enough ETH, a stale route) is refused before the wallet opens.
- */
+// Refuse a route that already reverts before opening the wallet.
 export async function simulate(chain: EvmChainKey, tx: { from: string; to: string; data: string; value: string }): Promise<string | null> {
   try {
     await rpc(chain, "eth_call", [{ from: tx.from, to: tx.to, data: tx.data, value: "0x" + BigInt(tx.value).toString(16) }, "latest"]);

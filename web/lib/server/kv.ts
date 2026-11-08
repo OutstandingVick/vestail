@@ -1,13 +1,6 @@
 import "server-only";
 
-/**
- * Upstash/Vercel KV over its REST API, as a Redis command array.
- *
- * Returns null when KV is not configured, which is the signal to fall back to
- * local files: that is how development works without an account, and it is
- * deliberately not an error. A configured-but-failing KV does throw, because
- * silently writing to a disk that will be discarded is worse than a 500.
- */
+// Missing KV config enables local development; a configured KV failure must throw.
 export async function kvCommand(
   command: string[],
   unavailable: string,
@@ -26,6 +19,5 @@ export async function kvCommand(
   return response.json() as Promise<{ result: unknown }>;
 }
 
-/** True when KV is configured, i.e. when the local-file fallback will not be used. */
 export const kvConfigured = () =>
   Boolean(process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN);

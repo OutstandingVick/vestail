@@ -10,22 +10,13 @@ import { ethBalance, tokenBalance, usdPrice } from "@/lib/server/evmHoldings";
 import { isEvmChain, NATIVE_ETH, type EvmChainKey } from "@/lib/chains";
 import type { Holding, Portfolio } from "@/lib/types";
 
-/**
- * GET /api/portfolio — the signed-in user's dashboard, all from real sources:
- * balances read onchain from their own Privy-linked wallets (Solana, Base,
- * Robinhood Chain), prices from Jupiter and KyberSwap, each holding's verdict
- * for their declared country, their recorded
- * buys, their watchlist and their value history. Each visit records today's
- * value, so the history fills in over time; nothing is back-filled or sampled.
- */
 export async function GET(request: Request) {
   const userId = await userFrom(request);
   if (!userId) return NextResponse.json({ error: "Sign in first." }, { status: 401 });
   const profile = await readProfile();
   if (!profile) return NextResponse.json({ error: "Choose your country first." }, { status: 400 });
 
-  // Each source fails on its own: the dashboard still renders, with a note
-  // saying which part is missing, rather than nothing at all.
+  // Keep partial portfolio data when one provider fails.
   const errors: string[] = [];
   const soft = <T,>(p: Promise<T>, fallback: T, message: string) => p.catch(() => (errors.push(message), fallback));
   const [linked, symbols, assets, orders, stored] = await Promise.all([
@@ -59,7 +50,6 @@ export async function GET(request: Request) {
       });
     }
   }
-  // EVM chains: the tracked stock tokens and ETH on Base and Robinhood Chain.
   const evm = linked.evm;
   const eth: Record<EvmChainKey, number> = { base: 0, robinhood: 0 };
   let ethUsd = 0;

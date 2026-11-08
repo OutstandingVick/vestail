@@ -18,11 +18,6 @@ const units = (usdc: string) => {
 };
 const human = (raw: string, decimals: number) => (Number(raw) / 10 ** decimals).toLocaleString(undefined, { maximumFractionDigits: 6 });
 
-/**
- * Buy one token with USDC through Jupiter, signed in the buyer's own wallet
- * (their Phantom or Solflare, or the embedded wallet Privy made for an email
- * sign-in). The server builds and checks the order; this only signs it.
- */
 export function SwapForm({ symbol, tokens, acknowledged, locked }: {
   symbol: string; tokens: Token[]; acknowledged: boolean; locked: boolean;
 }) {
@@ -58,9 +53,7 @@ export function SwapForm({ symbol, tokens, acknowledged, locked }: {
     setBusy("buy"); setMessage(null);
     try {
       const o = await order(true);
-      // Check again here, before the wallet opens: the server already inspected
-      // this transaction, but a compromised server must not be able to get an
-      // uninspected one signed. Same rules as the server, in the browser.
+      // Inspect again in the browser so a compromised server cannot substitute a transaction.
       const bytes = base64ToBytes(o.transaction);
       const inspection = inspectSwapTransaction(VersionedTransaction.deserialize(bytes), {
         taker: wallet.address,

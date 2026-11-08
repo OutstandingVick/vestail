@@ -7,16 +7,8 @@ import { usePathname } from "next/navigation";
 
 const solanaConnectors = toSolanaWalletConnectors({ shouldAutoConnect: true });
 
-/**
- * Privy is the whole sign-in: an emailed one-time code, or a Solana wallet
- * (Phantom, Solflare) or an EVM wallet (MetaMask, Rabby, Coinbase Wallet).
- * Everyone gets an embedded EVM wallet, which buys on Base and Robinhood
- * Chain; people without a Solana wallet also get an embedded Solana one.
- * No identity checks: this is login, not KYC.
- */
 export function Providers({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  // Public documents do not need authentication SDK storage or an app ID.
   if (pathname === "/terms" || pathname === "/privacy" || pathname === "/cookies") return <>{children}</>;
   const appId = process.env.NEXT_PUBLIC_PRIVY_APP_ID;
   if (!appId) {
@@ -36,15 +28,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
           accentColor: "#FF580A",
           logo: "/vestail-logo.svg",
           walletChainType: "ethereum-and-solana",
-          /*
-           * Named wallets get their own row and logo; anything else falls into
-           * detected_wallets, a generic list. Backpack and Jupiter were in that
-           * list, which is the wrong first impression for the people most
-           * likely to arrive with them — Vestail carries Backpack Securities
-           * tokens, and Jupiter is where its Solana routing goes.
-           *
-           * Solana first, since that is where the tokenised stocks are.
-           */
+          // Keep the wallets most relevant to Vestail visible before the generic detected list.
           walletList: [
             "phantom", "solflare", "backpack", "jupiter",
             "metamask", "rabby_wallet", "coinbase_wallet",

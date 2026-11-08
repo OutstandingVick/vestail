@@ -10,17 +10,6 @@ import { readProfile } from "@/lib/server/profile";
 import { walletsOf } from "@/lib/server/wallets";
 import { inspectEvmBuy, KYBER_ROUTER } from "@/lib/swap/inspectEvm";
 
-/**
- * POST /api/evm/order { symbol, address, amountWei, taker?, acknowledged? }
- *
- * Builds an ETH -> token buy on Base or Robinhood Chain through KyberSwap, for
- * a version the buyer's declared country and type allow. Same rules as the
- * Solana route: can_own always, conditional only acknowledged, cannot_own and
- * not assessed never. The taker must be one of the user's own EVM wallets
- * (read from Privy, not trusted from the browser). The transaction is
- * inspected before it is returned, and the Buy is recorded through
- * POST /orders/click, which checks the verdict again.
- */
 const REQUESTED_SLIPPAGE_BPS = 100;
 const MAX_PRICE_IMPACT_PCT = 10;
 const MIN_WEI = BigInt(1e14); // 0.0001 ETH
@@ -68,7 +57,6 @@ export async function POST(request: Request) {
   const { amountInUsd, amountOutUsd, amountOut, tokenOut, amountIn } = r.data.routeSummary;
   if (tokenOut.toLowerCase() !== token.address.toLowerCase() || amountIn !== amountWei)
     return fail(502, "KyberSwap returned a route that doesn't match the request.");
-  // Price impact from the route's own USD valuations: a thin pool shows up as value lost.
   const impact = Number(amountInUsd) > 0 ? ((Number(amountInUsd) - Number(amountOutUsd)) / Number(amountInUsd)) * 100 : 100;
   if (impact > MAX_PRICE_IMPACT_PCT)
     return fail(422, `This route loses more than ${MAX_PRICE_IMPACT_PCT}% of its value, which usually means too little liquidity. Try a smaller amount.`);
@@ -82,7 +70,7 @@ export async function POST(request: Request) {
   const inspection = inspectEvmBuy(tx, { taker, amountWei, tokenOut: token.address, quotedOut: amountOut });
   if (!inspection.ok) return fail(502, inspection.reason);
 
-  // Simulate before asking for a signature: a swap that would revert costs gas and proves nothing.
+  // Do not ask for a signature on a transaction that already reverts.
   const reverted = await simulate(token.chain, { from: taker, ...tx });
   if (reverted) {
     const reason = /insufficient funds/i.test(reverted) ? `Not enough ETH on ${chain.name} for this amount plus gas.` : "This swap would fail right now. Get a new price and try again.";

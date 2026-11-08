@@ -8,10 +8,6 @@ import { VerdictDot } from "@/components/VerdictDot";
 import type { MatrixRow } from "@/lib/types";
 import { VERDICT } from "@/lib/verdict";
 
-/**
- * One country: its flag and name, then a circle per asset. Picking a circle
- * names the asset and its verdict in place of the prompt.
- */
 export function CountryCard({ row, nameOf, mine }: { row: MatrixRow; nameOf: Record<string, string>; mine: boolean }) {
   const [picked, setPicked] = useState<string | null>(null);
   const cell = row.cells.find(c => c.asset === picked);
@@ -26,8 +22,6 @@ export function CountryCard({ row, nameOf, mine }: { row: MatrixRow; nameOf: Rec
         </p>
       </div>
       {cell && (
-        // Where to go next. Only the buyer's own country can be bought from; a
-        // cannot-own cell is never routed, so it gets the comparison instead.
         <Link
           href={mine && cell.status !== "cannot_own" ? `/app/asset/${cell.asset}` : `/app/compare?asset=${cell.asset}&who=${row.who}`}
           className="-mt-2 inline-flex items-center gap-1 text-xs font-semibold text-emphasis"
@@ -41,7 +35,6 @@ export function CountryCard({ row, nameOf, mine }: { row: MatrixRow; nameOf: Rec
         role="group"
         aria-label={`${row.name}: assets`}
         onKeyDown={e => {
-          // Left/right (and up/down) move between circles instead of tabbing through all of them.
           const keys: Record<string, number> = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 };
           if (!(e.key in keys)) return;
           const dots = [...e.currentTarget.querySelectorAll("button")];

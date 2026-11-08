@@ -2,11 +2,6 @@
 
 import { useState } from "react";
 
-/**
- * Portfolio value over time: one series, so one hue, no legend box (the card
- * title names it), a 2px line, a crosshair and tooltip on hover, and a table
- * for screen readers. Points exist only for days the user actually visited.
- */
 export function ValueChart({ points }: { points: { day: string; usd: number }[] }) {
   const [hover, setHover] = useState<number | null>(null);
   const W = 640, H = 200, PAD = { l: 8, r: 8, t: 16, b: 24 };

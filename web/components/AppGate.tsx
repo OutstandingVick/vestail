@@ -7,15 +7,7 @@ import { useEffect, useRef } from "react";
 import { authedFetch } from "@/lib/client";
 import type { Profile } from "@/lib/types";
 
-/**
- * The app is for signed-in users: anyone else goes to the sign-in page (/app).
- * (The real guarantees live in the API routes, which verify the Privy token;
- * this only keeps the screens tidy.)
- *
- * On a new device the profile cookie is empty but the Privy user still has
- * the country they declared, so it is restored from there. Nothing is ever
- * guessed: no saved profile means the app asks.
- */
+// API routes enforce authentication; this gate only controls the signed-in screens.
 export function AppGate({ profile, children }: { profile: Profile | null; children: React.ReactNode }) {
   const { ready, authenticated, user } = usePrivy();
   const router = useRouter();

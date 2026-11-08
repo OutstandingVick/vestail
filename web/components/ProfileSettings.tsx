@@ -8,7 +8,6 @@ import { useEffect, useState } from "react";
 
 const isEmbedded = (w: WalletWithMetadata) => w.walletClientType === "privy" || w.walletClientType === "privy-v2";
 
-/** One wallet: its address to deposit to, as text, a copy button and a QR code. */
 function WalletCard({ wallet }: { wallet: WalletWithMetadata }) {
   const [qr, setQr] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
@@ -30,7 +29,6 @@ function WalletCard({ wallet }: { wallet: WalletWithMetadata }) {
   return (
     <div className="flex flex-wrap items-center gap-5 rounded-card bg-wash p-5">
       {qr
-        // A generated data URL: nothing for next/image to optimise.
         // eslint-disable-next-line @next/next/no-img-element
         ? <img src={qr} alt={`QR code for ${wallet.address}`} width={148} height={148} className="rounded-xl bg-white p-1.5" />
         : <div className="size-[148px] rounded-xl bg-surface" aria-hidden="true" />}
@@ -83,11 +81,6 @@ function WalletCard({ wallet }: { wallet: WalletWithMetadata }) {
   );
 }
 
-/**
- * Where to send funds: every wallet the user has, Solana and EVM. Deposits go
- * straight to the user's own wallet: Vestail never holds them. Embedded wallets
- * (made for email sign-ins) can be exported to any other wallet at any time.
- */
 export function ProfileSettings() {
   const { user, linkWallet } = usePrivy();
   const { createWallet } = useCreateWallet();

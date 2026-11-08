@@ -6,11 +6,6 @@ import { useState, useTransition } from "react";
 import { authedFetch, errorOf } from "@/lib/client";
 import type { BuyerType, Country, Profile } from "@/lib/types";
 
-/**
- * "Searching as …": the buyer's own declaration of country and buyer type.
- * Nothing here is detected. With no profile yet, the country starts blank and
- * the app shows no verdicts until one is chosen.
- */
 export function ProfileBar({ countries, profile, onSaved }: { countries: Country[]; profile: Profile | null; onSaved?: string }) {
   const router = useRouter();
   const [pending, start] = useTransition();
@@ -21,26 +16,12 @@ export function ProfileBar({ countries, profile, onSaved }: { countries: Country
   function save(next: { country: string; who: BuyerType }) {
     setCountry(next.country);
     setWho(next.who);
-    // During onboarding nothing is saved until a country is chosen; the buyer type alone is not a profile.
     if (!next.country) return;
     setError(null);
     start(async () => {
       const res = await authedFetch("/api/profile", { method: "POST", body: JSON.stringify(next) });
       if (!res.ok) return setError(await errorOf(res, "Couldn't save that."));
-      /*
-       * Refresh before navigating, always.
-       *
-       * Saving sets the profile cookie on the response, which changes what
-       * every server component on the next page renders. The client Router
-       * Cache does not know that: it can still be holding the payload it
-       * prefetched for /app/portfolio while there was no profile, and that
-       * payload is the layout's redirect back to /app/start — which now
-       * redirects to /app/portfolio, and the two bounce off each other and
-       * render nothing. A blank screen, right after choosing a country.
-       *
-       * refresh() throws that cache away so the push fetches the page as it
-       * is now rather than as it was before the buyer existed.
-       */
+      // The profile cookie changes server output, so discard prefetched pages made before it existed.
       router.refresh();
       if (onSaved) router.push(onSaved);
     });

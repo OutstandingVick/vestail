@@ -5,13 +5,7 @@ import { api, ApiError } from "@/lib/server/api";
 import { userFrom } from "@/lib/server/privy";
 import { readProfile } from "@/lib/server/profile";
 
-/**
- * POST /api/order/click { asset, venue, acknowledged } — a Buy press on a
- * venue. This is where the order is built, so this is where the rules are
- * checked: the rule is re-read for the buyer's declared country and type
- * (never taken from the browser), cannot-own is refused, and conditional needs
- * acknowledged: true. The API checks all of it again when the click is recorded.
- */
+// Re-read eligibility server-side; never trust a browser-supplied verdict.
 const Body = z.object({ asset: z.string().min(1).max(64), venue: z.string().min(1).max(80), acknowledged: z.boolean().optional(), query: z.string().max(200).optional() });
 
 const fail = (status: number, error: string) => NextResponse.json({ error }, { status, headers: { "Cache-Control": "no-store" } });

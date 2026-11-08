@@ -5,11 +5,6 @@ import { api } from "@/lib/server/api";
 import { saveProfileFor, userFrom } from "@/lib/server/privy";
 import { PROFILE_COOKIE } from "@/lib/server/profile";
 
-/**
- * POST /api/profile { country, who } — the buyer declares (or changes) their
- * country and buyer type. Signed-in users only; saved to their Privy record
- * and to a cookie the server components read.
- */
 const Body = z.object({ country: z.string().regex(/^[A-Z]{2}$/), who: z.enum(["citizen", "foreigner"]) });
 
 export async function POST(request: Request) {
@@ -24,15 +19,13 @@ export async function POST(request: Request) {
 
   await saveProfileFor(userId, { country, who });
   const res = NextResponse.json({ country, who });
-  // httpOnly: only the server reads it, so a script on the page can't quietly
-  // change the country every verdict and buy gate depends on. secure in production.
+  // Verdicts depend on this cookie, so keep it server-only.
   res.cookies.set(PROFILE_COOKIE, `${country}:${who}`, {
     path: "/", sameSite: "lax", maxAge: 60 * 60 * 24 * 365, httpOnly: true, secure: process.env.NODE_ENV === "production",
   });
   return res;
 }
 
-/** Signing out clears the profile cookie too. */
 export async function DELETE() {
   const res = NextResponse.json({ ok: true });
   res.cookies.delete(PROFILE_COOKIE);

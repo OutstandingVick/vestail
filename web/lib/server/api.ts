@@ -2,33 +2,13 @@ import "server-only";
 
 import type { Asset, BuyerType, Order, Category, Country, Matrix, ProductActivity, Resolution, Rule, TokenBoard, TokenSymbol } from "@/lib/types";
 
-/**
- * The v2 API, called in-process.
- *
- * This used to fetch over HTTP from VESTAIL_API_URL, defaulting to
- * http://localhost:8787/v1. That default is unreachable from a deployed
- * function, so with the variable unset every signed-in page threw a
- * server-side exception — which is exactly what happened in production. The
- * Hono app is now called directly (see local-api.ts): same code, same spec
- * validation, no second service and no network.
- *
- * Caching is unchanged in intent. Rules are read fresh, because a compliance
- * answer should change the moment its rule does. Reference lists change only
- * with a deploy, so they are memoised for the lifetime of the function
- * instance rather than through Next's fetch cache, which no longer applies
- * now that nothing is fetched.
- */
 import { callApi } from "./local-api.ts";
 
 export class ApiError extends Error {
   constructor(public status: number, public code: string, message: string) { super(message); }
 }
 
-/*
- * Reference data is baked into the deployment, so a value read once is good
- * until the next deploy. The promise is cached, not the result, so concurrent
- * first calls share one trip through the API rather than racing.
- */
+// Cache promises so concurrent first reads share the same in-process API call.
 const reference_cache = new Map<string, Promise<unknown>>();
 
 async function get<T>(path: string, reference = false): Promise<T> {
@@ -65,14 +45,12 @@ export const api = {
 
   activity: () => get<ProductActivity>("/activity"),
 
-  /** One user's recorded Buy presses (GET /orders). */
   async orders(session: string, limit = 20): Promise<Order[]> {
     const safeLimit = Math.min(200, Math.max(1, Math.trunc(limit)));
     const res = await callApi("/orders" + qs({ session, limit: String(safeLimit) }));
     return res.ok ? res.json() : [];
   },
 
-  /** POST /orders/click. The key is internal to this process and never reaches the browser. */
   async click(body: {
     country: string; asset: string; who: BuyerType; venue: string;
     acknowledged?: boolean; mint?: string; market?: string; query?: string; session?: string;

@@ -9,12 +9,6 @@ import { authedFetch, errorOf } from "@/lib/client";
 import type { Status, Token, Venue } from "@/lib/types";
 import { safeHttps } from "@/lib/safeUrl";
 
-/**
- * Where the buyer acts. The rules, enforced here and again on the server:
- *  - cannot-own: no venues, no prices, nothing to press;
- *  - conditional: every Buy stays locked until the acknowledgement is ticked;
- *  - a token that is not assessed or cannot be owned is never offered.
- */
 export function ActionPanel({ assetId, assetName, classStatus, venues, symbol, tokens }: {
   assetId: string; assetName: string; classStatus: Status; venues: Venue[]; symbol?: string; tokens: Token[];
 }) {
@@ -34,12 +28,11 @@ export function ActionPanel({ assetId, assetName, classStatus, venues, symbol, t
 
   async function go(venue: string) {
     setError(null);
-    // Open the tab now, inside the click, so popup blockers allow it; point it once the server approves.
+    // Open during the click so popup blockers allow the approved redirect later.
     const tab = window.open("about:blank", "_blank");
     const res = await authedFetch("/api/order/click", { method: "POST", body: JSON.stringify({ asset: assetId, venue, acknowledged: ack }) });
     if (!res.ok) { tab?.close(); return setError(await errorOf(res, "That order was refused.")); }
     const redirect = safeHttps((await res.json()).redirect);
-    // Only ever navigate to an https venue URL, whatever the server returned.
     if (!redirect) { tab?.close(); return setError("That venue link isn't a secure https address, so Vestail won't open it."); }
     if (tab) { tab.opener = null; tab.location.href = redirect; } else window.location.href = redirect;
   }

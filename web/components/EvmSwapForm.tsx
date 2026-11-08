@@ -15,11 +15,6 @@ const toWei = (eth: string) => {
 };
 const human = (raw: string, decimals: number) => (Number(raw) / 10 ** decimals).toLocaleString(undefined, { maximumFractionDigits: 6 });
 
-/**
- * Buy a version on Base or Robinhood Chain with ETH, signed in the buyer's own
- * EVM wallet (embedded or external). The server picks the route, checks the
- * verdict and inspects the transaction; this only switches chain and sends it.
- */
 export function EvmSwapForm({ symbol, tokens, acknowledged, locked }: { symbol: string; tokens: Token[]; acknowledged: boolean; locked: boolean }) {
   const { wallets, ready } = useWallets();
   const [address, setAddress] = useState(tokens[0]?.address ?? "");
@@ -53,15 +48,12 @@ export function EvmSwapForm({ symbol, tokens, acknowledged, locked }: { symbol: 
     setBusy("buy"); setMessage(null);
     try {
       const o = await order(true);
-      // Check again in the browser, against what this buyer chose: their own
-      // wallet as receiver, the token they picked, the ETH they typed. A
-      // compromised server must not get an unchecked transaction signed.
+      // Inspect against the buyer's exact choices before asking the wallet to sign.
       const inspection = inspectEvmBuy(o.tx, { taker: wallet.address, amountWei: toWei(amount)!, tokenOut: address, quotedOut: o.amountOut });
       if (!inspection.ok) throw new Error(`Refused before signing: ${inspection.reason}`);
       await wallet.switchChain(chain.id);
       const provider = await wallet.getEthereumProvider();
-      // KyberSwap's router has the same address on every chain, so a wallet left
-      // on the wrong network would run this swap there. Confirm the switch took.
+      // The router address is shared across chains, so confirm the network switch took.
       const current = Number(await provider.request({ method: "eth_chainId" }));
       if (current !== chain.id || o.tx.chainId !== chain.id)
         throw new Error(`Your wallet is on another network. Switch it to ${chain.name} and try again.`);

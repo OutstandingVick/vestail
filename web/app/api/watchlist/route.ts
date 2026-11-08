@@ -6,7 +6,6 @@ import { userFrom } from "@/lib/server/privy";
 import { readProfile } from "@/lib/server/profile";
 import { readUser, writeUser } from "@/lib/server/store";
 
-/** POST /api/watchlist { asset, symbol?, on } — add or remove an asset (or one ticker under it). */
 const Body = z.object({
   asset: z.string().trim().min(1).max(64),
   symbol: z.string().trim().min(1).max(12).transform(value => value.toUpperCase()).optional(),
@@ -35,7 +34,6 @@ export async function POST(request: Request) {
   return NextResponse.json({ watching: on }, { headers: { "Cache-Control": "private, no-store" } });
 }
 
-/** GET /api/watchlist — the user's watched items, for the Watch buttons. */
 export async function GET(request: Request) {
   const userId = await userFrom(request);
   if (!userId) return NextResponse.json({ error: "Sign in first." }, { status: 401 });

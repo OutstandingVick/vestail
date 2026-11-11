@@ -1,6 +1,6 @@
 import { OpenAPIRegistry, OpenApiGeneratorV31 } from "@asteasolutions/zod-to-openapi";
 import { z } from "zod";
-import { AssetSelector, BatchInput, CheckInput, EligibilityResult, Residency } from "./schemas.js";
+import { AssetSelector, BatchInput, CheckInput, EligibilityResult, Residency, UtilitiesQuery, UtilitiesResult } from "./schemas.js";
 
 const registry = new OpenAPIRegistry();
 const ErrorResponse = registry.register("Error", z.object({ error: z.object({ code: z.string(), message: z.string() }) }));
@@ -40,6 +40,13 @@ registry.registerPath({
   method: "get", path: "/rules/{id}", summary: "Read one rule and its available history", security: secured,
   request: { params: z.object({ id: z.string() }) },
   responses: { 200: { description: "Rule detail", content: { "application/json": { schema: EligibilityResult.extend({ history: z.array(z.unknown()) }) } } }, 401: errorResponses[401], 404: { description: "Rule not found", content: { "application/json": { schema: ErrorResponse } } }, 429: errorResponses[429] },
+});
+
+registry.registerPath({
+  method: "get", path: "/utilities", summary: "What a profile can do with each version of an asset (trade, lend, borrow, earn), with verdicts and live numbers", security: secured,
+  description: "Each option is the most restrictive of the asset's hold verdict and the protocol's sourced rule. Protocols with no sourced rule are unverified and their actions are disabled. Lend, borrow and earn always require a risk acknowledgement. Spot only: no perpetuals or leverage.",
+  request: { query: UtilitiesQuery },
+  responses: { 200: { description: "Utilities per token version", content: { "application/json": { schema: registry.register("Utilities", UtilitiesResult) } } }, ...errorResponses },
 });
 
 registry.registerComponent("securitySchemes", "bearerAuth", { type: "http", scheme: "bearer", bearerFormat: "Vestail API key" });

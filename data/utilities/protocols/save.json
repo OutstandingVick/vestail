@@ -1,0 +1,9 @@
+{
+  "protocol": "save",
+  "name": "Save",
+  "version": "0000-00-00.0",
+  "verifiedOn": null,
+  "todo": true,
+  "todoNote": "TODO: read Save's terms of use for restricted jurisdictions and its asset listings, then add sourced rules. Until then every country is unverified and lend/borrow actions stay disabled.",
+  "rules": []
+}

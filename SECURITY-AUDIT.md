@@ -191,3 +191,32 @@ constant string), so this is defence in depth.
   the US and Germany only. A wrong rule can mislead a buyer without any security bug.
 - The marketing page's own scripts (`site/index.html`) beyond its CSP, and the separate v1 app on `main`.
 - Denial of service, infrastructure and hosting configuration, and anything not in this repository.
+
+---
+
+## Addendum: utilities and Earn (2026-11-11)
+
+New surface: `GET /api/v1/utilities`, `POST /api/earn`, `POST /api/earn/send`, and server-side Meteora transaction
+builders (`web/lib/server/meteora/`).
+
+- **No custody, no signing for users.** Liquidity transactions are built on the server with the user's linked wallet
+  as owner and fee payer. The only server-side signature is a throwaway keypair that creates the new position
+  account; it is discarded and controls nothing afterwards. The user signs everything else.
+- **Inspected three times.** Every built transaction is inspected on the server before it's returned, again in the
+  browser before the wallet opens, and the signed bytes again before relay. Meteora's two programs are allowed only
+  for liquidity transactions (`extraPrograms: LIQUIDITY_PROGRAMS`); swaps can't call them. Delegation, authority
+  changes and foreign account closes stay refused. Tested in `web/lib/swap/inspect.test.ts`.
+- **Gates.** Deposits re-read the earn verdict for the declared country and require the impermanent-loss
+  acknowledgement server-side; only pools Vestail lists for the token (USDC/SOL pairs, not blacklisted) are
+  accepted; only the user's own linked wallet. Withdrawals are deliberately never gated by a verdict, so a rule
+  change can't trap funds; they can only reach positions the wallet already owns.
+- **Value protection.** DLMM deposits use 1% active-bin slippage; DAMM v2 deposits never spend more than the typed
+  amounts; DAMM v2 withdrawals require at least 97% of the SDK's quote. DLMM withdrawals take bin reserves, not a
+  price, so they have no slippage window.
+- **Unverified protocols do nothing.** Lending protocols with no sourced rules return `unverified`, and the core
+  marks their actions disabled; the support config refuses perps, leverage, margin and futures at load.
+- **Supply chain.** The Meteora SDKs add Anchor's `toml` (prototype-pollution advisory; only parses local Anchor.toml
+  files) and `bigint-buffer` via spl-token (no fix; only parses data from Vestail's own RPC, server-side). Neither
+  runs in the browser. Accepted, not fixed.
+- **Not exercised with funds.** Builders were checked against live pools (instructions, programs, size) but no
+  deposit or withdrawal was signed or sent during this work.

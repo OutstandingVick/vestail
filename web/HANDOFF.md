@@ -108,6 +108,33 @@ dropped (USDY has no usable DEX liquidity there).
 - Sourcing caveat: Coinbase doesn't publish its eligible countries, so NG/DE are conditional on that. Policies only cover NG, US, DE; elsewhere = not assessed.
 - Not verified signed in: an EVM buy or an embedded EVM wallet being created.
 
+## Utilities (added 2026-11-11)
+
+For each token version a buyer can hold: Hold, Trade, Lend, Borrow against, Earn, each with its own verdict
+(eligible / conditional / restricted / unverified). An option's verdict is the most restrictive of the hold verdict
+(issuer rule capped by the class rule) and the protocol's own sourced rule; a protocol with no rule for the
+country is unverified and its actions are disabled.
+
+- Data: `data/utilities/protocols/*.json` (versioned rule files, same style as issuer policies; Jupiter and Meteora
+  sourced, Kamino/marginfi/Save are TODO placeholders) and `data/utilities/support.json` (which protocol offers which
+  utility for which assets: edit this, not code). Schema-checked in `services/api/test/data-schema.test.js`.
+- Core: `packages/core/utilities.js` (scale, protocol evaluation, spot-only support reader, judge). Perps, leverage,
+  margin and futures are refused at load.
+- API: `GET /api/v1/utilities?asset=&country=&residency=` (`services/api/src/public/utilities.js`), live numbers from
+  Jupiter quotes and Meteora's data APIs (`services/api/src/live/`), cached 30 s, only fetched for enabled options.
+  The web app calls it in-process with an in-memory partner key (`web/lib/server/local-api.ts`).
+- Web: an Overview/Utilities tab on asset pages (`UtilitiesTab`, `UtilitiesPanel`, `UtilityCard`), a risk
+  acknowledgement (`RiskAcknowledgement`), and the one action gate `canAct` in `web/lib/utilities.ts`. Watchlist rows
+  show Meteora depth.
+- Earn: `POST /api/earn` builds Meteora DLMM/DAMM v2 add/withdraw transactions server-side
+  (`web/lib/server/meteora/`) for the user's own linked wallet, only for listed USDC/SOL pools, re-checking the earn
+  verdict and the acknowledgement for deposits; withdrawals are never blocked. Every transaction is inspected with
+  Meteora's programs allowed (`LIQUIDITY_PROGRAMS` in `lib/swap/inspect.ts`), checked again in the browser, signed by
+  the user and relayed by `POST /api/earn/send`, which inspects the signed bytes again.
+- Lend/Borrow are placeholders: no protocol is sourced, so they're unverified and disabled everywhere.
+- Not verified with funds: an actual Meteora deposit or withdrawal. Builders were checked against live pools
+  (transaction contents and size), not signed or sent.
+
 ## Known issues and next steps (suggested order)
 
 1. **Walk the signed-in flows** above and fix anything visual; check phone width (375px) and dark mode on each page.

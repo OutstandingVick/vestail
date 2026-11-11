@@ -95,7 +95,17 @@ hundred. See [request-limits.md](./request-limits.md).
 | `GET /api/v1/assets?country=&residency=` | Every asset class with its verdict for that profile — a whole board in one call. |
 | `GET /api/v1/countries` | The twelve covered countries. |
 | `GET /api/v1/rules/{id}` | One rule by id, with its sources. |
+| `GET /api/v1/utilities?asset=&country=&residency=` | What the profile can do with each version of an asset (trade, lend, borrow, earn), each with its own verdict, the protocol's sourced reasons, and live Jupiter and Meteora numbers. See [reference/utilities.md](./reference/utilities.md). |
 | `GET /api/v1/openapi.json` | The generated contract. **The only endpoint that needs no key** — you need it before you have one. |
+
+## Utilities use the same four verdicts
+
+A utility's verdict is the most restrictive of the asset's hold verdict and the
+protocol's own sourced rule for the country. A protocol Vestail hasn't sourced
+is `unverified`, and its actions are disabled. Lend, borrow and earn always
+carry `acknowledgementRequired: true`: show the risk (liquidation, impermanent
+loss) and get the user's acknowledgement before building any transaction.
+There are no perpetuals or leverage.
 
 ## Getting a key
 

@@ -1,0 +1,36 @@
+{
+  "$comment": "Which protocol offers which utility for which assets. Edit freely: nothing in code hardcodes this. assets: \"*\" means every Solana token version Vestail tracks, or list mint addresses. Perpetuals and leverage are not allowed as utilities.",
+  "version": "2026-11-11.1",
+  "utilities": {
+    "trade": [
+      {
+        "protocol": "jupiter",
+        "chains": ["solana"],
+        "assets": "*",
+        "pairs": ["USDC", "SOL"],
+        "action": "swap"
+      }
+    ],
+    "earn": [
+      {
+        "protocol": "meteora",
+        "chains": ["solana"],
+        "assets": "*",
+        "pools": ["dlmm", "damm_v2"],
+        "pairs": ["USDC", "SOL"],
+        "action": "liquidity",
+        "risk": "impermanent_loss"
+      }
+    ],
+    "lend": [
+      { "protocol": "kamino", "chains": ["solana"], "assets": [], "action": "supply", "risk": "liquidation", "todo": "TODO: list the mints Kamino accepts, with a source." },
+      { "protocol": "marginfi", "chains": ["solana"], "assets": [], "action": "supply", "risk": "liquidation", "todo": "TODO: list the mints marginfi accepts, with a source." },
+      { "protocol": "save", "chains": ["solana"], "assets": [], "action": "supply", "risk": "liquidation", "todo": "TODO: list the mints Save accepts, with a source." }
+    ],
+    "borrow": [
+      { "protocol": "kamino", "chains": ["solana"], "assets": [], "action": "borrow", "risk": "liquidation", "todo": "TODO: list collateral mints and max LTV, with a source." },
+      { "protocol": "marginfi", "chains": ["solana"], "assets": [], "action": "borrow", "risk": "liquidation", "todo": "TODO: list collateral mints and max LTV, with a source." },
+      { "protocol": "save", "chains": ["solana"], "assets": [], "action": "borrow", "risk": "liquidation", "todo": "TODO: list collateral mints and max LTV, with a source." }
+    ]
+  }
+}

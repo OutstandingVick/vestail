@@ -40,6 +40,16 @@ export async function loadWatchlist(userId: string, profile: Profile): Promise<W
   catch { if (mints.length) errors.push("Live watchlist prices are temporarily unavailable."); }
   const asOf = new Date().toISOString();
 
+  // Meteora depth per watched stock, from the same utilities read the asset page uses.
+  const depth = new Map<string, number | null>();
+  await Promise.all([...boards.keys()].map(async symbol => {
+    try {
+      const u = await api.utilities(symbol, profile.country, profile.who);
+      const sums = u.versions.map(v => v.utilities.find(x => x.utility === "earn")?.options.find(o => o.protocol === "meteora")?.live?.depthUsd);
+      depth.set(symbol, sums.some(d => typeof d === "number") ? sums.reduce<number>((n, d) => n + (d ?? 0), 0) : null);
+    } catch { depth.set(symbol, null); }
+  }));
+
   const items = (await Promise.all(stored.watchlist.map(async item => {
     const board = item.symbol ? boards.get(item.symbol) : undefined;
     const rule = await api.rule(profile.country, item.asset, profile.who).catch(() => null);
@@ -51,6 +61,7 @@ export async function loadWatchlist(userId: string, profile: Profile): Promise<W
       quote: board ? selectWatchQuote(board.tokens.filter(token => token.chain === "solana").map(token => ({
         mint: token.mint, tokenSymbol: token.token_symbol, provider: token.provider,
       })), quotes, asOf) : null,
+      ...(item.symbol ? { meteoraDepthUsd: depth.get(item.symbol) ?? null } : {}),
     } satisfies WatchlistRow;
   }))).filter((item): item is WatchlistRow => item !== null);
   return { items, errors };

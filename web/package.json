@@ -10,6 +10,8 @@
     "test": "node --conditions=react-server --test \"lib/**/*.test.ts\""
   },
   "dependencies": {
+    "@meteora-ag/cp-amm-sdk": "^1.5.1",
+    "@meteora-ag/dlmm": "^1.9.14",
     "@phosphor-icons/react": "^2.1.10",
     "@privy-io/node": "^0.35.0",
     "@privy-io/react-auth": "^3.48.0",

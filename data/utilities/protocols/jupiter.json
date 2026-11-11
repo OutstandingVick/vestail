@@ -1,0 +1,25 @@
+{
+  "protocol": "jupiter",
+  "name": "Jupiter",
+  "version": "2026-11-11.1",
+  "verifiedOn": "2026-11-11",
+  "todo": false,
+  "rules": [
+    {
+      "id": "prohibited-localities",
+      "status": "restricted",
+      "regions": ["US", "CN"],
+      "reason": "Jupiter's terms (Block Raccoon S.A.) list the United States and China among the prohibited localities whose wallets it does not interact with.",
+      "sourceUrl": "https://jup.ag/mobile/terms",
+      "sourceQuality": "primary"
+    },
+    {
+      "id": "not-a-prohibited-locality",
+      "status": "eligible",
+      "regions": ["NG", "GB", "AE", "IN", "BR", "SA", "DE", "JP", "ZA", "KR"],
+      "reason": "Not among the prohibited localities in Jupiter's terms, and not subject to US, UK or EU sanctions that its catch-all covers. Spot swaps only.",
+      "sourceUrl": "https://jup.ag/mobile/terms",
+      "sourceQuality": "primary"
+    }
+  ]
+}

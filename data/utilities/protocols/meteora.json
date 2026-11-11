@@ -1,0 +1,25 @@
+{
+  "protocol": "meteora",
+  "name": "Meteora",
+  "version": "2026-11-11.1",
+  "verifiedOn": "2026-11-11",
+  "todo": false,
+  "rules": [
+    {
+      "id": "restricted-territories",
+      "status": "restricted",
+      "regions": ["US", "CN"],
+      "reason": "Meteora's terms (Meteora Nova Limited) list the United States and China as Restricted Territories; residents and citizens are Restricted Persons and may not use the app or smart contracts.",
+      "sourceUrl": "https://docs.meteora.ag/resources/legal/terms-of-service",
+      "sourceQuality": "primary"
+    },
+    {
+      "id": "not-a-restricted-territory",
+      "status": "eligible",
+      "regions": ["NG", "GB", "AE", "IN", "BR", "SA", "DE", "JP", "ZA", "KR"],
+      "reason": "Not among Meteora's Restricted Territories, and not subject to the US or EU sanctions its catch-all covers. Providing liquidity carries price risk and impermanent loss.",
+      "sourceUrl": "https://docs.meteora.ag/resources/legal/terms-of-service",
+      "sourceQuality": "primary"
+    }
+  ]
+}

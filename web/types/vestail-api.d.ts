@@ -19,6 +19,11 @@ declare module "@vestail/api" {
     /** Serve the sample activity figures. Defaults to NODE_ENV !== "production". */
     useSample?: boolean;
     corsOrigins?: string[];
+    /** The partner key store behind /api/v1: authenticate a bearer key, count its use. */
+    partnerKeyStore?: {
+      authenticate(key: string | null): Promise<{ id: string; rateLimit: number } | null>;
+      countUsage(id: string, at: Date): Promise<void>;
+    };
   }
 
   export function createApp(options?: CreateAppOptions): HonoLike;

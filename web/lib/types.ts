@@ -95,6 +95,8 @@ export interface WatchlistRow extends WatchItem {
   name: string;
   status: Status;
   quote: WatchQuote | null;
+  /** USD depth across the stock's Meteora USDC/SOL pools; null when Earn isn't available here or the read failed. */
+  meteoraDepthUsd?: number | null;
 }
 export interface Portfolio {
   wallets: string[];
@@ -107,3 +109,36 @@ export interface Portfolio {
   history: { day: string; usd: number }[];
   errors: string[];
 }
+
+/** /api/v1/utilities: what a holder may do with an asset, and whether they may. */
+export type UtilityVerdict = "eligible" | "conditional" | "restricted" | "unverified";
+export type UtilityName = "hold" | "trade" | "lend" | "borrow" | "earn";
+export type UtilityRisk = "liquidation" | "impermanent_loss";
+export interface JupiterPair {
+  pair: "USDC" | "SOL"; available: boolean; note?: string;
+  reference?: { spend: number; spendSymbol: string; receive: number };
+  pricePerToken?: number | null; priceImpactPct?: number; venues?: string[];
+}
+export interface MeteoraPool {
+  address: string; kind: "dlmm" | "damm_v2"; name: string; pair: "USDC" | "SOL";
+  tvlUsd: number | null; volume24hUsd: number | null; fees24hUsd: number | null;
+  feeTvl24hPct: number | null; feeAprPct: number | null; binStep: number | null; baseFeePct: number | null;
+}
+export interface UtilityOption {
+  protocol: string; name: string; version: string; verifiedOn: string | null;
+  verdict: UtilityVerdict; protocolVerdict: UtilityVerdict; holdVerdict: UtilityVerdict;
+  reasons: string[]; sources: { label: string; url: string; quality?: string }[];
+  action: string; pairs: string[]; pools: string[]; risk: UtilityRisk | null;
+  actionsEnabled: boolean; acknowledgementRequired: boolean;
+  live: { pairs?: JupiterPair[]; depthUsd?: number; pools?: MeteoraPool[] } | null;
+  liveError?: string;
+}
+export interface Utility {
+  utility: UtilityName; verdict: UtilityVerdict; options: UtilityOption[];
+  actionsEnabled: boolean; acknowledgementRequired: boolean; risk: UtilityRisk | null; reasons?: string[];
+}
+export interface UtilitiesVersion {
+  asset: { symbol: string; id: string; tokenSymbol: string; name: string; issuer: string; chain: string; instrument: string };
+  utilities: Utility[];
+}
+export interface Utilities { country: string; residency: string; versions: UtilitiesVersion[]; disclaimer: string }

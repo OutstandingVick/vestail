@@ -4,7 +4,8 @@ import { partnerAccess } from "./access.js";
 import { createEligibility } from "./eligibility.js";
 import { etag } from "./etag.js";
 import { publicOpenApi } from "./openapi.js";
-import { AssetsQuery, BatchInput, CheckInput, RuleParams, parse } from "./schemas.js";
+import { AssetsQuery, BatchInput, CheckInput, RuleParams, UtilitiesQuery, parse } from "./schemas.js";
+import { createUtilitiesService } from "./utilities.js";
 
 const validated = (schema, value) => {
   const result = parse(schema, value);
@@ -17,9 +18,10 @@ const jsonBody = async c => {
   catch { throw new ApiError(400, "validation_error", "request: A valid JSON body is required."); }
 };
 
-export function createPublicApi({ data, keyStore, accessNow }) {
+export function createPublicApi({ data, keyStore, accessNow, live }) {
   const api = new Hono();
   const eligibility = createEligibility(data);
+  const utilities = createUtilitiesService(data, live);
 
   api.use("*", partnerAccess({ store: keyStore, now: accessNow }));
   api.use("*", etag);
@@ -35,6 +37,7 @@ export function createPublicApi({ data, keyStore, accessNow }) {
     return c.json({ assets: eligibility.assets(country, residency) });
   });
   api.get("/countries", c => c.json({ countries: eligibility.countries() }));
+  api.get("/utilities", async c => c.json(await utilities.utilities(validated(UtilitiesQuery, c.req.query()))));
   api.get("/rules/:id", c => {
     const { id } = validated(RuleParams, c.req.param());
     return c.json(eligibility.rule(id));

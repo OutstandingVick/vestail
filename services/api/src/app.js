@@ -30,6 +30,7 @@ export function createApp({
   corsOrigins = (process.env.VESTAIL_CORS_ORIGINS || "*").split(",").map(s => s.trim()),
   partnerKeyStore = createKeyStore(),
   partnerAccessNow,
+  live,
 } = {}) {
   const app = new Hono();
   const v1 = new Hono();
@@ -57,7 +58,7 @@ export function createApp({
   registerOrders(v1, ctx);
 
   app.route("/v1", v1);
-  app.route("/api/v1", createPublicApi({ data, keyStore: partnerKeyStore, accessNow: partnerAccessNow }));
+  app.route("/api/v1", createPublicApi({ data, keyStore: partnerKeyStore, accessNow: partnerAccessNow, live }));
   app.onError(onError);
   app.notFound(notFound);
   return app;

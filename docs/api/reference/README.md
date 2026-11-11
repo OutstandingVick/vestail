@@ -30,6 +30,7 @@ For third parties. Keyed throughout, except the contract itself.
 | `POST /check` | [check.md](./check.md) | May this person own this thing? |
 | `POST /check/batch` | [check-batch.md](./check-batch.md) | Up to 100, for one request. |
 | `GET /assets` `/countries` `/rules/{id}` `/openapi.json` | [partner-reference.md](./partner-reference.md) | Lists, one rule, and the contract. |
+| [utilities.md](./utilities.md) | `GET /api/v1/utilities`: trade, lend, borrow and earn verdicts with live numbers. |
 
 ## If you read only one thing
 

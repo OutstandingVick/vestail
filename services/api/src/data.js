@@ -1,6 +1,7 @@
 import { readFileSync, readdirSync } from "node:fs";
 import { createVestail } from "@vestail/core";
 import { createTokens } from "@vestail/core/tokens";
+import { createUtilities } from "@vestail/core/utilities";
 
 const DATA_DIR = new URL("../../../data/", import.meta.url);
 const load = f => JSON.parse(readFileSync(new URL(f, DATA_DIR)));
@@ -29,5 +30,10 @@ export function loadData() {
     symbols: load("tokens/symbols.json"),
     evm: load("tokens/evm.json"),
   });
-  return { raw, core, tokens, idByName, nameById, countryByCode };
+  // Utilities: protocol rule files and the hand-edited support config.
+  const utilities = createUtilities({
+    protocols: readdirSync(new URL("utilities/protocols/", DATA_DIR)).filter(f => f.endsWith(".json")).map(f => load(`utilities/protocols/${f}`)),
+    support: load("utilities/support.json"),
+  });
+  return { raw, core, tokens, utilities, idByName, nameById, countryByCode };
 }

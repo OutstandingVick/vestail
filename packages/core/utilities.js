@@ -73,3 +73,57 @@ export function readSupport(support, protocols) {
   return (utility, token) => (utilities[utility] || []).filter(e =>
     e.chains.includes(token.chain) && (e.assets === "*" || e.assets.includes(token.address)));
 }
+
+/**
+ * createUtilities({ protocols: [rule files], support }) ->
+ *   judge(token, country) -> one entry per utility (hold, trade, lend, borrow, earn)
+ *
+ * `token` is a token from tokens.board(): its `status` is the hold verdict
+ * (issuer rule capped by the class rule). For each protocol that supports
+ * the token, the option's verdict is the most restrictive of hold and the
+ * protocol's own rule. The utility shows its best option; with none, it is
+ * unverified. Actions are enabled only for eligible or conditional options,
+ * and conditional or risky ones need an acknowledgement first.
+ */
+export function createUtilities({ protocols, support }) {
+  const PROTOCOLS = Object.fromEntries((Array.isArray(protocols) ? protocols : Object.values(protocols)).map(p => [p.protocol, p]));
+  const supportFor = readSupport(support, PROTOCOLS);
+
+  function option(utility, entry, hold, country) {
+    const p = evaluateProtocol(PROTOCOLS[entry.protocol], country);
+    const verdict = mostRestrictive(hold, p.verdict);
+    const enabled = verdict === "eligible" || verdict === "conditional";
+    return {
+      protocol: p.protocol, name: p.name, version: p.version, verifiedOn: p.verifiedOn,
+      verdict, protocolVerdict: p.verdict, holdVerdict: hold,
+      reasons: p.reasons, sources: p.sources,
+      action: entry.action, pairs: entry.pairs ?? [], pools: entry.pools ?? [],
+      risk: RISK[utility] ?? null,
+      actionsEnabled: enabled,
+      acknowledgementRequired: enabled && (verdict === "conditional" || Boolean(RISK[utility])),
+    };
+  }
+
+  function judge(token, country) {
+    const hold = holdVerdict(token.status);
+    const out = [{
+      utility: "hold", verdict: hold, options: [],
+      actionsEnabled: hold === "eligible" || hold === "conditional",
+      acknowledgementRequired: hold === "conditional", risk: null,
+    }];
+    for (const utility of CONFIGURABLE) {
+      const options = supportFor(utility, token).map(e => option(utility, e, hold, country));
+      const verdict = options.length ? [...options].sort((a, b) => VERDICTS.indexOf(b.verdict) - VERDICTS.indexOf(a.verdict))[0].verdict : "unverified";
+      out.push({
+        utility, verdict, options,
+        actionsEnabled: options.some(o => o.actionsEnabled),
+        acknowledgementRequired: options.some(o => o.acknowledgementRequired),
+        risk: RISK[utility] ?? null,
+        ...(options.length ? {} : { reasons: ["No protocol in Vestail's config offers this for this token yet."] }),
+      });
+    }
+    return out;
+  }
+
+  return { judge, protocols: PROTOCOLS };
+}

@@ -30,8 +30,11 @@ export async function dlmmPool(pool: string): Promise<{ dlmm: DLMM; info: DlmmPo
  * wallet. Returns the v0 transaction (co-signed only by the throwaway
  * position keypair) for the user to sign, and the new position's address.
  */
-export async function buildDlmmAdd({ pool, user, amountX, amountY }: { pool: string; user: string; amountX: string; amountY: string }) {
+export async function buildDlmmAdd({ pool, user, mint, amountToken, amountQuote }: { pool: string; user: string; mint: string; amountToken: string; amountQuote: string }) {
   const { dlmm, info } = await dlmmPool(pool);
+  // Pools list their two tokens in either order: map the user's amounts by mint, never by position.
+  if (info.tokenX !== mint && info.tokenY !== mint) throw new Error("That pool doesn't hold this token.");
+  const [amountX, amountY] = info.tokenX === mint ? [amountToken, amountQuote] : [amountQuote, amountToken];
   const owner = new PublicKey(user);
   const x = toUnits(amountX || "0", info.decimalsX), y = toUnits(amountY || "0", info.decimalsY);
   if (x === BigInt(0) && y === BigInt(0)) throw new Error("Enter an amount for at least one side.");

@@ -30,8 +30,12 @@ async function poolContext(pool: string) {
  * A new DAMM v2 position funded from the user's wallet, spending at most the
  * amounts they typed. Co-signed only by the throwaway position-NFT keypair.
  */
-export async function buildDammAdd({ pool, user, amountA, amountB }: { pool: string; user: string; amountA: string; amountB: string }) {
+export async function buildDammAdd({ pool, user, mint, amountToken, amountQuote }: { pool: string; user: string; mint: string; amountToken: string; amountQuote: string }) {
   const { conn, amm, state, programA, programB, decimalsA, decimalsB } = await poolContext(pool);
+  // Pools list their two tokens in either order: map the user's amounts by mint, never by position.
+  const isA = state.tokenAMint.toBase58() === mint;
+  if (!isA && state.tokenBMint.toBase58() !== mint) throw new Error("That pool doesn't hold this token.");
+  const [amountA, amountB] = isA ? [amountToken, amountQuote] : [amountQuote, amountToken];
   const owner = new PublicKey(user);
   const maxA = new BN(toUnits(amountA || "0", decimalsA).toString()), maxB = new BN(toUnits(amountB || "0", decimalsB).toString());
   if (maxA.isZero() && maxB.isZero()) throw new Error("Enter an amount for at least one side.");

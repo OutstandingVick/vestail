@@ -67,3 +67,21 @@ test("earn requires a risk acknowledgement, and no perps utility exists", async 
   assert.ok(names.every(n => ["hold", "trade", "lend", "borrow", "earn"].includes(n)));
   assert.ok(!JSON.stringify(ng).match(/perp|leverage/i));
 });
+
+test("a failing live source leaves the verdict intact and says why", async () => {
+  const get = await fixture({ ...live, meteora: async () => { throw new Error("Meteora damm_v2 returned HTTP 503"); } });
+  const ng = (await get({ asset: "NVDA", country: "NG", residency: "citizen" })).body;
+  const earn = pick(ng, "xstocks", "earn");
+  assert.equal(earn.verdict, "conditional");
+  assert.equal(earn.options[0].live, null);
+  assert.match(earn.options[0].liveError, /503/);
+});
+
+test("bad queries are refused, and the endpoint needs a key", async () => {
+  const get = await fixture();
+  assert.equal((await get({ asset: "NOPE", country: "NG", residency: "citizen" })).status, 400);
+  assert.equal((await get({ asset: "NVDA", country: "XX", residency: "citizen" })).status, 400);
+  assert.equal((await get({ asset: "NVDA", country: "NG", residency: "tourist" })).status, 400);
+  const app = createApp({ partnerKeyStore: new MemoryKeyStore(), live });
+  assert.equal((await app.request("/api/v1/utilities?asset=NVDA&country=NG&residency=citizen")).status, 401);
+});

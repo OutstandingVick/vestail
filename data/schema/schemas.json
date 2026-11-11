@@ -2,16 +2,488 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://vestail.example/schemas",
   "$defs": {
-    "Asset": { "type": "object", "required": ["id", "index", "name"], "properties": { "id": { "type": "string", "pattern": "^[a-z0-9_]+$" }, "index": { "type": "integer", "minimum": 0 }, "name": { "type": "string" } } },
-    "Category": { "type": "object", "required": ["id", "name", "assets"], "properties": { "id": { "type": "string" }, "name": { "type": "string" }, "assets": { "type": "array", "items": { "type": "string" }, "minItems": 1 } } },
-    "Entity": { "type": "object", "required": ["name", "kind", "asset"], "properties": { "name": { "type": "string" }, "kind": { "type": "string" }, "home": { "type": "string", "pattern": "^[A-Z]{2}$" }, "asset": { "type": "string" } } },
-    "Status": { "type": "integer", "enum": [0, 1, 2] },
-    "Source": { "type": "object", "required": ["title", "url"], "additionalProperties": false, "properties": { "title": { "type": "string", "minLength": 1 }, "url": { "type": "string", "format": "uri" } } },
-    "Rule": { "type": "object", "required": ["status", "sources", "verified_at"], "additionalProperties": false, "properties": { "status": { "$ref": "#/$defs/Status" }, "sources": { "type": "array", "items": { "$ref": "#/$defs/Source" } }, "verified_at": { "type": ["string", "null"], "format": "date" } } },
-    "RuleSet": { "type": "object", "description": "One rule per asset id. The core checks every asset in assets.json is present.", "propertyNames": { "pattern": "^[a-z0-9_]+$" }, "additionalProperties": { "$ref": "#/$defs/Rule" } },
-    "Country": { "type": "object", "required": ["code", "name", "flag", "rules"], "properties": { "code": { "type": "string", "pattern": "^[A-Z]{2}$" }, "name": { "type": "string" }, "flag": { "type": "string" }, "rules": { "type": "object", "required": ["citizen", "foreigner"], "properties": { "citizen": { "$ref": "#/$defs/RuleSet" }, "foreigner": { "$ref": "#/$defs/RuleSet" } } } } },
-    "Venue": { "type": "object", "required": ["name", "url"], "properties": { "name": { "type": "string" }, "url": { "type": ["string", "null"], "format": "uri" } } },
-    "VenueMap": { "type": "object", "required": ["default"], "properties": { "default": { "type": "array", "items": { "$ref": "#/$defs/Venue" } } }, "additionalProperties": { "type": "array", "items": { "$ref": "#/$defs/Venue" } } },
-    "Activity": { "type": "object", "properties": { "stats": { "type": "object", "properties": { "volume_30d_usd": { "type": "number" }, "volume_30d_delta_pct": { "type": "number" }, "orders_routed": { "type": "integer" }, "orders_delta_pct": { "type": "number" }, "active_buyers_7d": { "type": "integer" } } }, "recent": { "type": "array", "items": { "type": "object", "required": ["flag", "asset", "venue", "ago"], "properties": { "flag": { "type": "string" }, "asset": { "type": "string" }, "venue": { "type": "string" }, "ago": { "type": "string" } } } } } }
+    "Asset": {
+      "type": "object",
+      "required": [
+        "id",
+        "index",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9_]+$"
+        },
+        "index": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "Category": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "assets"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "assets": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        }
+      }
+    },
+    "Entity": {
+      "type": "object",
+      "required": [
+        "name",
+        "kind",
+        "asset"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "home": {
+          "type": "string",
+          "pattern": "^[A-Z]{2}$"
+        },
+        "asset": {
+          "type": "string"
+        }
+      }
+    },
+    "Status": {
+      "type": "integer",
+      "enum": [
+        0,
+        1,
+        2
+      ]
+    },
+    "Source": {
+      "type": "object",
+      "required": [
+        "title",
+        "url"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        }
+      }
+    },
+    "Rule": {
+      "type": "object",
+      "required": [
+        "status",
+        "sources",
+        "verified_at"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "$ref": "#/$defs/Status"
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Source"
+          }
+        },
+        "verified_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        }
+      }
+    },
+    "RuleSet": {
+      "type": "object",
+      "description": "One rule per asset id. The core checks every asset in assets.json is present.",
+      "propertyNames": {
+        "pattern": "^[a-z0-9_]+$"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/Rule"
+      }
+    },
+    "Country": {
+      "type": "object",
+      "required": [
+        "code",
+        "name",
+        "flag",
+        "rules"
+      ],
+      "properties": {
+        "code": {
+          "type": "string",
+          "pattern": "^[A-Z]{2}$"
+        },
+        "name": {
+          "type": "string"
+        },
+        "flag": {
+          "type": "string"
+        },
+        "rules": {
+          "type": "object",
+          "required": [
+            "citizen",
+            "foreigner"
+          ],
+          "properties": {
+            "citizen": {
+              "$ref": "#/$defs/RuleSet"
+            },
+            "foreigner": {
+              "$ref": "#/$defs/RuleSet"
+            }
+          }
+        }
+      }
+    },
+    "Venue": {
+      "type": "object",
+      "required": [
+        "name",
+        "url"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "url": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri"
+        }
+      }
+    },
+    "VenueMap": {
+      "type": "object",
+      "required": [
+        "default"
+      ],
+      "properties": {
+        "default": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Venue"
+          }
+        }
+      },
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "$ref": "#/$defs/Venue"
+        }
+      }
+    },
+    "Activity": {
+      "type": "object",
+      "properties": {
+        "stats": {
+          "type": "object",
+          "properties": {
+            "volume_30d_usd": {
+              "type": "number"
+            },
+            "volume_30d_delta_pct": {
+              "type": "number"
+            },
+            "orders_routed": {
+              "type": "integer"
+            },
+            "orders_delta_pct": {
+              "type": "number"
+            },
+            "active_buyers_7d": {
+              "type": "integer"
+            }
+          }
+        },
+        "recent": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "flag",
+              "asset",
+              "venue",
+              "ago"
+            ],
+            "properties": {
+              "flag": {
+                "type": "string"
+              },
+              "asset": {
+                "type": "string"
+              },
+              "venue": {
+                "type": "string"
+              },
+              "ago": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "ProtocolRule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "status",
+        "regions",
+        "reason",
+        "sourceUrl",
+        "sourceQuality"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+$"
+        },
+        "status": {
+          "enum": [
+            "eligible",
+            "conditional",
+            "restricted"
+          ]
+        },
+        "regions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Z]{2}$"
+          }
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 10
+        },
+        "sourceUrl": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://"
+        },
+        "sourceQuality": {
+          "enum": [
+            "primary",
+            "secondary"
+          ]
+        },
+        "acknowledgement": {
+          "type": "string"
+        }
+      }
+    },
+    "Protocol": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocol",
+        "name",
+        "version",
+        "verifiedOn",
+        "todo",
+        "rules"
+      ],
+      "properties": {
+        "protocol": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+$"
+        },
+        "name": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}\\.\\d+$"
+        },
+        "verifiedOn": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "todo": {
+          "type": "boolean"
+        },
+        "todoNote": {
+          "type": "string"
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ProtocolRule"
+          }
+        }
+      },
+      "if": {
+        "properties": {
+          "todo": {
+            "const": false
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "rules": {
+            "minItems": 1
+          },
+          "verifiedOn": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "UtilitySupport": {
+      "type": "object",
+      "required": [
+        "protocol",
+        "chains",
+        "assets",
+        "action"
+      ],
+      "properties": {
+        "protocol": {
+          "type": "string"
+        },
+        "chains": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "solana",
+              "base",
+              "robinhood"
+            ]
+          }
+        },
+        "assets": {
+          "oneOf": [
+            {
+              "const": "*"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ]
+        },
+        "pairs": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "USDC",
+              "SOL"
+            ]
+          }
+        },
+        "pools": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "dlmm",
+              "damm_v2"
+            ]
+          }
+        },
+        "action": {
+          "enum": [
+            "swap",
+            "liquidity",
+            "supply",
+            "borrow"
+          ]
+        },
+        "risk": {
+          "enum": [
+            "liquidation",
+            "impermanent_loss"
+          ]
+        },
+        "todo": {
+          "type": "string"
+        }
+      }
+    },
+    "Support": {
+      "type": "object",
+      "required": [
+        "version",
+        "utilities"
+      ],
+      "properties": {
+        "version": {
+          "type": "string"
+        },
+        "utilities": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Only spot utilities: no perps or leverage.",
+          "properties": {
+            "trade": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/UtilitySupport"
+              }
+            },
+            "lend": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/UtilitySupport"
+              }
+            },
+            "borrow": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/UtilitySupport"
+              }
+            },
+            "earn": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/UtilitySupport"
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }

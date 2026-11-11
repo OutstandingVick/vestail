@@ -28,6 +28,33 @@ export function EarnForm({ version, option, enabled }: { version: UtilitiesVersi
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<{ kind: "ok" | "error"; text: string; href?: string } | null>(null);
   const selected = pools.find(p => p.address === pool);
+  const [positions, setPositions] = useState<{ address: string; amountX?: number; amountY?: number; amountA?: number; amountB?: number }[] | null>(null);
+
+  async function call(body: Record<string, unknown>) {
+    const res = await authedFetch("/api/earn", { method: "POST", body: JSON.stringify({ symbol: version.asset.symbol, mint: version.asset.id, pool, wallet: wallet!.address, ...body }) });
+    if (!res.ok) throw new Error(await errorOf(res, "That didn't work."));
+    return res.json();
+  }
+
+  async function loadPositions() {
+    if (!wallet) return setMessage({ kind: "error", text: "Connect a Solana wallet first (Settings)." });
+    setBusy(true); setMessage(null);
+    try { setPositions((await call({ action: "positions" })).positions); } catch (e) { setMessage({ kind: "error", text: (e as Error).message }); }
+    setBusy(false);
+  }
+
+  // Withdrawing is never gated by a verdict: a rule change must not trap anyone's funds.
+  async function withdraw(position: string) {
+    setBusy(true); setMessage(null);
+    try {
+      const sig = await signAndSend((await call({ action: "remove", position })).transactions);
+      setMessage({ kind: "ok", text: "Withdrawn to your wallet.", href: `https://solscan.io/tx/${sig}` });
+      setPositions(ps => ps?.filter(p => p.address !== position) ?? null);
+    } catch (e) {
+      setMessage({ kind: "error", text: (e as Error).message });
+    }
+    setBusy(false);
+  }
 
   if (!pools.length) return <p className="text-sm text-muted">No USDC or SOL pool on Meteora for this token right now.</p>;
 
@@ -83,6 +110,21 @@ export function EarnForm({ version, option, enabled }: { version: UtilitiesVersi
         className="inline-flex min-h-11 w-fit items-center rounded-full bg-action px-5 font-semibold text-on-action disabled:cursor-not-allowed disabled:bg-field disabled:text-muted">
         {busy ? "Confirm in wallet…" : "Add liquidity"}
       </button>
+      <div className="flex flex-col gap-2">
+        <button type="button" onClick={loadPositions} disabled={busy} className="w-fit text-sm font-semibold text-emphasis disabled:opacity-60">
+          {positions ? "Refresh my positions" : "Show my positions in this pool"}
+        </button>
+        {positions && (positions.length ? (
+          <ul className="flex flex-col gap-1.5">
+            {positions.map(p => (
+              <li key={p.address} className="flex items-center justify-between gap-2 rounded-xl bg-wash px-3 py-2 text-sm">
+                <span>{p.address.slice(0, 4)}…{p.address.slice(-4)} · {(p.amountX ?? p.amountA ?? 0).toLocaleString(undefined, { maximumFractionDigits: 6 })} / {(p.amountY ?? p.amountB ?? 0).toLocaleString(undefined, { maximumFractionDigits: 6 })}</span>
+                <button type="button" onClick={() => withdraw(p.address)} disabled={busy} className="min-h-9 rounded-full border-[1.5px] border-field px-3 text-[13px] font-semibold">Withdraw all</button>
+              </li>
+            ))}
+          </ul>
+        ) : <p className="text-sm text-muted">No positions in this pool.</p>)}
+      </div>
       {message && <p role={message.kind === "error" ? "alert" : "status"} className={`text-sm ${message.kind === "error" ? "text-cannot" : "text-can"}`}>
         {message.text} {message.href && <a href={message.href} target="_blank" rel="noopener noreferrer" className="underline">View transaction</a>}
       </p>}

@@ -21,3 +21,29 @@ export function mostRestrictive(...verdicts) {
 /** The app's hold status (can_own / conditional / cannot_own / null) on the public scale. */
 export const HOLD_VERDICT = { can_own: "eligible", conditional: "conditional", cannot_own: "restricted" };
 export const holdVerdict = status => (status ? HOLD_VERDICT[status] ?? "unverified" : "unverified");
+
+/**
+ * One protocol's verdict for a country, from its rule file. The strictest rule
+ * naming the country decides. No rule naming it (or a placeholder file with no
+ * rules) means unverified: missing research is not permission.
+ */
+export function evaluateProtocol(protocol, country) {
+  const base = { protocol: protocol.protocol, name: protocol.name, version: protocol.version, verifiedOn: protocol.verifiedOn ?? null };
+  const matching = (protocol.rules || []).filter(r => r.regions.includes(country));
+  if (!matching.length) {
+    return {
+      ...base, verdict: "unverified", sources: [],
+      reasons: [protocol.todo
+        ? `${protocol.name} has no sourced rules in Vestail yet.`
+        : `${protocol.name}'s terms haven't been checked for this country.`],
+    };
+  }
+  const verdict = mostRestrictive(...matching.map(r => r.status));
+  const deciding = matching.filter(r => r.status === verdict);
+  return {
+    ...base, verdict,
+    reasons: deciding.map(r => r.reason),
+    sources: [...new Map(deciding.map(r => [r.sourceUrl, { label: `${protocol.name} terms`, url: r.sourceUrl, quality: r.sourceQuality }])).values()],
+    acknowledgement: deciding.find(r => r.acknowledgement)?.acknowledgement ?? null,
+  };
+}

@@ -1,6 +1,6 @@
 import "server-only";
 
-import type { Asset, BuyerType, Order, Category, Country, Matrix, ProductActivity, Resolution, Rule, TokenBoard, TokenSymbol } from "@/lib/types";
+import type { Utilities, Asset, BuyerType, Order, Category, Country, Matrix, ProductActivity, Resolution, Rule, TokenBoard, TokenSymbol } from "@/lib/types";
 
 /**
  * The v2 API, called in-process.
@@ -18,7 +18,7 @@ import type { Asset, BuyerType, Order, Category, Country, Matrix, ProductActivit
  * instance rather than through Next's fetch cache, which no longer applies
  * now that nothing is fetched.
  */
-import { callApi } from "./local-api.ts";
+import { callApi, callPublicApi } from "./local-api.ts";
 
 export class ApiError extends Error {
   constructor(public status: number, public code: string, message: string) { super(message); }
@@ -53,6 +53,13 @@ const qs = (p: Record<string, string | undefined>) =>
   "?" + new URLSearchParams(Object.entries(p).filter((e): e is [string, string] => !!e[1])).toString();
 
 export const api = {
+  /** What a holder may do with each version of an asset (trade, lend, borrow, earn), with live numbers. Never cached: verdicts and markets move. */
+  async utilities(asset: string, country: string, residency: "citizen" | "resident" | "foreigner"): Promise<Utilities> {
+    const res = await callPublicApi(`/utilities?${new URLSearchParams({ asset, country, residency })}`);
+    const body = await res.json().catch(() => null);
+    if (!res.ok) throw new ApiError(res.status, body?.error?.code ?? "unavailable", body?.error?.message ?? "Utilities unavailable.");
+    return body as Utilities;
+  },
   countries: () => get<Country[]>("/countries", true),
   assets: () => get<Asset[]>("/assets", true),
   categories: () => get<Category[]>("/categories", true),

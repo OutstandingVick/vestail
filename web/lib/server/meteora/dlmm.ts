@@ -44,3 +44,39 @@ export async function buildDlmmAdd({ pool, user, amountX, amountY }: { pool: str
   });
   return { transactions: [await toV0(dlmm.program.provider.connection, tx, owner, [position])], position: position.publicKey.toBase58(), pool: info };
 }
+
+/** The user's positions in one DLMM pool, with their token amounts and unclaimed fees. */
+export async function dlmmPositions({ pool, user }: { pool: string; user: string }) {
+  const { dlmm, info } = await dlmmPool(pool);
+  const { userPositions } = await dlmm.getPositionsByUserAndLbPair(new PublicKey(user));
+  return {
+    pool: info,
+    positions: userPositions.map(p => ({
+      address: p.publicKey.toBase58(),
+      amountX: Number(p.positionData.totalXAmount) / 10 ** info.decimalsX,
+      amountY: Number(p.positionData.totalYAmount) / 10 ** info.decimalsY,
+      feeX: Number(p.positionData.feeX.toString()) / 10 ** info.decimalsX,
+      feeY: Number(p.positionData.feeY.toString()) / 10 ** info.decimalsY,
+      lowerBinId: p.positionData.lowerBinId, upperBinId: p.positionData.upperBinId,
+    })),
+  };
+}
+
+/**
+ * Withdraw all of one position, claim its fees and close it, back to the
+ * user's wallet. Only a position the user owns is found, so a position
+ * address someone else owns can't be withdrawn through here.
+ */
+export async function buildDlmmRemove({ pool, user, position }: { pool: string; user: string; position: string }) {
+  const { dlmm } = await dlmmPool(pool);
+  const owner = new PublicKey(user);
+  const { userPositions } = await dlmm.getPositionsByUserAndLbPair(owner);
+  const found = userPositions.find(p => p.publicKey.toBase58() === position);
+  if (!found) throw new Error("That position isn't yours in this pool.");
+  const txs = await dlmm.removeLiquidity({
+    user: owner, position: found.publicKey,
+    fromBinId: found.positionData.lowerBinId, toBinId: found.positionData.upperBinId,
+    bps: new BN(10_000), shouldClaimAndClose: true,
+  });
+  return { transactions: await Promise.all(txs.map(tx => toV0(dlmm.program.provider.connection, tx, owner))) };
+}

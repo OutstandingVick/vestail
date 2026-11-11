@@ -47,3 +47,29 @@ export function evaluateProtocol(protocol, country) {
     acknowledgement: deciding.find(r => r.acknowledgement)?.acknowledgement ?? null,
   };
 }
+
+/** The only utilities Vestail offers. Spot only: no perpetuals, leverage or margin. */
+export const UTILITIES = ["hold", "trade", "lend", "borrow", "earn"];
+const CONFIGURABLE = ["trade", "lend", "borrow", "earn"];
+const FORBIDDEN = /perp|leverage|margin|futures/i;
+/** Utilities that need the buyer to acknowledge a risk before any transaction. */
+export const RISK = { lend: "liquidation", borrow: "liquidation", earn: "impermanent_loss" };
+
+/**
+ * Read support.json: which protocols offer which utility for which assets.
+ * Refuses anything that isn't a spot utility, and any protocol without a
+ * rule file, at load time, so a misconfiguration fails loudly.
+ */
+export function readSupport(support, protocols) {
+  const utilities = support.utilities || {};
+  for (const key of Object.keys(utilities)) {
+    if (FORBIDDEN.test(key) || !CONFIGURABLE.includes(key)) throw new Error(`utilities: "${key}" is not a supported utility (spot only: ${CONFIGURABLE.join(", ")})`);
+    for (const entry of utilities[key]) {
+      if (!protocols[entry.protocol]) throw new Error(`utilities: no rule file for protocol ${entry.protocol}`);
+      if (FORBIDDEN.test(entry.action || "")) throw new Error(`utilities: ${entry.protocol} ${key} action "${entry.action}" is not spot`);
+    }
+  }
+  /** Support entries for a utility that cover this token (by chain and address). */
+  return (utility, token) => (utilities[utility] || []).filter(e =>
+    e.chains.includes(token.chain) && (e.assets === "*" || e.assets.includes(token.address)));
+}

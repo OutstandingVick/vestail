@@ -6,6 +6,7 @@ import { ActionPanel } from "@/components/ActionPanel";
 import { Provenance } from "@/components/Provenance";
 import { PurchaseModal } from "@/components/PurchaseModal";
 import { TokenCard } from "@/components/TokenCard";
+import { UtilitiesTab } from "@/components/UtilitiesTab";
 import { VerdictBadge } from "@/components/VerdictBadge";
 import { WatchButton } from "@/components/WatchButton";
 import { api } from "@/lib/server/api";
@@ -14,10 +15,10 @@ import { ONCHAIN_CLASSES } from "@/lib/tokens";
 import type { TokenBoard } from "@/lib/types";
 
 export default async function AssetPage({ params, searchParams }: {
-  params: Promise<{ id: string }>; searchParams: Promise<{ symbol?: string; canonical?: string; buy?: string }>;
+  params: Promise<{ id: string }>; searchParams: Promise<{ symbol?: string; canonical?: string; buy?: string; tab?: string }>;
 }) {
   const { id } = await params;
-  const { symbol, canonical, buy } = await searchParams;
+  const { symbol, canonical, buy, tab } = await searchParams;
   const [profile, assets, countries, symbols] = await Promise.all([readProfile(), api.assets(), api.countries(), api.tokenSymbols()]);
   const asset = assets.find(a => a.id === id);
   if (!asset) notFound();
@@ -68,6 +69,24 @@ export default async function AssetPage({ params, searchParams }: {
           </section>
 
           {board && (
+            <nav aria-label="Asset sections" className="flex w-fit gap-1 rounded-full bg-tint p-1">
+              {[["overview", "Overview"], ["utilities", "Utilities"]].map(([key, label]) => (
+                <Link key={key} href={key === "utilities" ? `${cleanHref}?tab=utilities` : cleanHref} aria-current={(tab === "utilities") === (key === "utilities") ? "page" : undefined}
+                  className={`flex min-h-10 items-center rounded-full px-4 text-sm font-semibold ${(tab === "utilities") === (key === "utilities") ? "bg-surface shadow-sm" : "text-muted hover:text-ink"}`}>
+                  {label}
+                </Link>
+              ))}
+            </nav>
+          )}
+
+          {board && tab === "utilities" && (
+            <section className="rounded-panel bg-surface p-7">
+              <UtilitiesTab symbol={board.symbol} country={profile.country} who={profile.who} cleanHref={cleanHref}
+                conditions={Object.fromEntries(board.tokens.map(t => [t.address, t.status === "conditional" && t.issuer?.acknowledgement ? [`${t.issuer.acknowledgement.limit} needs ${t.issuer.acknowledgement.requires}.`] : []]))} />
+            </section>
+          )}
+
+          {board && tab !== "utilities" && (
             <section aria-labelledby="tokens-title" className="flex flex-col gap-3.5 rounded-panel bg-surface p-7">
               <div>
                 <h2 id="tokens-title" className="text-[22px] font-bold">{board.name} onchain</h2>

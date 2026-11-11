@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 
+import { EarnForm } from "@/components/EarnForm";
 import { UtilityCard } from "@/components/UtilityCard";
 import type { Utilities, UtilityOption } from "@/lib/types";
 
@@ -31,7 +32,7 @@ export function UtilitiesPanel({ data, buyHref, conditions, renderEarn }: {
     if (utility === "trade") {
       return <Link href={buyHref(version.asset.tokenSymbol)} aria-disabled={!enabled} className={button(enabled)}>Trade {version.asset.tokenSymbol}</Link>;
     }
-    if (utility === "earn") return renderEarn?.(version, option, enabled) ?? null;
+    if (utility === "earn") return renderEarn ? renderEarn(version, option, enabled) : <EarnForm version={version} option={option} enabled={enabled} />;
     return <span className={button(false)} aria-disabled="true">{utility === "lend" ? "Lend" : "Borrow"} (no verified protocol yet)</span>;
   }
 

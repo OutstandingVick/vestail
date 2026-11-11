@@ -95,6 +95,8 @@ export interface WatchlistRow extends WatchItem {
   name: string;
   status: Status;
   quote: WatchQuote | null;
+  /** USD depth across the stock's Meteora USDC/SOL pools; null when Earn isn't available here or the read failed. */
+  meteoraDepthUsd?: number | null;
 }
 export interface Portfolio {
   wallets: string[];

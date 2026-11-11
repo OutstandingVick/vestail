@@ -85,6 +85,15 @@ const ALLOWED_SYSTEM_IX = new Set([
   SYSTEM_TRANSFER_WITH_SEED,
 ]);
 
+/**
+ * Meteora's liquidity programs, read from the official SDKs' constants. Not
+ * in ALLOWED_PROGRAMS: they are allowed only when inspecting a liquidity
+ * transaction, which passes them explicitly as extraPrograms.
+ */
+export const METEORA_DLMM_PROGRAM = "LBUZKhRxPF3XUpBCjp4YzTKgLccjZhTSDM9YuVaPwxo";
+export const METEORA_DAMM_V2_PROGRAM = "cpamdpZCGKUy5JxQXB4dcpGPiikHawvSWAd6mEn1sGG";
+export const LIQUIDITY_PROGRAMS: readonly string[] = [METEORA_DLMM_PROGRAM, METEORA_DAMM_V2_PROGRAM];
+
 export interface InspectOptions {
   /** The wallet that will sign. Base58. */
   taker: string;
@@ -94,6 +103,8 @@ export interface InspectOptions {
    * rent on the token accounts the swap opens and for fees.
    */
   maxLamportsFromTaker: bigint;
+  /** Programs allowed on top of ALLOWED_PROGRAMS, e.g. LIQUIDITY_PROGRAMS for Earn. Everything else stays forbidden. */
+  extraPrograms?: readonly string[];
 }
 
 export type Inspection = { ok: true } | { ok: false; reason: string };
@@ -116,7 +127,7 @@ function readU64(data: Uint8Array, offset: number): bigint {
  */
 export function inspectSwapTransaction(
   tx: VersionedTransaction,
-  { taker, maxLamportsFromTaker }: InspectOptions,
+  { taker, maxLamportsFromTaker, extraPrograms = [] }: InspectOptions,
 ): Inspection {
   const message = tx.message;
   if (message.version !== 0) {
@@ -136,7 +147,7 @@ export function inspectSwapTransaction(
     if (programId === undefined) {
       return { ok: false, reason: "The swap refers to a program it did not name." };
     }
-    if (!ALLOWED_PROGRAMS.includes(programId)) {
+    if (!ALLOWED_PROGRAMS.includes(programId) && !extraPrograms.includes(programId)) {
       return {
         ok: false,
         reason: `The swap wants to call an unexpected program (${programId.slice(0, 8)}…).`,

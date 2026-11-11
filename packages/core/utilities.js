@@ -113,7 +113,10 @@ export function createUtilities({ protocols, support }) {
     }];
     for (const utility of CONFIGURABLE) {
       const options = supportFor(utility, token).map(e => option(utility, e, hold, country));
-      const verdict = options.length ? [...options].sort((a, b) => VERDICTS.indexOf(b.verdict) - VERDICTS.indexOf(a.verdict))[0].verdict : "unverified";
+      // The best option decides; with none, it's unverified, but never looser than holding allows.
+      const verdict = options.length
+        ? [...options].sort((a, b) => VERDICTS.indexOf(b.verdict) - VERDICTS.indexOf(a.verdict))[0].verdict
+        : mostRestrictive(hold, "unverified");
       out.push({
         utility, verdict, options,
         actionsEnabled: options.some(o => o.actionsEnabled),

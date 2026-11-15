@@ -3,11 +3,6 @@
 import type { UtilityRisk } from "@/lib/types";
 import { RISK_TEXT } from "@/lib/utilities";
 
-/**
- * The checkbox lend, borrow and earn need before any transaction, like the
- * acknowledgement on conditional verdicts. It states the risk in plain words
- * and, for a conditional option, the condition too.
- */
 export function RiskAcknowledgement({ id, risk, conditions, checked, onChange }: {
   id: string; risk: UtilityRisk | null; conditions: string[]; checked: boolean; onChange: (v: boolean) => void;
 }) {

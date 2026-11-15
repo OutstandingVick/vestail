@@ -11,7 +11,6 @@ import { blockedReason, canAct, UTILITY_LABEL } from "@/lib/utilities";
 const usd = (n: number | null | undefined) => (n == null ? "—" : n.toLocaleString(undefined, { style: "currency", currency: "USD", maximumFractionDigits: n < 10 ? 2 : 0 }));
 const pct = (n: number | null | undefined, d = 2) => (n == null ? "—" : `${n.toFixed(d)}%`);
 
-/** The few numbers that matter for each utility, from the option's live data. */
 function KeyNumbers({ utility, option }: { utility: Utility["utility"]; option: UtilityOption }) {
   if (option.liveError) return <p className="text-xs text-muted">Live numbers unavailable: {option.liveError}</p>;
   const live = option.live;
@@ -47,11 +46,6 @@ function KeyNumbers({ utility, option }: { utility: Utility["utility"]; option: 
   return null;
 }
 
-/**
- * One utility on the asset page: its verdict, key numbers, sources and the
- * action. The action renders only through canAct, so an unverified or
- * restricted option, or a risky one not yet acknowledged, can't start.
- */
 export function UtilityCard({ utility, conditions, renderAction }: {
   utility: Utility;
   conditions: string[];

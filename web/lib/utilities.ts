@@ -1,17 +1,10 @@
 import type { UtilityName, UtilityOption, UtilityRisk, UtilityVerdict } from "@/lib/types";
 
-/**
- * The one rule every utility button follows. An action may start only when
- * its option is enabled (eligible or conditional) and, where an
- * acknowledgement is required (a conditional verdict, or the risk of lending,
- * borrowing or providing liquidity), only after the buyer has given it.
- */
 export function canAct(option: Pick<UtilityOption, "actionsEnabled" | "acknowledgementRequired">, acknowledged: boolean): boolean {
   if (!option.actionsEnabled) return false;
   return !option.acknowledgementRequired || acknowledged;
 }
 
-/** Why a button is off, in words the buyer can act on. Null when it's on. */
 export function blockedReason(option: Pick<UtilityOption, "verdict" | "actionsEnabled" | "acknowledgementRequired">, acknowledged: boolean): string | null {
   if (option.verdict === "restricted") return "Not allowed where you are.";
   if (option.verdict === "unverified") return "Not verified for your country yet, so Vestail won't route it.";

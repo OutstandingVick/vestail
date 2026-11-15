@@ -11,12 +11,6 @@ import type { UtilitiesVersion, UtilityOption } from "@/lib/types";
 
 const usd = (n: number | null) => (n == null ? "—" : n.toLocaleString(undefined, { style: "currency", currency: "USD", maximumFractionDigits: 0 }));
 
-/**
- * Add liquidity to a Meteora pool from the user's own wallet. The server
- * builds and inspects the transaction; it's inspected again here before the
- * wallet opens; the user signs; the server relays. `enabled` already
- * includes the risk acknowledgement (canAct), and the server checks it too.
- */
 export function EarnForm({ version, option, enabled }: { version: UtilitiesVersion; option: UtilityOption; enabled: boolean }) {
   const pools = option.live?.pools ?? [];
   const { wallets } = useWallets();
@@ -58,7 +52,6 @@ export function EarnForm({ version, option, enabled }: { version: UtilitiesVersi
 
   if (!pools.length) return <p className="text-sm text-muted">No USDC or SOL pool on Meteora for this token right now.</p>;
 
-  /** Sign and relay each built transaction, checking every one before the wallet opens. */
   async function signAndSend(transactions: string[]) {
     let last = "";
     for (const t of transactions) {

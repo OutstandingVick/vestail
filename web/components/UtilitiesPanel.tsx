@@ -10,13 +10,6 @@ import type { Utilities, UtilityOption } from "@/lib/types";
 const button = (enabled: boolean) =>
   `inline-flex min-h-11 w-fit items-center rounded-full px-5 font-semibold ${enabled ? "bg-action text-on-action" : "pointer-events-none bg-field text-muted"}`;
 
-/**
- * The Utilities tab: for each token version of the asset, one card per
- * utility. Trading reuses the existing gated buy flow; earning opens the
- * Meteora panel; lending and borrowing stay disabled until a protocol is
- * sourced. `conditions` are each version's issuer conditions, shown before
- * any acknowledgement.
- */
 export function UtilitiesPanel({ data, buyHref, conditions, renderEarn }: {
   data: Utilities;
   buyHref: (tokenSymbol: string) => string;

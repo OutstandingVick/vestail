@@ -3,10 +3,6 @@ import { CheckCircle, Info, WarningCircle, XCircle } from "@phosphor-icons/react
 import type { UtilityVerdict } from "@/lib/types";
 import { VERDICT_LABEL } from "@/lib/utilities";
 
-/**
- * A utility's verdict, in the same visual language as hold verdicts:
- * restricted is hatched and unverified is dashed, so neither relies on colour.
- */
 export function UtilityVerdictBadge({ verdict }: { verdict: UtilityVerdict }) {
   if (verdict === "unverified") {
     return (

@@ -1,16 +1,5 @@
 import { ImageResponse } from "next/og";
 
-/**
- * The card people see when a Vestail link is pasted anywhere.
- *
- * Generated rather than exported from a design file, so it cannot drift from
- * the brand or go stale when the wording changes. 1200x630 is the size every
- * platform crops from.
- *
- * No logo file is loaded: an ImageResponse that fetches an asset can fail at
- * request time, and a link preview that intermittently renders nothing is
- * worse than one drawn from type alone.
- */
 export const alt = "Vestail — what you can own in your country, and where to buy it";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";

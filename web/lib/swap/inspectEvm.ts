@@ -11,7 +11,6 @@
  */
 import { decodeFunctionData, parseAbi } from "viem";
 
-/** KyberSwap's MetaAggregationRouterV2, the same address on Base and Robinhood Chain. */
 export const KYBER_ROUTER = "0x6131B5fae19EA4f9D964eAc0408E4408b66337b5";
 const NATIVE = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
 
@@ -24,7 +23,6 @@ const ROUTER_ABI = parseAbi([
 
 export interface EvmTx { to: string; data: string; value: string }
 
-/** The most the onchain minimum may sit below the quote: Vestail's slippage ceiling, as on Solana. */
 export const MAX_SLIPPAGE_BPS = BigInt(300);
 type Result = { ok: true } | { ok: false; reason: string };
 

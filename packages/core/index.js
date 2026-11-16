@@ -1,18 +1,3 @@
-/**
- * vestail-core — the resolution pipeline and rule lookup, decoupled from the UI.
- *
- * Usage:
- *   import { createVestail } from "./index.js";
- *   const core = createVestail({ assets, categories, aliases, entities, countries, venues });
- *   core.resolve("Google")            -> { assets:[3,4], perCountry, trail, note }
- *   core.matrix("Google", "citizen")  -> rows for every country, one status each
- *   core.venues("cryptocurrency", "NG")
- *   core.rule("NG", "citizen", "Cryptocurrency") -> { status, statusKey, sources, verified_at }
- *
- * All data is passed in; nothing is hard-coded. Feed it the JSON files in /data
- * or your own database rows shaped the same way (see /data/schema).
- */
-
 export const STATUS = { 2: "can_own", 1: "conditional", 0: "cannot_own" };
 export const STATUS_LABEL = { 2: "Can own", 1: "Conditional", 0: "Cannot own" };
 
@@ -29,7 +14,6 @@ export function editDistance(a, b) {
   return d[m][n];
 }
 
-/** 3 exact, 2 prefix (whole or any word), 1 substring or small typo, 0 miss */
 export function fuzzyHit(query, name) {
   const q = norm(query), n = norm(name);
   if (!q) return 0;
@@ -127,7 +111,6 @@ export function createVestail(data) {
     return { full: kept.join(" "), tokens: kept.slice().sort((a, b) => b.length - a.length) };
   }
 
-  /** Resolve free text to asset indices (+ a trail explaining how). */
   function resolve(query) {
     const empty = { stage: "none", assets: [], trail: [], note: "" };
     if (!query || !query.trim()) return { ...empty, stage: "all", assets: ASSETS.map((_, i) => i) };
@@ -141,14 +124,12 @@ export function createVestail(data) {
     return r;
   }
 
-  /** Venues for one asset (index or name) in one country, with the ref tag applied. */
   function venues(asset, code) {
     const name = typeof asset === "number" ? ASSETS[asset] : asset;
     const v = VENUES[name] || { default: [] };
     return (v[code] || v.default || []).map(x => ({ ...x, url: x.url && REF ? x.url + (x.url.includes("?") ? "&" : "?") + REF : x.url }));
   }
 
-  /** Full matrix for a query + buyer type: one row per country. */
   function matrix(query = "", who = "citizen", { sortByStatus = true } = {}) {
     const res = resolve(query);
     const rows = COUNTRIES.map(c => {
@@ -163,7 +144,6 @@ export function createVestail(data) {
     return { query, who, resolution: { stage: res.stage, trail: res.trail, note: res.note, assets: res.assetNames || [] }, rows };
   }
 
-  /** One rule with its provenance, or null for an unknown country or asset (index or name). */
   function rule(code, who, asset) {
     const c = COUNTRIES.find(x => x.code === code);
     const i = typeof asset === "number" ? asset : A[asset];

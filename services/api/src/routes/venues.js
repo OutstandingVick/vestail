@@ -1,13 +1,7 @@
 import { ApiError } from "../errors.js";
 
-/** Append a ref tag the same way the core does. */
 const tag = (url, ref) => url && url + (url.includes("?") ? "&" : "?") + ref;
 
-/**
- * GET /venues/{asset}?country=&ref= — where to buy. Without ref the core's
- * tagging applies unchanged; ref overrides the tag value as the spec allows.
- * Both "partner_xyz" and "ref=partner_xyz" are accepted (API.md shows the latter).
- */
 export function registerVenues(v1, { v, data }) {
   const { core, raw, nameById, countryByCode } = data;
 

@@ -7,14 +7,6 @@ import { userFrom } from "@/lib/server/privy";
 import { solanaWalletsOf } from "@/lib/server/wallets";
 import { inspectSwapTransaction, LIQUIDITY_PROGRAMS } from "@/lib/swap/inspect";
 
-/**
- * POST /api/earn/send { transaction, wallet } — relay a liquidity
- * transaction the user has already signed, through Vestail's own RPC so its
- * key stays server-side. The signed bytes are inspected again first: the
- * signer must be the user's linked wallet and only Meteora and standard
- * programs may appear. Vestail adds no signature and can't change the bytes
- * without invalidating the user's.
- */
 const Body = z.object({ transaction: z.string().min(1).max(2400).regex(/^[A-Za-z0-9+/]+=*$/), wallet: z.string().min(32).max(44) });
 const fail = (status: number, error: string) => NextResponse.json({ error }, { status, headers: { "Cache-Control": "no-store" } });
 

@@ -1,12 +1,6 @@
-/**
- * Spot trading numbers for a token from Jupiter's public quote API: for each
- * pair (USDC, SOL), what a reference amount buys, the price impact, and which
- * venues the route uses. Read-only quotes; Vestail never trades with leverage.
- */
 import { QUOTE_MINTS } from "./meteora.js";
 
 const QUOTE = "https://lite-api.jup.ag/swap/v1/quote";
-/** Reference sizes: 100 USDC, 0.5 SOL, in base units. */
 const REFERENCE = { USDC: { amount: "100000000", decimals: 6 }, SOL: { amount: "500000000", decimals: 9 } };
 
 export async function jupiterPairs(mint, decimals, { pairs = ["USDC", "SOL"], fetchImpl = fetch, timeoutMs = 6000 } = {}) {

@@ -3,13 +3,8 @@ import { ApiError } from "./errors.js";
 
 const digest = s => createHash("sha256").update(s).digest();
 
-/** API keys from VESTAIL_API_KEYS (comma-separated). No keys configured means no key is accepted. */
 export const keysFromEnv = () => (process.env.VESTAIL_API_KEYS || "").split(",").map(s => s.trim()).filter(Boolean);
 
-/**
- * Check `Authorization: Bearer <key>` and return which key matched (its index),
- * so clicks can be attributed to a partner without storing the key itself.
- */
 export function createAuth(keys) {
   const hashes = keys.map(digest);
   return header => {

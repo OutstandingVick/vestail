@@ -1,7 +1,6 @@
 import { getConnInfo } from "@hono/node-server/conninfo";
 import { errorBody } from "./errors.js";
 
-/** Client IP: X-Forwarded-For only behind a trusted proxy, else the socket address. */
 export const ipFrom = ({ trustProxy = process.env.VESTAIL_TRUST_PROXY === "1" } = {}) => c => {
   if (trustProxy) {
     const fwd = c.req.header("X-Forwarded-For");
@@ -10,10 +9,6 @@ export const ipFrom = ({ trustProxy = process.env.VESTAIL_TRUST_PROXY === "1" } 
   try { return getConnInfo(c).remote.address || "unknown"; } catch { return "unknown"; }
 };
 
-/**
- * Fixed-window limit on public reads, per IP, in memory. API.md: "Public read
- * for reference and matrix endpoints, rate-limited by IP."
- */
 export function rateLimit({ limit = 120, windowMs = 60_000, ipOf = ipFrom(), now = () => Date.now() } = {}) {
   const hits = new Map();
   return async (c, next) => {

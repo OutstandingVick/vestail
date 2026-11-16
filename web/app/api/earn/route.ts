@@ -11,17 +11,6 @@ import { solanaWalletsOf } from "@/lib/server/wallets";
 import { inspectSwapTransaction, LIQUIDITY_PROGRAMS } from "@/lib/swap/inspect";
 import { canAct } from "@/lib/utilities";
 
-/**
- * POST /api/earn — Meteora liquidity for the signed-in user's own wallet.
- *   action "positions": the user's positions in a pool.
- *   action "add": a deposit. Re-reads the earn verdict for the declared
- *     country; needs it enabled and the risk acknowledged.
- *   action "remove": a full withdrawal. Never blocked by a verdict, so a
- *     user's funds can't be trapped by a rule change.
- * The pool must be one Vestail lists for that token (USDC/SOL pairs only),
- * the wallet must be linked to the user, and every transaction is inspected
- * before it's returned. The user signs; Vestail holds nothing.
- */
 const Body = z.object({
   action: z.enum(["positions", "add", "remove"]),
   symbol: z.string().min(1).max(12),

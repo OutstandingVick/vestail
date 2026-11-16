@@ -4,7 +4,6 @@ import { ApiError } from "./errors.js";
 
 const SPEC_ID = "vestail-spec";
 
-/** Point local refs ("#/components/...") at the spec registered under SPEC_ID. */
 const rebase = node => {
   if (Array.isArray(node)) return node.map(rebase);
   if (!node || typeof node !== "object") return node;
@@ -13,10 +12,8 @@ const rebase = node => {
   return out;
 };
 
-/** Follow a local $ref to the schema it names (used for defaults). */
 const deref = (spec, schema) => schema?.$ref ? schema.$ref.slice(2).split("/").reduce((o, k) => o[k], spec) : schema;
 
-/** Map an Ajv failure on a parameter to the error codes documented in API.md. */
 const paramError = (name, message) => name === "who"
   ? new ApiError(400, "bad_buyer_type", "who must be citizen or foreigner.")
   : new ApiError(400, "validation", `${name} ${message}.`);
@@ -55,7 +52,6 @@ export function createValidator(spec) {
     };
   }
 
-  /** Validator for an operation's JSON request body, or null if it has none. */
   function body(specPath, method) {
     const rb = spec.paths[specPath]?.[method]?.requestBody;
     const schema = rb?.content?.["application/json"]?.schema;

@@ -11,15 +11,10 @@
  *  - No policy gate for a region means NOT ASSESSED (status null), never
  *    eligible. Missing research is not permission. It is not buyable.
  *  - The class rule can only make a token stricter, never looser.
- *
- * Usage:
- *   const t = createTokens({ representations, policies, symbols });
- *   t.board("NVDA", "NG", "citizen", core)  -> { symbol, asset, class_status, tokens: [...] }
  */
 
 import { STATUS } from "./index.js";
 
-/** v1's issuer statuses on v2's scale. */
 const ISSUER_SCALE = { eligible: 2, conditional: 1, restricted: 0 };
 
 /**
@@ -83,7 +78,6 @@ export function createTokens({ representations, policies, symbols, evm = null })
     }
   }
 
-  /** The v2 asset class name that governs a symbol in one country. */
   function classOf(symbol, code) {
     const s = SYMBOLS[symbol];
     if (s.class === "equity-by-home") return code === s.home ? "Domestic equities" : "Foreign equities";
@@ -93,7 +87,6 @@ export function createTokens({ representations, policies, symbols, evm = null })
     }[s.class] || s.class;
   }
 
-  /** Which side set the final status: "issuer", "class", or "both" when they agree. */
   function decidedBy(issuer, classStatus, status) {
     if (status === null) return null;
     if (!issuer || classStatus < issuer.status) return "class";
@@ -109,7 +102,6 @@ export function createTokens({ representations, policies, symbols, evm = null })
     }));
   }
 
-  /** Symbols whose entity name matches (for joining a resolver hit to its tokens). */
   const forEntity = name => list().filter(s => s.entity && s.entity.toLowerCase() === String(name).toLowerCase());
 
   /**
@@ -144,7 +136,6 @@ export function createTokens({ representations, policies, symbols, evm = null })
       class_sources: classRule.sources, class_verified_at: classRule.verified_at, tokens };
   }
 
-  /** One token by its address on any chain (EVM addresses match case-insensitively), judged as in board(). */
   function token(address, code, who, core) {
     for (const symbol of Object.keys(REPS)) {
       if (REPS[symbol].representations.some(r => sameAddress(r.address, address))) {

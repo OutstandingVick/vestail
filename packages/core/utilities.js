@@ -1,14 +1,5 @@
-/**
- * Utilities: what a holder may do with an asset beyond holding it, and
- * whether they're allowed to. Each utility's verdict combines the asset's hold
- * verdict with the protocol's own sourced restrictions; the most restrictive
- * wins. Data is injected: protocol rule files and the support config.
- */
-
-/** The public verdict scale, most restrictive first. */
 export const VERDICTS = ["restricted", "unverified", "conditional", "eligible"];
 
-/** The most restrictive of any number of verdicts. No inputs means unverified. */
 export function mostRestrictive(...verdicts) {
   const ranked = verdicts.filter(Boolean).map(v => {
     const i = VERDICTS.indexOf(v);
@@ -18,7 +9,6 @@ export function mostRestrictive(...verdicts) {
   return ranked.length ? VERDICTS[Math.min(...ranked)] : "unverified";
 }
 
-/** The app's hold status (can_own / conditional / cannot_own / null) on the public scale. */
 export const HOLD_VERDICT = { can_own: "eligible", conditional: "conditional", cannot_own: "restricted" };
 export const holdVerdict = status => (status ? HOLD_VERDICT[status] ?? "unverified" : "unverified");
 
@@ -48,11 +38,9 @@ export function evaluateProtocol(protocol, country) {
   };
 }
 
-/** The only utilities Vestail offers. Spot only: no perpetuals, leverage or margin. */
 export const UTILITIES = ["hold", "trade", "lend", "borrow", "earn"];
 const CONFIGURABLE = ["trade", "lend", "borrow", "earn"];
 const FORBIDDEN = /perp|leverage|margin|futures/i;
-/** Utilities that need the buyer to acknowledge a risk before any transaction. */
 export const RISK = { lend: "liquidation", borrow: "liquidation", earn: "impermanent_loss" };
 
 /**
@@ -69,7 +57,6 @@ export function readSupport(support, protocols) {
       if (FORBIDDEN.test(entry.action || "")) throw new Error(`utilities: ${entry.protocol} ${key} action "${entry.action}" is not spot`);
     }
   }
-  /** Support entries for a utility that cover this token (by chain and address). */
   return (utility, token) => (utilities[utility] || []).filter(e =>
     e.chains.includes(token.chain) && (e.assets === "*" || e.assets.includes(token.address)));
 }

@@ -3,14 +3,6 @@ import type { MetadataRoute } from "next";
 import { MARKETING_PAGES } from "@/lib/marketing-pages";
 import { absolute } from "@/lib/seo";
 
-/**
- * Every page a reader is meant to find.
- *
- * Deliberately absent: anything under /app or /admin, which robots.ts also
- * disallows, and /early-access, which calls notFound() in production. Listing a
- * page that answers 404 teaches a crawler the sitemap cannot be trusted, which
- * costs more than the missing entry.
- */
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
 

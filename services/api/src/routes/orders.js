@@ -1,14 +1,5 @@
 import { ApiError } from "../errors.js";
 
-/**
- * POST /orders/click — record a Buy press and return the tagged redirect.
- * The redirect is only ever a url the rule lookup would list, so a
- * cannot_own cell (no venues) or a venue without an online url is refused.
- * A conditional rule is only routed once the buyer has acknowledged the
- * condition (acknowledged: true), as in Vestail v1; the page's checkbox is a
- * convenience, this check is the guarantee.
- * Tagging is the core's; this route adds no ref logic of its own.
- */
 export function registerOrders(v1, { v, data, clicks, auth }) {
   const { core, tokens, nameById, idByName, countryByCode } = data;
 
@@ -18,7 +9,6 @@ export function registerOrders(v1, { v, data, clicks, auth }) {
     await next();
   });
 
-  /** GET /orders?session= — one buyer's recorded Buy presses, for their own history. */
   v.route(v1, "get", "/orders", (c, { params: { session, limit } }) => {
     const rows = clicks.bySession(session, c.get("partner"), limit ?? 50);
     return c.json(rows.map(x => ({

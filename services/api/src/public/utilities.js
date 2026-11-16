@@ -4,15 +4,7 @@ import { jupiterPairs } from "../live/jupiter.js";
 import { depthUsd, meteoraPools } from "../live/meteora.js";
 import { DISCLAIMER } from "./eligibility.js";
 
-/**
- * GET /utilities: for each version of an asset a profile could hold, what they
- * can do with it (hold, trade, lend, borrow, earn) and whether they're
- * allowed to, with reasons, sources and live numbers. Verdicts come from
- * packages/core/utilities.js; live numbers from Jupiter and Meteora and are
- * only fetched for options whose actions are enabled. No personal data.
- */
 export function createUtilitiesService(data, { jupiter = jupiterPairs, meteora = meteoraPools, cache = createLiveCache() } = {}) {
-  /** Every token version an asset selector names: a symbol (NVDA) or one address. */
   function versions(asset, country, who) {
     const bySymbol = data.tokens.list().find(s => s.symbol === asset.toUpperCase());
     if (bySymbol) return data.tokens.board(bySymbol.symbol, country, who, data.core).tokens.map(t => ({ symbol: bySymbol.symbol, token: t }));

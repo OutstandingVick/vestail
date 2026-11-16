@@ -22,7 +22,6 @@ const TOKEN_2022_PROGRAM = "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb";
 const ASSOCIATED_TOKEN = "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL";
 const MEMO_PROGRAM = "MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr";
 const MEMO_PROGRAM_V1 = "Memo1UhkJRfHyvLMcVucJwxXeuD728EqVDDwQDxFMNo";
-/** Jupiter's aggregator program: the one that routes a swap through pools. */
 const JUPITER_V6 = "JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4";
 /**
  * JupiterZ's order engine, which fills a swap against a market maker rather
@@ -36,7 +35,6 @@ const JUPITER_V6 = "JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4";
  */
 const JUPITER_Z_ORDER_ENGINE = "61DFfeTKM7trxYcPQCM78bJ794ddZprZpAwAnLiwTpYH";
 
-/** Top-level programs a Jupiter swap legitimately touches. */
 export const ALLOWED_PROGRAMS: readonly string[] = [
   SYSTEM_PROGRAM,
   COMPUTE_BUDGET,
@@ -71,7 +69,6 @@ const FORBIDDEN_TOKEN_IX: Record<number, string> = {
 
 const TOKEN_CLOSE_ACCOUNT = 9;
 
-/** System instructions, as the first four bytes of the data, little-endian. */
 const SYSTEM_TRANSFER = 2;
 const SYSTEM_TRANSFER_WITH_SEED = 11;
 const ALLOWED_SYSTEM_IX = new Set([
@@ -95,7 +92,6 @@ export const METEORA_DAMM_V2_PROGRAM = "cpamdpZCGKUy5JxQXB4dcpGPiikHawvSWAd6mEn1
 export const LIQUIDITY_PROGRAMS: readonly string[] = [METEORA_DLMM_PROGRAM, METEORA_DAMM_V2_PROGRAM];
 
 export interface InspectOptions {
-  /** The wallet that will sign. Base58. */
   taker: string;
   /**
    * The most lamports this transaction may move out of the taker's own
@@ -103,7 +99,6 @@ export interface InspectOptions {
    * rent on the token accounts the swap opens and for fees.
    */
   maxLamportsFromTaker: bigint;
-  /** Programs allowed on top of ALLOWED_PROGRAMS, e.g. LIQUIDITY_PROGRAMS for Earn. Everything else stays forbidden. */
   extraPrograms?: readonly string[];
 }
 

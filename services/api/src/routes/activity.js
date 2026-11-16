@@ -9,13 +9,6 @@ const ago = ms => {
   return `${Math.round(s / 86400)}d ago`;
 };
 
-/**
- * GET /activity — HUD stats and recent buys. Recorded clicks come first.
- * The sample figures in data/activity.sample.json are only used when
- * useSample is set; CLAUDE.md forbids shipping them to production, where the
- * stats come from recorded clicks alone. Volume needs order data, so it is 0
- * until a real order store exists.
- */
 export function registerActivity(v1, { v, data, clicks, useSample }) {
   const sample = data.raw.activity;
   const flagOf = code => data.countryByCode[code]?.flag || "";

@@ -16,15 +16,6 @@ export const metadata: Metadata = {
   },
 };
 
-/**
- * The page a careful reader goes looking for before trusting any of this.
- *
- * On a site that tells people what they may legally own, how the answers are
- * produced is not marketing — it is the thing being sold. That includes the
- * part nobody wants to publish: today none of the 480 rules has been checked
- * against a primary document. Saying so here costs less than a reader
- * discovering it themselves.
- */
 export default function MethodologyPage() {
   return (
     <LegalPage title="Methodology">

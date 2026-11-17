@@ -1737,8 +1737,6 @@ const ENTITIES = [
   ...["Vodafone","Verizon","AT&T","Airtel","Glo","9mobile","Jio","T-Mobile"].map(n => ({ name: n, kind: "Telecom operator", asset: "Telecom licences" }))
 ];
 
-// Ownership rules. 2 = can own, 1 = conditional, 0 = cannot own. Illustrative values only.
-// "citizen" = passport holder; "foreigner" = non-resident or resident without citizenship.
 const COUNTRIES = [
   { code: "NG", flag: "🇳🇬", name: "Nigeria",
     citizen:   [2,2,2,2,1,2,2,1,2,2,2,1,1,1,2,1,1,1,1,2],

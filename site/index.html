@@ -1731,7 +1731,6 @@ const ENTITIES = [
     .map(n => ({ name: n, kind: "Yacht builder", asset: "Yachts / vessels" })),
   ...["Glock","AK-47","AR-15","Beretta","Sig Sauer","Remington","Smith & Wesson","Kalashnikov"]
     .map(n => ({ name: n, kind: "Firearm", asset: "Firearms" })),
-  // bonds
   ...[["US Treasuries","US"],["T-bills","US"],["UK gilts","GB"],["German bunds","DE"],["FGN bonds","NG"],["Nigerian eurobond","NG"],["Saudi sukuk","SA"],["Indian G-secs","IN"]]
     .map(([n, h]) => ({ name: n, kind: "Sovereign bond", home: h, asset: "Government bonds" })),
   // media / telecom

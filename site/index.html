@@ -2119,7 +2119,6 @@ function countryCardHTML(country) {
     </div>`;
 }
 
-/* --- buy: record the press with the API, then follow its redirect --- */
 async function buyViaApi(link) {
   // Open the tab now, inside the click, or popup blockers stop it after the await.
   const win = window.open("", "_blank");
@@ -2143,7 +2142,6 @@ async function buyViaApi(link) {
   }
 }
 
-/* --- interactions --- */
 rows.addEventListener("click", e => {
   const trigger = e.target.closest(".country-card-trigger");
   if (!trigger) return;
@@ -2228,7 +2226,6 @@ problemSteps.forEach((step, index) => {
 });
 if (problemSteps[0]) activateProblem(problemSteps[0]);
 
-/* ---------- Coverage figures ---------- */
 const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 const fmt = (n, f, pre) => pre + (f === "compact" ? (n >= 1e6 ? (n / 1e6).toFixed(1) + "M" : n >= 1e3 ? Math.round(n / 1e3) + "k" : n) : Math.round(n).toLocaleString());
@@ -2261,7 +2258,6 @@ document.querySelectorAll("[data-focus-search]").forEach(b => b.addEventListener
 // A full placeholder is cut mid-word in the phone-width pill; give narrow screens a short one.
 if (matchMedia("(max-width: 480px)").matches) q.placeholder = "Google, a house, gold…";
 
-/* --- start --- */
 async function start() {
   if (API) {
     try {

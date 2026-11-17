@@ -452,7 +452,6 @@
   .showall:hover { text-decoration: underline; }
   .showall[hidden] { display: none; }
   .board { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; align-items: start; }
-  /* Four cards a row on wide screens, two once their ten verdict circles would become cramped, and one on phones. */
   @media (max-width: 1180px) { .board { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   .row {
     display: flex; flex-direction: column; gap: 22px;

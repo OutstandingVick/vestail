@@ -1800,7 +1800,6 @@ function editDistance(a, b) {
     d[i][j] = Math.min(d[i-1][j] + 1, d[i][j-1] + 1, d[i-1][j-1] + (a[i-1] === b[j-1] ? 0 : 1));
   return d[m][n];
 }
-// prefix / substring / small-typo matching for one candidate name
 function fuzzyHit(query, name) {
   const q = norm(query), n = norm(name);
   if (!q) return 0;
@@ -1812,7 +1811,6 @@ function fuzzyHit(query, name) {
 }
 const assetsOf = names => names.map(n => A[n]);
 
-// Stage 1 — named entity: "Google" → listed company (US) → equity → domestic/foreign per country
 function stageEntity(q) {
   let best = null, bestScore = 0;
   for (const e of ENTITIES) {
@@ -1834,7 +1832,6 @@ function stageEntity(q) {
   return { assets: [A[best.asset]], trail, note: `${best.name} is a ${best.kind.toLowerCase()}, governed by the ${best.asset.toLowerCase()} rule.` };
 }
 
-// Stage 2 — alias: "house" → Residential property; "stocks" → Equities category
 function stageAlias(q) {
   const nq = norm(q);
   let bestKey = null, bestScore = 0;
@@ -1851,7 +1848,6 @@ function stageAlias(q) {
   return { assets: [A[target]], trail: [{ label: bestKey }, { label: target }], note: `“${bestKey}” maps to the ${target.toLowerCase()} rule.` };
 }
 
-// Stage 3 — category name typed directly: "commodities"
 function stageCategory(q) {
   for (const cat of Object.keys(CATEGORIES)) {
     if (fuzzyHit(q, cat) >= 1) return { assets: assetsOf(CATEGORIES[cat]), trail: [{ label: cat }, { label: `${CATEGORIES[cat].length} asset classes` }], note: "" };
@@ -1859,7 +1855,6 @@ function stageCategory(q) {
   return null;
 }
 
-// Stage 4 — asset name typed directly (with prefix / typo tolerance): "foreign eq"
 function stageAsset(q) {
   const hits = ASSETS.map((a, i) => ({ i, s: fuzzyHit(q, a) })).filter(h => h.s > 0);
   if (!hits.length) return null;
@@ -1868,7 +1863,6 @@ function stageAsset(q) {
   return { assets: idx, trail: [{ label: idx.length === 1 ? ASSETS[idx[0]] : `${idx.length} asset names match` }], note: "" };
 }
 
-// Stage 0 — clean the query: drop filler words ("can I own a house in", "buy some gold")
 const STOP = new Set(["a","an","the","some","any","my","i","can","could","want","to","own","owning","buy","buying","purchase","hold","holding","in","of","for","as","is","it","do","does","allowed","get","have"]);
 function cleanQuery(query) {
   const words = norm(query).split(" ").filter(Boolean);

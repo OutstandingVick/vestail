@@ -1725,7 +1725,6 @@ const ENTITIES = [
     .map(([n, h]) => ({ name: n, kind: "Listed company", home: h, asset: "equity-by-home" })),
   ...["Bitcoin","BTC","Ethereum","ETH","Solana","SOL","Tether","USDT","USDC","XRP","Dogecoin","BNB","Cardano"]
     .map(n => ({ name: n, kind: "Cryptocurrency", asset: "Cryptocurrency" })),
-  // aircraft / vessels
   ...["Gulfstream","G650","Cessna","Citation","Bombardier","Global 7500","Learjet","Pilatus","Embraer Phenom","Falcon 8X","Airbus ACJ","Boeing BBJ"]
     .map(n => ({ name: n, kind: "Aircraft model", asset: "Private aircraft" })),
   ...["Azimut","Sunseeker","Benetti","Feadship","Lürssen","Riva","Ferretti","Princess yacht"]

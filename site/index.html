@@ -1733,7 +1733,6 @@ const ENTITIES = [
     .map(n => ({ name: n, kind: "Firearm", asset: "Firearms" })),
   ...[["US Treasuries","US"],["T-bills","US"],["UK gilts","GB"],["German bunds","DE"],["FGN bonds","NG"],["Nigerian eurobond","NG"],["Saudi sukuk","SA"],["Indian G-secs","IN"]]
     .map(([n, h]) => ({ name: n, kind: "Sovereign bond", home: h, asset: "Government bonds" })),
-  // media / telecom
   ...["CNN","BBC","Channels TV","Al Jazeera","Fox","Netflix"].map(n => ({ name: n, kind: "Media company", asset: "Media companies" })),
   ...["Vodafone","Verizon","AT&T","Airtel","Glo","9mobile","Jio","T-Mobile"].map(n => ({ name: n, kind: "Telecom operator", asset: "Telecom licences" }))
 ];

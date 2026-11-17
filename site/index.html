@@ -1581,7 +1581,6 @@ themeToggle.addEventListener('click', () => {
   setTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark');
 });
 
-/* Reuse the canonical full-colour lockup already rendered in the footer. */
 document.querySelector('.foot-mark').append(document.querySelector('.foot-logo svg').cloneNode(true));
 const footerLegal = document.querySelector('.foot-base');
 const footerLegalHome = footerLegal.parentElement;

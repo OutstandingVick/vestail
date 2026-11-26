@@ -579,7 +579,7 @@
   .board.country-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; border: 1px solid var(--country-grid-line); border-radius: var(--country-grid-radius); background: var(--surface); }
   .country-card { position: relative; z-index: 0; min-width: 0; }
   .country-card:is(:hover, :focus-within, .is-open) { z-index: 2; }
-  .country-card-trigger { width: 100%; min-height: 176px; display: flex; align-items: center; justify-content: center; gap: 12px; border: 0; border-radius: 0; background: var(--surface); color: var(--ink-3); padding: 24px; font: inherit; cursor: pointer; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 5%, transparent); transition: background-color 150ms var(--ease), color 150ms var(--ease), box-shadow 150ms var(--ease), scale 150ms var(--ease); }
+  .country-card-trigger { width: 100%; min-height: 176px; display: flex; align-items: center; justify-content: center; gap: 12px; border: 0; border-radius: 0; background: var(--surface); color: var(--ink); padding: 24px; font: inherit; cursor: pointer; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 5%, transparent); transition: background-color 150ms var(--ease), color 150ms var(--ease), box-shadow 150ms var(--ease), scale 150ms var(--ease); }
   .country-card-trigger:focus-visible, .country-card.is-open .country-card-trigger { background: var(--surface); color: var(--ink); box-shadow: var(--card-raised); }
   @media (hover: hover) { .country-card:hover .country-card-trigger { background: var(--surface); color: var(--ink); box-shadow: var(--card-raised); } }
   .country-card-trigger:focus-visible { outline: 2px solid var(--purple); outline-offset: 3px; }

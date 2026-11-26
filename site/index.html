@@ -1337,7 +1337,7 @@
       <button type="button" class="showall" id="showAll" aria-pressed="false">Show all 20</button>
       <span class="country-profile-label" id="hWho">Citizens</span>
     </div>
-    <div class="board country-grid" id="rows"></div>
+    <div class="board country-grid" id="rows" role="list" aria-labelledby="countryGridLabel"></div>
   </section>
 
   <section class="sec problem" id="problem" aria-labelledby="h-problem">
@@ -2114,6 +2114,7 @@ function paint({ res, data }) {
   data.forEach((c, index) => {
     const card = document.createElement("div");
     card.className = "country-card";
+    card.setAttribute("role", "listitem");
     card.dataset.country = c.code;
     if (firstPaint) { card.classList.add("in"); card.style.animationDelay = (index * 35) + "ms"; }
     card.innerHTML = countryCardHTML(c);

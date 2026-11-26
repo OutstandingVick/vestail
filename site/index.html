@@ -591,7 +591,7 @@
   .country-card-trigger:focus-visible { outline: 2px solid var(--purple); outline-offset: -3px; }
   .country-card-trigger:active { scale: .96; }
   .country-card-trigger .flag { width: auto; height: auto; border: 0; border-radius: 0; background: none; box-shadow: none; font-size: 2.125rem; line-height: 1; }
-  .country-card-name { font-family: var(--font-manrope); font-size: 1.125rem; font-weight: 700; letter-spacing: -.02em; }
+  .country-card-name { font-family: var(--font-manrope); font-size: 1.125rem; font-weight: 600; letter-spacing: -.025em; text-align: center; text-wrap: balance; }
   .country-popover { position: absolute; z-index: 12; inset-block-start: calc(100% - 18px); inset-inline-start: 50%; width: min(320px, calc(100vw - 40px)); visibility: hidden; opacity: 0; translate: -50% 8px; border-radius: 18px; background: var(--surface); color: var(--ink); padding: 18px; text-align: start; box-shadow: var(--card-hover); pointer-events: none; transition: opacity 120ms var(--ease), translate 120ms var(--ease), visibility 0s linear 120ms; }
   .country-card-trigger:focus-visible + .country-popover, .country-card.is-open .country-popover { visibility: visible; opacity: 1; translate: -50% 0; pointer-events: auto; transition-delay: 0s; }
   @media (hover: hover) { .country-card:hover .country-popover { visibility: visible; opacity: 1; translate: -50% 0; pointer-events: auto; transition-delay: 0s; } }

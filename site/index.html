@@ -627,7 +627,15 @@
     .country-grid-head { align-items: flex-start; flex-wrap: wrap; gap: 8px 14px; }
     .country-grid-label { flex-basis: 100%; }
     .showall { margin-inline-start: 0; }
-    .board.country-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .board.country-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; }
+    .country-card { border-inline-start: 0; }
+    .country-card:not(:nth-child(2n + 1)) { border-inline-start: 1px solid var(--country-grid-line); }
+    .country-card:nth-child(n + 3) { border-block-start: 1px solid var(--country-grid-line); }
+    .country-card .country-card-trigger { border-radius: 0; }
+    .country-card:first-child .country-card-trigger { border-start-start-radius: calc(var(--country-grid-radius) - 1px); }
+    .country-card:nth-child(2) .country-card-trigger { border-start-end-radius: calc(var(--country-grid-radius) - 1px); }
+    .country-card:nth-child(2n + 1):nth-last-child(-n + 2) .country-card-trigger { border-end-start-radius: calc(var(--country-grid-radius) - 1px); }
+    .country-card:last-child .country-card-trigger { border-end-end-radius: calc(var(--country-grid-radius) - 1px); }
     .country-card-trigger { min-height: 124px; flex-direction: column; gap: 9px; padding: 18px 12px; text-align: center; }
     .country-card-name { font-size: 0.9375rem; }
   }

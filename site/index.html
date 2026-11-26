@@ -612,6 +612,14 @@
   .country-empty { grid-column: 1 / -1; border-radius: 20px; background: var(--surface-2); padding: 32px; color: var(--ink-2); }
   @media (max-width: 900px) {
     .board.country-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .country-card { border-inline-start: 0; }
+    .country-card:not(:nth-child(3n + 1)) { border-inline-start: 1px solid var(--country-grid-line); }
+    .country-card:nth-child(n + 4) { border-block-start: 1px solid var(--country-grid-line); }
+    .country-card .country-card-trigger { border-radius: 0; }
+    .country-card:first-child .country-card-trigger { border-start-start-radius: calc(var(--country-grid-radius) - 1px); }
+    .country-card:nth-child(3) .country-card-trigger { border-start-end-radius: calc(var(--country-grid-radius) - 1px); }
+    .country-card:nth-child(3n + 1):nth-last-child(-n + 3) .country-card-trigger { border-end-start-radius: calc(var(--country-grid-radius) - 1px); }
+    .country-card:last-child .country-card-trigger { border-end-end-radius: calc(var(--country-grid-radius) - 1px); }
   }
   @media (max-width: 640px) {
     .country-showcase-controls { align-items: flex-start; flex-direction: column; }

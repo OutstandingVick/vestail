@@ -580,6 +580,7 @@
   .country-card { position: relative; z-index: 0; min-width: 0; }
   .country-card:is(:hover, :focus-within, .is-open) { z-index: 2; }
   .country-card:not(:nth-child(4n + 1)) { border-inline-start: 1px solid var(--country-grid-line); }
+  .country-card:nth-child(n + 5) { border-block-start: 1px solid var(--country-grid-line); }
   .country-card-trigger { width: 100%; min-height: 176px; display: flex; align-items: center; justify-content: center; gap: 12px; border: 0; border-radius: 0; background: var(--surface); color: var(--ink); padding: 24px; font: inherit; cursor: pointer; box-shadow: none; transition: background-color 150ms var(--ease), color 150ms var(--ease), box-shadow 150ms var(--ease), scale 150ms var(--ease); }
   .country-card-trigger:focus-visible, .country-card.is-open .country-card-trigger { background: var(--surface); color: var(--ink); box-shadow: var(--card-raised); }
   @media (hover: hover) { .country-card:hover .country-card-trigger { background: var(--surface); color: var(--ink); box-shadow: var(--card-raised); } }
